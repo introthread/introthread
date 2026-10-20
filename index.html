@@ -586,7 +586,7 @@ su2=function(e){e.preventDefault();const h=slug($('#sh').value);const next=()=>{
 su3=async function(){const prof={handle:SU.handle,name:SU.name,role:SU.role,company:SU.company,city:SU.city,bio:SU.bio,theme:SU.theme||'midnight'};
  if(!SB){toast('Accounts are not available right now.');return}
  if(PENDING){const {error}=await SB.from('profiles').insert(Object.assign({id:PENDING.id},prof));if(error)return fail(error);const u=PENDING;PENDING=null;await loadCloud(u);SU={step:1};save();go('#/app');return}
- const {data,error}=await SB.auth.signUp({email:SU.email,password:SU.pwRaw,options:{data:{profile:prof},emailRedirectTo:'https://www.introthread.com/app'}});
+ const {data,error}=await SB.auth.signUp({email:SU.email,password:SU.pwRaw,options:{data:{profile:prof},emailRedirectTo:'https://www.introthread.com/'}});
  if(error){SU.step=1;render();setTimeout(()=>{const el=$('#serr');if(el)el.textContent=/registered/i.test(error.message)?'An account with this email already exists. Log in instead.':error.message},0);return}
  const email=SU.email;SU={step:1};
  if(data.session){const r=await loadCloud(data.user);if(r){save();go('#/app');modal(`<div class="center"><div style="width:64px;height:64px;border-radius:50%;background:#e8f8f0;display:grid;place-items:center;margin:auto">${ic('check',30,'#12a065',3)}</div><h2 style="letter-spacing:-.8px">Your card is live</h2><p class="muted">introthread.com/${esc(prof.handle)}</p><button class="btn primary" onclick="closeModal();go('#/app/tap')">Start sharing</button></div>`)}}
