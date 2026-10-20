@@ -445,6 +445,10 @@ img.x-av{display:block}
 @media (min-width:1081px) and (max-height:780px){.x-side .x-hand,.x-s2 .x-count{display:none}.x-s2art .x-hand{display:none}.x-note{display:none}.x-side-p{-webkit-line-clamp:3;display:-webkit-box;-webkit-box-orient:vertical;overflow:hidden}#sb{height:64px}}
 @media (min-width:1081px) and (max-height:680px){.x-side-art,.x-feats span{display:none}.x-fsub{display:none}}
 
+.x-live{background:radial-gradient(50% 60% at 80% 40%,rgba(31,94,255,.08),transparent 65%),#fff;overflow:hidden}
+.x-live-in{display:grid;grid-template-columns:.85fr 1.15fr;gap:56px;align-items:center}
+@media (max-width:1180px){.x-live-in{grid-template-columns:1fr}}
+
 </style>
 </head>
 <body>
@@ -1003,6 +1007,7 @@ function vHome(){document.body.classList.remove('x-open');return mnav()+`
 <div class="x-pcard"><div class="x-pcard-top"><span>introthread</span>${sv('nfc',18)}</div><div class="x-av" style="width:58px;height:58px;font-size:19px;margin:24px 0 12px">SW</div><div class="x-pcard-n">Sarah Williams</div><div class="x-pcard-r">Marketing Director<br>Acme Technologies</div><div class="x-qr" id="qrHero"></div><div class="x-pcard-f">Tap or scan<br>to connect</div></div>
 <div class="x-hand">${handArrow(56,48)}Tap, scan or share<br>&mdash; no app required</div></div></div></section>
 <section class="x-strip"><div class="x-wrap x-strip-in"><div class="x-strip-l">Works wherever<br>you network</div><div class="x-strip-items"><span>${sv('nfc',20)}NFC tap</span><span>${sv('qr',20)}QR code</span><span>${sv('link',20)}Share link</span><span>${sv('mail',20)}Email &amp; SMS</span><span>${sv('contact',20)}Save to contacts</span><span>${sv('phone',20)}Any phone</span></div></div></section>
+<section class="x-sec x-live"><div class="x-wrap x-live-in"><div><div class="x-eye">Watch a connection grow</div><h2 class="x-h2">One tap.<br><em>One shared Thread.</em></h2><p class="x-sub" style="margin-top:20px">Sarah taps her card and James confirms where they met. Each answers one private question, What's next? The answers stay sealed until both have replied.</p><ul class="x-checks" style="grid-template-columns:1fr"><li>${sv('check',17,'currentColor',2.4)}Confirmed by both people</li><li>${sv('check',17,'currentColor',2.4)}Answers revealed together, never one-sided</li><li>${sv('check',17,'currentColor',2.4)}A follow-up nudge when it matters</li></ul></div>${demoStage()}</div></section>
 <section class="x-sec alt" id="how"><div class="x-wrap"><div class="x-head2"><div><div class="x-eye">How it works</div><h2 class="x-h2">From introduction<br><em class="ink">to opportunity.</em></h2></div><p class="x-sub">Introthread captures the relationship, with both people's consent, and helps you remember, follow up and turn conversations into opportunities.</p></div>
 <div class="x-steps">
 <div class="x-step"><span class="x-step-n">1</span><div class="x-step-v"><div class="v-ph a"><i></i><b></b><s></s></div><span class="v-wave">${sv('nfc',26)}</span><div class="v-ph b"><i></i><b></b><s></s></div></div><h3>Share your card</h3><p>Tap, scan or share your link. The other person doesn't need an app.</p></div>
