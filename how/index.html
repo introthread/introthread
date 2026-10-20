@@ -857,6 +857,48 @@ html,body,button,input,select,textarea{font-family:var(--xss)}
 @media (max-width:1280px){.t-grid{grid-template-columns:1fr}.t-card{max-width:520px;width:100%;margin:0 auto}}
 @media (max-width:900px){.t-ways{grid-template-columns:1fr}.t-g2,.t-opts{grid-template-columns:1fr}.t-priv{padding-left:0;border-left:0}.t-head{flex-direction:column}.t-chip,.t-user span{display:none}.t-tip{flex-wrap:wrap}}
 
+/* ===== Public profile workspace ===== */
+.pf-grid{display:grid;grid-template-columns:minmax(0,.95fr) minmax(0,1.05fr) minmax(0,1.2fr);gap:20px;align-items:start}
+.pf-prev .x-card{max-width:none;border-radius:20px;padding:24px 28px 26px}.pf-prev .x-card .x-av{width:150px!important;height:150px!important}
+.pf-prev .x-card-name{font-size:28px}.pf-prev .x-card-role{font-size:15px}.pf-prev .x-card-icons span{width:48px;height:48px}
+.pf-box{background:#fff;border:1px solid var(--line);border-radius:18px;padding:20px;box-shadow:0 20px 40px -34px rgba(15,23,42,.3);font-family:var(--xss)}
+.pf-col{display:grid;gap:14px}
+.pf-h{display:flex;gap:14px;align-items:flex-start;margin-bottom:16px}.pf-h b{display:block;font-size:17px;color:var(--xink)}.pf-h small{display:block;font-size:13.5px;color:var(--xmu);margin-top:2px}
+.pf-hic{flex:none;width:34px;height:34px;border-radius:9px;display:grid;place-items:center;background:#eef3ff;color:var(--xb)}.pf-hic.plain{background:none;width:28px}
+.pf-ed{display:flex;flex-direction:column;gap:14px}
+.pf-photo{display:flex;align-items:center;gap:20px}.pf-photo .x-av{margin:0;box-shadow:none}.pf-photo b{display:block;font-size:14px;color:var(--xink);margin-bottom:8px}
+.pf-pb{display:flex;gap:8px}.pf-btn{display:inline-flex;align-items:center;gap:8px;height:38px;padding:0 14px;border:1px solid var(--line);border-radius:9px;font:600 14px var(--xss);color:var(--xink);cursor:pointer;background:#fff}.pf-btn:hover{border-color:#c5cbd8}
+.pf-del{width:38px;height:38px;border-radius:9px;border:0;background:#fdecec;color:#d14343;display:grid;place-items:center;cursor:pointer}
+.pf-g2{display:grid;grid-template-columns:1fr 1fr;gap:12px 14px}
+.pf-ed .x-f>span{font-size:14px}.pf-ed .x-f input{height:42px;border:1px solid #dfe3ea;border-radius:9px;padding:0 12px;font:500 14.5px var(--xss);width:100%;outline:none}
+.pf-ed .x-f input:focus{border-color:var(--xb);box-shadow:0 0 0 4px rgba(31,94,255,.12)}
+.pf-ed .t-note textarea{min-height:76px;padding:10px 12px}.pf-cnt{text-align:right;font-size:12.5px;color:var(--xmu)}.pf-cnt b{font-weight:500}
+.pf-links{display:grid;gap:8px}.pf-link{display:flex;align-items:center;border:1px solid #dfe3ea;border-radius:9px;overflow:hidden;transition:border-color .15s,box-shadow .15s}.pf-link:focus-within{border-color:var(--xb);box-shadow:0 0 0 4px rgba(31,94,255,.12)}
+.pf-lic{flex:none;width:44px;height:40px;display:grid;place-items:center;border-right:1px solid #dfe3ea;color:#5b6478}.pf-lic.li{color:#0a66c2}
+.pf-link input{flex:1;min-width:0;border:0!important;box-shadow:none!important;height:40px!important;font-size:13.5px!important}
+.pf-link button{flex:none;width:36px;height:40px;border:0;background:none;color:#7a8396;cursor:pointer}.pf-link button:hover{color:#d14343}
+.pf-add{align-self:flex-start;display:inline-flex;align-items:center;gap:8px;margin-top:4px;height:40px;padding:0 14px;border:1px solid var(--line);border-radius:9px;background:#fff;color:var(--xb);font:700 14px var(--xss);cursor:pointer}
+.pf-save{height:50px;font-size:16px;margin-top:6px}
+.pf-styles{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+.pf-sty{border:1px solid var(--line);background:#fff;border-radius:12px;padding:6px 6px 9px;text-align:left;font:500 13.5px var(--xss);color:var(--xink);cursor:pointer;transition:border-color .15s,box-shadow .15s}
+.pf-sty span{position:relative;display:block;height:64px;border-radius:8px;margin-bottom:8px;overflow:hidden}
+.pf-sty i{position:absolute;right:6px;top:6px;width:22px;height:22px;border-radius:50%;background:var(--xb);display:none;place-items:center;box-shadow:0 0 0 2px #fff}
+.pf-sty.on{border-color:var(--xb);background:#eef3ff;box-shadow:0 0 0 3px rgba(31,94,255,.15)}.pf-sty.on i{display:grid}.pf-sty:hover{border-color:#c5cbd8}
+.pf-tabs{display:grid;grid-template-columns:repeat(3,1fr);background:#f3f5f9;border-radius:10px;padding:3px;margin-bottom:14px}
+.pf-tabs button{border:0;background:none;padding:9px;border-radius:8px;font:600 14px var(--xss);color:var(--xmu);cursor:pointer}.pf-tabs button.on{background:var(--xb);color:#fff;box-shadow:0 6px 14px -8px rgba(31,94,255,.8)}
+.pf-qrw{display:flex;gap:16px;align-items:flex-start}.pf-qr{position:relative;flex:none;border:1px solid var(--line);border-radius:12px;padding:10px;line-height:0;background:#fff}.pf-qr img{width:104px;height:104px;image-rendering:pixelated}
+.pf-qrr{flex:1;min-width:0;display:grid;gap:10px}
+.pf-url{display:flex;align-items:center;height:44px;border-radius:10px;background:#f3f5f9;padding:0 6px 0 14px;font:500 14.5px var(--xss);color:var(--xink)}.pf-url span{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.pf-url button{width:34px;height:34px;border:0;border-left:1px solid #dfe3ea;background:none;color:var(--xb);cursor:pointer}
+.pf-dl{display:inline-flex;align-items:center;justify-content:center;gap:9px;height:44px;border:1px solid #cfdaff;border-radius:10px;background:#fff;color:var(--xb);font:700 14.5px var(--xss);cursor:pointer;width:100%}.pf-dl:hover{background:#f5f8ff}
+.pf-fine{margin:0;font-size:12.5px;color:var(--xmu);text-align:center}.pf-sb1{display:grid;gap:10px}
+.pf-shares{display:grid;grid-template-columns:repeat(2,1fr);gap:8px}.pf-shares a,.pf-shares button{display:inline-flex;align-items:center;justify-content:center;gap:8px;height:40px;border:1px solid var(--line);border-radius:9px;background:#fff;color:var(--xink);font:600 13.5px var(--xss);text-decoration:none;cursor:pointer}
+.pf-nfc{display:flex;gap:14px;align-items:flex-start;padding:12px;border-radius:12px;background:#fff4ef}.pf-nfc>span{flex:none;width:46px;height:46px;border-radius:50%;background:var(--xor);color:#fff;display:grid;place-items:center}.pf-nfc b{display:block;font-size:14.5px}.pf-nfc small{display:block;font-size:13px;color:var(--xmu);margin-top:3px;line-height:1.45}
+.pf-vis{padding-left:42px}
+@media (max-width:1380px){.pf-grid{grid-template-columns:minmax(0,1fr) minmax(0,1fr)}.pf-col{grid-column:1/3;grid-template-columns:repeat(3,1fr);align-items:start}}
+@media (max-width:1000px){.pf-grid{grid-template-columns:1fr}.pf-col{grid-column:auto;grid-template-columns:1fr}.pf-prev{max-width:460px;width:100%;margin:0 auto}}
+@media (max-width:560px){.pf-g2{grid-template-columns:1fr}.pf-qrw{flex-direction:column;align-items:center}.pf-qrr{width:100%}}
+
 </style>
 </head>
 <body><a href="#root" class="x-skip">Skip to content</a>
@@ -1107,7 +1149,7 @@ function shell(on,inner){const u=me();const open=myThreads().filter(t=>['open','
  return`<div class="app"><aside class="sidebar"><div style="padding:6px 10px 18px">${logo(true)}</div>
  <a href="#/app/tap" class="btn primary block" style="margin-bottom:14px">${ic('tap',16)} Tap to Thread</a>
  ${nav('#/app','home','Today','today')}${nav('#/app/threads','thread','Threads','threads',open)}${nav('#/app/rooms','room','Rooms','rooms')}
- <div class="navgroup">You</div>${nav('#/app/card','user','My card','card')}${nav('#/'+u.handle,'globe','Public profile','pub')}${nav('#/app/settings','gear','Settings','settings')}
+ <div class="navgroup">You</div>${nav('#/app/card','user','My card','card')}${nav('#/app/profile','globe','Public profile','pub')}${nav('#/app/settings','gear','Settings','settings')}
  <div style="margin-top:auto" class="card pad" ><div class="small" style="font-weight:850">Your Warmth</div><div class="small muted" style="margin:4px 0 10px">${myThreads().filter(t=>t.confirmed).length} verified relationships</div>${warmBar(Math.min(5,1+Math.floor(myThreads().filter(t=>t.resolvedAt).length/2)))}</div>
  <div class="row" style="margin-top:14px;padding:8px">${av(u.name,'sm')}<div style="flex:1;min-width:0"><b class="small" style="display:block">${esc(u.name)}</b><span class="tiny muted">${esc(u.plan)} plan</span></div><button class="x" title="Log out" onclick="logout()">${ic('out',15)}</button></div></aside>
  <main class="main"><div class="topbar"><div class="search">${ic('search',16)}<input placeholder="Search Threads, people, rooms, events..." oninput="Q=this.value" onkeydown="if(event.key==='Enter')go('#/app/threads')"></div><div class="t-tb"><button type="button" class="t-chip" onclick="copy('${profileUrl(u)}','Link copied')" title="Copy your link">${sv('globe',16)} introthread.com/${esc(u.handle)}</button><button type="button" class="t-bell" onclick="showNudges()" aria-label="Nudges">${sv('bell',20)}${nudges().length?'<i></i>':''}</button><button type="button" class="t-user" onclick="acctMenu()">${avatarC(u,40)}<span><b>${esc(u.name)}</b><small>${esc(u.role||u.plan+' plan')}</small></span>${sv('chevd',16)}</button></div></div><div class="content">${inner}</div></main>
@@ -1223,7 +1265,7 @@ function guestAnswer(id,k){const t=findThread(id);t.theirs=k;t.events.push({k:'a
 /* ---------- router ---------- */
 function render(){const h=RH().slice(1);const p=h.split('/').filter(Boolean);let html;const authed=!!me();
  if(p[0]==='app'){if(!authed){go('#/login');return}
-  html=!p[1]?vToday():p[1]==='threads'?vThreads():p[1]==='thread'?vThread(p[2]):p[1]==='tap'?vTap():p[1]==='card'?vCard():p[1]==='rooms'?vRooms():p[1]==='room'?vRoom(p[2]):p[1]==='settings'?vSettings():vToday()}
+  html=!p[1]?vToday():p[1]==='threads'?vThreads():p[1]==='thread'?vThread(p[2]):p[1]==='tap'?vTap():p[1]==='card'?vCard():p[1]==='rooms'?vRooms():p[1]==='room'?vRoom(p[2]):p[1]==='profile'?vProfile():p[1]==='settings'?vSettings():vToday()}
  else if(!p[0])html=vHome();
  else html=({how:vHow,rooms:vRoomsPage,networks:vNetworks,pricing:vPricing,about:vAbout,privacy:vPrivacy,terms:vTerms,login:()=>authed?(go('#/app'),''):vLogin(),signup:()=>authed?(go('#/app'),''):vSignup(),t:()=>vGuest(p[1])}[p[0]]||(()=>vPublic(p[0])))();
  if(html==null)return;$('#root').innerHTML=html;
@@ -1483,7 +1525,7 @@ function vSignup(){const s=SU.step||1;document.body.classList.remove('x-open');
  const sw={1:'47%',2:'40%',3:'35%'}[s];
  return`<div class="x-auth" style="--sw:${sw}">${authSide(s)}<main class="x-main"><div class="x-mi" style="--mw:${mw}px">${st}${body}</div></main></div>`}
 
-const _rx=render;render=function(){const r=_rx.apply(this,arguments);[['qrHero',84],['qrCta',112]].forEach(([id,s])=>{const el=document.getElementById(id);if(el&&!el.firstChild)qr(el,'https://www.introthread.com',s)});setMeta();applyPhoto();if(location.hash&&/^#[a-z]+$/.test(location.hash)){const t=document.getElementById(location.hash.slice(1));if(t)setTimeout(()=>t.scrollIntoView(),60)}document.querySelectorAll('a[href^="#/"]').forEach(a=>a.setAttribute('href',a.getAttribute('href').slice(1)||'/'));const dl=document.querySelector('.x-dl');if(dl&&!dl.classList.contains('in')){if('IntersectionObserver' in window){const io=new IntersectionObserver(es=>{if(es.some(e=>e.isIntersecting)){dl.classList.add('in');io.disconnect()}},{threshold:.25});io.observe(dl)}else dl.classList.add('in')}return r};
+const _rx=render;render=function(){const r=_rx.apply(this,arguments);[['qrHero',84],['qrCta',112]].forEach(([id,s])=>{const el=document.getElementById(id);if(el&&!el.firstChild)qr(el,'https://www.introthread.com',s)});setMeta();applyPhoto();if($('#qrPf')&&!$('#qrPf').firstChild)qr($('#qrPf'),profileUrl(me()),104);if(location.hash&&/^#[a-z]+$/.test(location.hash)){const t=document.getElementById(location.hash.slice(1));if(t)setTimeout(()=>t.scrollIntoView(),60)}document.querySelectorAll('a[href^="#/"]').forEach(a=>a.setAttribute('href',a.getAttribute('href').slice(1)||'/'));const dl=document.querySelector('.x-dl');if(dl&&!dl.classList.contains('in')){if('IntersectionObserver' in window){const io=new IntersectionObserver(es=>{if(es.some(e=>e.isIntersecting)){dl.classList.add('in');io.disconnect()}},{threshold:.25});io.observe(dl)}else dl.classList.add('in')}return r};
 
 /* v4.1 login + compact previews */
 function prevHTML(){const u={name:SU.name,role:SU.role,company:SU.company,city:SU.city,handle:SU.handle,bio:SU.bio,photo:SU.photo,theme:SU.theme||'midnight'};return SU.pv==='p'?profileView(u).replace('class="x-pview"','class="x-pview cmp"'):bizCard(u).replace('class="x-card ','class="x-card cmp ')}
@@ -1643,6 +1685,52 @@ const _ntX=newThread;newThread=function(e){const v=id=>{const x=$('#'+id);return
 document.addEventListener('click',e=>{const d=$('#twd');if(d&&d.open&&!d.contains(e.target))d.removeAttribute('open')});
 /* topbar: account menu */
 function acctMenu(){const u=me();modal(`<div><div class="row" style="gap:12px;margin-bottom:14px">${avatarC(u,48)}<div><b>${esc(u.name)}</b><div class="small muted">${esc(u.email||'')}</div></div></div><div class="t-more"><a href="/app/card" onclick="closeModal()">${sv('user',18)} My card</a><a href="/${esc(u.handle)}" onclick="closeModal()">${sv('globe',18)} Public profile</a><a href="/app/settings" onclick="closeModal()">${sv('grid',18)} Settings</a><button onclick="closeModal();logout()">${sv('arrow',18)} Log out</button></div></div>`)}
+
+/* ===== v5 Public profile workspace ===== */
+let PF=null,PFT='qr';
+function pfInit(){const u=me();if(!PF||PF._id!==u.id){const L=u.links||{};const links=[];if(L.linkedin)links.push(L.linkedin);if(L.website)links.push(L.website);if(L.calendar)links.push(L.calendar);(L.extra||[]).forEach(x=>x&&links.push(x));
+ PF={_id:u.id,name:u.name||'',role:u.role||'',company:u.company||'',city:u.city||'',bio:u.bio||'',theme:u.theme||'midnight',links:links.length?links:[''],hidden:!!L.hidden}}return PF}
+function linkKind(v){v=(v||'').toLowerCase();return /linkedin\./.test(v)?'li':/(cal\.com|calendly|savvycal|zcal)/.test(v)?'cal':/(twitter\.com|x\.com)/.test(v)?'x':'globe'}
+function pfUser(){const u=me();const ls=PF.links.map(x=>x.trim()).filter(Boolean);const L=Object.assign({},u.links||{});L.linkedin=ls.find(x=>linkKind(x)==='li')||'';L.calendar=ls.find(x=>linkKind(x)==='cal')||'';const rest=ls.filter(x=>x!==L.linkedin&&x!==L.calendar);L.website=rest[0]||'';L.extra=rest.slice(1);L.hidden=PF.hidden;
+ return Object.assign({},u,{name:PF.name,role:PF.role,company:PF.company,city:PF.city,bio:PF.bio,theme:PF.theme,links:L})}
+function pfPreview(){const u=pfUser();return bizCard(Object.assign({},u,{tags:(u.links&&u.links.tags)||[],open:(u.links&&u.links.open)}),{})}
+function pfSync(){const g=id=>{const e=$('#'+id);return e?e.value:null};[['name','pfn'],['role','pfr'],['company','pfc'],['city','pfct'],['bio','pfb']].forEach(([k,id])=>{const v=g(id);if(v!=null)PF[k]=v});
+ document.querySelectorAll('.pf-link input').forEach((el,i)=>{PF.links[i]=el.value;const ic=el.parentNode.querySelector('.pf-lic');if(ic)ic.innerHTML=sv(linkKind(el.value),18)});
+ if($('#pfbc'))$('#pfbc').textContent=(PF.bio||'').length;const p=$('#pfprev');if(p)p.innerHTML=pfPreview()}
+function pfLinks(){return PF.links.map((v,i)=>`<div class="pf-link"><span class="pf-lic ${linkKind(v)==='li'?'li':''}">${sv(linkKind(v),18)}</span><input value="${esc(v)}" placeholder="linkedin.com/in/you, website or calendar link" oninput="pfSync()"><button type="button" aria-label="Remove link" onclick="pfSync();PF.links.splice(${i},1);if(!PF.links.length)PF.links.push('');$('#pflinks').innerHTML=pfLinks();pfSync()">${sv('close',15)}</button></div>`).join('')}
+function pfAdd(){pfSync();if(PF.links.length>=6)return toast('You can add up to 6 links');PF.links.push('');$('#pflinks').innerHTML=pfLinks();const all=document.querySelectorAll('.pf-link input');all[all.length-1].focus()}
+async function pfSave(b){pfSync();if(!PF.name.trim())return toast('Add your full name');const u=me();const nu=pfUser();const patch={name:nu.name.trim(),role:nu.role.trim(),company:nu.company.trim(),city:nu.city.trim(),bio:nu.bio.trim(),links:nu.links};
+ b.disabled=true;const ok=await upd('profiles',u.id,patch);b.disabled=false;if(!ok)return;Object.assign(u,patch);save();toast('Profile saved');window._keepScroll=true;render()}
+async function pfTheme(k){PF.theme=k;document.querySelectorAll('.pf-sty').forEach(b=>{const on=b.dataset.k===k;b.classList.toggle('on',on);b.setAttribute('aria-pressed',on)});const p=$('#pfprev');if(p)p.innerHTML=pfPreview();
+ const u=me();if(await upd('profiles',u.id,{theme:k})){u.theme=k;save();toast(THEMES[k].n+' style applied')}}
+async function pfVis(on){const u=me();PF.hidden=!on;const links=Object.assign({},u.links||{},{hidden:!on});if(await upd('profiles',u.id,{links})){u.links=links;save();toast(on?'Your profile is public':'Your profile is now hidden')}else{const c=$('#pfvis');if(c)c.checked=!on}}
+function pfTab(t){PFT=t;document.querySelectorAll('.pf-tabs button').forEach(b=>b.classList.toggle('on',b.dataset.t===t));const b=$('#pfshare');if(b){b.innerHTML=pfShareBody();if(t==='qr')qr($('#qrPf'),profileUrl(me()),104)}}
+function pfShareBody(){const u=me(),url=profileUrl(u),short='introthread.com/'+u.handle;const field=`<div class="pf-url"><span>${esc(short)}</span><button type="button" aria-label="Copy link" onclick="copy('${url}','Link copied')">${sv('copy',18)}</button></div>`;
+ if(PFT==='link')return`<div class="pf-sb1">${field}<div class="pf-shares"><button type="button" onclick="shareNative()">${sv('send',16)} Share</button><a href="mailto:?subject=${encodeURIComponent('My Introthread card')}&body=${encodeURIComponent(url)}">${sv('mail',16)} Email</a><a target="_blank" rel="noopener" href="https://wa.me/?text=${encodeURIComponent(url)}">${sv('send',16)} WhatsApp</a><a target="_blank" rel="noopener" href="https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(url)}">${sv('li',16)} LinkedIn</a></div><p class="pf-fine">Add it to your email signature and social bios.</p></div>`;
+ if(PFT==='nfc')return`<div class="pf-sb1"><div class="pf-nfc"><span>${sv('nfc',26)}</span><div><b>Link an NFC card or sticker</b><small>On Android Chrome, tap the button and hold the card to your phone. It will open ${esc(short)}.</small></div></div><button type="button" class="pf-dl" onclick="tapNFC()">${sv('nfc',18)} Write to NFC card</button><p class="pf-fine">On iPhone, use the QR code or your link.</p></div>`;
+ return`<div class="pf-qrw"><div class="pf-qr"><div id="qrPf"></div><span class="t-qrlogo" style="width:30px;height:30px"><span class="x-lm"><i></i><i></i></span></span></div><div class="pf-qrr">${field}<button type="button" class="pf-dl" onclick="tapDownloadQR()">${sv('arrow',18)} Download QR code</button><p class="pf-fine">Print it once. It always points to your latest card.</p></div></div>`}
+function vProfile(){const u=me();pfInit();const P=PF;
+ return shell('pub',`<div class="t-head"><div><div class="t-eye">Public profile</div><h1 class="t-h1">Your professional profile</h1><p class="t-sub">This is what people see when you share your Introthread link or QR code.</p></div><a href="/${esc(u.handle)}" class="t-how" target="_blank" rel="noopener">${sv('eye',18)} View as visitor</a></div>
+<div class="pf-grid">
+<div class="pf-prev" id="pfprev">${pfPreview()}</div>
+<section class="pf-box pf-ed"><div class="pf-h"><span class="pf-hic">${sv('user',20)}</span><div><b>Profile information</b><small>Edit your public profile. Changes appear instantly.</small></div></div>
+ <div class="pf-photo">${avatarC(u,72)}<div><b>Profile photo</b><div class="pf-pb"><label class="pf-btn">${sv('sync',16)} ${u.photo?'Change photo':'Upload photo'}<input type="file" hidden accept="image/jpeg,image/png,image/webp" onchange="pickPhoto(this,1)"></label>${u.photo?`<button type="button" class="pf-del" aria-label="Remove photo" onclick="removePhoto()">${sv('close',16)}</button>`:''}</div></div></div>
+ <div class="pf-g2"><label class="x-f"><span>Full name</span><input id="pfn" value="${esc(P.name)}" oninput="pfSync()" autocomplete="name"></label><label class="x-f"><span>Title</span><input id="pfr" value="${esc(P.role)}" oninput="pfSync()"></label>
+ <label class="x-f"><span>Company</span><input id="pfc" value="${esc(P.company)}" oninput="pfSync()"></label><label class="x-f"><span>City</span><input id="pfct" value="${esc(P.city)}" oninput="pfSync()"></label></div>
+ <label class="x-f"><span>Bio</span><div class="t-note"><textarea id="pfb" rows="3" maxlength="160" oninput="pfSync()">${esc(P.bio)}</textarea></div><small class="pf-cnt"><b id="pfbc">${P.bio.length}</b>/160</small></label>
+ <div class="x-f"><span>Links</span><div id="pflinks" class="pf-links">${pfLinks()}</div><button type="button" class="pf-add" onclick="pfAdd()">${sv('close',15,'currentColor',2.2).replace('<path d="M6 6l12 12M18 6 6 18"/>','<path d="M12 5v14M5 12h14"/>')} Add link</button></div>
+ <button type="button" class="t-start pf-save" onclick="pfSave(this)">${sv('lock',18)} Save changes</button></section>
+<div class="pf-col">
+ <section class="pf-box"><div class="pf-h"><span class="pf-hic plain">${sv('palette',22)}</span><div><b>Card style</b><small>Choose a style for your public card.</small></div></div>
+  <div class="pf-styles">${Object.entries(THEMES).map(([k,t])=>`<button type="button" class="pf-sty ${P.theme===k?'on':''}" data-k="${k}" aria-pressed="${P.theme===k}" onclick="pfTheme('${k}')"><span style="background:${t.bg}"><i>${sv('check',12,'#fff',3)}</i></span>${t.n}</button>`).join('')}</div></section>
+ <section class="pf-box"><div class="pf-h"><span class="pf-hic plain">${sv('hub',22)}</span><div><b>Share your profile</b><small>Share your Introthread link or QR code.</small></div></div>
+  <div class="pf-tabs">${[['qr','QR code'],['link','Link'],['nfc','NFC card']].map(([k,l])=>`<button type="button" data-t="${k}" class="${PFT===k?'on':''}" onclick="pfTab('${k}')">${l}</button>`).join('')}</div><div id="pfshare">${pfShareBody()}</div></section>
+ <section class="pf-box"><div class="pf-h"><span class="pf-hic plain">${sv('lock',22)}</span><div><b>Profile visibility</b><small>Control who can find and view your profile.</small></div></div>
+  <label class="t-tog pf-vis"><input type="checkbox" id="pfvis" ${P.hidden?'':'checked'} onchange="pfVis(this.checked)"><span class="t-sw"></span><span><b>Public profile</b><small>Allow anyone with your link or QR code to view your profile.</small></span></label></section>
+</div></div>`)}
+/* hidden profiles: visitors see a private notice */
+const _vPubX=vPublic;vPublic=function(h){const u=DB.users.find(x=>x.handle===String(h).toLowerCase());const mine=me()&&u&&me().id===u.id;
+ if(u&&u.links&&u.links.hidden&&!mine)return mnav()+`<section class="x-ph c x-nf"><div class="x-wrap"><div class="x-eye">Private profile</div><h1 class="x-h1 x-ph-h">This profile is <em>private.</em></h1><p class="x-lead" style="margin:0 auto">The owner has chosen not to show their card publicly right now.</p><div class="x-cta-row" style="justify-content:center"><a href="/signup" class="x-btn lg">Create your own card ${sv('arrow',17)}</a></div></div></section>`+foot();return _vPubX(h)};
 
 /* Supabase email-link callback: introthread.com/app#access_token=... or #error=... */
 const AUTH_CB=/(^|[#&])(access_token|error_description|error)=/.test(location.hash);
