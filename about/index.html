@@ -22,16 +22,14 @@
 <!--/meta-->
 <meta name="theme-color" content="#0b1122">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Ccircle cx='12' cy='16' r='8' fill='%230b1122'/%3E%3Ccircle cx='20' cy='16' r='8' fill='%23ff6a3d' fill-opacity='.92'/%3E%3C/svg%3E">
-<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Instrument+Serif:ital@0;1&family=Caveat:wght@500&display=swap" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/qrcode-generator@1.4.4/qrcode.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="/config.js"></script>
 <style>
 :root{--bg:#f7f8fa;--surface:#fff;--ink:#0f1218;--text:#111318;--muted:#667085;--line:#e6e8ec;--brand:#3157ff;--brand2:#2341c8;--soft:#eef2ff;--thread:#ff6b3d;--ok:#12a065;--warn:#c58a12;--bad:#d14343;--r:16px;--sh:0 10px 30px rgba(16,24,40,.07);--sh2:0 30px 80px rgba(16,24,40,.18)}
-*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;font-family:Manrope,Inter,system-ui,-apple-system,"Segoe UI",sans-serif;color:var(--text);background:var(--bg);-webkit-font-smoothing:antialiased}
+*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;font-family:var(--xss);color:var(--text);background:var(--bg);-webkit-font-smoothing:antialiased}
 a{color:inherit;text-decoration:none}button,input,select,textarea{font:inherit}button{cursor:pointer}img{max-width:100%}
-.serif{font-family:"Instrument Serif",Georgia,serif;font-weight:400;font-style:italic;letter-spacing:-.5px}
+.serif{font-family:var(--xsf);font-weight:400;font-style:italic;letter-spacing:-.5px}
 .btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;border:0;border-radius:11px;padding:12px 18px;font-weight:800;font-size:14px;transition:.15s}
 .btn.primary{background:var(--brand);color:#fff;box-shadow:0 8px 20px rgba(49,87,255,.25)}.btn.primary:hover{background:var(--brand2);transform:translateY(-1px)}
 .btn.dark{background:var(--ink);color:#fff}.btn.dark:hover{background:#262b36}
@@ -207,7 +205,7 @@ input:focus,select:focus,textarea:focus{border-color:var(--brand);box-shadow:0 0
 .x-pcard .x-av{margin:26px 0 12px}.x-pcard-n{font-weight:700;font-size:19px}.x-pcard-r{font-size:12.5px;color:rgba(255,255,255,.66);line-height:1.45;margin-top:3px}
 .x-qr{background:#fff;border-radius:10px;padding:7px;display:inline-block;line-height:0;margin-top:16px}.x-qr img{display:block}
 .x-pcard-f{position:absolute;left:22px;bottom:18px;font-size:12px;color:rgba(255,255,255,.75);line-height:1.35}
-.x-hand{position:absolute;font-family:'Caveat',cursive;font-size:23px;line-height:1.1;color:#333b4f;transform:rotate(-4deg)}
+.x-hand{position:absolute;font-family:var(--xss);font-style:italic;font-size:23px;line-height:1.1;color:#333b4f;transform:rotate(-4deg)}
 .x-hero-art .x-hand{right:0;bottom:6px;text-align:left}.x-hero-art .x-hand svg{position:absolute;left:-58px;top:-26px}
 /* phone */
 .x-phone{width:252px;border-radius:42px;padding:9px;background:linear-gradient(145deg,#2b2f38,#0b0d12);box-shadow:inset 0 0 0 1.5px #474c58,0 50px 80px -30px rgba(5,10,30,.6)}
@@ -783,6 +781,13 @@ a:focus-visible,button:focus-visible,summary:focus-visible,.x-sty:focus-visible{
 
 /* v4.7 ui-sans-serif renders as serif in Chrome on Windows: use sans-serif */
 .x-ww-h h2,.x-why-q,.x-ctab h2{font-family:sans-serif;font-weight:400}
+
+/* v5 type system: sans-serif + ui-sans-serif only */
+:root{--xsf:sans-serif;--xss:sans-serif;--serif:sans-serif;--sans:sans-serif;--mono:sans-serif}
+@supports (font:-apple-system-body){:root{--xsf:ui-sans-serif,sans-serif;--xss:ui-sans-serif,sans-serif}}
+html,body,button,input,select,textarea{font-family:var(--xss)}
+.serif,.x-h1,.x-h2,.x-ww-h h2,.x-why-q,.x-ctab h2,.x-bc h3{font-family:var(--xsf)}
+.x-hand{font-size:17px;letter-spacing:0}
 
 </style>
 </head>
