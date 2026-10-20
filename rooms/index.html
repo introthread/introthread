@@ -1033,6 +1033,9 @@ html,body,button,input,select,textarea{font-family:var(--xss)}
 .tp-add{border:1px dashed #cfd6e3!important;border-radius:999px!important;height:34px!important;width:150px!important;padding:0 12px!important;font:500 13px var(--xss)!important;box-shadow:none!important}
 .t-topics{grid-column:1/-1}
 
+.g-conn{display:flex;align-items:center;gap:12px;padding:12px;border:1px dashed #cfd6e3;border-radius:12px}.g-conn>span{flex:none;width:40px;height:40px;border-radius:10px;border:1px solid var(--line);display:grid;place-items:center}.g-conn>span svg{width:20px;height:20px}
+.g-conn>div{flex:1;min-width:0}.g-conn b{display:block;font-size:14.5px;color:var(--xink)}.g-conn small{display:block;font-size:12.5px;color:var(--xmu);margin-top:2px}
+
 </style>
 </head>
 <body><a href="#root" class="x-skip">Skip to content</a>
@@ -1947,7 +1950,7 @@ function vToday(){const u=me(),T=myThreads();const now=Date.now();const wk=T.fil
  ${dPromo('Turn more Threads into opportunities',['Add context and notes','Set follow-up reminders','Track progress to resolution'])}
  <section class="d-box">${dSecHead('Quick actions')}<div class="d-qa"><a href="/app/tap">${sv('nfc',18)} Tap to Thread ${sv('chev',14)}</a><button type="button" onclick="shareNative()">${sv('send',18)} Share my card ${sv('chev',14)}</button><button type="button" onclick="tapQR()">${sv('qr',18)} Scan a QR code ${sv('chev',14)}</button><button type="button" onclick="newRoomModal()">${sv('users',18)} Create a Room ${sv('chev',14)}</button></div></section></div>
  </div><div class="d-side">
- <section class="d-box">${dSecHead('Upcoming events','/app/rooms')}${evs.length?evs.map(r=>{const d=new Date(r.date);const dd=Math.round((r.date-new Date().setHours(0,0,0,0))/DAY);return`<a class="d-ev" href="/app/room/${r.id}"><span class="d-evd">${d.toLocaleDateString('en-GB',{weekday:'short'})}<b>${d.getDate()}</b></span><span class="d-evl"><i></i></span><span class="d-evt"><b>${esc(r.name)}</b><small>${esc(r.location||'Room '+r.code)}</small></span><em>${dd<=0?'Today':dd===1?'Tomorrow':'In '+dd+' days'}</em></a>`}).join(''):`<div class="d-empty v">${sv('cal',22)}<div><b>No upcoming events</b><small>Create a Room for your next event and every tap becomes a Thread.</small></div><button type="button" class="x-btn sm" onclick="newRoomModal()">Create a Room</button></div>`}</section>
+ <section class="d-box">${dSecHead('Today&rsquo;s meetings')}${gcalPanel()}</section><section class="d-box">${dSecHead('Upcoming events','/app/rooms')}${evs.length?evs.map(r=>{const d=new Date(r.date);const dd=Math.round((r.date-new Date().setHours(0,0,0,0))/DAY);return`<a class="d-ev" href="/app/room/${r.id}"><span class="d-evd">${d.toLocaleDateString('en-GB',{weekday:'short'})}<b>${d.getDate()}</b></span><span class="d-evl"><i></i></span><span class="d-evt"><b>${esc(r.name)}</b><small>${esc(r.location||'Room '+r.code)}</small></span><em>${dd<=0?'Today':dd===1?'Tomorrow':'In '+dd+' days'}</em></a>`}).join(''):`<div class="d-empty v">${sv('cal',22)}<div><b>No upcoming events</b><small>Create a Room for your next event and every tap becomes a Thread.</small></div><button type="button" class="x-btn sm" onclick="newRoomModal()">Create a Room</button></div>`}</section>
  <section class="d-box">${dSecHead('Thread activity')}<div class="d-chart-h"><span class="d-sel">Last 7 days</span></div><div class="d-chart">${bins.map(b=>`<div class="d-bar" title="${b.l}: ${b.n} new, ${b.v} verified, ${b.r} resolved"><span><i class="r" style="height:${b.r/mx*100}%"></i><i class="n" style="height:${Math.max(0,b.n-b.v)/mx*100}%"></i><i class="v" style="height:${b.v/mx*100}%"></i></span><small>${b.l}</small></div>`).join('')}</div>
  <div class="d-leg"><span><i class="n"></i>New threads <b>${tot('n')}</b></span><span><i class="v"></i>Verified <b>${tot('v')}</b></span><span><i class="r"></i>Resolved <b>${tot('r')}</b></span></div></section>
  </div></div>`)}
@@ -2011,6 +2014,27 @@ const _ntT=newThread;newThread=function(e){const tags=TSEL.slice();const before=
  TSEL=[];return r};
 const _rT=render;render=function(){normTags();return _rT.apply(this,arguments)};
 
+/* ===== Google sign-in + Calendar ===== */
+const GSCOPE='https://www.googleapis.com/auth/calendar.readonly';
+oauth=async function(p){if(p!=='Google')return toast(p+' sign-in is coming soon. Please use Google or email for now.');
+ if(typeof SB==='undefined'||!SB)return toast('Sign-in is not available right now. Please try again shortly.');
+ try{sessionStorage.setItem('it_oauth','1')}catch(_){}
+ const {error}=await SB.auth.signInWithOAuth({provider:'google',options:{redirectTo:'https://www.introthread.com/',scopes:GSCOPE,queryParams:{access_type:'offline',prompt:'select_account'}}});
+ if(error)toast(error.message)};
+function gTokSave(s){if(s&&s.provider_token){try{sessionStorage.setItem('it_gtok',JSON.stringify({t:s.provider_token,exp:Date.now()+50*6e4}))}catch(_){}}}
+function gTok(){try{const o=JSON.parse(sessionStorage.getItem('it_gtok')||'null');return o&&o.exp>Date.now()?o.t:null}catch(_){return null}}
+let GCAL=null,GCAL_BUSY=false;
+async function gcalLoad(){const tok=gTok();if(!tok||GCAL_BUSY||GCAL)return;GCAL_BUSY=true;
+ try{const a=new Date();a.setHours(0,0,0,0);const b=new Date(a.getTime()+7*DAY);
+  const r=await fetch('https://www.googleapis.com/calendar/v3/calendars/primary/events?singleEvents=true&orderBy=startTime&maxResults=8&timeMin='+encodeURIComponent(new Date().toISOString())+'&timeMax='+encodeURIComponent(b.toISOString()),{headers:{Authorization:'Bearer '+tok}});
+  if(r.status===401||r.status===403){sessionStorage.removeItem('it_gtok');GCAL=[]}else{const j=await r.json();GCAL=(j.items||[]).map(e=>({title:e.summary||'Busy',where:e.location||'',start:Date.parse(e.start.dateTime||e.start.date),allDay:!e.start.dateTime,link:e.htmlLink}))}}
+ catch(_){GCAL=[]}GCAL_BUSY=false;if(/^#\/app\/?$/.test(RH())){window._keepScroll=true;render()}}
+function gcalPanel(){const tok=gTok();if(!tok)return`<div class="g-conn"><span>${oG()}</span><div><b>Connect Google Calendar</b><small>See today&rsquo;s meetings here and start Threads from them.</small></div><button type="button" class="d-act ghost sm" onclick="oauth('Google')">Connect</button></div>`;
+ if(!GCAL){gcalLoad();return'<p class="d-muted">Loading your calendar...</p>'}
+ if(!GCAL.length)return'<p class="d-muted">No meetings in the next 7 days.</p>';
+ return GCAL.map(e=>{const d=new Date(e.start);const today=new Date().toDateString()===d.toDateString();return`<a class="d-ev" href="${esc(e.link||'#')}" target="_blank" rel="noopener"><span class="d-evd">${today?'Today':d.toLocaleDateString('en-GB',{weekday:'short'})}<b>${e.allDay?d.getDate():d.toLocaleTimeString('en-GB',{hour:'2-digit',minute:'2-digit'})}</b></span><span class="d-evl"><i></i></span><span class="d-evt"><b>${esc(e.title)}</b><small>${esc(e.where||(e.allDay?'All day':'Google Calendar'))}</small></span><em>${today?'Today':d.toLocaleDateString('en-GB',{day:'numeric',month:'short'})}</em></a>`}).join('')}
+if(typeof SB!=='undefined'&&SB){SB.auth.onAuthStateChange((ev,s)=>{gTokSave(s)});SB.auth.getSession().then(({data})=>gTokSave(data&&data.session))}
+
 /* Supabase email-link callback: introthread.com/app#access_token=... or #error=... */
 const AUTH_CB=/(^|[#&])(access_token|error_description|error)=/.test(location.hash);
 if(AUTH_CB){const hp=new URLSearchParams(location.hash.slice(1));window._authErr=hp.get('error_description');}
@@ -2025,9 +2049,9 @@ const _render2=render;render=function(){const p=RH().slice(1).split('/').filter(
 (async function boot(){
  if(AUTH_CB){$('#root').innerHTML=`<div class="pub"><div class="pubcard center"><div style="margin:80px 0 20px">${logo()}</div><p class="muted">Signing you in...</p></div></div>`}
  if(SB){const {data}=await SB.auth.getSession();const s=data&&data.session;
-  if(s&&MODE!=='demo'){const r=await loadCloud(s.user);if(r==='needs-profile'){SU={step:2,name:(s.user.user_metadata||{}).full_name||'',email:s.user.email};go('#/signup')}}
+  if(s&&MODE!=='demo'){const r=await loadCloud(s.user);if(r==='needs-profile'){SU={step:2,name:(s.user.user_metadata||{}).full_name||'',email:s.user.email,photo:(s.user.user_metadata||{}).avatar_url||null};go('#/signup')}}
   SB.auth.onAuthStateChange(async(ev,sess)=>{if(ev==='SIGNED_IN'&&sess&&MODE!=='demo'&&!me()){const r=await loadCloud(sess.user);if(r==='ok'){save();render()}}})}
-  if(AUTH_CB){if(SB)await new Promise(r=>setTimeout(r,400));const ok=SB&&(await SB.auth.getSession()).data.session;history.replaceState(null,'',ok?'/app':'/login');if(!ok&&window._authErr)setTimeout(()=>toast(window._authErr.replace(/\+/g,' ')),300);else if(ok&&!me()){const r=await loadCloud(ok.user);if(r==='needs-profile'){SU={step:2,name:'',email:ok.user.email};go('#/signup')}}if(ok)setTimeout(()=>toast('Email confirmed. Welcome to Introthread.'),300)}
+  if(AUTH_CB){if(SB)await new Promise(r=>setTimeout(r,400));const ok=SB&&(await SB.auth.getSession()).data.session;history.replaceState(null,'',ok?'/app':'/login');if(!ok&&window._authErr)setTimeout(()=>toast(window._authErr.replace(/\+/g,' ')),300);else if(ok&&!me()){const r=await loadCloud(ok.user);if(r==='needs-profile'){SU={step:2,name:(ok.user.user_metadata||{}).full_name||'',email:ok.user.email,photo:(ok.user.user_metadata||{}).avatar_url||null};go('#/signup')}}if(ok)setTimeout(()=>toast('Email confirmed. Welcome to Introthread.'),300)}
  render()})();
 
 </script>
