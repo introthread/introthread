@@ -477,6 +477,23 @@ img.x-av{display:block}
 @media (max-width:1180px){.x-strip-in{grid-template-columns:1fr!important;gap:22px}.x-strip-items{grid-template-columns:repeat(3,1fr)}.x-si:nth-child(4){border-left:0}.x-si:nth-child(n+4){border-top:1px solid var(--xln)}}
 @media (max-width:640px){.x-strip-items{grid-template-columns:repeat(2,1fr)}.x-si{border-left:1px solid var(--xln)!important;border-top:1px solid var(--xln)}.x-si:nth-child(odd){border-left:0!important}.x-si:nth-child(-n+2){border-top:0}}
 
+.x-mlogin{display:none}body.x-open .x-mlogin{display:block}
+/* works wherever v3 */
+.x-ww{padding:72px 0 80px;background:radial-gradient(60% 80% at 50% 0%,rgba(31,94,255,.07),transparent 70%),#fff;border-top:1px solid var(--xln)}
+.x-ww-h{text-align:center;max-width:640px;margin:0 auto 40px}
+.x-ww-h h2{font-family:var(--xsf);font-weight:400;font-size:clamp(34px,3.4vw,46px);line-height:1.05;letter-spacing:-.015em;color:var(--xink);margin:0}
+.x-ww-h h2 em{font-style:italic;color:var(--xb)}
+.x-ww-h p{font:400 16.5px/1.6 var(--xss);color:var(--xmu);margin:14px 0 0}
+.x-ww-g{display:grid;grid-template-columns:repeat(6,1fr);gap:16px}
+.x-ww-i{display:flex;flex-direction:column;align-items:center;text-align:center;gap:6px;padding:28px 14px 26px;background:#fff;border:1px solid var(--xln);border-radius:18px;box-shadow:0 1px 2px rgba(15,23,42,.04);transition:transform .2s,box-shadow .2s,border-color .2s}
+.x-ww-i:hover{transform:translateY(-4px);border-color:#cfdaff;box-shadow:0 22px 40px -24px rgba(31,94,255,.45)}
+.x-ww-ic{width:56px;height:56px;border-radius:16px;display:grid;place-items:center;margin-bottom:12px;color:#fff;background:linear-gradient(145deg,#3f7bff,#1f5eff 55%,#1748d6);box-shadow:0 12px 22px -10px rgba(31,94,255,.7),inset 0 1px 0 rgba(255,255,255,.25)}
+.x-ww-i:nth-child(even) .x-ww-ic{background:linear-gradient(145deg,#1a2440,#0b1122);box-shadow:0 12px 22px -10px rgba(11,17,34,.6),inset 0 1px 0 rgba(255,255,255,.12)}
+.x-ww-i b{font:700 16px/1.3 var(--xss);color:var(--xink);white-space:nowrap}
+.x-ww-i small{font:500 13.5px/1.45 var(--xss);color:var(--xmu)}
+@media (max-width:1180px){.x-ww-g{grid-template-columns:repeat(3,1fr)}}
+@media (max-width:640px){.x-ww{padding:56px 0}.x-ww-g{grid-template-columns:repeat(2,1fr);gap:12px}.x-ww-i{padding:22px 10px}.x-ww-i b{white-space:normal}}
+
 </style>
 </head>
 <body>
@@ -1034,7 +1051,7 @@ function vHome(){document.body.classList.remove('x-open');return mnav()+`
 <div class="x-hero-art">${phone(bizCard(SARAH,{phone:1}))}
 <div class="x-pcard"><div class="x-pcard-top"><span>introthread</span>${sv('nfc',18)}</div><div class="x-av" style="width:58px;height:58px;font-size:19px;margin:24px 0 12px">SW</div><div class="x-pcard-n">Sarah Williams</div><div class="x-pcard-r">Marketing Director<br>Acme Technologies</div><div class="x-qr" id="qrHero"></div><div class="x-pcard-f">Tap or scan<br>to connect</div></div>
 <span class="x-glow"></span><span class="x-wave"></span><span class="x-wave d2"></span><span class="x-wave d3"></span><span class="x-tline"></span><div class="x-hand">${handArrow(56,48)}Tap, scan or share<br>&mdash; no app required</div></div></div></section>
-<section class="x-strip"><div class="x-wrap x-strip-in"><div class="x-strip-l"><span class="x-strip-k">Works everywhere</span><p>Works wherever<br><em>you network.</em></p><small>Nothing to install on the other side.</small></div><div class="x-strip-items">${[['nfc','NFC tap','Tap any phone'],['qr','QR code','Scan to connect'],['link','Share link','introthread.com/you'],['mail','Email &amp; SMS','Send in one tap'],['contact','Save to contacts','One-tap vCard'],['phone','Any phone','iPhone and Android']].map(([ic,t,s])=>`<div class="x-si"><span class="x-si-ic">${sv(ic,20)}</span><b>${t}</b><small>${s}</small></div>`).join('')}</div></div></section>
+<section class="x-ww"><div class="x-wrap"><div class="x-ww-h"><div class="x-eye">Works everywhere</div><h2>Works wherever <em>you network.</em></h2><p>One card for every way you meet people. Nothing to install on the other side.</p></div><div class="x-ww-g">${[['nfc','NFC tap','Tap any phone'],['qr','QR code','Scan to connect'],['link','Share link','introthread.com/you'],['mail','Email &amp; SMS','Send in one tap'],['contact','Save to contacts','One-tap vCard'],['phone','Any phone','iPhone and Android']].map(([ic,t,s])=>`<div class="x-ww-i"><span class="x-ww-ic">${sv(ic,24)}</span><b>${t}</b><small>${s}</small></div>`).join('')}</div></div></section>
 <section class="x-sec alt" id="how"><div class="x-wrap"><div class="x-head2"><div><div class="x-eye">How it works</div><h2 class="x-h2">From introduction<br><em class="ink">to opportunity.</em></h2></div><p class="x-sub">Introthread captures the relationship, with both people's consent, and helps you remember, follow up and turn conversations into opportunities.</p></div>
 <div class="x-steps">
 <div class="x-step"><span class="x-step-n">1</span><div class="x-step-v"><div class="v-ph a"><i></i><b></b><s></s></div><span class="v-wave">${sv('nfc',26)}</span><div class="v-ph b"><i></i><b></b><s></s></div></div><h3>Share your card</h3><p>Tap, scan or share your link. The other person doesn't need an app.</p></div>
