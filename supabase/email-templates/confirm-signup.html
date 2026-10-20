@@ -1,16 +1,138 @@
 <!doctype html>
-<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="color-scheme" content="light"><title>Introthread</title></head>
-<body style="margin:0;padding:0;background:#f2eee6;-webkit-font-smoothing:antialiased">
-<div style="display:none;max-height:0;overflow:hidden;opacity:0">Activate your card</div>
-<table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background:#f2eee6"><tr><td align="center" style="padding:40px 16px">
-<table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="max-width:560px">
-<tr><td style="padding:0 4px 22px;font-family:Georgia,'Times New Roman',serif;font-size:24px;letter-spacing:-0.5px;color:#171512">intro<i>thread</i></td></tr>
-<tr><td style="background:#fffdf8;border:1px solid #d6cfc2;padding:44px 44px 36px">
-<p style="margin:0 0 18px;font-family:'Courier New',Courier,monospace;font-size:11px;letter-spacing:1.5px;text-transform:uppercase;color:#7c766c">Activate your card</p>
-<h1 style="margin:0 0 20px;font-family:Georgia,'Times New Roman',serif;font-weight:normal;font-size:36px;line-height:1.08;letter-spacing:-1px;color:#171512">One step left. <i>Activate your card.</i></h1>
-<p style="margin:0 0 30px;font-family:Helvetica,Arial,sans-serif;font-size:16px;line-height:1.6;color:#3a362f">Thanks for joining Introthread. Confirm your email and your card goes live, ready for your next handshake. From then on, every person you meet gets a shared Thread and one question: what&rsquo;s next?</p>
-<table role="presentation" cellpadding="0" cellspacing="0"><tr><td style="background:#171512"><a href="{{ .ConfirmationURL }}" style="display:inline-block;padding:15px 28px;font-family:Helvetica,Arial,sans-serif;font-size:15px;font-weight:bold;color:#f7f4ee;text-decoration:none">Activate my card</a></td></tr></table>
-<table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="margin-top:36px;border-top:1px dashed #cfc7b8"><tr><td style="padding-top:18px;font-family:Helvetica,Arial,sans-serif;font-size:13px;line-height:1.6;color:#7c766c">This link expires in 24 hours. If you did not create an Introthread account, you can ignore this email and nothing will happen.<br><br>If the button does not work, copy this link into your browser:<br><a href="{{ .ConfirmationURL }}" style="color:#c8442a;word-break:break-all">{{ .ConfirmationURL }}</a></td></tr></table>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="x-apple-disable-message-reformatting">
+<meta name="color-scheme" content="light only">
+<meta name="supported-color-schemes" content="light">
+<title>Activate your Introthread card</title>
+<style>
+  @media (max-width:600px){
+    .pad{padding-left:24px!important;padding-right:24px!important}
+    .h1{font-size:32px!important;line-height:36px!important}
+    .card-name{font-size:24px!important}
+    .stack{display:block!important;width:100%!important}
+    .step-n{font-size:30px!important}
+  }
+  a{color:#c8442a}
+</style>
+</head>
+<body style="margin:0;padding:0;background:#efeae1;-webkit-text-size-adjust:100%">
+
+<!-- Preheader (shows in the inbox preview) -->
+<div style="display:none;max-height:0;overflow:hidden;mso-hide:all;font-size:1px;line-height:1px;color:#efeae1">
+One tap and your card goes live at introthread.com/{{ .Data.profile.handle }}. &#8199;&#847;&#8199;&#847;&#8199;&#847;&#8199;&#847;&#8199;&#847;&#8199;&#847;&#8199;&#847;&#8199;&#847;&#8199;&#847;
+</div>
+
+<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="background:#efeae1">
+<tr><td align="center" style="padding:36px 12px 48px">
+
+<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="max-width:580px">
+
+  <!-- Masthead -->
+  <tr><td class="pad" style="padding:0 8px 20px">
+    <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0"><tr>
+      <td style="font-family:Georgia,'Times New Roman',serif;font-size:25px;letter-spacing:-0.6px;color:#171512">intro<i>thread</i></td>
+      <td align="right" style="font-family:'Courier New',Courier,monospace;font-size:11px;letter-spacing:1.4px;text-transform:uppercase;color:#8a8378">Account activation</td>
+    </tr></table>
+  </td></tr>
+
+  <!-- The record -->
+  <tr><td style="background:#fffdf8;border:1px solid #d6cfc2">
+
+    <!-- record header -->
+    <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0"><tr>
+      <td class="pad" style="padding:18px 40px;border-bottom:1px dashed #cfc7b8;font-family:'Courier New',Courier,monospace;font-size:11px;letter-spacing:1.4px;text-transform:uppercase;color:#8a8378">Card record</td>
+      <td class="pad" align="right" style="padding:18px 40px;border-bottom:1px dashed #cfc7b8;font-family:'Courier New',Courier,monospace;font-size:11px;letter-spacing:1.4px;text-transform:uppercase;color:#c8442a">Status: awaiting you</td>
+    </tr></table>
+
+    <!-- headline -->
+    <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0"><tr>
+      <td class="pad" style="padding:38px 40px 8px">
+        <h1 class="h1" style="margin:0;font-family:Georgia,'Times New Roman',serif;font-weight:normal;font-size:40px;line-height:44px;letter-spacing:-1.2px;color:#171512">{{ .Data.profile.name }}, your card is <i style="color:#c8442a">one tap from live.</i></h1>
+        <p style="margin:18px 0 0;font-family:Helvetica,Arial,sans-serif;font-size:16px;line-height:26px;color:#3a362f">Confirm this is your email address and your card goes live. From then on, everyone you meet gets a shared record of the moment, confirmed by both of you.</p>
+      </td>
+    </tr></table>
+
+    <!-- card preview -->
+    <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0"><tr>
+      <td class="pad" style="padding:28px 40px 6px">
+        <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="background:#1c1916;border-radius:6px">
+          <tr><td style="padding:22px 26px 0">
+            <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0"><tr>
+              <td style="font-family:'Courier New',Courier,monospace;font-size:10px;letter-spacing:2px;text-transform:uppercase;color:#a39c90">Introthread</td>
+              <td align="right" style="font-family:'Courier New',Courier,monospace;font-size:10px;letter-spacing:2px;text-transform:uppercase;color:#f2a48e">Preview</td>
+            </tr></table>
+          </td></tr>
+          <tr><td style="padding:30px 26px 4px">
+            <div class="card-name" style="font-family:Georgia,'Times New Roman',serif;font-size:28px;line-height:32px;letter-spacing:-0.6px;color:#f7f4ee">{{ .Data.profile.name }}</div>
+            <div style="padding-top:6px;font-family:Helvetica,Arial,sans-serif;font-size:14px;line-height:20px;color:#b9b1a4">{{ .Data.profile.role }} &middot; {{ .Data.profile.company }}</div>
+          </td></tr>
+          <tr><td style="padding:26px 26px 22px">
+            <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="border-top:1px solid #3a362f"><tr>
+              <td style="padding-top:14px;font-family:'Courier New',Courier,monospace;font-size:12px;color:#efe9df">introthread.com/{{ .Data.profile.handle }}</td>
+              <td align="right" style="padding-top:14px;font-family:'Courier New',Courier,monospace;font-size:11px;letter-spacing:1px;text-transform:uppercase;color:#a39c90">Not yet live</td>
+            </tr></table>
+          </td></tr>
+        </table>
+      </td>
+    </tr></table>
+
+    <!-- button -->
+    <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0"><tr>
+      <td class="pad" style="padding:28px 40px 10px">
+        <table role="presentation" cellpadding="0" cellspacing="0" border="0" width="100%"><tr>
+          <td align="center" bgcolor="#171512" style="background:#171512;border-radius:2px">
+            <!--[if mso]><v:roundrect xmlns:v="urn:schemas-microsoft-com:vml" href="{{ .ConfirmationURL }}" style="height:54px;v-text-anchor:middle;width:500px;" stroke="f" fillcolor="#171512"><center style="color:#f7f4ee;font-family:Arial,sans-serif;font-size:16px;font-weight:bold;">Activate my card</center></v:roundrect><![endif]-->
+            <!--[if !mso]><!-- --><a href="{{ .ConfirmationURL }}" style="display:block;padding:17px 24px;font-family:Helvetica,Arial,sans-serif;font-size:16px;font-weight:bold;letter-spacing:0.2px;color:#f7f4ee;text-decoration:none">Activate my card &rarr;</a><!--<![endif]-->
+          </td>
+        </tr></table>
+        <p style="margin:12px 0 0;text-align:center;font-family:'Courier New',Courier,monospace;font-size:11px;letter-spacing:1px;text-transform:uppercase;color:#8a8378">Takes one tap &middot; Link valid for 24 hours</p>
+      </td>
+    </tr></table>
+
+    <!-- what happens next -->
+    <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0"><tr>
+      <td class="pad" style="padding:34px 40px 8px">
+        <div style="font-family:'Courier New',Courier,monospace;font-size:11px;letter-spacing:1.4px;text-transform:uppercase;color:#8a8378;padding-bottom:12px;border-bottom:1px solid #171512">After you activate</div>
+        <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0">
+          <tr>
+            <td class="step-n" width="56" valign="top" style="padding:16px 0;border-bottom:1px solid #e3dccf;font-family:Georgia,'Times New Roman',serif;font-size:34px;line-height:34px;color:#171512">1</td>
+            <td valign="top" style="padding:16px 0;border-bottom:1px solid #e3dccf;font-family:Helvetica,Arial,sans-serif;font-size:15px;line-height:23px;color:#3a362f"><b style="color:#171512">Tap.</b> Share your card by phone, code or link. The other person needs no app.</td>
+          </tr>
+          <tr>
+            <td class="step-n" width="56" valign="top" style="padding:16px 0;border-bottom:1px solid #e3dccf;font-family:Georgia,'Times New Roman',serif;font-size:34px;line-height:34px;color:#171512">2</td>
+            <td valign="top" style="padding:16px 0;border-bottom:1px solid #e3dccf;font-family:Helvetica,Arial,sans-serif;font-size:15px;line-height:23px;color:#3a362f"><b style="color:#171512">Thread.</b> A shared record of where and when you met, confirmed by both of you.</td>
+          </tr>
+          <tr>
+            <td class="step-n" width="56" valign="top" style="padding:16px 0;font-family:Georgia,'Times New Roman',serif;font-size:34px;line-height:34px;color:#c8442a">3</td>
+            <td valign="top" style="padding:16px 0;font-family:Helvetica,Arial,sans-serif;font-size:15px;line-height:23px;color:#3a362f"><b style="color:#171512">What&rsquo;s next?</b> One private question each. We reveal the answers together and help you follow through.</td>
+          </tr>
+        </table>
+      </td>
+    </tr></table>
+
+    <!-- safety + fallback -->
+    <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0"><tr>
+      <td class="pad" style="padding:26px 40px 34px;border-top:1px dashed #cfc7b8">
+        <p style="margin:0;font-family:Helvetica,Arial,sans-serif;font-size:13px;line-height:21px;color:#6f6a61">Didn&rsquo;t sign up? Ignore this email. No card is created and nobody can see your details until you activate.</p>
+        <p style="margin:14px 0 0;font-family:Helvetica,Arial,sans-serif;font-size:13px;line-height:21px;color:#6f6a61">Button not working? Paste this link into your browser:<br><a href="{{ .ConfirmationURL }}" style="color:#c8442a;word-break:break-all">{{ .ConfirmationURL }}</a></p>
+      </td>
+    </tr></table>
+
+  </td></tr>
+
+  <!-- footer -->
+  <tr><td class="pad" style="padding:22px 8px 0">
+    <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0"><tr>
+      <td class="stack" valign="top" style="font-family:Georgia,'Times New Roman',serif;font-style:italic;font-size:15px;color:#3a362f;padding-bottom:8px">Every handshake, followed through.</td>
+      <td class="stack" valign="top" align="right" style="font-family:'Courier New',Courier,monospace;font-size:11px;line-height:18px;letter-spacing:0.6px;color:#8a8378">Sent to {{ .Email }}<br><a href="https://www.introthread.com" style="color:#8a8378;text-decoration:underline">introthread.com</a> &middot; London &middot; New York</td>
+    </tr></table>
+  </td></tr>
+
+</table>
 </td></tr>
-<tr><td style="padding:22px 4px 0;font-family:'Courier New',Courier,monospace;font-size:11px;letter-spacing:1px;text-transform:uppercase;color:#8a8378">Introthread &middot; Every handshake, followed through<br><span style="text-transform:none;letter-spacing:0">Sent to {{ .Email }} &middot; <a href="https://www.introthread.com" style="color:#8a8378">introthread.com</a></span></td></tr>
-</table></td></tr></table></body></html>
+</table>
+</body>
+</html>
