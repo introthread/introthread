@@ -1,0 +1,1 @@
+window.INTROTHREAD_CONFIG={supabaseUrl:'https://zpcsmsqnesqftodnondn.supabase.co',supabaseAnonKey:'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InpwY3Ntc3FuZXNxZnRvZG5vbmRuIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTI0OTU0MDMsImV4cCI6MjEwODA3MTQwM30.nv3xDj94P9-i4A-S_BxICfv7qqOIr09phs-w1eb3GPI'};
