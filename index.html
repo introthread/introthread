@@ -449,6 +449,19 @@ img.x-av{display:block}
 .x-live-in{display:grid;grid-template-columns:.85fr 1.15fr;gap:56px;align-items:center}
 @media (max-width:1180px){.x-live-in{grid-template-columns:1fr}}
 
+/* hero tap-to-connect animation */
+.x-glow{position:absolute;left:56%;top:44%;width:420px;height:420px;margin:-210px 0 0 -210px;border-radius:50%;background:radial-gradient(circle,rgba(31,94,255,.22),rgba(255,106,61,.10) 45%,transparent 70%);z-index:0;pointer-events:none;animation:xglow 3s ease-in-out infinite}
+.x-wave{position:absolute;left:56%;top:44%;width:130px;height:130px;margin:-65px 0 0 -65px;border-radius:50%;border:1.5px solid rgba(31,94,255,.6);box-shadow:0 0 28px rgba(31,94,255,.28),inset 0 0 22px rgba(31,94,255,.16);z-index:3;pointer-events:none;opacity:0;animation:xwave 3s cubic-bezier(.2,.6,.3,1) infinite}
+.x-wave.d2{animation-delay:1s}.x-wave.d3{animation-delay:2s}
+.x-tline{position:absolute;left:44%;top:44%;width:110px;height:2px;margin-top:-1px;border-radius:2px;background:linear-gradient(90deg,#1f5eff,#ff6a3d);box-shadow:0 0 12px rgba(255,106,61,.55);z-index:3;transform-origin:left center;pointer-events:none;animation:xline 3s ease-in-out infinite}
+.x-hero-art .x-phone{animation:xfloatA 6s ease-in-out infinite}.x-pcard{animation:xfloatB 6s ease-in-out infinite}
+@keyframes xwave{0%{transform:scale(.3);opacity:0}15%{opacity:1}100%{transform:scale(2.7);opacity:0}}
+@keyframes xline{0%,8%{transform:scaleX(0);opacity:0}35%,75%{transform:scaleX(1);opacity:1}100%{transform:scaleX(1);opacity:0}}
+@keyframes xglow{0%,100%{transform:scale(.92);opacity:.75}50%{transform:scale(1.06);opacity:1}}
+@keyframes xfloatA{0%,100%{transform:rotate(-5deg) translateY(0)}50%{transform:rotate(-5deg) translateY(-8px)}}
+@keyframes xfloatB{0%,100%{transform:rotate(9deg) translateY(0)}50%{transform:rotate(9deg) translateY(8px)}}
+@media (prefers-reduced-motion:reduce){.x-glow,.x-wave,.x-tline,.x-hero-art .x-phone,.x-pcard{animation:none}.x-wave{display:none}}
+
 </style>
 </head>
 <body>
@@ -1005,7 +1018,7 @@ function vHome(){document.body.classList.remove('x-open');return mnav()+`
 <ul class="x-checks"><li>${sv('check',17,'currentColor',2.4)}No app needed for the other person</li><li>${sv('check',17,'currentColor',2.4)}Private until you both confirm</li><li>${sv('check',17,'currentColor',2.4)}Set up in 60 seconds</li><li>${sv('check',17,'currentColor',2.4)}Works with NFC, QR and links</li></ul></div>
 <div class="x-hero-art">${phone(bizCard(SARAH,{phone:1}))}
 <div class="x-pcard"><div class="x-pcard-top"><span>introthread</span>${sv('nfc',18)}</div><div class="x-av" style="width:58px;height:58px;font-size:19px;margin:24px 0 12px">SW</div><div class="x-pcard-n">Sarah Williams</div><div class="x-pcard-r">Marketing Director<br>Acme Technologies</div><div class="x-qr" id="qrHero"></div><div class="x-pcard-f">Tap or scan<br>to connect</div></div>
-<div class="x-hand">${handArrow(56,48)}Tap, scan or share<br>&mdash; no app required</div></div></div></section>
+<span class="x-glow"></span><span class="x-wave"></span><span class="x-wave d2"></span><span class="x-wave d3"></span><span class="x-tline"></span><div class="x-hand">${handArrow(56,48)}Tap, scan or share<br>&mdash; no app required</div></div></div></section>
 <section class="x-strip"><div class="x-wrap x-strip-in"><div class="x-strip-l">Works wherever<br>you network</div><div class="x-strip-items"><span>${sv('nfc',20)}NFC tap</span><span>${sv('qr',20)}QR code</span><span>${sv('link',20)}Share link</span><span>${sv('mail',20)}Email &amp; SMS</span><span>${sv('contact',20)}Save to contacts</span><span>${sv('phone',20)}Any phone</span></div></div></section>
 <section class="x-sec alt" id="how"><div class="x-wrap"><div class="x-head2"><div><div class="x-eye">How it works</div><h2 class="x-h2">From introduction<br><em class="ink">to opportunity.</em></h2></div><p class="x-sub">Introthread captures the relationship, with both people's consent, and helps you remember, follow up and turn conversations into opportunities.</p></div>
 <div class="x-steps">
