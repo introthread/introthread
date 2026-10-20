@@ -443,7 +443,7 @@ img.x-av{display:block}
 @media (min-width:1081px) and (max-width:1360px){.x-styles{grid-template-columns:1fr 1fr}.x-sw{height:clamp(44px,6.4vh,66px)}.x-s3{grid-template-columns:minmax(0,1fr) 280px}.x-s2{grid-template-columns:minmax(0,1fr) 260px}.x-s1art{transform:scale(.74)}}
 @media (min-width:1081px) and (max-height:880px){.x-oauth{grid-template-columns:1fr 1fr}.x-obtn{font-size:14px;gap:10px}.x-s1art{transform:scale(.72)}.x-s2art{transform:scale(.68)}}
 @media (min-width:1081px) and (max-height:780px){.x-side .x-hand,.x-s2 .x-count{display:none}.x-s2art .x-hand{display:none}.x-note{display:none}.x-side-p{-webkit-line-clamp:3;display:-webkit-box;-webkit-box-orient:vertical;overflow:hidden}#sb{height:64px}}
-@media (min-width:1081px) and (max-height:680px){.x-side-art,.x-feats span{display:none}.x-fsub{display:none}}
+@media (min-width:1081px) and (max-height:680px){.x-side-art,.x-feats div span{display:none}.x-fsub{display:none}}
 
 .x-live{background:radial-gradient(50% 60% at 80% 40%,rgba(31,94,255,.08),transparent 65%),#fff;overflow:hidden}
 .x-live-in{display:grid;grid-template-columns:.85fr 1.15fr;gap:56px;align-items:center}
@@ -592,6 +592,43 @@ img.x-av{display:block}
 .x-why-i b{font-size:15.5px;margin:1px 0 3px}.x-why-i small{font-size:13.5px;line-height:1.5}
 .x-why-n{top:20px;right:24px}
 @media (max-width:900px){.x-sec{padding:52px 0}.x-why{padding:40px 0}.x-why-top{padding:28px 20px 22px}}
+
+/* v4.3 login + signup step 1 left panel */
+.x-feats div span{display:block}
+.x-side.v2 .x-side-p{max-width:470px}
+.x-chips2{display:flex;flex-wrap:wrap;gap:8px;margin-top:clamp(14px,2.6vh,26px)}
+.x-chips2 span{display:inline-flex;align-items:center;gap:9px;padding:6px 14px 6px 6px;border-radius:999px;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.12);font:600 13px var(--xss);color:#e3e8f4}
+.x-chips2 i{width:26px;height:26px;border-radius:50%;display:grid;place-items:center;background:rgba(31,94,255,.25);color:#cfdcff}
+.x-scene{position:relative;flex:1;min-height:220px;margin:clamp(14px,3vh,30px) -20px 0}
+.x-orb{position:absolute;border-radius:50%;filter:blur(50px);opacity:.55;animation:xorb 14s ease-in-out infinite}
+.x-orb.a{width:280px;height:280px;left:22%;top:8%;background:#1f5eff}.x-orb.b{width:220px;height:220px;left:52%;top:40%;background:#ff6a3d;opacity:.32;animation-delay:-7s}
+@keyframes xorb{0%,100%{transform:translate(0,0) scale(1)}50%{transform:translate(30px,-20px) scale(1.12)}}
+.x-sc-path{position:absolute;inset:0;width:100%;height:100%;overflow:visible}
+.x-sc-path path{animation:xdash 1.6s linear infinite;filter:drop-shadow(0 0 4px rgba(255,140,90,.6))}
+@keyframes xdash{to{stroke-dashoffset:-20}}
+.x-sc-ring{position:absolute;left:50%;top:50%;width:200px;height:200px;margin:-100px 0 0 -100px;border-radius:50%;border:1px solid rgba(120,160,255,.45);animation:xwave 3.6s cubic-bezier(.2,.6,.3,1) infinite;opacity:0}
+.x-sc-ring.r2{animation-delay:1.8s}
+.x-sc-card{position:absolute;left:50%;top:50%;width:clamp(230px,34vh,280px);transform:translate(-50%,-50%);padding:16px;border-radius:20px;background:linear-gradient(160deg,rgba(255,255,255,.12),rgba(255,255,255,.04));border:1px solid rgba(255,255,255,.16);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);box-shadow:0 40px 70px -30px rgba(0,0,0,.7);animation:xfc 7s ease-in-out infinite;z-index:2}
+@keyframes xfc{0%,100%{transform:translate(-50%,-50%)}50%{transform:translate(-50%,calc(-50% - 10px))}}
+.x-sc-row{display:flex;align-items:center;gap:12px}.x-sc-row img{width:50px;height:50px;border-radius:50%;object-fit:cover;box-shadow:0 0 0 3px rgba(255,255,255,.15)}
+.x-sc-row div{flex:1;min-width:0}.x-sc-row b{display:block;font-size:15px}.x-sc-row small{display:block;font-size:11.5px;line-height:1.35;color:#aeb8cc;margin-top:2px}.x-sc-row svg{color:#aeb8cc;align-self:flex-start}
+.x-sc-ic{display:flex;gap:6px;margin-top:14px}.x-sc-ic span{flex:1;height:32px;border-radius:8px;border:1px solid rgba(255,255,255,.14);display:grid;place-items:center;color:#dfe6f5}.x-sc-ic span:first-child{color:#5b93ff}
+.x-sc-save{margin-top:10px;text-align:center;background:var(--xb);border-radius:9px;padding:9px;font-size:13px;font-weight:700;box-shadow:0 10px 20px -10px rgba(31,94,255,.9)}
+.x-sc-toast{position:absolute;right:6%;top:4%;display:flex;align-items:center;gap:10px;padding:10px 14px 10px 10px;border-radius:14px;background:#fff;color:var(--xink);box-shadow:0 20px 40px -18px rgba(0,0,0,.6);z-index:3;animation:xtoast 7s ease-in-out infinite}
+.x-sc-toast .ok{width:26px;height:26px;border-radius:50%;background:#12a065;display:grid;place-items:center;flex:none}
+.x-sc-toast b{display:block;font-size:13px}.x-sc-toast small{display:block;font-size:11px;color:var(--xmu);margin-top:1px}
+@keyframes xtoast{0%,8%{opacity:0;transform:translateY(-10px) scale(.96)}16%,78%{opacity:1;transform:none}90%,100%{opacity:0;transform:translateY(-6px)}}
+.x-sc-j{position:absolute;left:4%;bottom:6%;display:flex;align-items:center;gap:10px;padding:7px 14px 7px 7px;border-radius:999px;background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.18);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);z-index:3;animation:xbob 6s ease-in-out infinite}
+.x-sc-j img{width:34px;height:34px;border-radius:50%;object-fit:cover;object-position:60% 25%}
+.x-sc-j b{display:block;font-size:12.5px}.x-sc-j small{display:block;font-size:10.5px;color:#aeb8cc}
+.x-sc-m{position:absolute;right:5%;bottom:10%;padding:9px 12px;border-radius:12px;background:#fff;color:var(--xink);box-shadow:0 20px 40px -18px rgba(0,0,0,.6);z-index:3;animation:xbob 6s ease-in-out infinite;animation-delay:-3s}
+.x-sc-m small{display:block;font-size:10.5px;font-weight:700;color:var(--xmu);margin-bottom:6px}
+.x-sc-m span{display:inline-flex;align-items:center;gap:6px;padding:6px 10px;border-radius:8px;background:#eef3ff;border:1px solid var(--xb);color:var(--xb);font-size:12px;font-weight:700}
+@keyframes xbob{0%,100%{transform:translateY(0)}50%{transform:translateY(-8px)}}
+@media (prefers-reduced-motion:reduce){.x-orb,.x-sc-path path,.x-sc-ring,.x-sc-card,.x-sc-toast,.x-sc-j,.x-sc-m{animation:none}.x-sc-ring{display:none}.x-sc-toast{opacity:1}}
+@media (max-width:1080px){.x-scene,.x-chips2{display:none}}
+@media (min-width:1081px) and (max-height:700px){.x-sc-j,.x-sc-m{display:none}.x-scene{min-height:180px}}
+@media (min-width:1081px) and (max-height:600px){.x-scene{display:none}}
 
 </style>
 </head>
@@ -1170,7 +1207,7 @@ function vHome(){document.body.classList.remove('x-open');return mnav()+`
 <section class="x-sec" style="padding-top:0"><div class="x-wrap"><div class="x-ctab"><div><div class="x-eye">Get started today</div><h2>Make every introduction count.</h2><p>Create your free Introthread card in 60 seconds. Your next handshake deserves a Thread.</p><div class="x-cta-row" style="margin-top:0"><a href="#/signup" class="x-btn lg">Get your free card ${sv('arrow',17)}</a><a href="#/login" class="x-btn dk2 lg"><span class="x-play" style="background:#fff;color:#0b1122">${sv('play',11)}</span>Try the live demo</a></div></div>
 <div class="x-ctab-art"><div class="x-wcard o"></div><div class="x-wcard d"><div style="display:flex;justify-content:space-between;font-size:12px;font-weight:700;color:#c8d0e0">introthread ${sv('nfc',16)}</div><div class="x-qr" id="qrCta" style="margin-top:36px"></div></div><div class="x-wcard w"><div style="font-size:11px;font-weight:700;text-align:left">introthread</div>${avatarC(SARAH,64)}<div style="font-weight:700;font-size:16px">Sarah Williams</div><div style="font-size:12px;color:#5b6478;margin-top:3px">Marketing Director</div></div></div></div></div></section>`+foot()}
 /* ---------- onboarding ---------- */
-function authSide(s){const top=`<div class="x-side-top">${logo(true)}${!s||s===1?'<small>Built for professionals<br>across the UK and USA</small>':''}</div>`;
+function authSideBase(s){const top=`<div class="x-side-top">${logo(true)}${!s||s===1?'<small>Built for professionals<br>across the UK and USA</small>':''}</div>`;
  const feats=a=>`<ul class="x-feats">${a.map(([i,b,t])=>`<li><span class="x-fic">${sv(i,22)}</span><div><b>${b}</b><span>${t}</span></div></li>`).join('')}</ul>`;
  const note=(i,b,t)=>`<div class="x-note"><span class="x-fic" style="width:44px;height:44px">${sv(i,19)}</span><div><b>${b}</b><span>${t}</span></div></div>`;
  if(s===2)return`<aside class="x-side">${top}<div class="x-eye">Your professional identity<br>anywhere you network</div><h1>A profile that<br>works as hard as<br><em>your network.</em></h1><p class="x-side-p" style="max-width:340px">Create a professional identity that people trust, share it instantly and turn introductions into meaningful opportunities.</p>${feats([['user','Professional identity','Showcase who you are and what you do.'],['link','Share anywhere','QR, NFC, link, email or SMS.'],['users','Remember and follow up','Keep track of conversations and next steps.']])}
@@ -1232,6 +1269,21 @@ function vLogin(){document.body.classList.remove('x-open');return`<div class="x-
 <div id="lerr" class="x-err" role="alert"></div><button class="x-btn lg block" style="margin-top:4px">Log in ${sv('arrow',17)}</button></form>
 <button type="button" class="x-demo" onclick="demoLogin()">${sv('spark',16)} Explore the live demo account</button>
 <p class="x-alt" style="margin-top:8px">New here? <a href="#/signup">Create your free card</a></p></div></main></div>`}
+
+
+function authSide(s){if(s===2||s===3)return authSideBase(s);
+ return`<aside class="x-side v2"><div class="x-side-top">${logo(true)}<small>Built for professionals<br>across the UK and USA</small></div>
+ <div class="x-eye">${s?'Join a more meaningful<br>professional network':'Welcome back to<br>your professional network'}</div><h1>Every handshake,<br><em>followed through.</em></h1>
+ <p class="x-side-p">Introthread helps you create your professional identity, capture connections and stay on top of the relationships that matter.</p>
+ <div class="x-chips2">${[['user','Create your identity'],['send','Share instantly'],['bell','Follow up on time']].map(([i,t])=>`<span><i>${sv(i,14)}</i>${t}</span>`).join('')}</div>
+ <div class="x-scene" aria-hidden="true"><span class="x-orb a"></span><span class="x-orb b"></span>
+  <svg class="x-sc-path" viewBox="0 0 100 100" preserveAspectRatio="none"><defs><linearGradient id="xpg" x1="0" x2="1"><stop offset="0" stop-color="#ff6a3d"/><stop offset="1" stop-color="#4f86ff"/></linearGradient></defs><path d="M17 78 C 28 70, 34 58, 47 52" fill="none" stroke="url(#xpg)" stroke-width="2" stroke-dasharray="5 5" vector-effect="non-scaling-stroke"/></svg>
+  <span class="x-sc-ring"></span><span class="x-sc-ring r2"></span>
+  <div class="x-sc-card"><div class="x-sc-row"><img src="/img/sarah.jpg" alt=""><div><b>Sarah Williams</b><small>Marketing Director<br>Acme Technologies</small></div>${sv('nfc',18)}</div><div class="x-sc-ic">${['li','x','cal','link','mail'].map(k=>`<span>${sv(k,14)}</span>`).join('')}</div><div class="x-sc-save">Save Contact</div></div>
+  <div class="x-sc-toast"><span class="ok">${sv('check',13,'#fff',3)}</span><div><b>Thread confirmed</b><small>You and Sarah &middot; London Tech Week</small></div></div>
+  <div class="x-sc-j"><img src="/img/uc-professionals.jpg" alt=""><div><b>James Carter</b><small>Partner, Lattice Ventures</small></div></div>
+  <div class="x-sc-m"><small>What's next?</small><span>${sv('cal',13)} Meet again ${sv('check',13,'currentColor',2.6)}</span></div>
+ </div></aside>`}
 
 /* Supabase email-link callback: introthread.com/app#access_token=... or #error=... */
 const AUTH_CB=/(^|[#&])(access_token|error_description|error)=/.test(location.hash);
