@@ -789,6 +789,74 @@ html,body,button,input,select,textarea{font-family:var(--xss)}
 .serif,.x-h1,.x-h2,.x-ww-h h2,.x-why-q,.x-ctab h2,.x-bc h3{font-family:var(--xsf)}
 .x-hand{font-size:17px;letter-spacing:0}
 
+/* ===== Tap to Thread v5 ===== */
+.app .topbar{height:72px;padding:0 28px}
+.app .topbar .search{max-width:560px;flex:1;height:44px}
+.t-tb{display:flex;align-items:center;gap:14px}
+.t-chip{display:inline-flex;align-items:center;gap:8px;height:40px;padding:0 14px;border:1px solid var(--line);border-radius:10px;background:#fff;font:600 13.5px var(--xss);color:var(--xink);cursor:pointer}
+.t-bell{position:relative;width:40px;height:40px;border-radius:10px;border:0;background:transparent;display:grid;place-items:center;color:var(--xink);cursor:pointer}.t-bell:hover{background:#f3f5f9}
+.t-bell i{position:absolute;top:7px;right:8px;width:9px;height:9px;border-radius:50%;background:var(--xor);box-shadow:0 0 0 2px #fff}
+.t-user{display:flex;align-items:center;gap:10px;padding:4px 6px 4px 14px;border-left:1px solid var(--line);background:none;border-top:0;border-right:0;border-bottom:0;cursor:pointer;text-align:left;font-family:var(--xss)}
+.t-user .x-av{margin:0;box-shadow:none}.t-user b{display:block;font-size:14px;color:var(--xink)}.t-user small{display:block;font-size:12.5px;color:var(--xmu)}
+.t-head{display:flex;justify-content:space-between;align-items:flex-start;gap:24px;margin-bottom:26px}
+.t-eye{font:700 13px var(--xss);letter-spacing:.14em;text-transform:uppercase;color:var(--xb)}
+.t-h1{font-family:var(--xsf);font-weight:700;font-size:clamp(32px,3.2vw,46px);letter-spacing:-.035em;line-height:1.05;color:var(--xink);margin:8px 0 8px}
+.t-sub{font:400 17px/1.5 var(--xss);color:var(--xmu);margin:0}
+.t-how{display:inline-flex;align-items:center;gap:10px;height:44px;padding:0 16px;border:1px solid var(--line);border-radius:10px;background:#fff;font:600 14px var(--xss);color:var(--xink);text-decoration:none;white-space:nowrap}.t-how:hover{border-color:#c5cbd8}
+.t-grid{display:grid;grid-template-columns:minmax(0,.82fr) minmax(0,1.18fr);gap:28px;align-items:stretch}
+.t-card{position:relative;overflow:hidden;border-radius:20px;padding:26px 18px 18px;display:flex;flex-direction:column;align-items:center;font-family:var(--xss);box-shadow:0 40px 70px -40px rgba(8,14,40,.7)}
+.t-card-top{align-self:stretch;display:flex;justify-content:space-between;align-items:center;padding:0 8px}
+.t-card .x-logo.dk b{color:#4f86ff}.t-card.lt .x-logo{color:var(--xink)}
+.t-card-id{text-align:center;margin-top:18px}.t-card-id .x-av{box-shadow:0 0 0 4px rgba(255,255,255,.15)}
+.t-card-id b{display:block;font-size:27px;font-weight:700;letter-spacing:-.02em;margin-top:14px}.t-card-id small{display:block;font-size:16px;color:var(--sub);margin-top:4px}
+.t-qr{position:relative;margin-top:22px;background:#fff;border-radius:18px;padding:14px;line-height:0;box-shadow:0 20px 40px -20px rgba(0,0,0,.6)}.t-qr img{display:block;width:164px;height:164px;image-rendering:pixelated}
+.t-qrlogo{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);width:42px;height:42px;border-radius:50%;background:#fff;display:grid;place-items:center;box-shadow:0 0 0 4px #fff}
+.t-qrlogo .x-lm i{width:15px;height:15px}.t-qrlogo .x-lm i:first-child{background:#0b1122}
+.t-url{margin-top:14px;font:500 15px var(--xss);color:var(--sub)}
+.t-acts{display:flex;gap:8px;margin-top:auto;padding-top:18px;align-self:stretch}
+.t-acts button{flex:1 1 auto;display:inline-flex;align-items:center;justify-content:center;gap:7px;height:42px;padding:0 10px;border-radius:10px;border:1px solid rgba(255,255,255,.18);background:rgba(255,255,255,.06);color:inherit;font:600 13px var(--xss);cursor:pointer;white-space:nowrap}
+.t-acts button:last-child{flex:0 0 42px;letter-spacing:1px}.t-acts button:hover{background:rgba(255,255,255,.14)}
+.t-card.lt .t-acts button{border-color:rgba(15,23,42,.14);background:rgba(255,255,255,.6)}
+.t-form{background:#fff;border:1px solid var(--line);border-radius:20px;padding:24px 24px 22px;box-shadow:0 20px 40px -34px rgba(15,23,42,.3);display:flex;flex-direction:column;gap:16px;font-family:var(--xss)}
+.t-form-h{display:flex;justify-content:space-between;align-items:flex-start;gap:16px}.t-form-h h2{font:700 21px var(--xss);color:var(--xink);margin:0}.t-form-h p{margin:5px 0 0;font-size:14.5px;color:var(--xmu)}
+.t-seg{border:1px solid var(--line);background:#fff}.t-seg button{padding:9px 16px;font-size:14px}
+.t-g2{display:grid;grid-template-columns:1fr 1fr;gap:14px 18px}.t-g2[hidden]{display:none}
+.t-form .x-f>span{font-size:14px}.t-form .x-f em{font-style:normal;font-weight:500;color:var(--xmu)}
+.t-form .x-f input,.t-form .x-f select{height:46px;border:1px solid #dfe3ea;border-radius:10px;padding:0 14px;font:500 15px var(--xss);width:100%;background:#fff;outline:none}
+.t-form .x-f input:focus,.t-form .x-f select:focus,.t-note:focus-within{border-color:var(--xb);box-shadow:0 0 0 4px rgba(31,94,255,.12)}
+.t-where{position:relative}.t-where summary{list-style:none;display:flex;align-items:center;gap:10px;height:46px;padding:0 14px;border:1px solid #dfe3ea;border-radius:10px;cursor:pointer;font:500 15px var(--xss);color:var(--xink)}
+.t-where summary::-webkit-details-marker{display:none}.t-where summary span{flex:1;color:#5b6478}.t-where summary.set span{color:var(--xink);font-weight:600}.t-where summary svg{color:#7a8396}
+.t-where[open] summary{border-color:var(--xb);box-shadow:0 0 0 4px rgba(31,94,255,.12)}
+.t-where-m{position:absolute;z-index:20;left:0;right:0;top:52px;background:#fff;border:1px solid var(--line);border-radius:12px;box-shadow:0 24px 50px -20px rgba(15,23,42,.35);padding:8px;max-height:300px;overflow:auto}
+.t-where-m small{display:block;font:700 11px var(--xss);letter-spacing:.12em;text-transform:uppercase;color:var(--xmu);padding:8px 10px 4px}
+.t-where-m button{display:flex;align-items:center;gap:10px;width:100%;border:0;background:none;padding:9px 10px;border-radius:8px;font:500 14px var(--xss);color:var(--xink);cursor:pointer;text-align:left}.t-where-m button:hover{background:#f3f6fc}.t-where-m button svg{color:var(--xb)}
+.t-where-c{display:flex;gap:6px;padding:8px 4px 4px;border-top:1px solid var(--line);margin-top:6px}.t-where-c input{flex:1;height:38px!important}.t-where-c button{width:auto;background:var(--xb);color:#fff;padding:0 14px;justify-content:center}.t-where-c button:hover{background:var(--xb2)}
+.t-note{position:relative;border:1px solid #dfe3ea;border-radius:10px;transition:border-color .15s,box-shadow .15s}.t-note textarea{width:100%;border:0;outline:none;resize:vertical;min-height:88px;padding:12px 14px 26px;font:500 15px/1.5 var(--xss);border-radius:10px;background:transparent}
+.t-note small{position:absolute;right:12px;bottom:8px;font-size:12px;color:var(--xmu)}.t-note small b{font-weight:500}
+.t-opts{display:grid;grid-template-columns:1fr 1fr;gap:18px;align-items:center;padding-top:4px}
+.t-tog{display:flex;gap:14px;align-items:center;cursor:pointer}.t-tog input{position:absolute;opacity:0;width:1px;height:1px}
+.t-sw{flex:none;position:relative;width:50px;height:28px;border-radius:999px;background:#d5dae3;transition:background .2s}.t-sw:after{content:'';position:absolute;left:3px;top:3px;width:22px;height:22px;border-radius:50%;background:#fff;box-shadow:0 2px 6px rgba(0,0,0,.2);transition:transform .2s}
+.t-tog input:checked+.t-sw{background:var(--xb)}.t-tog input:checked+.t-sw:after{transform:translateX(22px)}.t-tog input:focus-visible+.t-sw{outline:3px solid rgba(31,94,255,.5);outline-offset:2px}
+.t-tog b,.t-priv b{display:block;font-size:14px;color:var(--xink)}.t-tog small,.t-priv small{display:block;font-size:13px;color:var(--xmu);margin-top:2px}
+.t-priv{display:flex;gap:12px;align-items:flex-start;padding-left:18px;border-left:1px solid var(--line)}.t-priv svg{color:#5b6478;flex:none;margin-top:2px}
+.t-start{display:flex;align-items:center;justify-content:center;gap:12px;height:56px;border:0;border-radius:12px;background:var(--xb);color:#fff;font:700 17px var(--xss);cursor:pointer;box-shadow:0 14px 28px -14px rgba(31,94,255,.9);transition:background .15s,transform .15s}.t-start:hover{background:var(--xb2);transform:translateY(-1px)}
+.t-ways{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;margin-top:24px}
+.t-way{display:flex;align-items:center;gap:16px;text-align:left;padding:20px 18px;border-radius:16px;border:1px solid transparent;cursor:pointer;font-family:var(--xss);transition:transform .15s,box-shadow .15s}
+.t-way:hover{transform:translateY(-2px);box-shadow:0 18px 34px -24px rgba(15,23,42,.4)}
+.t-way>span:nth-child(2){flex:1}.t-way b{display:block;font-size:16px;color:var(--xink);margin-bottom:4px}.t-way small{display:block;font-size:13.5px;line-height:1.5;color:#5b6478}.t-way>svg{color:#5b6478;flex:none}
+.t-way-ic{flex:none;width:58px;height:58px;border-radius:50%;display:grid;place-items:center}
+.t-way.o{background:#fff4ef;border-color:#ffe2d6}.t-way.o .t-way-ic{background:var(--xor);color:#fff;box-shadow:0 0 0 8px rgba(255,106,61,.14)}
+.t-way.b{background:#f1f5ff;border-color:#dfe7ff}.t-way.b .t-way-ic{background:#dfe8ff;color:var(--xb)}
+.t-way.g{background:#effaf4;border-color:#d6f0e2}.t-way.g .t-way-ic{background:#dcf3e6;color:#12a065}
+.t-tip{display:flex;align-items:center;gap:16px;margin-top:18px;padding:16px 20px;border:1px solid var(--line);border-radius:16px;background:#fff;font-family:var(--xss)}
+.t-tip-ic{flex:none;width:44px;height:44px;border-radius:50%;background:#eef3ff;color:var(--xb);display:grid;place-items:center}
+.t-tip>span:nth-child(2){flex:1}.t-tip b{display:block;font-size:14.5px;color:var(--xink)}.t-tip small{display:block;font-size:13px;color:var(--xmu);margin-top:2px}
+.t-tip a{display:inline-flex;align-items:center;gap:4px;font:700 14px var(--xss);color:var(--xb);text-decoration:none;white-space:nowrap}
+.t-qrbig{position:relative;display:inline-block;background:#fff;border:1px solid var(--line);border-radius:18px;padding:16px;line-height:0}.t-qrbig img{width:280px;height:280px;image-rendering:pixelated}
+.t-more{display:grid;gap:6px}.t-more a,.t-more button{display:flex;align-items:center;gap:12px;padding:12px 14px;border-radius:10px;border:1px solid var(--line);background:#fff;font:600 14.5px var(--xss);color:var(--xink);text-decoration:none;cursor:pointer;text-align:left}.t-more a:hover,.t-more button:hover{background:#f6f8fc}
+@media (max-width:1280px){.t-grid{grid-template-columns:1fr}.t-card{max-width:520px;width:100%;margin:0 auto}}
+@media (max-width:900px){.t-ways{grid-template-columns:1fr}.t-g2,.t-opts{grid-template-columns:1fr}.t-priv{padding-left:0;border-left:0}.t-head{flex-direction:column}.t-chip,.t-user span{display:none}.t-tip{flex-wrap:wrap}}
+
 </style>
 </head>
 <body><a href="#root" class="x-skip">Skip to content</a>
@@ -1042,7 +1110,7 @@ function shell(on,inner){const u=me();const open=myThreads().filter(t=>['open','
  <div class="navgroup">You</div>${nav('#/app/card','user','My card','card')}${nav('#/'+u.handle,'globe','Public profile','pub')}${nav('#/app/settings','gear','Settings','settings')}
  <div style="margin-top:auto" class="card pad" ><div class="small" style="font-weight:850">Your Warmth</div><div class="small muted" style="margin:4px 0 10px">${myThreads().filter(t=>t.confirmed).length} verified relationships</div>${warmBar(Math.min(5,1+Math.floor(myThreads().filter(t=>t.resolvedAt).length/2)))}</div>
  <div class="row" style="margin-top:14px;padding:8px">${av(u.name,'sm')}<div style="flex:1;min-width:0"><b class="small" style="display:block">${esc(u.name)}</b><span class="tiny muted">${esc(u.plan)} plan</span></div><button class="x" title="Log out" onclick="logout()">${ic('out',15)}</button></div></aside>
- <main class="main"><div class="topbar"><div class="search">${ic('search',16)}<input placeholder="Search Threads, people, rooms" oninput="Q=this.value" onkeydown="if(event.key==='Enter')go('#/app/threads')"></div><div class="row"><span class="chip">${ic('globe',13)} introthread.com/${esc(u.handle)}</span><button class="x" onclick="showNudges()" title="Nudges">${ic('bell',16)}</button></div></div><div class="content">${inner}</div></main>
+ <main class="main"><div class="topbar"><div class="search">${ic('search',16)}<input placeholder="Search Threads, people, rooms, events..." oninput="Q=this.value" onkeydown="if(event.key==='Enter')go('#/app/threads')"></div><div class="t-tb"><button type="button" class="t-chip" onclick="copy('${profileUrl(u)}','Link copied')" title="Copy your link">${sv('globe',16)} introthread.com/${esc(u.handle)}</button><button type="button" class="t-bell" onclick="showNudges()" aria-label="Nudges">${sv('bell',20)}${nudges().length?'<i></i>':''}</button><button type="button" class="t-user" onclick="acctMenu()">${avatarC(u,40)}<span><b>${esc(u.name)}</b><small>${esc(u.role||u.plan+' plan')}</small></span>${sv('chevd',16)}</button></div></div><div class="content">${inner}</div></main>
  <nav class="mobile-tab">${[['#/app','home','Today','today'],['#/app/threads','thread','Threads','threads'],['#/app/tap','tap','Tap','tap'],['#/app/rooms','room','Rooms','rooms'],['#/app/card','user','Card','card']].map(([h,i,l,k])=>`<a href="${h}" class="${on===k?'on':''}">${ic(i,20)}${l}</a>`).join('')}</nav></div>`}
 let Q='';
 function logout(){DB.session=null;save();toast('Logged out');go('#/')}
@@ -1159,7 +1227,7 @@ function render(){const h=RH().slice(1);const p=h.split('/').filter(Boolean);let
  else if(!p[0])html=vHome();
  else html=({how:vHow,rooms:vRoomsPage,networks:vNetworks,pricing:vPricing,about:vAbout,privacy:vPrivacy,terms:vTerms,login:()=>authed?(go('#/app'),''):vLogin(),signup:()=>authed?(go('#/app'),''):vSignup(),t:()=>vGuest(p[1])}[p[0]]||(()=>vPublic(p[0])))();
  if(html==null)return;$('#root').innerHTML=html;
- const u=me();if(u){qr($('#qrToday'),profileUrl(u),96);qr($('#qrTap'),profileUrl(u),210);qr($('#qrCard'),profileUrl(u),96)}
+ const u=me();if(u){qr($('#qrToday'),profileUrl(u),96);qr($('#qrTap'),profileUrl(u),164);qr($('#qrCard'),profileUrl(u),96)}
  const rq=$('#qrRoom');if(rq){const r=DB.rooms.find(x=>x.id===p[2]);qr(rq,'https://introthread.com/r/'+r.code,150)}
  document.title={app:'Introthread',login:'Log in | Introthread',signup:'Create your card | Introthread',pricing:'Pricing | Introthread'}[p[0]]||'Introthread | Every handshake, followed through';
  if(!window._keepScroll)window.scrollTo(0,0)}
@@ -1519,6 +1587,62 @@ const TERMS=[['accept','Using Introthread','<p>By creating an account or using I
 ['law','Governing law','<p>These terms are governed by the laws of England and Wales. If you live elsewhere, you keep any mandatory protections of your local law.</p>'],
 ['contact','Contact','<p>Questions about these terms: <a href="mailto:hello@introthread.com">hello@introthread.com</a>.</p>']];
 function vTerms(){return legalDoc('Legal','Terms of <em>Service.</em>','20 October 2026',TERMS)}
+
+/* ===== v5 Tap to Thread ===== */
+let TAPM='q';
+function tapWhereSet(id,label){$('#tw').value=id||'';$('#tw2').value=label||'';const b=$('#twb span');if(b){b.textContent=label||'Select a location';b.parentNode.classList.toggle('set',!!label)}const d=$('#twd');if(d)d.removeAttribute('open')}
+function tapWhereCustom(){const v=($('#twc').value||'').trim();if(v)tapWhereSet('',v)}
+function tapMode(m){TAPM=m;document.querySelectorAll('.t-seg button').forEach(b=>b.classList.toggle('on',b.dataset.m===m));const f=$('#tfull');if(f)f.hidden=m!=='f'}
+function tapQR(){const u=me();modal(`<div class="center" style="padding:6px"><div class="x-eye" style="margin-bottom:6px">Scan to connect</div><h2 style="margin:0 0 4px;font-size:24px">${esc(u.name)}</h2><p class="muted" style="margin:0 0 18px">introthread.com/${esc(u.handle)}</p><div class="t-qrbig"><div id="qrBig"></div><span class="t-qrlogo"><span class="x-lm"><i></i><i></i></span></span></div><button class="x-btn block" style="margin-top:20px" onclick="closeModal()">Done</button></div>`);setTimeout(()=>qr($('#qrBig'),profileUrl(u),300),20)}
+async function tapNFC(){const u=me();if('NDEFReader' in window){try{toast('Hold an NFC card or sticker to the back of your phone...');const w=new NDEFReader();await w.write({records:[{recordType:'url',data:profileUrl(u)}]});toast('NFC card linked to introthread.com/'+u.handle)}catch(e){toast('NFC write was cancelled or failed. Try again.')}}
+ else toast('Writing NFC cards works in Chrome on Android. On iPhone and desktop, use the QR code or your link.')}
+function tapMore(){const u=me();modal(`<div><h2 style="margin:0 0 14px;font-size:20px">More options</h2><div class="t-more"><button onclick="closeModal();tapQR()">${sv('qr',18)} Show full-screen QR code</button><button onclick="tapDownloadQR()">${sv('arrow',18)} Download QR code (PNG)</button><a href="/${esc(u.handle)}" onclick="closeModal()">${sv('globe',18)} View public profile</a><a href="/app/card" onclick="closeModal()">${sv('user',18)} Edit my card</a></div></div>`)}
+function tapDownloadQR(){const u=me();const d=document.createElement('div');qr(d,profileUrl(u),600);const img=d.querySelector('img');if(!img)return toast('QR code is not available right now.');const a=document.createElement('a');a.href=img.src;a.download='introthread-'+u.handle+'-qr.png';document.body.appendChild(a);a.click();a.remove();toast('QR code downloaded')}
+function tapVcf(o){const lines=['BEGIN:VCARD','VERSION:3.0','FN:'+o.name,o.role?'TITLE:'+o.role:'',o.company?'ORG:'+o.company:'',/@/.test(o.email)?'EMAIL:'+o.email:(o.email?'TEL:'+o.email:''),'NOTE:Met via Introthread'+(o.where?' at '+o.where:''),'END:VCARD'].filter(Boolean).join('\n');const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([lines],{type:'text/vcard'}));a.download=(o.name||'contact').replace(/\s+/g,'-')+'.vcf';document.body.appendChild(a);a.click();a.remove()}
+function tapNoteCount(){const n=$('#tx');if(n&&$('#txc'))$('#txc').textContent=n.value.length}
+function vTap(){const u=me();const rooms=myRooms();const t=THEMES[u.theme]||THEMES.midnight;
+ return shell('tap',`<div class="t-head"><div><div class="t-eye">Tap to Thread</div><h1 class="t-h1">Share your card, start a Thread</h1><p class="t-sub">Hold this screen up, tap an NFC card, scan the QR code or send your link. The other person needs no app.</p></div><a href="/how" class="t-how"><span class="x-play">${sv('play',10)}</span>How it works</a></div>
+<div class="t-grid">
+<div class="t-card ${t.light?'lt':''}" style="background:${t.bg};color:${t.fg};--sub:${t.sub}">
+ <div class="t-card-top"><span class="x-logo ${t.light?'':'dk'}" style="font-size:20px"><span class="x-lm"><i></i><i></i></span><span>intro<b>thread</b></span></span>${sv('nfc',24)}</div>
+ <div class="t-card-id">${avatarC(u,104)}<b>${esc(u.name)}</b><small>${esc(u.role||'')}${u.company?' &bull; '+esc(u.company):''}</small></div>
+ <div class="t-qr"><div id="qrTap"></div><span class="t-qrlogo"><span class="x-lm"><i></i><i></i></span></span></div>
+ <div class="t-url">introthread.com/${esc(u.handle)}</div>
+ <div class="t-acts"><button type="button" onclick="copy('${profileUrl(u)}','Link copied')">${sv('link',16)} Copy link</button><button type="button" onclick="shareNative()">${sv('send',16)} Share</button><button type="button" onclick="toast('Apple and Google Wallet passes are coming soon.')">${sv('wallet',16)} Add to Wallet</button><button type="button" aria-label="More options" onclick="tapMore()">&bull;&bull;&bull;</button></div>
+</div>
+<form class="t-form" onsubmit="return newThread(event)" autocomplete="off">
+ <div class="t-form-h"><div><h2>Met someone just now?</h2><p>Create a Thread in seconds. We&rsquo;ll send them a link to confirm.</p></div><div class="x-seg t-seg"><button type="button" data-m="q" class="${TAPM==='q'?'on':''}" onclick="tapMode('q')">Quick add</button><button type="button" data-m="f" class="${TAPM==='f'?'on':''}" onclick="tapMode('f')">Full details</button></div></div>
+ <div class="t-g2">
+  <label class="x-f"><span>Name</span><input id="tn" required placeholder="Their name" autocomplete="off"></label>
+  <label class="x-f"><span>Email or phone</span><input id="te" placeholder="name@company.com or +44 7XXX XXX"></label>
+  <label class="x-f"><span>Role <em>(optional)</em></span><input id="tr" placeholder="e.g. Founder, Investor, Designer"></label>
+  <label class="x-f"><span>Company <em>(optional)</em></span><input id="tc" placeholder="e.g. Acme Technologies"></label>
+  <div class="x-f"><span>Where did you meet?</span><input type="hidden" id="tw"><input type="hidden" id="tw2">
+   <details class="t-where" id="twd"><summary id="twb">${sv('pin',18)}<span>Select a location</span>${sv('chev',16)}</summary><div class="t-where-m">
+    ${rooms.length?`<small>Your Rooms</small>${rooms.map(r=>`<button type="button" onclick="tapWhereSet('${r.id}','${esc(r.name).replace(/'/g,'&#39;')}')">${sv('users',15)}${esc(r.name)}</button>`).join('')}`:''}
+    <small>Quick picks</small>${['Conference','Coffee meeting','Client meeting','Networking event','Office'].map(p=>`<button type="button" onclick="tapWhereSet('','${p}')">${sv('pin',15)}${p}</button>`).join('')}
+    <div class="t-where-c"><input id="twc" placeholder="Somewhere else..." onkeydown="if(event.key==='Enter'){event.preventDefault();tapWhereCustom()}"><button type="button" onclick="tapWhereCustom()">Use</button></div></div></details></div>
+  <label class="x-f"><span>Add a note <em>(optional)</em></span><div class="t-note"><textarea id="tx" maxlength="200" rows="3" placeholder="What did you talk about?" oninput="tapNoteCount()"></textarea><small><b id="txc">0</b>/200</small></div></label>
+ </div>
+ <div class="t-g2" id="tfull" ${TAPM==='f'?'':'hidden'}><label class="x-f"><span>LinkedIn <em>(optional)</em></span><input id="tli" placeholder="linkedin.com/in/..."></label><label class="x-f"><span>Follow up in</span><select id="tfu"><option value="">No reminder</option><option>2 days</option><option selected>3 days</option><option>1 week</option><option>2 weeks</option></select></label></div>
+ <div class="t-opts"><label class="t-tog"><input type="checkbox" id="tsave" checked><span class="t-sw"></span><span><b>Save to my contacts</b><small>Keep their details for easier follow up.</small></span></label><div class="t-priv">${sv('lock',18)}<span><b>This information is private</b><small>It will only be shared after they confirm.</small></span></div></div>
+ <button class="t-start">${sv('link',20)} Start Thread ${sv('arrow',18)}</button>
+</form></div>
+<div class="t-ways">
+ <button type="button" class="t-way o" onclick="tapNFC()"><span class="t-way-ic">${sv('nfc',24)}</span><span><b>Tap with an NFC card</b><small>Hold your NFC card or phone close to theirs to start a Thread.</small></span>${sv('chev',18)}</button>
+ <button type="button" class="t-way b" onclick="tapQR()"><span class="t-way-ic">${sv('qr',24)}</span><span><b>Scan QR code</b><small>Let them scan your code to open your Introthread card.</small></span>${sv('chev',18)}</button>
+ <button type="button" class="t-way g" onclick="shareNative()"><span class="t-way-ic">${sv('send',22)}</span><span><b>Share your link</b><small>Send your link via any channel: email, SMS, WhatsApp or social media.</small></span>${sv('chev',18)}</button>
+</div>
+<div class="t-tip"><span class="t-tip-ic">${sv('spark',20)}</span><span><b>Pro tip: Add context after the event</b><small>Take quick notes while it&rsquo;s fresh. You can always update the Thread later with more details and next steps.</small></span><a href="/how">Learn more ${sv('chev',15)}</a></div>`)}
+/* wrap newThread: Full details + save to contacts */
+const _ntX=newThread;newThread=function(e){const v=id=>{const x=$('#'+id);return x?x.value.trim():''};
+ const o={name:v('tn'),email:v('te'),role:v('tr'),company:v('tc'),where:v('tw2')};if(!o.name){e.preventDefault();toast('Add their name to start a Thread');return false}
+ if(TAPM==='f'){const extra=[v('tli')?'LinkedIn: '+v('tli'):'',v('tfu')?'Follow up in '+v('tfu'):''].filter(Boolean).join(' · ');if(extra&&$('#tx'))$('#tx').value=($('#tx').value.trim()?$('#tx').value.trim()+' · ':'')+extra}
+ if($('#tsave')&&$('#tsave').checked){try{tapVcf(o)}catch(_){}}
+ return _ntX.call(this,e)};
+document.addEventListener('click',e=>{const d=$('#twd');if(d&&d.open&&!d.contains(e.target))d.removeAttribute('open')});
+/* topbar: account menu */
+function acctMenu(){const u=me();modal(`<div><div class="row" style="gap:12px;margin-bottom:14px">${avatarC(u,48)}<div><b>${esc(u.name)}</b><div class="small muted">${esc(u.email||'')}</div></div></div><div class="t-more"><a href="/app/card" onclick="closeModal()">${sv('user',18)} My card</a><a href="/${esc(u.handle)}" onclick="closeModal()">${sv('globe',18)} Public profile</a><a href="/app/settings" onclick="closeModal()">${sv('grid',18)} Settings</a><button onclick="closeModal();logout()">${sv('arrow',18)} Log out</button></div></div>`)}
 
 /* Supabase email-link callback: introthread.com/app#access_token=... or #error=... */
 const AUTH_CB=/(^|[#&])(access_token|error_description|error)=/.test(location.hash);
