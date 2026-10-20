@@ -9,6 +9,7 @@ META={
  '/pricing':('Pricing | Introthread','Start free with your card, link, QR and unlimited Threads. Pro from $10 a month, Rooms from $166 per event, custom plans for networks.'),
  '/about':('About | Introthread','Introthread records the moment two people meet and agree on what happens next. Our story, and how to get in touch.'),
  '/privacy':('Trust and privacy | Introthread','Two-sided consent, private answers and opt-in network visibility. Designed for UK GDPR, the DPA 2018 and US state privacy laws.'),
+ '/terms':('Terms of Service | Introthread','The terms for using Introthread: your account, your content, acceptable use, plans and payments, and your rights.'),
  '/login':('Log in | Introthread','Log in to Introthread and pick up every Thread where you left it.'),
  '/signup':('Create your free card | Introthread','Create your free Introthread card in 60 seconds. No card required.'),
 }
