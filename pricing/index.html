@@ -712,6 +712,43 @@ img.x-av{display:block}
 @media (max-width:760px){.x-f3,.x-f4,.x-flow,.x-plans{grid-template-columns:1fr}.x-ph{padding:44px 0}.x-ph-art .x-phone{transform:scale(.9)}}
 @media (prefers-reduced-motion:reduce){.x-ph-glow,.x-ph-art .x-phone,.x-rep,.x-warm,.x-quotecard,.x-shield{animation:none}}
 
+.x-up{display:flex;align-items:center;gap:12px}
+.x-up-in{flex:1;display:flex;align-items:center;gap:14px;padding:12px 14px;border:1.5px dashed #cfd6e3;border-radius:12px;background:#fafbfd;cursor:pointer;transition:border-color .15s,background .15s}
+.x-up-in:hover{border-color:var(--xb);background:#f5f8ff}.x-up-in input{position:absolute;width:1px;height:1px;opacity:0}
+.x-up-in img,.x-up-ph{width:48px;height:48px;border-radius:50%;object-fit:cover;flex:none}.x-up-ph{display:grid;place-items:center;background:#eef1f6;color:#8a93a6}
+.x-up-t b{display:block;font-size:14.5px;color:var(--xink)}.x-up-t small{font-size:12.5px;color:var(--xmu)}
+.x-up-rm{border:0;background:none;color:#d14343;font:600 13.5px var(--xss);cursor:pointer}
+.x-prow{display:flex;gap:16px;align-items:center;padding-bottom:16px;margin-bottom:4px;border-bottom:1px solid var(--line,#e6e8ec)}.x-prow .x-av{margin:0;box-shadow:none}
+.x-prow b{display:block;font-size:15px}.x-prow small{display:block;font-size:13px;color:var(--xmu)}.x-prow-b{display:flex;gap:8px;margin-top:8px}.x-prow-b .x-btn{cursor:pointer}
+@media (min-width:1081px) and (max-height:820px){.x-up-in{padding:8px 12px}.x-up-in img,.x-up-ph{width:38px;height:38px}}
+
+/* ===== v4 app dashboard ===== */
+:root{--brand:#1f5eff;--brand2:#1748d6;--soft:#eef3ff;--ink:#0b1122;--bg:#f6f7fb;--line:#e6e9f0;--muted:#5b6478}
+.app{background:var(--bg);font-family:var(--xss)}
+.app .sidebar{background:radial-gradient(80% 40% at 0% 0%,rgba(31,94,255,.25),transparent 70%),linear-gradient(180deg,#0b1224,#0a1020);border-right:0;color:#dfe5f2}
+.app .sidebar .nav{color:#b4bdd0;border-radius:10px;font-weight:600}.app .sidebar .nav svg{opacity:.85}
+.app .sidebar .nav:hover{background:rgba(255,255,255,.06);color:#fff}
+.app .sidebar .nav.on{background:linear-gradient(90deg,rgba(31,94,255,.32),rgba(31,94,255,.12));color:#fff;box-shadow:inset 2px 0 0 #4f86ff}
+.app .sidebar .cnt{background:var(--xor);color:#fff}
+.app .sidebar .navgroup{color:#6f7a93}
+.app .sidebar .card{background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);box-shadow:none;color:#e6ebf5}
+.app .sidebar .card .muted,.app .sidebar .tiny.muted{color:#97a2ba}
+.app .sidebar .row b{color:#fff}.app .sidebar .x{color:#b4bdd0;background:transparent}
+.app .sidebar .btn.primary{box-shadow:0 10px 24px -10px rgba(31,94,255,.9)}
+.app .topbar{background:rgba(255,255,255,.85);border-bottom:1px solid var(--line)}
+.app .topbar .search{border-radius:10px;background:#f3f5f9;border:1px solid transparent}.app .topbar .search:focus-within{border-color:var(--brand);background:#fff}
+.app .ph h1{font-family:var(--xsf);font-weight:400;font-size:40px;letter-spacing:-.015em;line-height:1.05}
+.app .eyebrow{color:var(--brand);letter-spacing:.14em;font-weight:700}
+.app .card{border-radius:18px;border-color:var(--line);box-shadow:0 1px 2px rgba(15,23,42,.04),0 20px 40px -32px rgba(15,23,42,.25)}
+.app .metric{border-radius:18px;border-color:var(--line);box-shadow:0 20px 40px -34px rgba(15,23,42,.3);position:relative;overflow:hidden}
+.app .metric:after{content:'';position:absolute;right:-30px;top:-30px;width:90px;height:90px;border-radius:50%;background:radial-gradient(circle,rgba(31,94,255,.12),transparent 70%)}
+.app .metric .v{font-family:var(--xsf);font-weight:400;font-size:40px;letter-spacing:-.02em}
+.app .btn{border-radius:10px;font-weight:700}.app .btn.primary{background:var(--brand)}.app .btn.primary:hover{background:var(--brand2)}
+.app .tl{border-radius:14px}.app .tl:hover{border-color:#c9d6ff;box-shadow:0 16px 30px -22px rgba(31,94,255,.45)}
+.app .chip.blue{background:var(--soft);color:var(--brand)}
+.app .x-card{max-width:380px}
+.app .mobile-tab{background:rgba(11,17,34,.96);border-top:0}.app .mobile-tab a{color:#9aa5bd}.app .mobile-tab a.on{color:#fff}
+
 </style>
 </head>
 <body>
@@ -959,7 +996,7 @@ function su3(){const u={id:uid(),name:SU.name,email:SU.email,pw:SU.pw,role:SU.ro
 /* ---------- app shell ---------- */
 function shell(on,inner){const u=me();const open=myThreads().filter(t=>['open','pending','matched'].includes(threadState(t))).length;
  const nav=(h,i,l,k,c)=>`<a href="${h}" class="nav ${on===k?'on':''}">${ic(i)}${l}${c?`<span class="cnt">${c}</span>`:''}</a>`;
- return`<div class="app"><aside class="sidebar"><div style="padding:6px 10px 18px">${logo()}</div>
+ return`<div class="app"><aside class="sidebar"><div style="padding:6px 10px 18px">${logo(true)}</div>
  <a href="#/app/tap" class="btn primary block" style="margin-bottom:14px">${ic('tap',16)} Tap to Thread</a>
  ${nav('#/app','home','Today','today')}${nav('#/app/threads','thread','Threads','threads',open)}${nav('#/app/rooms','room','Rooms','rooms')}
  <div class="navgroup">You</div>${nav('#/app/card','user','My card','card')}${nav('#/'+u.handle,'globe','Public profile','pub')}${nav('#/app/settings','gear','Settings','settings')}
@@ -1025,7 +1062,7 @@ function newThread(e){e.preventDefault();const rid=$('#tw').value,room=DB.rooms.
 
 /* ---------- card ---------- */
 function vCard(){const u=me();return shell('card',`<div class="ph"><div><div class="eyebrow">My card</div><h1>Your professional identity</h1><p>What people see when you tap. Changes are live instantly, even on printed QR codes.</p></div><a class="btn secondary" href="#/${u.handle}">${ic('globe',16)} View public profile</a></div>
-<div class="grid" style="grid-template-columns:1.2fr 1fr"><div class="card pad-lg"><form onsubmit="return saveCard(event)" class="stack"><div class="grid g2"><div class="field"><label>Full name</label><input id="cn" value="${esc(u.name)}" required></div><div class="field"><label>Title</label><input id="cr" value="${esc(u.role)}"></div><div class="field"><label>Company</label><input id="cc" value="${esc(u.company)}"></div><div class="field"><label>City</label><input id="cct" value="${esc(u.city||'')}"></div></div>
+<div class="grid" style="grid-template-columns:1.2fr 1fr"><div class="card pad-lg"><form onsubmit="return saveCard(event)" class="stack">${photoRow(u)}<div class="grid g2"><div class="field"><label>Full name</label><input id="cn" value="${esc(u.name)}" required></div><div class="field"><label>Title</label><input id="cr" value="${esc(u.role)}"></div><div class="field"><label>Company</label><input id="cc" value="${esc(u.company)}"></div><div class="field"><label>City</label><input id="cct" value="${esc(u.city||'')}"></div></div>
 <div class="field"><label>Bio</label><textarea id="cb" rows="3" maxlength="200">${esc(u.bio||'')}</textarea></div><div class="grid g3"><div class="field"><label>LinkedIn</label><input id="cl" value="${esc(u.links.linkedin||'')}" placeholder="linkedin.com/in/..."></div><div class="field"><label>Website</label><input id="cw" value="${esc(u.links.website||'')}"></div><div class="field"><label>Booking link</label><input id="ck" value="${esc(u.links.calendar||'')}" placeholder="cal.com/..."></div></div>
 <div class="field"><label>Card style</label><div class="row wrap-row">${Object.entries(THEMES).map(([k,v])=>`<button type="button" title="${k}" onclick="setTheme('${k}')" style="width:42px;height:42px;border-radius:12px;background:${v.bg};border:${u.theme===k?'3px solid var(--brand)':'1px solid var(--line)'}"></button>`).join('')}</div></div><button class="btn primary" style="align-self:flex-start">Save changes</button></form></div>
 <div class="stack" style="gap:18px;position:sticky;top:90px;align-self:start">${bizCard(u)}<div class="card pad row"><div class="qrbox" id="qrCard" style="border:1px solid var(--line)"></div><div><b>Your dynamic QR</b><p class="small muted">Print it once. It always points to your latest card.</p><button class="btn secondary sm" onclick="copy('${profileUrl(u)}','Link copied')">Copy link</button></div></div></div></div>`)}
@@ -1104,7 +1141,7 @@ const threadLink=t=>SITE+'/t/'+(t.token||t.id);
 /* persist only demo data locally */
 save=function(){const keep=x=>!x._c;localStorage.setItem(KEY,JSON.stringify({users:DB.users.filter(keep),threads:DB.threads.filter(keep),rooms:DB.rooms.filter(keep),session:MODE==='demo'?DB.session:null}))};
 function clearCloud(){DB.users=DB.users.filter(x=>!x._c);DB.threads=DB.threads.filter(x=>!x._c);DB.rooms=DB.rooms.filter(x=>!x._c)}
-const mapProfile=(p,email)=>({_c:true,id:p.id,name:p.name,email:email||'',role:p.role||'',company:p.company||'',city:p.city||'',bio:p.bio||'',handle:p.handle,theme:p.theme||'midnight',links:p.links||{},plan:p.plan||'Free',prefs:p.prefs||{},created:Date.parse(p.created_at)||Date.now()});
+const mapProfile=(p,email)=>({_c:true,id:p.id,name:p.name,email:email||'',role:p.role||'',company:p.company||'',city:p.city||'',bio:p.bio||'',handle:p.handle,theme:p.theme||'midnight',photo:(p.links||{}).photo||null,links:p.links||{},plan:p.plan||'Free',prefs:p.prefs||{},created:Date.parse(p.created_at)||Date.now()});
 const mapThread=r=>({_c:true,id:r.id,token:r.guest_token,ownerId:r.owner_id,other:{name:r.other_name,role:r.other_role||'',company:r.other_company||'',email:r.other_email||''},where:r.where_met||'In person',note:r.note||'',createdAt:Date.parse(r.created_at),confirmed:!!r.confirmed,mine:r.mine,theirs:r.theirs,resolvedAt:r.resolved_at?Date.parse(r.resolved_at):null,roomId:r.room_id,
  events:(r.thread_events||[]).map(e=>({k:e.kind,at:Date.parse(e.at),text:e.text})).sort((a,b)=>a.at-b.at)});
 const mapRoom=r=>({_c:true,id:r.id,ownerId:r.owner_id,name:r.name,date:Date.parse(r.event_date),location:r.location||'',code:r.code,created:Date.parse(r.created_at)});
@@ -1141,7 +1178,7 @@ su2=function(e){e.preventDefault();const h=slug($('#sh').value);const next=()=>{
  if(DB.users.some(u=>u.handle===h))return taken(),false;
  if(!SB){next();return false}
  SB.rpc('handle_available',{p_handle:h}).then(({data,error})=>{if(error)return fail(error);data?next():taken()});return false};
-su3=async function(){const prof={handle:SU.handle,name:SU.name,role:SU.role,company:SU.company,city:SU.city,bio:SU.bio,theme:SU.theme||'midnight'};
+su3=async function(){const prof={handle:SU.handle,name:SU.name,role:SU.role,company:SU.company,city:SU.city,bio:SU.bio,photo:SU.photo,theme:SU.theme||'midnight'};
  if(!SB){toast('Accounts are not available right now.');return}
  if(PENDING){const {error}=await SB.from('profiles').insert(Object.assign({id:PENDING.id},prof));if(error)return fail(error);const u=PENDING;PENDING=null;await loadCloud(u);SU={step:1};save();go('#/app');return}
  const {data,error}=await SB.auth.signUp({email:SU.email,password:SU.pwRaw,options:{data:{profile:prof},emailRedirectTo:'https://www.introthread.com/'}});
@@ -1306,7 +1343,7 @@ function liveP(){const g=id=>{const e=$('#'+id);return e?e.value:null};
  if($('#sh')){const v=g('sh').toLowerCase().replace(/[^a-z0-9]/g,'').slice(0,20);if(v!==g('sh'))$('#sh').value=v}
  [['role','sr'],['company','sc'],['city','sct'],['handle','sh'],['bio','sb']].forEach(([k,id])=>{const v=g(id);if(v!=null)SU[k]=k==='handle'?v:v});
  if($('#sbc'))$('#sbc').textContent=(SU.bio||'').length;const lp=$('#lp');if(lp)lp.innerHTML=prevHTML()}
-function prevHTML(){const u={name:SU.name,role:SU.role,company:SU.company,city:SU.city,handle:SU.handle,bio:SU.bio,theme:SU.theme||'midnight'};return SU.pv==='p'?profileView(u):bizCard(u)}
+function prevHTML(){const u={name:SU.name,role:SU.role,company:SU.company,city:SU.city,handle:SU.handle,bio:SU.bio,photo:SU.photo,theme:SU.theme||'midnight'};return SU.pv==='p'?profileView(u):bizCard(u)}
 function setPv(v){SU.pv=v;document.querySelectorAll('.x-seg button').forEach(b=>b.classList.toggle('on',b.dataset.v===v));const lp=$('#lp');if(lp)lp.innerHTML=prevHTML()}
 function pickTheme(k){SU.theme=k;window._keepScroll=true;render()}
 function doSu3(b){b.disabled=true;b.innerHTML='Creating your card...';Promise.resolve(su3()).finally(()=>{const x=$('#su3b');if(x){x.disabled=false;x.innerHTML='Create my card '+sv('arrow',17)}})}
@@ -1327,6 +1364,7 @@ function vSignup(){const s=SU.step||1;document.body.classList.remove('x-open');
  <label class="x-f"><span>City <i>*</i></span><div class="x-in">${sv('pin',18)}<input id="sct" required placeholder="London, UK" autocomplete="address-level2" value="${esc(SU.city||'')}"></div></label>
  <label class="x-f"><span>Your Introthread link <i>*</i></span><div class="x-link"><span>introthread.com/</span><input id="sh" required maxlength="20" autocapitalize="none" spellcheck="false" value="${esc(h)}" oninput="chkH()"><i id="shok"></i></div><small class="x-hint" id="shh">Use lowercase letters and numbers.</small></label>
  <label class="x-f"><span>One-line bio <i>*</i></span><textarea id="sb" rows="3" maxlength="160" required placeholder="What you do and who you help">${esc(SU.bio||'')}</textarea><small class="x-count"><b id="sbc" style="font-weight:500">${(SU.bio||'').length}</b>/160</small></label>
+ <div class="x-f"><span>Add a profile photo <em style="font-style:normal;font-weight:500;color:var(--xmu)">(optional)</em></span><div class="x-up" id="xup">${upBox()}</div></div>
  <div class="x-actions"><button type="button" class="x-btn ghost lg" onclick="liveP();SU.step=1;render()">Back</button><button class="x-btn lg grow">Continue ${sv('arrow',17)}</button></div></form>
  <aside class="x-prev"><div class="x-prev-h"><b>Live preview</b>${seg()}</div><div id="lp">${prevHTML()}</div></aside></div>`}
  if(s===3){mw=960;const cat=SU.cat||'all';SU.theme=SU.theme||'midnight';body=`<div class="x-s3-head"><div><h1 class="x-ftitle">Choose your card style</h1><p class="x-fsub">You can change this at any time. Your details will update automatically.</p></div>${seg(1)}</div>
@@ -1337,10 +1375,10 @@ function vSignup(){const s=SU.step||1;document.body.classList.remove('x-open');
  const sw={1:'47%',2:'40%',3:'35%'}[s];
  return`<div class="x-auth" style="--sw:${sw}">${authSide(s)}<main class="x-main"><div class="x-mi" style="--mw:${mw}px">${st}${body}</div></main></div>`}
 
-const _rx=render;render=function(){const r=_rx.apply(this,arguments);[['qrHero',84],['qrCta',112]].forEach(([id,s])=>{const el=document.getElementById(id);if(el&&!el.firstChild)qr(el,'https://www.introthread.com',s)});setMeta();document.querySelectorAll('a[href^="#/"]').forEach(a=>a.setAttribute('href',a.getAttribute('href').slice(1)||'/'));const dl=document.querySelector('.x-dl');if(dl&&!dl.classList.contains('in')){if('IntersectionObserver' in window){const io=new IntersectionObserver(es=>{if(es.some(e=>e.isIntersecting)){dl.classList.add('in');io.disconnect()}},{threshold:.25});io.observe(dl)}else dl.classList.add('in')}return r};
+const _rx=render;render=function(){const r=_rx.apply(this,arguments);[['qrHero',84],['qrCta',112]].forEach(([id,s])=>{const el=document.getElementById(id);if(el&&!el.firstChild)qr(el,'https://www.introthread.com',s)});setMeta();applyPhoto();document.querySelectorAll('a[href^="#/"]').forEach(a=>a.setAttribute('href',a.getAttribute('href').slice(1)||'/'));const dl=document.querySelector('.x-dl');if(dl&&!dl.classList.contains('in')){if('IntersectionObserver' in window){const io=new IntersectionObserver(es=>{if(es.some(e=>e.isIntersecting)){dl.classList.add('in');io.disconnect()}},{threshold:.25});io.observe(dl)}else dl.classList.add('in')}return r};
 
 /* v4.1 login + compact previews */
-function prevHTML(){const u={name:SU.name,role:SU.role,company:SU.company,city:SU.city,handle:SU.handle,bio:SU.bio,theme:SU.theme||'midnight'};return SU.pv==='p'?profileView(u).replace('class="x-pview"','class="x-pview cmp"'):bizCard(u).replace('class="x-card ','class="x-card cmp ')}
+function prevHTML(){const u={name:SU.name,role:SU.role,company:SU.company,city:SU.city,handle:SU.handle,bio:SU.bio,photo:SU.photo,theme:SU.theme||'midnight'};return SU.pv==='p'?profileView(u).replace('class="x-pview"','class="x-pview cmp"'):bizCard(u).replace('class="x-card ','class="x-card cmp ')}
 async function forgotPw(){const em=($('#le').value||'').trim().toLowerCase();const er=$('#lerr');if(!/^\S+@\S+\.\S+$/.test(em)){er.textContent='Enter your email above, then tap Forgot password.';$('#le').focus();return}
  er.textContent='';if(typeof SB!=='undefined'&&SB){const {error}=await SB.auth.resetPasswordForEmail(em,{redirectTo:'https://www.introthread.com/'});if(error){er.textContent=error.message;return}}
  toast('If an account exists for '+em+', a reset link is on its way.')}
@@ -1401,6 +1439,20 @@ function setMeta(){const p='/'+(location.pathname.split('/').filter(Boolean)[0]|
  const set=(sel,attr,val)=>{const e=document.head.querySelector(sel);if(e)e.setAttribute(attr,val)};
  set('meta[name="description"]','content',m[1]);set('link[rel="canonical"]','href','https://www.introthread.com'+(p==='/'?'/':p));
  set('meta[property="og:title"]','content',m[0]);set('meta[property="og:description"]','content',m[1]);set('meta[property="og:url"]','content','https://www.introthread.com'+(p==='/'?'/':p))}
+
+
+/* profile photo */
+function upBox(){const has=!!SU.photo;return`<label class="x-up-in">${has?`<img src="${SU.photo}" alt="">`:`<span class="x-up-ph">${sv('user',26)}</span>`}<span class="x-up-t"><b>${has?'Change photo':'Upload a photo'}</b><small>JPG, PNG or WebP (max 5MB)</small></span><input type="file" accept="image/jpeg,image/png,image/webp" onchange="pickPhoto(this)"></label>${has?`<button type="button" class="x-up-rm" onclick="SU.photo=null;$('#xup').innerHTML=upBox();liveP()">Remove</button>`:''}`}
+function shrinkImg(file){return new Promise((res,rej)=>{if(!/^image\/(jpeg|png|webp)$/.test(file.type))return rej('Please choose a JPG, PNG or WebP image.');if(file.size>5*1024*1024)return rej('That image is over 5MB. Please choose a smaller one.');
+ const r=new FileReader();r.onerror=()=>rej('Could not read that file.');r.onload=()=>{const im=new Image();im.onerror=()=>rej('Could not read that image.');im.onload=()=>{const s=Math.min(im.width,im.height),S=320,c=document.createElement('canvas');c.width=c.height=S;const x=c.getContext('2d');x.imageSmoothingQuality='high';x.drawImage(im,(im.width-s)/2,(im.height-s)/2,s,s,0,0,S,S);let q=.85,d=c.toDataURL('image/jpeg',q);while(d.length>70000&&q>.5){q-=.1;d=c.toDataURL('image/jpeg',q)}res(d)};im.src=r.result};r.readAsDataURL(file)})}
+async function pickPhoto(inp,live){const f=inp.files&&inp.files[0];if(!f)return;try{const d=await shrinkImg(f);
+ if(live){const u=me();const links=Object.assign({},u.links||{},{photo:d});if(await upd('profiles',u.id,{links})){u.links=links;u.photo=d;save();toast('Photo updated');window._keepScroll=true;render()}}
+ else{SU.photo=d;$('#xup').innerHTML=upBox();liveP()}}catch(e){toast(typeof e==='string'?e:'Could not use that image.')}}
+async function removePhoto(){const u=me();const links=Object.assign({},u.links||{});delete links.photo;if(await upd('profiles',u.id,{links})){u.links=links;u.photo=null;save();toast('Photo removed');window._keepScroll=true;render()}}
+function photoRow(u){return`<div class="x-prow">${avatarC(u,64)}<div><b>Profile photo</b><small>Shown on your card and public profile.</small><div class="x-prow-b"><label class="x-btn sm ghost">${u.photo?'Change photo':'Upload photo'}<input type="file" hidden accept="image/jpeg,image/png,image/webp" onchange="pickPhoto(this,1)"></label>${u.photo?'<button type="button" class="x-btn sm ghost" onclick="removePhoto()">Remove</button>':''}</div></div></div>`}
+let _phBusy=false;async function applyPhoto(){const ph=localStorage.getItem('it_photo');const u=me();if(!ph||!u||_phBusy||typeof cloud!=='function'||!cloud())return;if(u.photo===ph){localStorage.removeItem('it_photo');return}
+ _phBusy=true;const links=Object.assign({},u.links||{},{photo:ph});if(await upd('profiles',u.id,{links})){u.links=links;u.photo=ph;save();localStorage.removeItem('it_photo');render()}_phBusy=false}
+const _su3x=su3;su3=async function(){try{if(SU.photo)localStorage.setItem('it_photo',SU.photo)}catch(e){}return _su3x.apply(this,arguments)};
 
 /* Supabase email-link callback: introthread.com/app#access_token=... or #error=... */
 const AUTH_CB=/(^|[#&])(access_token|error_description|error)=/.test(location.hash);
