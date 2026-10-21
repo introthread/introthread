@@ -237,3 +237,11 @@ Tap -> Thread -> one question, "What's next?". Answers stay sealed until both pe
 - Analytics: PostHog loads only when `posthogKey` is set in `config.js` AND the visitor taps Allow on the consent bar (`it_consent` in localStorage). No names or emails sent; identify uses the user id. Events: thread_started, thread_confirmed, thread_answered, followup_sent, thread_resolved, ai_draft_used, plus page views.
 - Local mock test: `node /home/user/apitest.js` (sandbox only).
 - Payments: Stripe on hold; Paystack planned with the user (not built yet).
+
+## Paystack billing v26 (21 Oct 2026, night)
+- Stripe on hold; Paystack (Kenya, test mode, KES only for now). Test plans: monthly `PLN_igm7c0i78tlx9jz` (KES 1,300), yearly `PLN_scrctkdhtg6us1f` (KES 12,500); defaults in `api/_lib/pay.js`, override with `PAYSTACK_PLAN_MONTH` / `PAYSTACK_PLAN_YEAR`. Test public key pk_test_61677ac8dacf82d2b15735bc2e4bc8433a32e20d (not needed by the code: checkout is initialised server-side).
+- Functions: `POST /api/pay-init {interval}` (Paystack hosted checkout, card only, callback `/app?pay=done`), `POST /api/pay-verify {reference}` (called by the app on return; checks metadata.user_id), `POST /api/pay-manage` (Paystack manage link: update card / cancel), `POST /api/paystack-webhook` (HMAC SHA512 check; charge.success, subscription.create, subscription.not_renew, subscription.disable, invoice.payment_failed).
+- No migration: Paystack ids reuse the existing columns. `subscriptions.stripe_customer_id` = CUS_ code, `stripe_subscription_id` = SUB_ code, `payments.stripe_invoice_id` = `ps_<reference>`. `amount_usd` = KES / `KES_PER_USD` (default 130). Pro = `profiles.plan='Pro'`.
+- Client: `bUpgrade` and `stManage` switch to Paystack only when `/api/status` returns `pay:true` (needs `PAYSTACK_SECRET_KEY` + `SUPABASE_SERVICE_ROLE_KEY` in Vercel). Otherwise the old "Request invoice" flow stays.
+- Mock test: `node /home/user/paytest.js`.
+- Before live: switch to live key and live plan codes; enable USD when a Kenyan USD account is approved.
