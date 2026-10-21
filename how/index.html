@@ -2684,6 +2684,15 @@ button.rm-c{cursor:pointer;transition:border-color .15s,box-shadow .15s}button.r
 .nf-empty{display:flex;flex-direction:column;align-items:center;gap:6px;padding:28px 8px;color:#475467;text-align:center}.nf-empty small{color:#667085}.nf-set{display:block;margin-top:12px;text-align:center;color:#1748d6;font-weight:600;font-size:14px}
 .t-bell{position:relative}.t-bell .nf-n{position:absolute;top:2px;right:2px;min-width:18px;height:18px;padding:0 5px;border-radius:999px;background:#f04438;color:#fff;font:700 11px/18px var(--xss,sans-serif);font-style:normal;text-align:center;box-sizing:border-box}
 
+/* phones: stop the page sliding left and right.
+   1) no element may make the page wider than the screen (clip any overflow),
+   2) no accidental zoom-in: double-tap zoom is turned off (pinch zoom still works for accessibility) and form fields use 16px text so phones do not zoom when you tap into them. */
+html{-webkit-text-size-adjust:100%;text-size-adjust:100%;touch-action:manipulation}
+@media (max-width:1023px){html,body{overflow-x:hidden;overflow-x:clip;overscroll-behavior-x:none;max-width:100%}
+ .app,.main,.content,.topbar,.mb-bar,.mobile-tab,#root{max-width:100%;min-width:0;box-sizing:border-box}
+ .topbar>*{min-width:0}.mb-logo{min-width:0;flex-shrink:1}
+ input:not([type=checkbox]):not([type=radio]):not([type=range]),select,textarea{font-size:16px!important}}
+
 </style>
 </head>
 <body><a href="#root" class="x-skip">Skip to content</a>
