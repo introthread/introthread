@@ -1555,6 +1555,44 @@ html,body,button,input,select,textarea{font-family:var(--xss)}
 @media (max-width:1280px){.st12-grid{grid-template-columns:1fr}.st12-side{grid-template-columns:1fr 1fr}.st12-side>section:first-child{grid-column:1/-1}}
 @media (max-width:760px){.st12-side{grid-template-columns:1fr}.st12-plan{grid-template-columns:1fr}.st12-photo{flex-direction:column;align-items:flex-start}.st12-bill{flex-direction:column;align-items:stretch}.st12-save{width:100%}.st12-form .cd-bh{flex-wrap:wrap}.st12-form .pp-ai{width:100%;justify-content:center}}
 
+/* v13 home: How it works */
+.hw-head{display:flex;justify-content:space-between;align-items:flex-end;gap:24px;margin-bottom:34px}
+.hw-h2{margin:10px 0 12px}.hw-h2 span{color:var(--xb)}
+.hw-sub{margin:0;max-width:520px;font:400 16.5px/1.6 var(--xss);color:var(--xmu)}
+.hw-see{display:inline-flex;align-items:center;gap:10px;height:48px;padding:0 20px;border:1px solid var(--xln);border-radius:12px;background:#fff;color:var(--xink);font:600 15px var(--xss);text-decoration:none;white-space:nowrap;box-shadow:0 1px 2px rgba(15,23,42,.05);flex:none}
+.hw-see:hover{border-color:#c9d6f5}
+.hw-play{width:26px;height:26px;border-radius:50%;background:#0b1224;color:#fff;display:grid;place-items:center}
+.hw-steps{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:20px}
+.hw-step{background:#fff;border:1px solid var(--xln);border-radius:18px;padding:14px 14px 22px;box-shadow:0 1px 2px rgba(15,23,42,.04);transition:box-shadow .2s,transform .2s}
+.hw-step:hover{transform:translateY(-3px);box-shadow:0 24px 40px -26px rgba(15,23,42,.28)}
+.hw-v{position:relative;height:172px;border-radius:12px;background:linear-gradient(160deg,#eef2fb,#f7f9fd);display:grid;place-items:center;overflow:hidden;margin-bottom:18px}
+.hw-n{position:absolute;left:10px;top:10px;width:28px;height:28px;border-radius:50%;background:var(--xb);color:#fff;display:grid;place-items:center;font:700 13px var(--xss);z-index:2}
+.hw-step h3{margin:0 0 8px;padding:0 4px;font:700 17px var(--xss);color:var(--xink);letter-spacing:-.2px}
+.hw-step p{margin:0;padding:0 4px;font:400 14px/1.6 var(--xss);color:var(--xmu)}
+.hw-nfc{position:relative;display:flex;align-items:center;gap:6px}
+.hw-card{position:relative;width:132px;height:88px;border-radius:12px;padding:12px;transform:rotate(-8deg);background:radial-gradient(90% 80% at 110% 110%,rgba(255,106,61,.45),transparent 60%),linear-gradient(150deg,#0b1430,#16224a);box-shadow:0 18px 30px -14px rgba(8,14,40,.7)}
+.hw-lg{display:flex;align-items:center;gap:5px;color:#fff;font:600 12px var(--xss)}.hw-lg b{color:#7aa2ff;font-weight:600}.hw-lg .x-lm{transform:scale(.7);transform-origin:left center}
+.hw-chip{position:absolute;left:12px;bottom:12px;width:22px;height:16px;border-radius:4px;background:linear-gradient(135deg,#f3d27a,#c79a35)}
+.hw-waves{color:var(--xb);animation:hwp 1.8s ease-in-out infinite}
+@keyframes hwp{0%,100%{opacity:.45;transform:translateX(0)}50%{opacity:1;transform:translateX(3px)}}
+.hw-mini{width:84%;background:#fff;border-radius:12px;padding:12px;box-shadow:0 12px 26px -16px rgba(15,23,42,.35);font-family:var(--xss)}
+.hw-who{display:flex;gap:10px;align-items:center}.hw-who img{width:40px;height:40px;border-radius:50%;object-fit:cover;flex:none}
+.hw-who b{display:block;font-size:13px;font-weight:600;color:var(--xink)}.hw-who small{display:block;font-size:11.5px;color:var(--xmu);line-height:1.3}
+.hw-ok{display:inline-flex;align-items:center;gap:5px;margin-top:10px;padding:4px 10px;border-radius:99px;background:#e7f6ee;color:#0f8a57;font-size:12px;font-weight:600}
+.hw-q{display:block;font-size:12.5px;font-weight:600;color:var(--xink);margin-bottom:8px}
+.hw-opt{display:flex;align-items:center;gap:8px;padding:7px 9px;border:1px solid var(--xln);border-radius:8px;font-size:12px;color:#344054;margin-top:6px}
+.hw-opt svg{color:var(--xmu);flex:none}.hw-opt span{flex:1}
+.hw-opt.on{border-color:var(--xb);background:#eef3ff;color:var(--xink)}.hw-opt.on svg{color:var(--xb)}
+.hw-opt em{width:16px;height:16px;border-radius:50%;background:var(--xb);display:grid;place-items:center}
+.hw-stack{width:86%;display:grid;gap:8px}.hw-stack .hw-mini{width:100%}
+.hw-row{display:flex;align-items:center;gap:10px;padding:10px 12px}
+.hw-row b{display:block;font-size:12.5px;font-weight:600;color:var(--xink)}.hw-row small{display:block;font-size:11.5px;color:var(--xmu)}.hw-row>div{flex:1;min-width:0}
+.hw-ic{width:30px;height:30px;border-radius:8px;display:grid;place-items:center;flex:none}.hw-ic.o{background:#fff1ec;color:#ff6a3d}.hw-ic.b{background:#eef3ff;color:var(--xb)}
+.hw-tog{width:30px;height:18px;border-radius:99px;background:var(--xb);position:relative;flex:none}.hw-tog:after{content:"";position:absolute;right:2px;top:2px;width:14px;height:14px;border-radius:50%;background:#fff}
+@media (max-width:1100px){.hw-steps{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media (max-width:640px){.hw-head{flex-direction:column;align-items:flex-start}.hw-steps{grid-template-columns:1fr}.hw-see{width:100%;justify-content:center}}
+@media (prefers-reduced-motion:reduce){.hw-waves{animation:none}}
+
 </style>
 </head>
 <body><a href="#root" class="x-skip">Skip to content</a>
@@ -2114,13 +2152,14 @@ function vHome(){document.body.classList.remove('x-open');return mnav()+`
 <div class="x-pcard"><div class="x-pcard-top"><span>introthread</span>${sv('nfc',18)}</div><div class="x-av" style="width:58px;height:58px;font-size:19px;margin:24px 0 12px">SW</div><div class="x-pcard-n">Sarah Williams</div><div class="x-pcard-r">Marketing Director<br>Acme Technologies</div><div class="x-qr" id="qrHero"></div><div class="x-pcard-f">Tap or scan<br>to connect</div></div>
 <span class="x-glow"></span><span class="x-wave"></span><span class="x-wave d2"></span><span class="x-wave d3"></span><span class="x-tline"></span><div class="x-hand">${handArrow(56,48)}Tap, scan or share<br>&mdash; no app required</div></div></div></section>
 <section class="x-ww"><div class="x-wrap"><div class="x-ww-h"><div class="x-eye">Works everywhere</div><h2>Works wherever <em>you network.</em></h2><p>One card for every way you meet people. Nothing to install on the other side.</p></div><div class="x-ww-g">${[['nfc','NFC tap','Tap any phone'],['qr','QR code','Scan to connect'],['link','Share link','introthread.com/you'],['mail','Email &amp; SMS','Send in one tap'],['contact','Save to contacts','One-tap vCard'],['phone','Any phone','iPhone and Android']].map(([ic,t,s])=>`<div class="x-ww-i"><span class="x-ww-ic">${sv(ic,24)}</span><b>${t}</b><small>${s}</small></div>`).join('')}</div></div></section>
-<section class="x-sec alt" id="how"><div class="x-wrap"><div class="x-head2"><div><div class="x-eye">How it works</div><h2 class="x-h2">From introduction<br><em class="ink">to opportunity.</em></h2></div><p class="x-sub">Introthread captures the relationship, with both people's consent, and helps you remember, follow up and turn conversations into opportunities.</p></div>
-<div class="x-steps">
-<div class="x-step"><span class="x-step-n">1</span><div class="x-step-v"><div class="v-ph a"><i></i><b></b><s></s></div><span class="v-wave">${sv('nfc',26)}</span><div class="v-ph b"><i></i><b></b><s></s></div></div><h3>Share your card</h3><p>Tap, scan or share your link. The other person doesn't need an app.</p></div>
-<div class="x-step"><span class="x-step-n">2</span><div class="x-step-v"><div class="v-mini"><div class="v-row"><img src="/img/sarah.jpg" alt="" style="width:36px;height:36px;border-radius:50%;object-fit:cover"><div>Sarah Williams<small>Marketing Director<br>Acme Technologies</small></div></div><div class="v-pill"><img src="/img/sarah.jpg" alt=""><i style="background:#1f5eff"></i>Confirmed ${sv('check',12,'currentColor',2.6)}</div></div></div><h3>A shared Thread</h3><p>When both people confirm, a shared record is created.</p></div>
-<div class="x-step"><span class="x-step-n">3</span><div class="x-step-v"><div class="v-mini"><div style="font-size:12.5px">What's next?</div><div class="v-opt on">${sv('cal',13)}Meet again<em>${sv('check',13)}</em></div><div class="v-opt">${sv('users',13)}Introduce someone</div><div class="v-opt">${sv('bell',13)}Stay in touch</div></div></div><h3>Add context</h3><p>Capture notes, set a follow-up and keep track of what matters.</p></div>
-<div class="x-step"><span class="x-step-n">4</span><div class="x-step-v"><div style="width:82%"><div class="v-mini" style="width:100%"><div class="v-row"><span style="width:30px;height:30px;border-radius:8px;background:#fff1ec;color:#ff6a3d;display:grid;place-items:center">${sv('cal',16)}</span><div>Follow up with Sarah<small>in 3 days</small></div></div></div><div class="v-mini" style="width:100%;margin-top:8px;opacity:.85"><div class="v-row"><span style="width:30px;height:30px;border-radius:8px;background:#eef3ff;color:#1f5eff;display:grid;place-items:center">${sv('mail',15)}</span><div>Suggested message ready</div></div></div></div></div><h3>Turn conversations into opportunities</h3><p>Get timely reminders and suggested messages.</p></div>
-</div></div></section>
+<section class="x-sec alt hw" id="how"><div class="x-wrap">
+<div class="hw-head"><div><div class="x-eye">How it works</div><h2 class="x-h2 hw-h2">From introduction<br>to <span>opportunity.</span></h2><p class="hw-sub">Introthread captures the relationship, with both people's consent, and helps you remember, follow up and turn conversations into opportunities.</p></div><a href="/how" class="hw-see"><span class="hw-play">${sv('play',10)}</span>See how it works</a></div>
+<ol class="hw-steps">
+<li class="hw-step"><div class="hw-v"><span class="hw-n">1</span><div class="hw-nfc"><div class="hw-card"><span class="hw-lg"><span class="x-lm"><i></i><i></i></span>intro<b>thread</b></span><span class="hw-chip"></span></div><span class="hw-waves">${sv('nfc',28)}</span></div></div><h3>Share your card</h3><p>Tap, scan or share your link. The other person doesn't need an app.</p></li>
+<li class="hw-step"><div class="hw-v"><span class="hw-n">2</span><div class="hw-mini"><div class="hw-who"><img src="/img/sarah.jpg" alt="" width="40" height="40"><div><b>Sarah Williams</b><small>Marketing Director</small><small>Acme Technologies</small></div></div><span class="hw-ok">${sv('check',12,'currentColor',2.8)} Confirmed</span></div></div><h3>A shared Thread</h3><p>When both people confirm, a shared record is created.</p></li>
+<li class="hw-step"><div class="hw-v"><span class="hw-n">3</span><div class="hw-mini"><b class="hw-q">What's next?</b><div class="hw-opt on">${sv('cal',14)}<span>Meet again</span><em>${sv('check',11,'#fff',3)}</em></div><div class="hw-opt">${sv('users',14)}<span>Introduce someone</span></div><div class="hw-opt">${sv('bell',14)}<span>Stay in touch</span></div></div></div><h3>Add context</h3><p>Capture notes, set a follow-up and keep track of what matters.</p></li>
+<li class="hw-step"><div class="hw-v"><span class="hw-n">4</span><div class="hw-stack"><div class="hw-mini hw-row"><span class="hw-ic o">${sv('bell',15)}</span><div><b>Follow up with Sarah</b><small>in 3 days</small></div><span class="hw-tog" aria-hidden="true"></span></div><div class="hw-mini hw-row"><span class="hw-ic b">${sv('mail',15)}</span><div><b>Suggested message ready</b></div></div></div></div><h3>Turn conversations into opportunities</h3><p>Get timely reminders and suggested messages.</p></li>
+</ol></div></section>
 <section class="x-sec x-dsec"><div class="x-wrap"><div class="x-head2"><div><div class="x-eye">The difference</div><h2 class="x-h2">More than a<br><em>digital business card.</em></h2></div><div><p class="x-sub">Most digital cards stop at the swap. Introthread follows what happens next, so the people you meet never fade into your contacts.</p><a href="#/how" class="x-btn lg" style="margin-top:24px">See why it's different ${sv('arrow',17)}</a></div></div>
 <div class="x-dl"><div class="x-dl-top"><span>After you meet</span>${['Day 0','Day 3','Day 30','Day 90'].map(d=>`<span>${d}</span>`).join('')}</div>
 <div class="x-lane old"><div class="x-lane-l"><span class="x-lane-ic">${sv('contact',18)}</span><div><b>Typical digital card</b><small>A contact, then silence</small></div></div><div class="x-lane-t"><i class="x-lane-line"></i>${[['contact','Contact saved','Name and number only'],['close','No context','Where did you meet?'],['bell','No follow-up','The moment passes'],['user','Forgotten','&ldquo;Who was this again?&rdquo;']].map(([ic,t,s],k)=>`<div class="x-node" style="--o:${1-k*.2}"><span class="x-dot"></span><div class="x-nc"><em>${['Day 0','Day 3','Day 30','Day 90'][k]}</em><span class="x-nic">${sv(ic,15)}</span><b>${t}</b><small>${s}</small></div></div>`).join('')}</div></div>
