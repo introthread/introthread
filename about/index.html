@@ -2802,9 +2802,9 @@ html{-webkit-text-size-adjust:100%;text-size-adjust:100%;touch-action:manipulati
 .d7-top .d-evd b{font-size:18px}
 .d7-top .d-chart{height:120px;gap:6px}.d7-top .d-bar span{width:22px;border-radius:4px}
 .d7-top .d-leg{display:flex;flex-wrap:nowrap;gap:12px;font-size:12.5px;white-space:nowrap}
-.d7-bot{grid-template-columns:1fr 1fr 1.05fr!important;margin-top:16px}
-.d7-qa b{white-space:nowrap}
-.d7-qa small{white-space:nowrap}
+@media (min-width:1201px){.d7-bot{grid-template-columns:1fr 1fr 1.05fr!important;margin-top:16px}}
+@media (min-width:1201px){.d7-qa b{white-space:nowrap}}
+@media (min-width:1201px){.d7-qa small{white-space:nowrap}}
 
 /* v12 Threads list: match design */
 @media (min-width:1025px){
@@ -2929,6 +2929,16 @@ html{-webkit-text-size-adjust:100%;text-size-adjust:100%;touch-action:manipulati
 .pc-back{aspect-ratio:1.586/1;padding:26px 30px 22px!important}
 .pc-back .pc-bq{padding:8px 0 0}
 .pc-back .pc-bq-b img,.pc-back .pc-bq-b canvas{width:200px}
+}
+
+/* v24 phones: section tabs wrap into pill chips, so every option is visible (no hidden sideways scrolling) */
+@media (max-width:760px){
+.cd-tabs,.th-tabs,.ro-tabs,.st12-tabs,.pp-tabbar .pp-tabs{display:flex!important;flex-wrap:wrap!important;overflow:visible!important;gap:8px!important;mask-image:none!important;-webkit-mask-image:none!important;padding:0!important;border-bottom:0!important;scroll-snap-type:none!important}
+.cd-tabs button,.th-tabs button,.ro-tabs button,.st12-tabs button,.pp-tabbar .pp-tabs button{flex:0 0 auto!important;height:38px!important;padding:0 14px!important;border:1px solid #e4e7ec!important;border-radius:999px!important;background:#fff!important;box-shadow:none!important;font-size:14px!important;white-space:nowrap;margin:0!important}
+.cd-tabs button.on,.th-tabs button.on,.ro-tabs button.on,.st12-tabs button.on,.pp-tabbar .pp-tabs button.on{background:var(--xb)!important;border-color:var(--xb)!important;color:#fff!important}
+.cd-tabs button.on svg,.st12-tabs button.on svg{color:#fff!important}
+.cd-tabs button::after,.st12-tabs button::after,.pp-tabs button::after{display:none!important}
+.pp-tabbar{overflow:visible!important;flex-wrap:wrap}
 }
 </style>
 </head>
