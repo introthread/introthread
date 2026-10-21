@@ -2878,6 +2878,15 @@ html{-webkit-text-size-adjust:100%;text-size-adjust:100%;touch-action:manipulati
 .pp-so{grid-template-columns:repeat(3,minmax(0,1fr))!important}
 .pp-so button{min-width:0;padding:0 6px!important;font-size:13px!important;gap:6px!important;white-space:nowrap}
 }
+
+/* v22 card presentations: one consistent look (blue photo ring, balanced title lines) */
+.t-card-id .x-av,.cd-id .x-av{box-shadow:0 0 0 3px rgba(10,16,32,.55),0 0 0 6px #3b6bff,0 14px 34px -12px rgba(59,107,255,.65)!important}
+.t-card-id b,.cd-id b,.pc-id h1{text-wrap:balance}
+.t-card-id small,.cd-id small,.pc-id p,.pp-card p{text-wrap:balance}
+@media (max-width:420px){.pc-id p{font-size:14.5px}.pc-id h1{font-size:23px}}
+
+/* v22b phones: role and company on two clean lines (no bullet starting a line) */
+@media (max-width:480px){.pc-id p>span,.pp-role>span{display:block;height:0;overflow:hidden;font-size:0}}
 </style>
 </head>
 <body><a href="#root" class="x-skip">Skip to content</a>
