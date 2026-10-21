@@ -2016,6 +2016,29 @@ body:has(.scan) .toast{bottom:auto!important;top:calc(70px + env(safe-area-inset
 
 @media (max-width:1023px){.th-row,.th-row.cmp{grid-template-areas:"av who dots" "pri pri pri" "st st st" "btn btn btn"!important}.th-pri{padding:8px 0 0!important;border-top:1px solid #eef1f5!important}}
 
+/* v30 smart capture */
+.cap{border:1px dashed #c9d6f5;border-radius:14px;padding:14px;background:linear-gradient(180deg,#f8faff,#fff)}
+.cap-h b{display:flex;align-items:center;gap:6px;font-size:14.5px;font-weight:600;color:var(--xink)}.cap-h b svg{color:var(--xb)}.cap-h small{display:block;font-size:13px;color:var(--xmu);margin-top:2px}
+.cap-b{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:8px;margin-top:10px}
+.cap-b button{display:flex;align-items:center;gap:8px;min-height:44px;padding:8px 12px;border:1px solid var(--line);border-radius:10px;background:#fff;font:600 13.5px var(--xss);color:var(--xink);cursor:pointer;text-align:left}
+.cap-b button svg{color:var(--xb);flex:none}.cap-b button:hover{border-color:#c9d6f5;background:#f5f8ff}
+.cap-res{display:flex;flex-wrap:wrap;gap:6px 12px;margin-top:10px;font-size:13px;color:#475467}.cap-res[hidden]{display:none}.cap-res .ok{display:inline-flex;align-items:center;gap:5px;color:#0f8a57;font-weight:600}
+.cap-fill{animation:capf 1.6s ease}@keyframes capf{0%{background:#e7f6ee;border-color:#12a065}100%{background:#fff}}
+.cap-m h3{margin:0;font:600 19px var(--xss)}.cap-m textarea{width:100%;margin-top:12px;min-height:110px;padding:12px;border:1px solid #dfe3ea;border-radius:12px;font:500 15px/1.5 var(--xss);resize:vertical;outline:none}.cap-m textarea:focus{border-color:var(--xb);box-shadow:0 0 0 4px rgba(31,94,255,.12)}
+.cap-mb{display:flex;gap:8px;margin:8px 0}
+.cap-pv{display:grid;grid-template-columns:auto 1fr;gap:6px 14px;margin:10px 0;padding:12px 14px;border:1px solid var(--line);border-radius:12px;background:#fafbfd}.cap-pv>div{display:contents}.cap-pv dt{font-size:12.5px;color:var(--xmu)}.cap-pv dd{margin:0;font-size:14px;font-weight:500;overflow-wrap:anywhere}
+.cap-empty{font-size:13.5px;color:var(--xmu);margin:10px 0}
+.cap-cam{position:relative;margin:12px 0;border-radius:16px;overflow:hidden;background:#0b1224;aspect-ratio:1/1;max-height:60vh}.cap-cam video{width:100%;height:100%;object-fit:cover;display:block}
+.cap-frame{position:absolute;inset:18%;border:3px solid rgba(255,255,255,.9);border-radius:18px;box-shadow:0 0 0 999px rgba(11,18,36,.35)}
+.cap-st{font-size:13.5px;color:var(--xmu);text-align:center;margin:6px 0}
+.cap-prog{height:8px;border-radius:99px;background:#eef1f5;overflow:hidden;margin:16px 0 8px}.cap-prog i{display:block;height:100%;width:5%;background:var(--xb);transition:width .2s}
+.t-li{grid-column:1/-1}
+.pc-fast{display:flex;gap:6px;align-items:flex-start;margin:0 0 12px;font-size:13px;color:var(--xmu)}.pc-fast svg{color:var(--xb);flex:none;margin-top:2px}
+.su-q{margin-top:22px;padding:14px 16px;border:1px dashed #c9d6f5;border-radius:14px;background:#f8faff;font-family:var(--xss)}.su-q b{display:flex;align-items:center;gap:6px;font-size:14.5px}.su-q b svg{color:var(--xb)}.su-q small{display:block;font-size:13px;color:var(--xmu);margin:2px 0 10px}
+.su-qr{display:flex;gap:8px}.su-qr textarea{flex:1;min-width:0;min-height:44px;resize:vertical;padding:10px 12px!important;line-height:1.4;border:1px solid #dfe3ea;border-radius:10px;padding:0 12px;font:500 15px var(--xss)}.su-qr .x-btn{height:44px}
+#suqr{margin:8px 0 0;font-size:13px;color:#0f8a57;display:flex;gap:5px;align-items:center}#suqr:empty{display:none}
+@media (max-width:560px){.cap-b{grid-template-columns:1fr 1fr}}
+
 </style>
 </head>
 <body><a href="#root" class="x-skip">Skip to content</a>
@@ -3905,6 +3928,132 @@ SV.thread='<circle cx="6.5" cy="12" r="3.5"/><circle cx="17.5" cy="12" r="3.5"/>
 
 /* v29 page changes start at the top (scroll position no longer carries over between pages) */
 window.addEventListener('itroute',()=>setTimeout(()=>window.scrollTo(0,0),0));
+/* ===== v30 Smart capture: turn a LinkedIn link, QR code, business card, signature or contact into a filled form =====
+   LinkedIn does not let apps read other people's profiles from a username, so a LinkedIn link gives us
+   the profile link and a best-guess name; email, phone, role and company come from the other sources. */
+const ROLE_WORDS=/\b(founder|co-?founder|ceo|cto|cfo|coo|cmo|cpo|chief|president|vice president|vp|director|head|manager|lead|engineer|developer|designer|partner|principal|associate|analyst|consultant|officer|advisor|adviser|investor|owner|executive|specialist|coordinator|marketing|sales|product|operations|recruiter|researcher|scientist|architect|attorney|lawyer|accountant|professor|lecturer|student|intern)\b/i;
+const CO_WORDS=/\b(ltd|limited|inc|llc|llp|plc|gmbh|corp|corporation|company|co\.|group|holdings|technologies|technology|tech|capital|ventures|partners|labs|studio|studios|agency|bank|consulting|solutions|systems|foundation|university|school|institute|media|global|international)\b/i;
+const titleCase=s=>s.toLowerCase().replace(/(^|[\s'-])(\p{L})/gu,(m,a,b)=>a+b.toUpperCase());
+function liFromUrl(s){const m=String(s||'').match(/linkedin\.com\/(?:mwlite\/)?in\/([A-Za-z0-9\-_%.]+)/i);if(!m)return null;const slug=decodeURIComponent(m[1]).replace(/\/$/,'');
+ const parts=slug.split(/[-_]+/).filter(p=>p&&!/^\d+$/.test(p)&&!(/\d/.test(p)&&p.length>=5)&&!/^[0-9a-f]{6,}$/i.test(p));
+ return{url:'https://www.linkedin.com/in/'+slug,user:slug,name:parts.length>=2&&parts.length<=4&&parts.every(p=>/^[\p{L}'.]+$/u.test(p))?titleCase(parts.join(' ')):''}}
+function normPhone(p){p=String(p||'').trim();const plus=/^\s*(\+|00)/.test(p);const d=p.replace(/[^\d]/g,'').replace(/^00/,'');if(d.length<7||d.length>15)return'';return(plus?'+':'')+d}
+function parseContact(raw){const text=String(raw||'').replace(/\r/g,'').trim();const out={name:'',email:'',phone:'',company:'',role:'',linkedin:'',website:'',source:''};if(!text)return out;
+ /* vCard */
+ if(/BEGIN:VCARD/i.test(text)){out.source='vCard';const L=text.replace(/\n[ \t]/g,'').split('\n');const get=k=>{const l=L.find(x=>new RegExp('^'+k+'[;:]','i').test(x));return l?l.slice(l.indexOf(':')+1).trim():''};
+  out.name=get('FN')||get('N').split(';').filter(Boolean).reverse().join(' ');out.email=get('EMAIL');out.phone=normPhone(get('TEL'));out.company=get('ORG').split(';')[0];out.role=get('TITLE')||get('ROLE');
+  L.filter(x=>/^(URL|X-SOCIALPROFILE)/i.test(x)).forEach(x=>{const u=x.slice(x.indexOf(':')+1).trim();const li=liFromUrl(u);if(li)out.linkedin=li.url;else if(!out.website)out.website=u});
+  out.name=out.name.replace(/\\,/g,',');return out}
+ /* MECARD (common in QR codes) */
+ if(/^MECARD:/i.test(text)){out.source='QR contact';const f=k=>{const m=text.match(new RegExp('[:;]'+k+':([^;]*)','i'));return m?m[1].trim():''};const n=f('N');out.name=n.includes(',')?n.split(',').reverse().join(' ').trim():n;out.email=f('EMAIL');out.phone=normPhone(f('TEL'));out.company=f('ORG');const u=f('URL');const li=liFromUrl(u);if(li)out.linkedin=li.url;else out.website=u;return out}
+ /* LinkedIn link */
+ const li=liFromUrl(text);if(li){out.linkedin=li.url;out.name=li.name;out.source='LinkedIn link'}
+ /* general text: email signature, WhatsApp contact, notes */
+ const em=text.match(/[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}/i);if(em)out.email=em[0];
+ const ph=text.replace(/https?:\/\/\S+/g,' ').match(/(?:\+|00)?\d[\d\s().-]{6,}\d/g);if(ph){for(const c of ph){const n=normPhone(c);if(n&&!/^(19|20)\d{2}$/.test(n)){out.phone=n;break}}}
+ const urls=(text.match(/(?:https?:\/\/|www\.)[^\s<>"]+|\b[a-z0-9-]+\.(?:com|co\.uk|io|ai|co|org|net|app|dev|co\.ke|ke)(?:\/[^\s]*)?\b/gi)||[]).filter(u=>!/linkedin\.com/i.test(u)&&!(out.email&&out.email.toLowerCase().endsWith(u.toLowerCase())));
+ if(urls.length)out.website=urls[0].replace(/[).,]+$/,'');
+ if(li&&!/\n/.test(text.trim()))return out.source='LinkedIn link',out;
+ const lines=text.split(/\n|\s{2,}/).map(s=>s.trim()).filter(Boolean);const clean=l=>!/[@]|https?:|www\.|\d{4,}/.test(l)&&l.length<=60;
+ for(const l of lines){if(!clean(l))continue;
+  const at=l.match(/^(.{2,40}?)\s+(?:at|@)\s+(.{2,40})$/i);if(at&&ROLE_WORDS.test(at[1])){out.role=out.role||at[1].trim();out.company=out.company||at[2].trim();continue}
+  const sp=l.split(/\s*[,\u00b7|\u2013\u2014-]\s+/);if(sp.length===2&&ROLE_WORDS.test(sp[0])&&!ROLE_WORDS.test(sp[1])){out.role=out.role||sp[0];out.company=out.company||sp[1];continue}
+  if(!out.name&&/^[\p{Lu}][\p{L}'.-]+(?:\s+[\p{Lu}][\p{L}'.-]+){1,3}$/u.test(l)&&!ROLE_WORDS.test(l)&&!CO_WORDS.test(l)){out.name=l;continue}
+  if(!out.role&&ROLE_WORDS.test(l)){out.role=l;continue}
+  if(!out.company&&CO_WORDS.test(l)){out.company=l;continue}
+  if(out.role&&!out.company&&/^[\p{Lu}][\p{L}&'.\s-]{1,40}$/u.test(l)&&l.split(/\s+/).length<=4){out.company=l;continue}}
+ if(!out.name&&out.email){const lp=out.email.split('@')[0].split(/[._-]/).filter(p=>/^[a-z]{2,}$/i.test(p));if(lp.length>=2&&lp.length<=3)out.name=titleCase(lp.join(' '))}
+ out.source=out.source||(lines.length>2?'signature':'text');return out}
+/* ---------- where_met carries optional contact extras (phone, LinkedIn) without a schema change ---------- */
+function tPack(where,meta){const m={};['phone','linkedin','src'].forEach(k=>{if(meta&&meta[k])m[k]=meta[k]});return(where||'In person')+(Object.keys(m).length?' @@'+JSON.stringify(m):'')}
+function tMeta(t){if(!t||t._mx)return;t._mx=1;const w=t.where||'',mm=w.match(/\s*@@(\{.*\})\s*$/);if(!mm)return;const i=mm.index;try{const m=JSON.parse(mm[1]);t.other=t.other||{};if(m.phone)t.other.phone=m.phone;if(m.linkedin)t.other.linkedin=m.linkedin;if(m.src)t.src=m.src}catch(_){}t.where=w.slice(0,i)||'In person'}
+const _render30=render;render=function(){try{(DB.threads||[]).forEach(tMeta)}catch(_){}return _render30.apply(this,arguments)};
+/* ---------- capture UI on the Tap form ---------- */
+const CAP_FIELDS={name:'tn',email:'te',phone:'tph',linkedin:'tln',role:'tr',company:'tc'};
+let CAP_SRC='';
+function capApply(o,scope){const map=scope||CAP_FIELDS;const filled=[];
+ Object.entries(map).forEach(([k,id])=>{const el=$('#'+id);if(!el||!o[k])return;if(el.value.trim()&&el.value.trim()!==o[k]&&k!=='linkedin')return;el.value=o[k];filled.push(k);el.classList.remove('cap-fill');void el.offsetWidth;el.classList.add('cap-fill')});
+ CAP_SRC=o.source||CAP_SRC;const lab={name:'name',email:'email',phone:'phone',linkedin:'LinkedIn',role:'job title',company:'company'};
+ const r=$('#capres');if(r){const miss=['email','phone'].filter(k=>map[k]&&!($('#'+map[k])||{}).value);r.innerHTML=filled.length?`<span class="ok">${sv('check',13,'currentColor',2.6)} Filled ${filled.map(k=>lab[k]).join(', ')}${o.source?' from '+esc(o.source):''}</span>${miss.length===2?`<span>Add their email or phone so you can follow up.</span>`:''}`:`<span>Nothing new found. Check the text and try again.</span>`;r.hidden=false}
+ const first=Object.values(map).map(id=>$('#'+id)).find(el=>el&&!el.value);if(first&&filled.length)first.focus({preventScroll:true});return filled}
+function capLooksRich(s){return/linkedin\.com\/in\/|BEGIN:VCARD|^MECARD:/i.test(s)||(s.split('\n').length>=2&&/@|\+?\d[\d\s().-]{7,}/.test(s))}
+function capStrip(){const ct='contacts' in navigator&&'select' in (navigator.contacts||{});return`<div class="cap"><div class="cap-h"><b>${sv('spark',15)} Capture in seconds</b><small>Paste a LinkedIn link, scan their QR or business card. We fill the form for you.</small></div>
+ <div class="cap-b"><button type="button" onclick="capPaste()">${sv('link',18)}<span>Paste link or text</span></button><button type="button" onclick="capScanQR()">${sv('qr',18)}<span>Scan QR code</span></button><button type="button" onclick="capCard()">${sv('photo',18)}<span>Scan business card</span></button>${ct?`<button type="button" onclick="capContacts()">${sv('contact',18)}<span>From contacts</span></button>`:''}</div><div class="cap-res" id="capres" role="status" aria-live="polite" hidden></div></div>`}
+function capPreview(o){const lab=[['name','Name'],['email','Email'],['phone','Phone'],['linkedin','LinkedIn'],['role','Job title'],['company','Company'],['website','Website']];const rows=lab.filter(([k])=>o[k]);
+ return rows.length?`<dl class="cap-pv">${rows.map(([k,l])=>`<div><dt>${l}</dt><dd>${esc(o[k])}</dd></div>`).join('')}</dl>`:'<p class="cap-empty">Paste a LinkedIn link, an email signature or contact details. We will pick out the name, email, phone, job title and company.</p>'}
+function capPaste(prefill,title){modal(`<div class="cap-m"><div class="row between"><h3>${title||'Paste link or text'}</h3><button class="x" aria-label="Close" onclick="closeModal()">&times;</button></div>
+ <textarea id="capt" rows="5" placeholder="linkedin.com/in/their-name\nor paste an email signature, WhatsApp contact or notes" oninput="$('#cappv').innerHTML=capPreview(parseContact(this.value))">${esc(prefill||'')}</textarea>
+ <div class="cap-mb">${navigator.clipboard&&navigator.clipboard.readText?`<button type="button" class="t-how sm" onclick="navigator.clipboard.readText().then(v=>{$('#capt').value=v;$('#cappv').innerHTML=capPreview(parseContact(v))}).catch(()=>toast('Paste with your keyboard or long-press instead'))">${sv('copy',15)} Paste from clipboard</button>`:''}</div>
+ <div id="cappv">${capPreview(parseContact(prefill||''))}</div>
+ <p class="bl-fine">LinkedIn does not share profile details with other apps, so from a LinkedIn link we save the profile link and the name in it. Ask for their email or phone, or scan their business card.</p>
+ <div class="fu-b"><button type="button" class="t-how" onclick="closeModal()">Cancel</button><button type="button" class="x-btn" onclick="const o=parseContact($('#capt').value);closeModal();capApply(o)">Fill the form</button></div></div>`);setTimeout(()=>{const t=$('#capt');if(t&&!prefill)t.focus()},40)}
+function capLoad(src,check){return new Promise((res,rej)=>{if(check())return res();const s=document.createElement('script');s.src=src;s.onload=()=>res();s.onerror=()=>rej(new Error('load'));document.head.appendChild(s)})}
+/* QR: BarcodeDetector when the browser has it, otherwise jsQR */
+let CAPQ=null;
+async function capScanQR(){modal(`<div class="cap-m"><div class="row between"><h3>Scan their QR code</h3><button class="x" aria-label="Close" onclick="capQRStop();closeModal()">&times;</button></div><p class="fu-sub">Point your camera at a LinkedIn QR, a contact QR or an Introthread card.</p><div class="cap-cam"><video id="capv" playsinline muted></video><span class="cap-frame"></span></div><p class="cap-st" id="capst">Starting camera...</p><div class="fu-b"><label class="t-how sm">${sv('photo',15)} Use a photo instead<input type="file" accept="image/*" hidden onchange="capQRFile(this)"></label><button type="button" class="t-how" onclick="capQRStop();closeModal()">Cancel</button></div></div>`);
+ try{const st=await navigator.mediaDevices.getUserMedia({video:{facingMode:'environment'}});const v=$('#capv');if(!v){st.getTracks().forEach(t=>t.stop());return}CAPQ={st,run:true};v.srcObject=st;await v.play();$('#capst').textContent='Looking for a QR code...';capQRLoop(v)}
+ catch(e){const s=$('#capst');if(s)s.textContent='Camera is not available. Allow camera access, or use a photo instead.'}}
+function capQRStop(){if(CAPQ){CAPQ.run=false;CAPQ.st.getTracks().forEach(t=>t.stop());CAPQ=null}}
+async function capDecode(src){if('BarcodeDetector' in window){try{const d=new BarcodeDetector({formats:['qr_code']});const r=await d.detect(src);if(r[0])return r[0].rawValue}catch(_){}}
+ await capLoad('https://cdn.jsdelivr.net/npm/jsqr@1.4.0/dist/jsQR.js',()=>window.jsQR);const c=document.createElement('canvas');const w=src.videoWidth||src.naturalWidth||src.width,h=src.videoHeight||src.naturalHeight||src.height;if(!w)return null;c.width=w;c.height=h;const x=c.getContext('2d');x.drawImage(src,0,0,w,h);const r=jsQR(x.getImageData(0,0,w,h).data,w,h);return r?r.data:null}
+async function capQRLoop(v){while(CAPQ&&CAPQ.run){try{const t=await capDecode(v);if(t){capQRStop();closeModal();capQRResult(t);return}}catch(_){}await new Promise(r=>setTimeout(r,280))}}
+function capQRFile(inp){const f=inp.files&&inp.files[0];if(!f)return;const img=new Image();img.onload=async()=>{const t=await capDecode(img).catch(()=>null);if(t){capQRStop();closeModal();capQRResult(t)}else{const s=$('#capst');if(s)s.textContent='No QR code found in that photo. Try a closer, sharper photo.'}};img.src=URL.createObjectURL(f)}
+function capQRResult(t){const o=parseContact(t);const it=String(t).match(/introthread\.com\/([a-z0-9]{2,30})(?:[/?#]|$)/i);if(it&&!o.name){o.website='introthread.com/'+it[1];o.source='Introthread card'}if(!o.source||o.source==='text')o.source='QR code';
+ const n=capApply(o);if(!n.length)capPaste(t,'We read this from the QR code')}
+/* business card: on-device text recognition (Tesseract.js), then the same parser */
+function capCard(){const i=document.createElement('input');i.type='file';i.accept='image/*';i.setAttribute('capture','environment');i.onchange=()=>capCardRun(i.files&&i.files[0]);i.click()}
+async function capCardRun(f){if(!f)return;modal(`<div class="cap-m"><h3>Reading the business card</h3><div class="cap-prog"><i id="capbar"></i></div><p class="cap-st" id="capst">Preparing text recognition...</p></div>`);
+ try{await capLoad('https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js',()=>window.Tesseract);
+  const r=await Tesseract.recognize(f,'eng',{logger:m=>{const s=$('#capst'),b=$('#capbar');if(s)s.textContent=m.status==='recognizing text'?'Reading text...':'Preparing text recognition...';if(b&&m.progress)b.style.width=Math.round(m.progress*100)+'%'}});
+  const txt=(r.data&&r.data.text||'').trim();closeModal();if(!txt)return toast('No text found. Try a brighter, closer photo.');const o=parseContact(txt);o.source='business card';capPaste(txt,'Check what we read');setTimeout(()=>{const p=$('#cappv');if(p)p.innerHTML=capPreview(o)},50)}
+ catch(e){closeModal();toast('Could not read the card. Check your connection and try again.')}}
+async function capContacts(){try{const r=await navigator.contacts.select(['name','email','tel'],{multiple:false});if(!r||!r[0])return;const c=r[0];capApply({name:(c.name||[])[0]||'',email:(c.email||[])[0]||'',phone:normPhone((c.tel||[])[0]||''),source:'your contacts'})}catch(_){toast('Could not open your contacts.')}}
+/* smart paste: paste a LinkedIn link or a signature into any field of a capture form */
+document.addEventListener('paste',e=>{const f=e.target.closest&&e.target.closest('.t-form,.pc-form');if(!f)return;const s=(e.clipboardData||window.clipboardData).getData('text');if(!s||!capLooksRich(s))return;
+ const o=parseContact(s);if(f.classList.contains('t-form')){e.preventDefault();capApply(o)}else{e.preventDefault();capApply(o,{name:'gn',email:'ge',phone:'gph',linkedin:'gln',role:'gr',company:'gc'})}},true);
+/* Tap form: email, phone and LinkedIn as separate fields, capture strip above */
+const _vTap30=vTap;vTap=function(){let h=_vTap30();
+ h=h.replace(/<label class="x-f"><span>Email or phone <i>\*<\/i><\/span><input id="te"[^>]*><\/label>/,`<label class="x-f"><span>Email</span><input id="te" type="email" inputmode="email" autocomplete="off" placeholder="name@company.com"></label><label class="x-f"><span>Phone</span><input id="tph" type="tel" inputmode="tel" autocomplete="off" placeholder="+44 7700 900123"></label><label class="x-f t-li"><span>LinkedIn <em>(paste their profile link)</em></span><input id="tln" inputmode="url" autocomplete="off" placeholder="linkedin.com/in/their-name" onchange="const o=liFromUrl(this.value);if(o){this.value=o.url;if(o.name&&!$('#tn').value)capApply({name:o.name,source:'LinkedIn link'})}"></label>`);
+ h=h.replace(/<label class="x-f"><span>LinkedIn <em>\(optional\)<\/em><\/span><input id="tli"[^>]*><\/label>/,'');
+ return h.replace('<div class="t-g2">',capStrip()+'<div class="t-g2">')};
+const _nt30=newThread;newThread=function(e){const v=id=>{const x=$('#'+id);return x?x.value.trim():''};const em=v('te'),ph=normPhone(v('tph')),liR=v('tln');
+ if(v('tn')&&!em&&!ph){e.preventDefault();toast('Add their email or phone so you can follow up');const t=$('#te');if(t)t.focus();return false}
+ if(em&&!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(em)){e.preventDefault();toast('Check the email address');return false}
+ if(v('tph')&&!ph){e.preventDefault();toast('Check the phone number');return false}
+ const li=liR?(liFromUrl(liR)||{}).url||'':'';if(liR&&!li){e.preventDefault();toast('Paste a LinkedIn profile link like linkedin.com/in/name');return false}
+ const meta={phone:ph,linkedin:li,src:CAP_SRC};const before=new Set(DB.threads.map(t=>t.id));window._capLast=Object.assign({name:v('tn'),email:em,role:v('tr'),company:v('tc')},meta);
+ const r=_nt30.call(this,e);CAP_SRC='';
+ let n=0;const iv=setInterval(()=>{const t=DB.threads.find(x=>!before.has(x.id)&&x.ownerId===DB.session);if(t){clearInterval(iv);t._mx=1;t.other.phone=meta.phone||t.other.phone;t.other.linkedin=meta.linkedin||t.other.linkedin;if(meta.src)t.src=meta.src;
+   if(cloud()&&(meta.phone||meta.linkedin))upd('threads',t.id,{where_met:tPack(t.where,meta)});save()}else if(++n>40)clearInterval(iv)},150);return r};
+tapVcf=function(o){const x=Object.assign({},o,window._capLast||{});const lines=['BEGIN:VCARD','VERSION:3.0','FN:'+x.name,x.role?'TITLE:'+x.role:'',x.company?'ORG:'+x.company:'',x.email?'EMAIL:'+x.email:'',x.phone?'TEL;TYPE=CELL:'+x.phone:'',x.linkedin?'URL:'+x.linkedin:'','NOTE:Met via Introthread'+(o.where?' at '+o.where:''),'END:VCARD'].filter(Boolean).join('\n');const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([lines],{type:'text/vcard'}));a.download=(x.name||'contact').replace(/\s+/g,'-')+'.vcf';document.body.appendChild(a);a.click();a.remove()};
+/* Thread page: phone and LinkedIn in The moment, and editable */
+const _vThread30=vThread;vThread=function(id){let h=_vThread30(id);const t=findThread(id);if(!t)return h;tMeta(t);const o=t.other||{};
+ const add=(o.phone?`<li>${sv('phone',16)}<a href="tel:${esc(o.phone)}">${esc(o.phone)}</a></li>`:'')+(o.linkedin?`<li>${sv('li',16)}<a href="${esc(o.linkedin)}" target="_blank" rel="noopener">${esc(o.linkedin.replace(/^https:\/\/www\./,''))}</a></li>`:'');
+ return add?h.replace('<ul class="td-facts">','<ul class="td-facts">'+add):h};
+const _tdEdit30=tdEdit;tdEdit=function(id){_tdEdit30(id);const t=findThread(id);if(!t)return;const g=document.querySelector('.modal .t-g2');if(g)g.insertAdjacentHTML('beforeend',`<label class="x-f"><span>Phone</span><input id="tep" type="tel" value="${esc(t.other.phone||'')}" maxlength="30"></label><label class="x-f"><span>LinkedIn</span><input id="tel2" value="${esc(t.other.linkedin||'')}" placeholder="linkedin.com/in/name" maxlength="200"></label>`)};
+const _tdSave30=tdEditSave;tdEditSave=async function(e,id){const t=findThread(id);const ph=normPhone(($('#tep')||{}).value||''),lr=(($('#tel2')||{}).value||'').trim(),li=lr?(liFromUrl(lr)||{}).url||'':'';
+ if((($('#tep')||{}).value||'').trim()&&!ph){e.preventDefault();toast('Check the phone number');return false}if(lr&&!li){e.preventDefault();toast('Paste a LinkedIn profile link like linkedin.com/in/name');return false}
+ const r=await _tdSave30.call(this,e,id);if(t){t.other.phone=ph;t.other.linkedin=li;if(cloud())await upd('threads',id,{where_met:tPack(t.where,{phone:ph,linkedin:li,src:t.src})});save();window._keepScroll=true;render()}return r};
+/* exports include phone and LinkedIn */
+const _bVcf30=bExportVcf;bExportVcf=function(){const T=myThreads();T.forEach(tMeta);const keep=T.map(t=>t.other.email);T.forEach(t=>{t.other._x=1});
+ const orig=window.Blob;window.Blob=function(parts,opt){if(opt&&opt.type==='text/vcard'&&parts&&typeof parts[0]==='string'){let i=0;parts=[parts[0].split('END:VCARD').map((c,k)=>{const t=T[k];if(!t||!c.trim())return c;return c+(t.other.phone?'TEL;TYPE=CELL:'+t.other.phone+'\r\n':'')+(t.other.linkedin?'URL:'+t.other.linkedin+'\r\n':'')}).join('END:VCARD')]}return new orig(parts,opt)};
+ try{_bVcf30()}finally{window.Blob=orig}};
+const _bCsv30=bExportThreads;bExportThreads=function(){const T=myThreads();T.forEach(tMeta);const orig=window.Blob;window.Blob=function(parts,opt){if(opt&&opt.type==='text/csv'){const rows=parts[0].replace(/^\ufeff/,'').split('\n');parts=['\ufeff'+rows.map((r,i)=>{if(i===0)return r+',"Phone","LinkedIn"';const t=T[i-1];const q=v=>`"${String(v||'').replace(/"/g,'""')}"`;return r+','+q(t&&t.other.phone)+','+q(t&&t.other.linkedin)}).join('\n')]}return new orig(parts,opt)};try{_bCsv30()}finally{window.Blob=orig}};
+/* public card: phone and LinkedIn for the visitor, with autofill */
+const _vPub30=vPublic;vPublic=function(hd){let h=_vPub30(hd);if(!h.includes('id="gc"'))return h;
+ const fi=(id,ic,ph,o)=>`<label class="pc-in">${sv(ic,18)}<input id="${id}" placeholder="${ph}" ${o}></label>`;
+ h=h.replace(/(<label class="pc-in">[\s\S]{0,400}?id="gc"[^>]*><\/label>)/,`$1${fi('gph','phone','Phone (optional)','type="tel" inputmode="tel" autocomplete="tel" maxlength="30" aria-label="Phone"')}${fi('gln','li','LinkedIn profile link (optional)','inputmode="url" autocomplete="url" maxlength="200" aria-label="LinkedIn profile link" onchange="const o=liFromUrl(this.value);if(o)this.value=o.url"')}`);
+ return h.replace('<form class="pc-form"','<p class="pc-fast">'+sv('spark',14)+' Tip: paste your LinkedIn link or email signature into any box and we fill in the rest.</p><form class="pc-form"')};
+const _guest30=guestThread;guestThread=function(e,oid){const gw=$('#gw');const ph=normPhone(($('#gph')||{}).value||''),lr=(($('#gln')||{}).value||'').trim(),li=lr?(liFromUrl(lr)||{}).url||'':'';
+ if((($('#gph')||{}).value||'').trim()&&!ph){e.preventDefault();toast('Check the phone number');return false}if(lr&&!li){e.preventDefault();toast('Paste a LinkedIn profile link like linkedin.com/in/name');return false}
+ if(!gw||(!ph&&!li))return _guest30(e,oid);const orig=gw.value;gw.value=tPack(orig.trim()||'In person',{phone:ph,linkedin:li,src:'card'});try{return _guest30(e,oid)}finally{gw.value=orig}};
+/* sign-up: fill your own profile from your LinkedIn link or email signature */
+function suQuickFill(){const o=parseContact(($('#suq')||{}).value||'');const m={name:'sn2',role:'sr',company:'sc'};const n=capApply(o,m);if(o.linkedin){try{localStorage.setItem('it_su_li',o.linkedin)}catch(_){}}
+ const r=$('#suqr');if(r)r.innerHTML=n.length||o.linkedin?`${sv('check',13,'currentColor',2.6)} Filled ${n.concat(o.linkedin?['LinkedIn link']:[]).join(', ').replace('role','job title')}. Check the rest below.`:'Nothing found. Paste your LinkedIn link or your email signature.';if(typeof liveP==='function')liveP()}
+const _vSignup30=vSignup;vSignup=function(){const h=_vSignup30();if(!(SU&&SU.step===2))return h;
+ return h.replace('<div class="x-s2" style="margin-top:30px">',`<div class="su-q"><b>${sv('spark',15)} Fill this in seconds</b><small>Paste your LinkedIn profile link or your email signature.</small><div class="su-qr"><textarea id="suq" rows="2" placeholder="linkedin.com/in/your-name or your email signature" onpaste="setTimeout(suQuickFill,0)"></textarea><button type="button" class="x-btn" onclick="suQuickFill()">Fill</button></div><p id="suqr" role="status" aria-live="polite"></p></div><div class="x-s2" style="margin-top:22px">`)};
+/* save the LinkedIn link from sign-up onto the new profile */
+const _render30b=render;render=function(){const u=me();if(u){let li=null;try{li=localStorage.getItem('it_su_li')}catch(_){}if(li){try{localStorage.removeItem('it_su_li')}catch(_){}if(!(u.links||{}).linkedin){const links=Object.assign({},u.links||{},{linkedin:li});upd('profiles',u.id,{links}).then(ok=>{if(ok){u.links=links;save()}})}}}return _render30b.apply(this,arguments)};
 </script>
 </body>
 </html>
