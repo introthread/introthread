@@ -1,6 +1,6 @@
 # Introthread
 
-**Professional networking and relationship intelligence for the UK and USA.**
+**Professional networking and relationship intelligence for professionals everywhere.**
 
 Identity → Share → Connect → Remember → Follow Up → Grow
 

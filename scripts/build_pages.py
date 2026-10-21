@@ -2,7 +2,7 @@
 import re, json, os
 SITE='https://www.introthread.com'
 META={
- '/':('Introthread | Every handshake, followed through','Create your professional card, share it by tap, QR or link, and turn every introduction into a shared Thread with one clear next step. Built for the UK and USA.'),
+ '/':('Introthread | Every handshake, followed through','Create your professional card, share it by tap, QR or link, and turn every introduction into a shared Thread with one clear next step. Built for professionals everywhere.'),
  '/how':('How it works | Introthread','Tap or scan, confirm a shared Thread, answer one private question: What\'s next? See how Introthread turns introductions into follow-through.'),
  '/rooms':('Thread Rooms for events and communities | Introthread','Measure what your event created: verified connections, meetings booked and introductions made, live and for 30 days after.'),
  '/networks':('Warmth for teams and networks | Introthread','Consented, verified relationship strength for VC platform teams, accelerators and professional communities. Warm intros that are actually warm.'),
