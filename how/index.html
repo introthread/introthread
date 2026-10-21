@@ -1164,6 +1164,76 @@ html,body,button,input,select,textarea{font-family:var(--xss)}
 @media (max-width:1200px){.d7-top{grid-template-columns:1fr}.d7-bot{grid-template-columns:1fr 1fr}.d7-promo{grid-column:1/-1}}
 @media (max-width:760px){.d7-stats{grid-template-columns:1fr!important}.d7-bot{grid-template-columns:1fr}.fu-opts{grid-template-columns:1fr}.d-hbtns .t-how{display:none}}
 
+/* v8 Threads screen */
+.th-new span{font-size:22px;font-weight:400;line-height:1}
+.th-bar{display:flex;align-items:center;gap:14px;margin-bottom:16px;font-family:var(--xss)}
+.th-tabs{display:flex;gap:8px;flex:1;min-width:0;overflow-x:auto;scrollbar-width:none;padding:2px}
+.th-tabs::-webkit-scrollbar{display:none}
+.th-tabs button{flex:none;height:42px;padding:0 16px;border:1px solid var(--line);border-radius:10px;background:#fff;font:500 14.5px var(--xss);color:#344054;cursor:pointer;white-space:nowrap}
+.th-tabs button:hover{border-color:#c9d6f5}
+.th-tabs button.on{color:var(--xb);font-weight:600;border-color:transparent;background:#fff;box-shadow:inset 0 -3px 0 var(--xb)}
+.th-tools{display:flex;gap:10px;flex:none}
+.th-sort{height:42px;min-width:150px;border:1px solid var(--line);border-radius:10px;padding:0 12px;background:#fff;font:500 14px var(--xss);color:var(--xink);cursor:pointer}
+.th-ib,.th-filter{height:42px;border:1px solid var(--line);border-radius:10px;background:#fff;color:var(--xink);display:inline-flex;align-items:center;justify-content:center;gap:8px;cursor:pointer;font:600 14px var(--xss)}
+.th-ib{width:46px}.th-filter{padding:0 16px}
+.th-ib.on,.th-filter.on{border-color:var(--xb);color:var(--xb);background:#f3f6ff}
+.th-filter i{font-style:normal;min-width:20px;height:20px;border-radius:99px;background:var(--xb);color:#fff;font-size:11.5px;display:grid;place-items:center}
+.th-q{display:flex;align-items:center;gap:10px;margin:-4px 0 12px;font:500 14px var(--xss);color:var(--xmu)}
+.th-q button{border:0;background:none;color:var(--xb);font:600 14px var(--xss);cursor:pointer}
+.th-grid{grid-template-columns:minmax(0,1fr) 365px}
+.th-list{display:flex;flex-direction:column;gap:12px;min-width:0}
+.th-row{display:grid;grid-template-columns:72px 60px minmax(0,1.25fr) minmax(0,1fr) auto 26px;gap:16px;align-items:center;padding:14px 16px 14px 14px;background:#fff;border:1px solid var(--line);border-left:4px solid #d0d5dd;border-radius:14px;box-shadow:0 14px 30px -28px rgba(15,23,42,.35);font-family:var(--xss);cursor:pointer;transition:box-shadow .15s,border-color .15s}
+.th-row:hover{box-shadow:0 16px 34px -24px rgba(31,94,255,.45)}
+.th-row:focus-visible{outline:2px solid var(--xb);outline-offset:2px}
+.th-row.r{border-left-color:#e5484d}.th-row.o{border-left-color:#ff6a3d}.th-row.g{border-left-color:#12a065}.th-row.n{border-left-color:#d0d5dd}
+.th-pri{display:flex;flex-direction:column;align-items:center;gap:5px;text-align:center;border-right:1px solid #eef1f5;padding-right:10px;align-self:stretch;justify-content:center}
+.th-ring{width:44px;height:44px;border-radius:50%;border:3px solid;display:grid;place-items:center;background:#fff}
+.th-pri.r .th-ring{border-color:#e5484d!important;border-right-color:#fbd5d6!important}
+.th-pri.o .th-ring{border-color:#ff6a3d!important;border-right-color:#ffe0d4!important}
+.th-pri.g .th-ring{border-color:#12a065!important;border-bottom-color:#cdeedd!important}
+.th-pri.n .th-ring{border-color:#d0d5dd!important}
+.th-ring b{font-size:14px;font-weight:700}
+.th-pri small{font-size:12px;line-height:1.2;font-weight:500}
+.th-pri.r small{color:#e5484d}.th-pri.o small{color:#ff6a3d}.th-pri.g small{color:#12a065}.th-pri.n small{color:var(--xmu)}
+.th-who{min-width:0}.th-who b{display:flex;align-items:center;gap:6px;font-size:16px;font-weight:600;color:var(--xink)}
+.th-who>small{display:block;font-size:14px;color:#475467;margin-top:1px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.th-meta{display:flex;flex-direction:column;gap:2px;margin:6px 0 7px;font-size:13px;color:var(--xmu)}
+.th-meta span{display:flex;align-items:center;gap:6px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.th-meta svg{flex:none}
+.th-st{display:flex;flex-direction:column;align-items:flex-start;gap:7px;min-width:0}
+.th-st small{display:flex;align-items:flex-start;gap:7px;font-size:13px;color:#475467;line-height:1.4;max-width:100%}
+.th-st small svg{flex:none;margin-top:2px;color:var(--xmu)}
+.th-st small span{display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.th-chip{display:inline-flex;align-items:center;gap:6px;height:26px;padding:0 10px;border-radius:7px;font-size:12.5px;font-weight:600}
+.th-chip.o{background:#fff1ea;color:#d4501f}.th-chip.b{background:#eef3ff;color:var(--xb)}.th-chip.g{background:#e7f6ee;color:#0f8a57}.th-chip.n{background:#f2f4f7;color:#475467}
+.th-minus{width:13px;height:13px;border-radius:50%;background:#667085;position:relative;display:inline-block}
+.th-minus:after{content:"";position:absolute;left:3px;right:3px;top:6px;height:1.6px;background:#fff}
+.th-row .d-act{min-width:104px}
+.th-row.cmp{padding-top:9px;padding-bottom:9px;grid-template-columns:72px 44px minmax(0,1.25fr) minmax(0,1fr) auto 26px}
+.th-row.cmp .th-meta{flex-direction:row;gap:14px;margin:3px 0}.th-row.cmp .d-tags,.th-row.cmp .d-warm{display:none}
+.th-more{display:flex;justify-content:center;align-items:center;gap:10px;height:48px;border:1px dashed #c9d2e3;border-radius:12px;background:#fff;font:600 14.5px var(--xss);color:var(--xb);cursor:pointer}
+.th-more span{font-weight:500;color:var(--xmu);font-size:13px}
+.th-end{text-align:center;color:var(--xmu);font:500 13px var(--xss);margin:4px 0}
+.th-gl div{padding:16px}.th-gl b{font-size:26px!important;font-weight:600}
+.th-fu{display:grid;grid-template-columns:36px 44px minmax(0,1fr) 36px;gap:12px;align-items:start;padding:14px 0;border-top:1px solid var(--line)}
+.th-fu:first-of-type{border-top:0;padding-top:4px}
+.th-fud{width:36px;height:36px;border-radius:50%;display:grid;place-items:center;font:700 12.5px var(--xss);margin-top:4px}
+.th-fud.r{background:#fdecec;color:#e5484d}.th-fud.o{background:#fff1ea;color:#d4501f}.th-fud.g{background:#e7f6ee;color:#0f8a57}.th-fud.n{background:#f2f4f7;color:#475467}
+.th-fuw{min-width:0}.th-fuw a{text-decoration:none;color:var(--xink)}.th-fuw b{font-size:15px;font-weight:600}
+.th-fuw small{display:flex;align-items:center;gap:4px;font-size:12.5px;color:var(--xmu);margin-top:1px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.th-fuw .d-tags{margin-top:8px}
+.th-cal{width:36px;height:36px;border:1px solid #c9d6f5;border-radius:9px;background:#fff;color:var(--xb);display:grid;place-items:center;cursor:pointer;align-self:end}
+.th-cal:hover{background:#f3f6ff}
+@media (max-width:1380px){.th-grid{grid-template-columns:minmax(0,1fr) 330px}.th-row{grid-template-columns:66px 52px minmax(0,1.2fr) minmax(0,1fr) auto 24px;gap:12px}}
+@media (max-width:1200px){.th-grid{grid-template-columns:1fr}.th-bar{flex-wrap:wrap}.th-tools{width:100%}.th-sort{flex:1}}
+@media (max-width:760px){
+.th-row,.th-row.cmp{grid-template-columns:52px minmax(0,1fr) 26px;grid-template-areas:"av who dots" "pri st st" "btn btn btn";gap:10px 12px;padding:14px}
+.th-row>.d-av{grid-area:av}.th-who{grid-area:who}.th-row>.d-dots{grid-area:dots;align-self:start}
+.th-pri{grid-area:pri;border-right:0;padding-right:0}.th-st{grid-area:st}.th-row>.d-act{grid-area:btn;width:100%}
+.th-row>.d-av{width:52px!important;height:52px!important}
+.th-tools{flex-wrap:nowrap}.th-filter{padding:0 12px}
+}
+
 </style>
 </head>
 <body><a href="#root" class="x-skip">Skip to content</a>
@@ -2242,6 +2312,50 @@ function vToday(){const u=me(),T=myThreads();const now=Date.now();const wk=T.fil
  <section class="d-box">${dSecHead('Quick actions')}<div class="d7-qa">${qa('/app/tap',0,'nfc','Tap to Thread','Share instantly')}${qa(0,'shareNative()','send','Share my card','Send your link')}${qa(0,'tapQR()','qr','Scan a QR code','Open a card')}${qa(0,'newRoomModal()','cal','Create a Room','Host an event')}</div></section>
  <div class="d7-promo"><span class="d-promo-ic">${sv('chart',22)}</span><div><b>Turn more Threads into opportunities</b><ul>${['Add context and notes','Set follow-up reminders','Track progress to resolution'].map(x=>`<li><i>${sv('check',11,'#fff',3.2)}</i>${x}</li>`).join('')}</ul><a href="/how">Learn more ${sv('arrow',15)}</a></div></div>
  </div>`)}
+
+/* ===== v8 Threads screen (design: Relationship Thread) ===== */
+let TSORT='priority',TLIM=20,TCOMPACT=false,TFT=[],TFV=false;
+const TH_SORTS=[['priority','Priority'],['recent','Most recent'],['oldest','Oldest'],['next','Next follow-up']];
+function thDaysLeft(t){return Math.max(0,Math.ceil(pulse(t)*7))}
+function thPri(t){const s=threadState(t);if(s==='resolved'||s==='closed')return{c:'n',l:'Low priority',d:Math.max(1,Math.round((Date.now()-t.createdAt)/DAY))+'d'};
+ if(s==='matched'||(s==='open'&&!t.mine))return{c:'g',l:'Respond',d:thDaysLeft(t)+'d'};const d=thDaysLeft(t);return d<=1?{c:'r',l:'High priority',d:d+'d'}:{c:'o',l:'Follow up',d:d+'d'}}
+function thRing(p){const col={r:'#e5484d',o:'#ff6a3d',g:'#12a065',n:'#98a2b3'}[p.c];return`<span class="th-pri ${p.c}"><span class="th-ring" style="border-color:${col}33;color:${col}"><b>${p.d}</b></span><small>${p.l}</small></span>`}
+function thSorted(T){const A=T.slice(),act=t=>['matched','open','pending'].includes(threadState(t));const rank=t=>({matched:0,open:1,pending:1,resolved:3,closed:4})[threadState(t)];
+ if(TSORT==='recent')A.sort((a,b)=>b.createdAt-a.createdAt);else if(TSORT==='oldest')A.sort((a,b)=>a.createdAt-b.createdAt);
+ else if(TSORT==='next')A.sort((a,b)=>(act(b)-act(a))||(pulse(a)-pulse(b)));else A.sort((a,b)=>{const pa=thPri(a),pb=thPri(b),w={r:0,o:1,g:2,n:3};return(w[pa.c]-w[pb.c])||(pulse(a)-pulse(b))||(b.createdAt-a.createdAt)});return A}
+function thFilter(){const all=[...new Set(myThreads().flatMap(tagsOf))].sort();modal(`<div><div class="row between"><h3 style="margin:0;font:600 19px var(--xss)">Filter Threads</h3><button class="x" aria-label="Close" onclick="closeModal()">&times;</button></div>
+ <div class="x-f" style="margin-top:16px"><span>Topics</span><div class="tp-wrap">${all.length?all.map(x=>`<button type="button" class="tp ${TFT.includes(x)?'on':''}" aria-pressed="${TFT.includes(x)}" onclick="this.classList.toggle('on');this.setAttribute('aria-pressed',this.classList.contains('on'))" data-v="${esc(x)}">${esc(x)}</button>`).join(''):'<small class="muted">No topics on your Threads yet.</small>'}</div></div>
+ <label class="t-tog" style="margin-top:16px"><input type="checkbox" id="tfv" ${TFV?'checked':''}><span class="t-sw"></span><span><b>Verified only</b><small>Show Threads both people confirmed.</small></span></label>
+ <div class="fu-b"><button type="button" class="t-how" onclick="TFT=[];TFV=false;closeModal();TLIM=20;render()">Clear</button><button type="button" class="x-btn" onclick="TFT=[...document.querySelectorAll('.modal .tp.on')].map(b=>b.dataset.v);TFV=$('#tfv').checked;closeModal();TLIM=20;render()">Apply</button></div></div>`)}
+function vThreads(){const all=myThreads();const cnt=s=>all.filter(t=>threadState(t)===s).length;const q=(TQ2||Q||'').toLowerCase().trim();let T=all.slice();
+ if(TF2!=='all')T=T.filter(t=>threadState(t)===TF2);
+ if(q)T=T.filter(t=>[t.other.name,t.other.company,t.other.role,t.where,t.note,tagsOf(t).join(' ')].join(' ').toLowerCase().includes(q));
+ if(TFT.length)T=T.filter(t=>tagsOf(t).some(x=>TFT.includes(x)));if(TFV)T=T.filter(t=>t.confirmed);
+ T=thSorted(T);const shown=T.slice(0,TLIM);
+ const tabs=[['all','All',all.length],['matched','Matched',cnt('matched')],['open','Awaiting answers',cnt('open')],['pending','Awaiting confirmation',cnt('pending')],['resolved','Resolved',cnt('resolved')],['closed','Closed',cnt('closed')]];
+ const conf=all.filter(t=>t.confirmed).length,res=cnt('resolved'),wait=cnt('open')+cnt('matched')+cnt('pending');const pct=(a,b)=>b?Math.round(a/b*100):0;
+ const fu=all.filter(t=>['matched','open','pending'].includes(threadState(t))).sort((a,b)=>pulse(a)-pulse(b)).slice(0,3);
+ const nf=TFT.length+(TFV?1:0);const sortL=(TH_SORTS.find(s=>s[0]===TSORT)||[])[1].toLowerCase();
+ const chipIc=s=>s==='matched'||s==='resolved'?sv('check',13,'currentColor',2.6):s==='closed'?'<i class="th-minus"></i>':sv('bell',13);
+ const row=t=>{const s=threadState(t),p=thPri(t),act=['matched','open','pending'].includes(s);const last=(t.events||[]).slice(-1)[0];
+  return`<div class="th-row ${p.c} ${TCOMPACT?'cmp':''}" role="link" tabindex="0" aria-label="Open Thread with ${esc(t.other.name)}" onclick="if(!event.target.closest('button,a'))go('/app/thread/${t.id}')" onkeydown="if(event.key==='Enter'&&event.target===this)go('/app/thread/${t.id}')">
+  ${thRing(p)}${xav(t.other.name,TCOMPACT?44:60)}
+  <div class="th-who"><b>${esc(t.other.name)}${t.confirmed?`<span class="d-ver" title="Verified">${sv('check',10,'#fff',3.2)}</span>`:''}</b><small>${esc([t.other.role,t.other.company].filter(Boolean).join(' · ')||'New connection')}</small>
+   <span class="th-meta"><span>${sv('pin',14)} ${esc(t.where||'In person')}</span><span>${sv('cal',14)} ${ago(t.createdAt)}</span></span>${tagChips(t)}</div>
+  <div class="th-st"><span class="th-chip ${({pending:'o',open:t.mine?'o':'b',matched:'g',resolved:'g',closed:'n'})[s]}">${chipIc(s)} ${dChip(t).replace(/<[^>]+>/g,'')}</span><small>${sv('mail',14)} <span>${esc(t.note||(last&&last.text)||'Thread started')}</span></small>${dWarm(t)}</div>
+  ${act?`<button type="button" class="d-act" onclick="${s==='open'&&!t.mine?`go('/app/thread/${t.id}')`:`fuOpen('${t.id}')`}">${s==='open'&&!t.mine?'Answer':'Follow up'}</button>`:`<button type="button" class="d-act ghost" onclick="go('/app/thread/${t.id}')">View</button>`}
+  <button type="button" class="d-dots" aria-label="More options for ${esc(t.other.name)}" onclick="dMenu('${t.id}')">&#8942;</button></div>`};
+ return shell('threads',`<div class="t-head"><div><div class="t-eye">Threads</div><h1 class="t-h1">Every relationship, followed through</h1><p class="t-sub">Turn introductions into meaningful opportunities. ${all.length} Thread${all.length===1?'':'s'} &middot; sorted by ${sortL}</p></div><a href="/app/tap" class="x-btn lg th-new"><span aria-hidden="true">+</span> New Thread</a></div>
+ <div class="th-bar"><nav class="th-tabs" aria-label="Thread status">${tabs.map(([k,l,c])=>`<button type="button" class="${TF2===k?'on':''}" aria-pressed="${TF2===k}" onclick="TF2='${k}';TLIM=20;window._keepScroll=true;render()">${l} (${c})</button>`).join('')}</nav>
+ <div class="th-tools"><select class="th-sort" aria-label="Sort Threads" onchange="TSORT=this.value;window._keepScroll=true;render()">${TH_SORTS.map(([k,l])=>`<option value="${k}" ${TSORT===k?'selected':''}>${l}</option>`).join('')}</select><button type="button" class="th-ib ${TCOMPACT?'on':''}" aria-pressed="${TCOMPACT}" title="${TCOMPACT?'Comfortable rows':'Compact rows'}" aria-label="Toggle compact rows" onclick="TCOMPACT=!TCOMPACT;window._keepScroll=true;render()">${sv('menu2',18)}</button><button type="button" class="th-filter ${nf?'on':''}" onclick="thFilter()">${sv('grid',16)} Filter${nf?` <i>${nf}</i>`:''}</button></div></div>
+ ${q?`<div class="th-q">Showing results for &ldquo;${esc(q)}&rdquo; <button type="button" onclick="TQ2='';Q='';const i=document.querySelector('.topbar input');if(i)i.value='';render()">Clear search</button></div>`:''}
+ <div class="d7-top th-grid"><div class="th-list">${shown.length?shown.map(row).join(''):`<div class="d-empty">${sv('search',22)}<div><b>No Threads here</b><small>${q||nf?'Try a different search or clear your filters.':'Threads in this state will appear here.'}</small></div><a href="/app/tap" class="x-btn sm">Start a Thread</a></div>`}
+ ${T.length>TLIM?`<button type="button" class="th-more" onclick="TLIM+=20;window._keepScroll=true;render()">Show more <span>${Math.min(20,T.length-TLIM)} of ${T.length-TLIM} remaining</span></button>`:T.length>20?`<p class="th-end">All ${T.length} Threads shown</p>`:''}</div>
+ <div class="d-side">
+ <section class="d-box">${dSecHead('Threads at a glance','/app','View analytics')}<div class="d-glance th-gl"><div class="b">${sv('users',24)}<b>${all.length}</b><small>Total Threads</small></div><div class="g">${sv('shield',24)}<b>${conf}</b><small>Verified (${pct(conf,all.length)}%)</small></div><div class="o">${sv('bell',24)}<b>${wait}</b><small>Awaiting next step</small></div><div class="b">${sv('chart',24)}<b>${res}</b><small>Resolved (${pct(res,all.length)}%)</small></div></div></section>
+ <section class="d-box">${dSecHead('Upcoming follow-ups','/app/threads')}${fu.length?fu.map(t=>{const p=thPri(t);return`<div class="th-fu"><span class="th-fud ${p.c}">${thDaysLeft(t)}d</span>${xav(t.other.name,44)}<div class="th-fuw"><a href="/app/thread/${t.id}"><b>${esc(t.other.name)}</b></a><small>${esc([t.other.role,t.other.company].filter(Boolean).join(' · ')||'New connection')}</small><small>${sv('pin',12)} ${esc(t.where||'In person')}</small>${tagChips(t)}</div><button type="button" class="th-cal" aria-label="Add follow-up with ${esc(t.other.name)} to calendar" title="Add to calendar" onclick="dIcs('${t.id}')">${sv('cal',17)}</button></div>`}).join(''):'<p class="d-muted">No follow-ups due. Nice work.</p>'}</section>
+ <div class="d7-promo"><span class="d-promo-ic">${sv('spark',22)}</span><div><b>Turn more Threads into opportunities</b><ul>${['Add context and notes','Set follow-up reminders','Track progress to resolution'].map(x=>`<li><i>${sv('check',11,'#fff',3.2)}</i>${x}</li>`).join('')}</ul><a href="/how">Learn more ${sv('arrow',15)}</a></div></div>
+ </div></div>`)}
 
 </script>
 </body>
