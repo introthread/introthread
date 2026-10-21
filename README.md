@@ -24,7 +24,13 @@ All project services are registered to and connected through the main account em
 
 > Never commit secrets (API keys, Supabase service-role keys, database passwords) to this repository. Keep them in Vercel environment variables and a local `.env.local` file, which must stay in `.gitignore`.
 
+## Handover
+
+The current state of the build, working rules, what has been done and what comes next are in [HANDOVER.md](HANDOVER.md). Read it before making changes.
+
 ## Development workflow
+
+- Edit `index.html`, then run `python3 scripts/build_pages.py` to regenerate the 9 static pages, and commit them together.
 
 - Commits are made directly to `main`.
 - Vercel deploys automatically from `main`.

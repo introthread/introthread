@@ -2039,6 +2039,13 @@ body:has(.scan) .toast{bottom:auto!important;top:calc(70px + env(safe-area-inset
 #suqr{margin:8px 0 0;font-size:13px;color:#0f8a57;display:flex;gap:5px;align-items:center}#suqr:empty{display:none}
 @media (max-width:560px){.cap-b{grid-template-columns:1fr 1fr}}
 
+.cap-ask{flex-basis:100%;margin-top:4px;padding:12px;border:1px solid #f5c26b;background:#fffaf0;border-radius:12px;display:flex;flex-direction:column;gap:8px;min-width:0}
+.cap-ask b{font-weight:600;color:#7a4b00;font-size:14px}.cap-ask small{color:#6b5a3a;font-size:12.5px;line-height:1.4}
+.cap-ask-f{display:grid;grid-template-columns:1fr 1fr;gap:8px}.cap-ask-f input{width:100%;min-width:0;box-sizing:border-box;font-size:16px;padding:10px 12px;border:1px solid #e4d3b0;border-radius:10px;background:#fff}
+.cap-ask-f input:focus{outline:2px solid #f5a524;outline-offset:0;border-color:#f5a524}
+.cap-ask-x{align-self:flex-start;background:none;border:0;padding:2px 0;color:#7a6a4a;font-size:13px;text-decoration:underline;cursor:pointer}
+@media(max-width:420px){.cap-ask-f{grid-template-columns:1fr}}
+
 </style>
 </head>
 <body><a href="#root" class="x-skip">Skip to content</a>
@@ -3974,7 +3981,7 @@ let CAP_SRC='';
 function capApply(o,scope){const map=scope||CAP_FIELDS;const filled=[];
  Object.entries(map).forEach(([k,id])=>{const el=$('#'+id);if(!el||!o[k])return;if(el.value.trim()&&el.value.trim()!==o[k]&&k!=='linkedin')return;el.value=o[k];filled.push(k);el.classList.remove('cap-fill');void el.offsetWidth;el.classList.add('cap-fill')});
  CAP_SRC=o.source||CAP_SRC;const lab={name:'name',email:'email',phone:'phone',linkedin:'LinkedIn',role:'job title',company:'company'};
- const r=$('#capres');if(r){const miss=['email','phone'].filter(k=>map[k]&&!($('#'+map[k])||{}).value);r.innerHTML=filled.length?`<span class="ok">${sv('check',13,'currentColor',2.6)} Filled ${filled.map(k=>lab[k]).join(', ')}${o.source?' from '+esc(o.source):''}</span>${miss.length===2?`<span>Add their email or phone so you can follow up.</span>`:''}`:`<span>Nothing new found. Check the text and try again.</span>`;r.hidden=false}
+ const r=$('#capres');if(r){const miss=['email','phone'].filter(k=>map[k]&&!($('#'+map[k])||{}).value);r.innerHTML=filled.length?`<span class="ok">${sv('check',13,'currentColor',2.6)} Filled ${filled.map(k=>lab[k]).join(', ')}${o.source?' from '+esc(o.source):''}</span>${miss.length===2&&!(map===CAP_FIELDS&&filled.includes('linkedin'))?`<span>Add their email or phone so you can follow up.</span>`:''}`:`<span>Nothing new found. Check the text and try again.</span>`;r.hidden=false;if(map===CAP_FIELDS&&filled.includes('linkedin')&&miss.length===2){capAsk();return filled}}
  const first=Object.values(map).map(id=>$('#'+id)).find(el=>el&&!el.value);if(first&&filled.length)first.focus({preventScroll:true});return filled}
 function capLooksRich(s){return/linkedin\.com\/in\/|BEGIN:VCARD|^MECARD:/i.test(s)||(s.split('\n').length>=2&&/@|\+?\d[\d\s().-]{7,}/.test(s))}
 function capStrip(){const ct='contacts' in navigator&&'select' in (navigator.contacts||{});return`<div class="cap"><div class="cap-h"><b>${sv('spark',15)} Capture in seconds</b><small>Paste a LinkedIn link, scan their QR or business card. We fill the form for you.</small></div>
@@ -4054,6 +4061,17 @@ const _vSignup30=vSignup;vSignup=function(){const h=_vSignup30();if(!(SU&&SU.ste
  return h.replace('<div class="x-s2" style="margin-top:30px">',`<div class="su-q"><b>${sv('spark',15)} Fill this in seconds</b><small>Paste your LinkedIn profile link or your email signature.</small><div class="su-qr"><textarea id="suq" rows="2" placeholder="linkedin.com/in/your-name or your email signature" onpaste="setTimeout(suQuickFill,0)"></textarea><button type="button" class="x-btn" onclick="suQuickFill()">Fill</button></div><p id="suqr" role="status" aria-live="polite"></p></div><div class="x-s2" style="margin-top:22px">`)};
 /* save the LinkedIn link from sign-up onto the new profile */
 const _render30b=render;render=function(){const u=me();if(u){let li=null;try{li=localStorage.getItem('it_su_li')}catch(_){}if(li){try{localStorage.removeItem('it_su_li')}catch(_){}if(!(u.links||{}).linkedin){const links=Object.assign({},u.links||{},{linkedin:li});upd('profiles',u.id,{links}).then(ok=>{if(ok){u.links=links;save()}})}}}return _render30b.apply(this,arguments)};
+
+/* follow-up prompt: a LinkedIn capture has no email or phone, so ask for one right there */
+function capAsk(){const r=$('#capres');if(!r||$('#capask'))return;const d=document.createElement('div');d.className='cap-ask';d.id='capask';d.setAttribute('role','group');d.setAttribute('aria-label','Add their email or phone');
+ d.innerHTML=`<b>Ask for their email or phone now</b><small>LinkedIn codes don't include contact details. Add one so your follow-up reaches them.</small><div class="cap-ask-f"><input id="capae" type="email" inputmode="email" autocomplete="off" autocapitalize="off" placeholder="Email" aria-label="Their email" oninput="capAskSync()"><input id="capap" type="tel" inputmode="tel" autocomplete="off" placeholder="Phone" aria-label="Their phone" oninput="capAskSync()" onblur="capAskSync(1)"></div><div class="cap-ask-s" id="capasks" role="status" aria-live="polite"></div><button type="button" class="cap-ask-x" onclick="capAskClose()">Skip for now</button>`;
+ r.appendChild(d);setTimeout(()=>{const e=$('#capae');if(e)e.focus({preventScroll:true});if(d.scrollIntoView)d.scrollIntoView({block:'nearest',behavior:'smooth'})},60)}
+function capAskSync(blur){const e=$('#capae'),p=$('#capap'),te=$('#te'),tp=$('#tph');if(!e||!p)return;
+ if(te)te.value=e.value.trim();if(tp){let v=p.value.trim();if(blur&&v){v=normPhone(v)||v;p.value=v}tp.value=v}
+ const okE=/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(e.value.trim()),okP=p.value.replace(/\D/g,'').length>=7;const s=$('#capasks');
+ if(s)s.innerHTML=okE||okP?`<span class="ok">${sv('check',13,'currentColor',2.6)} Added to the form. You can save the Thread.</span>`:''}
+function capAskClose(){const d=$('#capask');if(d)d.remove()}
+document.addEventListener('input',e=>{const t=e.target;if(!t||!(t.id==='te'||t.id==='tph'))return;const d=$('#capask');if(!d)return;if(t.value.trim()){const m=t.id==='te'?$('#capae'):$('#capap');if(m)m.value=t.value}});
 </script>
 </body>
 </html>
