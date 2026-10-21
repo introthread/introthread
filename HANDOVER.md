@@ -198,6 +198,7 @@ Tap -> Thread -> one question, "What's next?". Answers stay sealed until both pe
 - iPhone Safari hides the contact picker unless the Contact Picker API feature flag is turned on.
 
 ## Open items / next steps
+0. Agnes: run migration 013 (`013_fix_ambiguous.sql`) now. Live, /admin/users failed with 'column reference "plan" is ambiguous' and /admin/audit with 'column reference "actor" is ambiguous': a function parameter had the same name as a column (plan in admin_users2 from 005; actor/outcome in admin_audit2 from 012). 013 qualifies every reference; 005 and 012 are patched in place for fresh setups. Lesson: in plpgsql functions never reuse a column name as a parameter name, or always qualify it (function_name.param).
 1. Agnes: migrations 009, 010 and 011 are run and verified (staff invitation tested: Pending, then Accepted, both in the audit log). Run migration 012 next, then reload /admin/audit (the update note disappears).
 1b. All admin screens are redesigned (v34 to v43). Agnes sends one mockup at a time.
 2. Agnes: sign in as mosemqute@gmail.com, open /admin, set up two-step verification.

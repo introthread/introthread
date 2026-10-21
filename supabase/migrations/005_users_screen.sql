@@ -42,7 +42,7 @@ begin
   ), f as (
     select * from base where
       (qq='' or name ilike '%'||qq||'%' or handle ilike '%'||qq||'%' or email ilike '%'||qq||'%' or company ilike '%'||qq||'%')
-      and (plan='all' or base.plan=admin_users2.plan)
+      and (admin_users2.plan='all' or base.plan=admin_users2.plan)
       and (st='all' or status=st)
   )
   select jsonb_build_object(
@@ -55,7 +55,7 @@ begin
         'pending', count(*) filter (where status='pending')) from base),
     'rows', coalesce((select jsonb_agg(jsonb_build_object('id',id,'email',admin_mask_email(email),'name',name,'handle',handle,'role',role,'company',company,'city',city,
         'created_at',created_at,'last_sign_in_at',last_sign_in_at,'confirmed_email',confirmed_email,'has_profile',has_profile,
-        'plan',plan,'status',status,'threads',threads,'reports',reports,'staff',staff)) from (
+        'plan',z.plan,'status',status,'threads',threads,'reports',reports,'staff',staff)) from (
         select * from f order by
           case when sort='name' and dir='asc' then lower(name) end asc,
           case when sort='name' and dir='desc' then lower(name) end desc,

@@ -62,9 +62,9 @@ begin
           when 'setting' then l.target_id
           else null end as target_label
       from audit_log l where l.created_at >= since),
-    hit as (select * from base where (cat = 'all' or category = cat) and (actor is null or actor_id = admin_audit2.actor)
-              and (outcome = 'all' or base.outcome = admin_audit2.outcome)
-              and (qq = '' or lower(action) like '%'||qq||'%' or lower(coalesce(actor,'')) like '%'||qq||'%' or lower(coalesce(reason,'')) like '%'||qq||'%'
+    hit as (select * from base where (cat = 'all' or category = cat) and (admin_audit2.actor is null or base.actor_id = admin_audit2.actor)
+              and (admin_audit2.outcome = 'all' or base.outcome = admin_audit2.outcome)
+              and (qq = '' or lower(action) like '%'||qq||'%' or lower(coalesce(base.actor,'')) like '%'||qq||'%' or lower(coalesce(reason,'')) like '%'||qq||'%'
                    or lower(coalesce(target_label,'')) like '%'||qq||'%' or lower(coalesce(target_id,'')) like '%'||qq||'%' or lower(details::text) like '%'||qq||'%'))
     select jsonb_build_object(
       'total', (select count(*) from hit),
