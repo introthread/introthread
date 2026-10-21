@@ -2626,6 +2626,13 @@ button.rm-c{cursor:pointer;transition:border-color .15s,box-shadow .15s}button.r
 .al-t td,.pq-t td,.sf-t td{white-space:normal}
 @media (min-width:1100px){.al-tb{display:grid;grid-template-columns:minmax(200px,1.5fr) repeat(4,minmax(0,1fr));align-items:center}.al-tb .md-sel{width:100%;min-width:0;box-sizing:border-box}.al-tb .md-sel select{width:100%;min-width:0;text-overflow:ellipsis}.al-tb .al-clr{grid-column:1/-1;justify-self:end;padding:0}}
 
+/* ==== profile photo cropper ==== */
+.pc-m{max-width:420px}.pc-stage{position:relative;width:100%;max-width:320px;aspect-ratio:1/1;margin:14px auto 0;border-radius:16px;overflow:hidden;background:#0f1218;touch-action:none;cursor:grab;outline:none}.pc-stage:active{cursor:grabbing}.pc-stage:focus-visible{box-shadow:0 0 0 3px rgba(31,94,255,.4)}
+.pc-stage canvas{display:block;width:100%;height:100%}.pc-ring{position:absolute;inset:0;pointer-events:none;border-radius:16px;background:radial-gradient(circle at center,transparent 0 69.5%,rgba(15,18,24,.55) 70%);box-shadow:inset 0 0 0 2px rgba(255,255,255,.6)}
+.pc-zoom{display:flex;align-items:center;gap:10px;max-width:320px;margin:14px auto 0;color:#475467}.pc-zoom input{flex:1;accent-color:#1f5eff}
+.pc-acts{display:flex;gap:10px;justify-content:flex-end;margin-top:16px}.pc-m .ad-btn{display:inline-flex;align-items:center;justify-content:center;height:44px;padding:0 16px!important;border:1px solid #d0d5dd!important;border-radius:12px;background:#fff;color:var(--ink);font:600 14.5px var(--xss);cursor:pointer}.pc-m .ad-btn.pri{background:#1f5eff;border-color:#1f5eff!important;color:#fff}
+@media (max-width:480px){.pc-acts .ad-btn{flex:1}}
+
 </style>
 </head>
 <body><a href="#root" class="x-skip">Skip to content</a>
@@ -6288,6 +6295,34 @@ function alExport(){const n=(ALX.data||{}).total||0;if(!n)return toast('Nothing 
   if(ALX.limited)R=(ALX.data._all||[]);else{for(let off=0;off<Math.min(n,5000);off+=200){const d=await arpc('admin_audit2',{q:ALX.q,cat:ALX.cat,actor:ALX.actor||null,days:ALX.days,outcome:ALX.outcome,lim:200,off});R=R.concat(d.rows||[]);if(!(d.rows||[]).length)break}
    await arpc('admin_log',{act:'audit.export',uid:null,reason:r,details:{count:R.length,filters:{q:ALX.q,category:ALX.cat,actor:ALX.actor||null,days:ALX.days,outcome:ALX.outcome}}})}
   admDownload('introthread-audit-log-'+new Date().toISOString().slice(0,10)+'.csv',admCsv(R.map(a=>Object.assign({},a,{label:alLab(a.action),cat:(AL_CAT[a.category||alCat(a.action)]||AL_CAT.other)[0],out:(a.outcome||alOut(a.action)),det:JSON.stringify(a.details||{})})),[['created_at','When'],['actor','Staff member'],['actor_role','Role'],['label','Event'],['action','Action code'],['cat','Category'],['out','Outcome'],['target_type','Target type'],['target_id','Target ID'],['target_label','Target'],['reason','Reason'],['det','Details'],['id','Entry ID']]),'text/csv')}})}
+
+/* ==== Profile photo: choose the part of the picture to use (drag to move, zoom) before saving ==== */
+let PCROP=null;
+pickPhoto=async function(inp,live){const f=inp.files&&inp.files[0];inp.value='';if(!f)return;
+ if(!/^image\/(jpeg|png|webp)$/.test(f.type))return toast('Please choose a JPG, PNG or WebP image.');if(f.size>5*1024*1024)return toast('That image is over 5MB. Please choose a smaller one.');
+ const url=URL.createObjectURL(f);const im=new Image();im.onerror=()=>{URL.revokeObjectURL(url);toast('Could not read that image.')};im.onload=()=>{PCROP={im,url,live:!!live,z:1,x:0,y:0};pcOpen()};im.src=url};
+function pcOpen(){modal(`<div class="cap-m pc-m"><div class="row between"><h3>Adjust your photo</h3><button class="x" aria-label="Close" onclick="pcCancel()">&times;</button></div>
+ <p class="fu-sub">Drag to choose the part to show. Use the slider to zoom in.</p>
+ <div class="pc-stage" id="pcst" tabindex="0" aria-label="Photo position. Use the arrow keys to move and plus or minus to zoom."><canvas id="pccv" width="560" height="560"></canvas><span class="pc-ring" aria-hidden="true"></span></div>
+ <label class="pc-zoom"><span>${sv('search',16)}</span><input type="range" id="pcz" min="1" max="4" step="0.01" value="1" aria-label="Zoom" oninput="pcZoom(+this.value)"></label>
+ <div class="pc-acts"><button type="button" class="ad-btn" onclick="pcCancel()">Cancel</button><button type="button" class="ad-btn pri" id="pcuse" onclick="pcUse()">Use photo</button></div></div>`);
+ const st=$('#pcst');let drag=null;
+ st.addEventListener('pointerdown',e=>{drag={x:e.clientX,y:e.clientY,ox:PCROP.x,oy:PCROP.y};st.setPointerCapture(e.pointerId)});
+ st.addEventListener('pointermove',e=>{if(!drag)return;const k=560/st.clientWidth;PCROP.x=drag.ox+(e.clientX-drag.x)*k;PCROP.y=drag.oy+(e.clientY-drag.y)*k;pcDraw()});
+ const end=()=>{drag=null};st.addEventListener('pointerup',end);st.addEventListener('pointercancel',end);
+ st.addEventListener('wheel',e=>{e.preventDefault();pcZoom(PCROP.z*(e.deltaY<0?1.08:1/1.08))},{passive:false});
+ st.addEventListener('keydown',e=>{const m={ArrowLeft:[20,0],ArrowRight:[-20,0],ArrowUp:[0,20],ArrowDown:[0,-20]}[e.key];if(m){e.preventDefault();PCROP.x+=m[0];PCROP.y+=m[1];pcDraw()}else if(e.key==='+'||e.key==='='){pcZoom(PCROP.z*1.1)}else if(e.key==='-'){pcZoom(PCROP.z/1.1)}});
+ pcDraw()}
+/* the image always covers the square; position is clamped so no empty edges show */
+function pcGeom(){const {im,z}=PCROP,S=560,base=S/Math.min(im.width,im.height),sc=base*z,w=im.width*sc,h=im.height*sc;const mx=(w-S)/2,my=(h-S)/2;PCROP.x=Math.max(-mx,Math.min(mx,PCROP.x));PCROP.y=Math.max(-my,Math.min(my,PCROP.y));return {S,sc,w,h,dx:(S-w)/2+PCROP.x,dy:(S-h)/2+PCROP.y}}
+function pcDraw(){const c=$('#pccv');if(!c||!PCROP)return;const g=pcGeom(),x=c.getContext('2d');x.clearRect(0,0,g.S,g.S);x.imageSmoothingQuality='high';x.drawImage(PCROP.im,g.dx,g.dy,g.w,g.h)}
+function pcZoom(z){if(!PCROP)return;PCROP.z=Math.max(1,Math.min(4,z));const r=$('#pcz');if(r)r.value=PCROP.z;pcDraw()}
+function pcCancel(){if(PCROP){URL.revokeObjectURL(PCROP.url);PCROP=null}closeModal()}
+async function pcUse(){if(!PCROP)return;const b=$('#pcuse');if(b)b.disabled=true;const g=pcGeom(),O=480,k=O/g.S,c=document.createElement('canvas');c.width=c.height=O;const x=c.getContext('2d');x.fillStyle='#fff';x.fillRect(0,0,O,O);x.imageSmoothingQuality='high';x.drawImage(PCROP.im,g.dx*k,g.dy*k,g.w*k,g.h*k);
+ let q=.88,d=c.toDataURL('image/jpeg',q);while(d.length>90000&&q>.5){q-=.08;d=c.toDataURL('image/jpeg',q)}if(d.length>90000){const c2=document.createElement('canvas');c2.width=c2.height=320;c2.getContext('2d').drawImage(c,0,0,320,320);d=c2.toDataURL('image/jpeg',.82)}
+ const live=PCROP.live;URL.revokeObjectURL(PCROP.url);PCROP=null;closeModal();
+ try{if(live){const u=me();const links=Object.assign({},u.links||{},{photo:d});if(await upd('profiles',u.id,{links})){u.links=links;u.photo=d;save();toast('Photo updated');window._keepScroll=true;render()}}
+  else{SU.photo=d;const el=$('#xup');if(el)el.innerHTML=upBox();if(typeof liveP==='function')liveP()}}catch(e){toast('Could not save that photo.')}}
 </script>
 </body>
 </html>
