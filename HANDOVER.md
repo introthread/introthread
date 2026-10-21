@@ -1,9 +1,9 @@
 # Introthread - handover for the next AI agent
 
-Last updated: 21 Oct 2026, 3:15 pm Nairobi (after admin redesign v42, screen 9 of 9). Read this before making changes, and update it after every change.
+Last updated: 21 Oct 2026, 3:15 pm Nairobi (after admin redesign v43, Audit log). Read this before making changes, and update it after every change.
 
 ## Current state (cross-checked 21 Oct 2026)
-- `main` head: the Staff commit (v42). Vercel deploys `main` automatically.
+- `main` head: the Audit log commit (v43). Vercel deploys `main` automatically.
 - Migration 011 (`supabase/migrations/011_staff_screen.sql`) is NOT YET RUN. Until it is, the Staff page adds existing accounts directly (no invitations, no pausing, no two-step or last-active columns).
 - Migration 010 (`supabase/migrations/010_privacy_screen.sql`) is NOT YET RUN. Until it is, the Privacy page filters in the browser, has no identity-check step, and people's notes on new requests are dropped (the request itself still saves).
 - Migration 009 (`supabase/migrations/009_plans_screen.sql`) is NOT YET RUN. Agnes must paste it into the Supabase SQL Editor and run it. Until then the Plans page uses its fallback (no descriptions, no people counts, older save function, history from the audit log).
@@ -182,6 +182,15 @@ Tap -> Thread -> one question, "What's next?". Answers stay sealed until both pe
   - `supabase/migrations/011_staff_screen.sql`: staff.suspended_at/suspended_by/invited_by; `is_staff` and `admin_me` now ignore paused staff (so every server check blocks them); `staff_invites` table (one pending per email); `admin_staff2`, `admin_staff_invite`, `admin_staff_invite_sent`, `admin_staff_invite_resend`, `admin_staff_invite_revoke`, `staff_accept_invite`, `admin_staff_role`, `admin_staff_suspend`, `admin_staff_remove` (all audited; reason required; cannot act on yourself; always keeps one active owner). Without 011 the page falls back to `admin_staff` / `admin_set_staff`.
   - Mobile checked with 390px Playwright screenshots (table cards, invite panel, manage modal).
   - Next: redesign the Audit log screen when Agnes sends a mockup.
+- Admin redesign v43 (Audit log), `alLoad`/`alPage`/`alOpen`/`alExport`, state `ALX`. From Agnes's mockup "Modern Audit Log Dashboard" and brief (no fake activity, no editing or deleting entries, keep backend and permissions).
+  - Cards (real counts only): Events today (vs yesterday), Staff active today (and total events), Security events today (vs yesterday), Exports today (or failed actions today). The mockup's percentage trends were replaced by plain "+N vs yesterday".
+  - Toolbar: search (action, staff member, target, reason, details), action type (Users, Moderation, Rooms, Billing, Privacy, Settings, Security, Export, Other), staff member, date range (24 hours to all time, default 30 days), outcome (Completed / Failed; Failed = actions whose code contains "failed", for example staff.invite_failed), Clear filters.
+  - Table: Event (readable label + category pill, Failed pill), Staff member (name + role), Date and time, Target (readable name: user, plan, room, privacy request, staff invitation email, setting), Reason, Details. Pages of 25. Below 760px rows become cards.
+  - Details panel (modal): action code, category, outcome, staff member and role, exact time with seconds, target and target ID, reason, before/after table when the entry has changes, other details, a link to the related screen, Copy entry ID, and an immutability note.
+  - Export CSV exports the filtered list (up to 5,000), asks for a reason and is recorded as `audit.export` (any staff member can export, as before).
+  - Empty state: activity icon, "No activity recorded yet" and an explanation; filtered empty state with Clear filters. Immutability note at the bottom.
+  - `supabase/migrations/012_audit_screen.sql` (NOT YET RUN): triggers that block UPDATE, DELETE and TRUNCATE on audit_log for everyone; drops the old "staff write audit" policy so entries can only be written by the checked admin functions through `audit()` (staff can no longer insert made-up rows from the browser); indexes; `admin_log` also accepts `audit.export`; `audit_category()`; `admin_audit2` (server-side filters, paging, readable targets, counts, staff list). Without 012 the page filters the newest 1,000 entries in the browser and the export is not recorded.
+  - Mobile checked with 390px Playwright screenshots (cards, table cards, details panel).
 
 ## Honest limits to keep in mind
 - LinkedIn does not let apps read another person's profile from a username. A LinkedIn link gives the profile URL and a best-guess name only; email, phone, title and company must come from paste, QR vCard, business card or contacts.
@@ -189,8 +198,8 @@ Tap -> Thread -> one question, "What's next?". Answers stay sealed until both pe
 - iPhone Safari hides the contact picker unless the Contact Picker API feature flag is turned on.
 
 ## Open items / next steps
-1. Agnes: run migrations 009, 010 and 011 (in that order) in the Supabase SQL Editor, then reload /admin/plans, /admin/privacy and /admin/staff (the update notes disappear).
-1b. Audit log screen redesign (waiting for a mockup). Agnes sends one mockup at a time.
+1. Agnes: migrations 009, 010 and 011 are run and verified (staff invitation tested: Pending, then Accepted, both in the audit log). Run migration 012 next, then reload /admin/audit (the update note disappears).
+1b. All admin screens are redesigned (v34 to v43). Agnes sends one mockup at a time.
 2. Agnes: sign in as mosemqute@gmail.com, open /admin, set up two-step verification.
 3. Stripe billing (next in the build order after admin): Product + monthly/yearly Prices in USD and GBP, Price IDs into Plans, secret key and webhook secret in Vercel env (never in code), checkout, customer portal, webhook writing `subscriptions` (incl. started_at, canceled_at, amount, current_period_end) and `payments` (amount_usd for totals). The Revenue badge turns green automatically once Stripe ids appear.
 4. Then Google/Microsoft connect, then LinkedIn (agreed build order: contacts and import, admin, Stripe, Google/Microsoft, LinkedIn). No LinkedIn company page yet.
@@ -206,6 +215,6 @@ Tap -> Thread -> one question, "What's next?". Answers stay sealed until both pe
 
 ## Testing approach used
 - Sandbox workflow: write large JS/CSS to the session file store first, copy one file at a time into the sandbox, insert JS before the last `</script>` and CSS before the last `\n</style>`, run `python3 scripts/build_pages.py` (prints "built 10"), keep a `.bak` of `index.html` before each insert.
-- Admin tests mock Supabase by replacing `const SB=(window.supabase` with `const SB=window.__SB?window.__SB:(window.supabase` and setting `__SB` in jsdom `beforeParse`. Per-screen tests are saved in `tests/admin/` (tadm all tabs, tusers, tmod, trm rooms, trv revenue, tpl plans, tsg settings, tpq privacy, tsf staff). Run from the repo root after `npm i jsdom`, for example `timeout 13 node tests/admin/trv.js 2>&1 | grep -v "Not implemented" | tail -1`; a pass ends in `errs []`. They read `index.html` from the current folder. Each covers the full page, detail panel, actions with reasons, and the fallback without the screen's migration. Run at most about 4 tests per command (each takes 10 to 13 seconds).
+- Admin tests mock Supabase by replacing `const SB=(window.supabase` with `const SB=window.__SB?window.__SB:(window.supabase` and setting `__SB` in jsdom `beforeParse`. Per-screen tests are saved in `tests/admin/` (tadm all tabs, tusers, tmod, trm rooms, trv revenue, tpl plans, tsg settings, tpq privacy, tsf staff, tal audit log). Run from the repo root after `npm i jsdom`, for example `timeout 13 node tests/admin/trv.js 2>&1 | grep -v "Not implemented" | tail -1`; a pass ends in `errs []`. They read `index.html` from the current folder. Each covers the full page, detail panel, actions with reasons, and the fallback without the screen's migration. Run at most about 4 tests per command (each takes 10 to 13 seconds).
 - jsdom scripts that load `index.html`, log in to demo mode and exercise flows; a pass ends with an empty error list. Covered: Tap form, sign-up, guest reveal, capture, the LinkedIn follow-up prompt, exports, billing, rooms, Today, thread detail.
 - Playwright phone-viewport screenshots (390x844) for layout checks.
