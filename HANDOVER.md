@@ -1,6 +1,6 @@
 # Introthread - handover for the next AI agent
 
-Last updated: 21 Oct 2026 (admin redesign v37, screen 4 of 9). Read this before making changes.
+Last updated: 21 Oct 2026 (admin redesign v38, screen 5 of 9). Agnes confirmed migrations 002 to 007 are run. Read this before making changes.
 
 ## Where things are
 - Live site: https://www.introthread.com (apex redirects to www). Vercel deploys automatically from `main` of `introthread/introthread` (preset "Other", static).
@@ -95,6 +95,18 @@ Tap -> Thread -> one question, "What's next?". Answers stay sealed until both pe
   - Actions: Create room and Edit room (owner/admin/moderator/support; name, type, date, format, start/end, place or platform and link, access, limit, description, organiser by email or handle), Export results CSV, Delete room (owner/admin/moderator, typed DELETE). Reason required; audited. Type is stored as `kind` in the Room's existing meta JSON (after "\n@@" in rooms.location), so the app is unaffected.
   - Needs `supabase/migrations/007_rooms_screen.sql` (room_meta, room_place, room_status, admin_rooms2, admin_room_detail, admin_room_save, admin_room_log). Without it the page works from the newest 500 Rooms with the old function; staff can still create Rooms they own and delete Rooms, but not edit, see attendees or export.
   - Next: Screen 5 Revenue.
+- Admin redesign v38 (screen 5 of 9: Revenue), `rvLoad`/`rvPage`, state `RVX` (helpers prefixed rv; `money` and `usd` names were already taken):
+  - Header: honest Stripe badge (green "Stripe connected" only when a subscription or payment carries a Stripe id, otherwise amber "Stripe not connected"), range (3/6/12/24 months, saved `it_rev_m`), Manage billing (opens Stripe dashboard when connected; otherwise a "Connect Stripe" checklist).
+  - KPI cards: Monthly revenue (MRR, USD), Yearly run rate, Paying people (% of users), Conversion (Free to Paid, with change in points). Month-on-month change uses subscription start and cancel dates.
+  - Charts (SVG, hover/focus tooltips, Monthly/Weekly): Revenue received + monthly revenue; New paying users + cumulative paying users.
+  - Past-due / failed-payment alert with Review.
+  - Subscriptions table with Active / Past due / Cancelled / All tabs and counts, paging, open person in Users, CSV export (owner/finance, audited).
+  - Revenue by plan donut (payments received in range; falls back to monthly revenue when no payments yet).
+  - Price list from the plans table (USD, GBP, monthly and yearly, Thread limit, Stripe linked or not, status) with Edit prices (goes to Plans).
+  - Recent payments (6) with View all modal (filters Paid, Failed, Refunded).
+  - Needs `supabase/migrations/008_revenue_screen.sql` (subscriptions.started_at, canceled_at, amount; new `payments` table written only by the Stripe webhook; sub_mrr_usd, admin_revenue, admin_subs2, admin_payments). Without it the page estimates from current subscriptions and plan prices and hides charts.
+  - Stripe itself (checkout, webhook writing subscriptions and payments) is still to build, per the agreed build order.
+  - Next: Screen 6 Plans and pricing.
 
 ## Honest limits to keep in mind
 - LinkedIn does not let apps read another person's profile from a username. A LinkedIn link gives the profile URL and a best-guess name only; email, phone, title and company must come from paste, QR vCard, business card or contacts.
