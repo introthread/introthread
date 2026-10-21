@@ -1,6 +1,6 @@
 # Introthread - handover for the next AI agent
 
-Last updated: 21 Oct 2026 (admin redesign v36, screen 3 of 9). Read this before making changes.
+Last updated: 21 Oct 2026 (admin redesign v37, screen 4 of 9). Read this before making changes.
 
 ## Where things are
 - Live site: https://www.introthread.com (apex redirects to www). Vercel deploys automatically from `main` of `introthread/introthread` (preset "Other", static).
@@ -87,6 +87,14 @@ Tap -> Thread -> one question, "What's next?". Answers stay sealed until both pe
   - Severity: Harassment or hate and Fake/impersonating = High; Spam and Inappropriate = Medium; others Low; 2+ reports on the same item raise it to Medium, 3+ to High.
   - Needs `supabase/migrations/006_moderation.sql` (reports.assigned_to, reports.outcome, report_subject, report_severity, admin_reports2, admin_report_detail, admin_report_take, admin_moderate). Without it the page works from the newest 300 reports with the old functions, and shows a note.
   - Next: Screen 4 Rooms.
+- Admin redesign v37 (screen 4 of 9: Rooms), `rmLoad`/`rmPage`/`rmPanel`, state `RMX` (note: `ADMR` is the dashboard range variable, do not reuse it):
+  - Cards: Total rooms, Total attendees (distinct people who made Threads in Rooms, with connections made), Active rooms (happening today, or ongoing communities; click to filter, shows upcoming count), Unique room links (links used by at least one person).
+  - Toolbar: search (name, description, place, code, organiser), Status (Happening now, Upcoming, Past), Type (Conferences and events, Communities, Team meetings), Date (any, next 30 days, this month, past 30/90 days), Clear filters. Sort: newest, oldest, next event, latest event date, most Threads, name.
+  - Empty state with Create room and the Share a link / QR code / Manage attendees strip; "Select a room" intro with the 4 uses and a Learn more modal (how Rooms work).
+  - Details panel: status, type, access, open reports; join link introthread.com/r/CODE with Copy link, QR code (modal + Download PNG drawn on canvas) and Open join page. Tabs: Overview (results: Threads, attendees, confirmed, both answered, meetings agreed, introductions; Room details; organiser; reports), Attendees, Activity (other person first name + initial only), History (audit log).
+  - Actions: Create room and Edit room (owner/admin/moderator/support; name, type, date, format, start/end, place or platform and link, access, limit, description, organiser by email or handle), Export results CSV, Delete room (owner/admin/moderator, typed DELETE). Reason required; audited. Type is stored as `kind` in the Room's existing meta JSON (after "\n@@" in rooms.location), so the app is unaffected.
+  - Needs `supabase/migrations/007_rooms_screen.sql` (room_meta, room_place, room_status, admin_rooms2, admin_room_detail, admin_room_save, admin_room_log). Without it the page works from the newest 500 Rooms with the old function; staff can still create Rooms they own and delete Rooms, but not edit, see attendees or export.
+  - Next: Screen 5 Revenue.
 
 ## Honest limits to keep in mind
 - LinkedIn does not let apps read another person's profile from a username. A LinkedIn link gives the profile URL and a best-guess name only; email, phone, title and company must come from paste, QR vCard, business card or contacts.
