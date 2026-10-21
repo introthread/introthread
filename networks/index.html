@@ -6746,6 +6746,13 @@ const _gcal11=gcalPanel;gcalPanel=function(){return _gcal11.apply(this,arguments
 const _vProfile13=vProfile;vProfile=function(){return _vProfile13.apply(this,arguments).replace(/Suggest with AI/g,'Generate with AI')};
 
 const _vContacts18=vContacts;vContacts=function(){const h=_vContacts18.apply(this,arguments);return /class="app[ "]/.test(h)?h:shell('threads',h)};
+
+/* v18 hard refresh while signed in: keep the loading screen until the saved session is restored, never flash the login page */
+const itHasSess=()=>{try{return Object.keys(localStorage).some(k=>/^sb-.*-auth-token$/.test(k))}catch(_){return false}};
+var IT_BOOTED=!(typeof SB!=='undefined'&&SB)||!itHasSess()||(typeof MODE!=='undefined'&&MODE==='demo');
+if(!IT_BOOTED){const fin=()=>{if(IT_BOOTED)return;IT_BOOTED=true;render()};setTimeout(fin,8000);
+ SB.auth.getSession().then(async({data})=>{const s=data&&data.session;if(s){let n=0;while(!me()&&n++<70)await new Promise(r=>setTimeout(r,100))}fin()}).catch(fin)}
+const _renderBoot=render;render=function(){if(!IT_BOOTED&&!me()&&/^\/app(\/|$)/.test(location.pathname)){try{$('#root').innerHTML=itSplash()}catch(_){}return}return _renderBoot.apply(this,arguments)};
 </script>
 </body>
 </html>
