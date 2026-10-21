@@ -2782,6 +2782,14 @@ html{-webkit-text-size-adjust:100%;text-size-adjust:100%;touch-action:manipulati
 .t-form .t-g2>label:has(#tln){grid-column:auto!important}
 @media (min-width:1025px){.t-left{position:sticky;top:76px}.t-left .t-card{position:static}}
 @media (max-width:900px){.t-hacts{width:100%}.t-hacts>a{flex:1;justify-content:center}}
+
+/* v10 Tap: match design - compact Quick add */
+.t-form.q .cap,.t-form.q .t-g2>label:has(#tph),.t-form.q .t-g2>label:has(#tln),.t-form.q .t-g2>#capmore{display:none!important}
+.t-form.q .t-g2>label:has(#tx){grid-column:auto;order:8}
+.t-form.q .t-g2>div:has(#tw){order:7}
+.t-form.q .t-note textarea{min-height:76px}
+.t-form .te-q{display:none}.t-form.q .te-q{display:inline}.t-form.q .te-f{display:none}
+@media (min-width:1025px){.t-grid{align-items:stretch!important}.t-card{position:static!important;justify-content:space-between}.t-card-id{margin-top:10px!important}.t-acts{margin-top:14px!important}}
 </style>
 </head>
 <body><a href="#root" class="x-skip">Skip to content</a>
@@ -6673,10 +6681,14 @@ const _vThreads8=vThreads;vThreads=function(){let h=_vThreads8.apply(this,argume
 const _vTap34=vTap;vTap=function(){let h=_vTap34();
  h=h.replace(/<a href="\/app\/scan" class="t-event">[\s\S]*?<\/a>/,'');
  if(h.includes('<a href="/how" class="t-how">')&&!h.includes('t-hacts')){h=h.replace('<a href="/how" class="t-how">',`<div class="t-hacts"><a href="/app/scan" class="t-evbtn"><span>${sv('qr',18)}</span><span><b>Event mode</b><small>Full-screen QR</small></span></a><a href="/how" class="t-how">`).replace(/(How it works<\/a>)/,'$1</div>')}
- const a=h.indexOf('<div class="t-ways">'),b=h.indexOf('<div class="t-tip">');const f=h.indexOf('<form class="t-form"');
- if(a>0&&b>a&&f>0&&f<a&&h.includes('<div class="t-grid">')){const ways=h.slice(a,b);h=h.slice(0,a)+h.slice(b);
-  h=h.replace('<div class="t-grid">','<div class="t-grid"><div class="t-left">').replace('<form class="t-form"','<div class="t-side-h">More ways to share</div>'+ways+'</div><form class="t-form"')}
  return h};
+
+const _vTap35=vTap;vTap=function(){let h=_vTap35();
+ h=h.replace('<form class="t-form"',`<form class="t-form${TAPM==='q'?' q':''}"`);
+ h=h.replace(/<label class="x-f"><span>Email<\/span>(<input id="te")[^>]*>/,'<label class="x-f"><span><b class="te-f" style="font-weight:inherit">Email</b><b class="te-q" style="font-weight:inherit">Email or phone <i>*</i></b></span>$1 type="text" autocomplete="off" placeholder="name@company.com or +254 7XX XXX XXX">');
+ return h};
+const _tapMode35=tapMode;tapMode=function(m){_tapMode35(m);const f=document.querySelector('.t-form');if(f)f.classList.toggle('q',m==='q')};
+const _nt35=newThread;newThread=function(e){const f=document.querySelector('.t-form');if(f&&f.classList.contains('q')){const te=$('#te'),tp=$('#tph');const v=(te&&te.value||'').trim();if(v&&!v.includes('@')&&/^[+\d][\d\s()-]{5,}$/.test(v)&&tp){tp.value=v;te.value=''}}return _nt35.call(this,e)};
 </script>
 </body>
 </html>
