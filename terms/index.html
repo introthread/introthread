@@ -2887,6 +2887,49 @@ html{-webkit-text-size-adjust:100%;text-size-adjust:100%;touch-action:manipulati
 
 /* v22b phones: role and company on two clean lines (no bullet starting a line) */
 @media (max-width:480px){.pc-id p>span,.pp-role>span{display:block;height:0;overflow:hidden;font-size:0}}
+
+/* v23 public card: flip + landscape */
+.pc-flip{perspective:1800px;width:100%;max-width:540px;margin:0 auto}
+.pc-flip-in{display:grid;transition:transform .6s cubic-bezier(.2,.7,.2,1);transform-style:preserve-3d}
+.pc-flip-in>.pc-card{grid-area:1/1;backface-visibility:hidden;-webkit-backface-visibility:hidden;max-width:none;margin:0;cursor:pointer}
+.pc-flip .pc-back{transform:rotateY(180deg);justify-content:flex-start}
+.pc-flip.on .pc-flip-in{transform:rotateY(180deg)}
+@media (prefers-reduced-motion:reduce){.pc-flip-in{transition:none}}
+.pc-flipbtn{display:inline-flex;align-items:center;gap:7px;height:34px;padding:0 12px;border:1px solid rgba(255,255,255,.28);border-radius:999px;background:rgba(255,255,255,.08);color:inherit;font:600 13px var(--xss);cursor:pointer}
+.pc-card.lt .pc-flipbtn{border-color:rgba(15,23,42,.18);background:rgba(255,255,255,.7)}
+.pc-flipbtn:focus-visible{outline:3px solid #7aa2ff;outline-offset:2px}
+.pc-front>.pc-flipbtn{margin-top:16px}
+.pc-fqr{display:none}
+.pc-bq{flex:1;display:grid;place-items:center;width:100%;padding:18px 0 6px}
+.pc-bq-b,.pc-fqr-b{position:relative;background:#fff;border-radius:18px;padding:14px;line-height:0;box-shadow:0 20px 40px -20px rgba(0,0,0,.6)}
+.pc-bq-b img,.pc-bq-b canvas{display:block;width:min(240px,62vw);height:auto;aspect-ratio:1/1;image-rendering:pixelated}
+.pc-fqr-b img,.pc-fqr-b canvas{display:block;width:150px;height:150px;image-rendering:pixelated}
+.pc-bq-b .t-qrlogo,.pc-fqr-b .t-qrlogo{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%)}
+.pc-bt{margin:14px 0 6px;font:600 18px var(--xss);text-align:center}
+.pc-blink{display:inline-flex;align-items:center;gap:8px;height:38px;padding:0 16px;border:1px solid rgba(255,255,255,.25);border-radius:999px;background:rgba(255,255,255,.08);color:inherit;font:600 14px var(--xss);cursor:pointer}
+.pc-card.lt .pc-blink{border-color:rgba(15,23,42,.18);background:#fff}
+.pc-bh2{margin:12px 0 0;font-size:12.5px;color:var(--sub);text-align:center}
+@media (min-width:900px){
+.pc-page .pc-wrap{max-width:780px}
+.pc-flip{max-width:780px}
+.pc-front{display:grid!important;grid-template-columns:minmax(0,1fr) 200px;grid-template-areas:"top top" "id qr" "ics qr" "save qr" "rows rows" "flip flip";column-gap:30px;align-items:start;padding:26px 30px 22px!important;aspect-ratio:1.586/1;align-content:start}
+.pc-front>.pc-top{grid-area:top}
+.pc-front>.pc-id{grid-area:id;display:grid;grid-template-columns:auto 1fr;column-gap:20px;align-items:center;text-align:left;margin-top:18px}
+.pc-front>.pc-id .pc-ring{grid-row:1/4}
+.pc-front>.pc-id .x-av{width:104px!important;height:104px!important;font-size:34px!important}
+.pc-front>.pc-id h1{margin:0 0 4px;font-size:27px}
+.pc-front>.pc-id p{text-align:left}
+.pc-front>.pc-ics{grid-area:ics;justify-content:flex-start;margin-top:18px}
+.pc-front>.pc-save{grid-area:save;justify-self:start;padding:0 26px;margin-top:16px}
+.pc-front>.pc-rows{grid-area:rows;grid-template-columns:auto auto 1fr;column-gap:24px;margin-top:18px}
+.pc-front>.pc-rows>*{min-width:0}
+.pc-front>.pc-flipbtn{grid-area:flip;justify-self:end;margin-top:12px}
+.pc-front>.pc-fqr{grid-area:qr;display:flex;flex-direction:column;align-items:center;gap:10px;margin-top:18px}
+.pc-front>.pc-fqr small{font:600 12.5px var(--xss);color:var(--sub)}
+.pc-back{aspect-ratio:1.586/1;padding:26px 30px 22px!important}
+.pc-back .pc-bq{padding:8px 0 0}
+.pc-back .pc-bq-b img,.pc-back .pc-bq-b canvas{width:200px}
+}
 </style>
 </head>
 <body><a href="#root" class="x-skip">Skip to content</a>
@@ -6813,6 +6856,27 @@ const _bInvHTML20=bInvHTML;bInvHTML=function(i){let h=_bInvHTML20.apply(this,arg
  const fin=`<div class="iv-legal"><span>${legal}</span><span>${esc(i.number)} &middot; Page 1 of 1</span></div>`;
  const k=h.lastIndexOf('</article>');return k>0?h.slice(0,k)+fin+h.slice(k):h+fin};
 const _bInvPrint20=bInvPrint;bInvPrint=function(id){const o=window.open;window.open=function(){const w=o.apply(window,arguments);if(!w)return w;const dw=w.document.write.bind(w.document);w.document.write=function(x){return dw(String(x).replace('@page{size:A4;margin:14mm}','@page{size:A4;margin:0}').replace('body{padding:0;margin:0}','body{padding:16mm 17mm 14mm;margin:0;-webkit-print-color-adjust:exact;print-color-adjust:exact}.iv{min-height:calc(297mm - 30mm);display:flex;flex-direction:column}.iv .iv-legal{margin-top:auto}'))};return w};try{return _bInvPrint20.apply(this,arguments)}finally{window.open=o}};
+
+/* v23 public card: business-card shape on laptops + accessible tap-to-flip (back shows a large QR and the link) */
+let PCF=false;
+function pcFlip(on){const f=document.getElementById('pcflip');if(!f)return;PCF=typeof on==='boolean'?on:!PCF;f.classList.toggle('on',PCF);
+ const fr=f.querySelector('.pc-front'),bk=f.querySelector('.pc-back');if(fr){fr.inert=PCF;fr.setAttribute('aria-hidden',PCF?'true':'false')}if(bk){bk.inert=!PCF;bk.setAttribute('aria-hidden',PCF?'false':'true')}
+ f.querySelectorAll('.pc-flipbtn').forEach(b=>b.setAttribute('aria-pressed',PCF?'true':'false'));const t=f.querySelector(PCF?'.pc-back .pc-flipbtn':'.pc-front .pc-flipbtn');if(t&&typeof on!=='boolean')t.focus({preventScroll:true})}
+function pcTap(e){if(e.target.closest('a,button,input,textarea,select,label'))return;if(window.getSelection&&String(window.getSelection()).length)return;pcFlip()}
+const _vPub23=vPublic;vPublic=function(hd){let h=_vPub23.apply(this,arguments);const a=h.indexOf('<article class="pc-card');if(a<0)return h;const b=h.indexOf('</article>',a);if(b<0)return h;
+ const u=DB.users.find(x=>String(x.handle||'').toLowerCase()===String(hd).toLowerCase());if(!u)return h;PCF=false;
+ const url=profileUrl(u),short='introthread.com/'+esc(u.handle),f=esc((u.name||'').split(' ')[0]||'me');
+ const open=h.slice(a,h.indexOf('>',a)+1),style=(open.match(/style="([^"]*)"/)||[])[1]||'',lt=/\blt\b/.test(open)?' lt':'';
+ let front=h.slice(a,b+10).replace('<article class="pc-card','<article class="pc-card pc-front" onclick="pcTap(event)" aria-hidden="false"');
+ const flipBtn=k=>`<button type="button" class="pc-flipbtn" onclick="pcFlip()" aria-pressed="false" aria-controls="pcflip" title="${k?'Show the front':'Show the QR code'}">${sv(k?'user':'qr',15)}<span>${k?'Front':'Flip for QR'}</span></button>`;
+ front=front.replace('</article>',`<div class="pc-fqr" aria-hidden="true"><div class="pc-fqr-b"><div id="pcqr1"></div><span class="t-qrlogo"><span class="x-lm"><i></i><i></i></span></span></div><small>Scan to connect</small></div>${flipBtn(0)}</article>`);
+ const back=`<article class="pc-card pc-back${lt}" style="${style}" onclick="pcTap(event)" aria-hidden="true" aria-label="Card back with QR code"><div class="pc-top"><span class="x-logo${lt?'':' dk'}"><span class="x-lm"><i></i><i></i></span><span>intro<b>thread</b></span></span>${flipBtn(1)}</div>
+  <div class="pc-bq"><div class="pc-bq-b"><div id="pcqr2"></div><span class="t-qrlogo"><span class="x-lm"><i></i><i></i></span></span></div></div>
+  <p class="pc-bt">Scan to connect with ${f}</p><button type="button" class="pc-blink" onclick="copy('${url}','Link copied')">${short} ${sv('copy',15)}</button><p class="pc-bh2">Point a phone camera at the code. No app needed.</p></article>`;
+ h=h.slice(0,a)+`<div class="pc-flip" id="pcflip"><div class="pc-flip-in">${front}${back}</div></div>`+h.slice(b+10);
+ setTimeout(()=>{const e1=document.getElementById('pcqr1'),e2=document.getElementById('pcqr2');try{if(e1&&!e1.childNodes.length)qr(e1,url,150);if(e2&&!e2.childNodes.length)qr(e2,url,240)}catch(_){}const bk=document.querySelector('#pcflip .pc-back');if(bk)bk.inert=true},0);
+ return h};
+document.addEventListener('keydown',e=>{if(e.key==='Escape'&&PCF&&document.getElementById('pcflip'))pcFlip(false)});
 </script>
 </body>
 </html>
