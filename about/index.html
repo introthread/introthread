@@ -2704,6 +2704,32 @@ html{-webkit-text-size-adjust:100%;text-size-adjust:100%;touch-action:manipulati
 .in-note{display:flex;gap:10px;align-items:flex-start;padding:14px 16px;border-radius:14px;background:#f5f7fb;color:#475467}.in-note p{margin:0;font-size:13px;line-height:1.5}.in-note svg{flex:none;margin-top:2px}
 @media (max-width:480px){.in-row{flex-wrap:wrap}.in-tx{flex-basis:calc(100% - 58px)}.in-btn{width:100%;margin-left:58px;width:calc(100% - 58px)}.in-card{padding:16px}}
 
+/* ==== Event mode v2 ==== */
+.ev2{position:fixed;inset:0;z-index:80;display:flex;flex-direction:column;background:radial-gradient(120% 60% at 50% 0%,#eef3ff 0%,#f7f9fc 55%,#fff 100%);color:#101828;overflow:auto;-webkit-overflow-scrolling:touch}
+.ev2.dk{background:radial-gradient(120% 60% at 50% 0%,#1b2a5c 0%,#0d1530 60%,#0a1024 100%);color:#fff}
+.ev2-h{display:flex;align-items:center;justify-content:space-between;gap:8px;padding:calc(env(safe-area-inset-top) + 12px) 16px 8px}.ev2-hr{display:flex;gap:8px}
+.ev2-ib{display:inline-flex;align-items:center;justify-content:center;width:44px;height:44px;border-radius:14px;border:1px solid rgba(16,24,40,.08);background:rgba(255,255,255,.85);color:inherit;cursor:pointer;backdrop-filter:blur(6px)}.ev2.dk .ev2-ib{background:rgba(255,255,255,.08);border-color:rgba(255,255,255,.14)}
+.ev2-live{display:inline-flex;align-items:center;gap:7px;padding:7px 12px;border-radius:999px;background:#ecfdf3;color:#067647;font:600 12.5px var(--xss,sans-serif);letter-spacing:.02em;white-space:nowrap}.ev2.dk .ev2-live{background:rgba(18,183,106,.16);color:#6ce9a6}
+.ev2-live i{width:8px;height:8px;border-radius:50%;background:#12b76a;box-shadow:0 0 0 0 rgba(18,183,106,.5);animation:ev2p 2s infinite}@keyframes ev2p{70%{box-shadow:0 0 0 8px rgba(18,183,106,0)}100%{box-shadow:0 0 0 0 rgba(18,183,106,0)}}.ev2-sep{opacity:.5}
+@media (max-width:360px){.ev2-sep,.ev2-live{font-size:11.5px}}
+.ev2-m{flex:1;display:flex;flex-direction:column;align-items:center;gap:14px;padding:6px 16px calc(env(safe-area-inset-bottom) + 16px);max-width:520px;width:100%;margin:0 auto;box-sizing:border-box}
+.ev2-card{width:100%;display:flex;flex-direction:column;align-items:center;padding:18px 18px 16px;border-radius:28px;background:#fff;border:1px solid #e9edf5;box-shadow:0 24px 48px -28px rgba(16,24,40,.35);box-sizing:border-box}.ev2.dk .ev2-card{background:rgba(255,255,255,.06);border-color:rgba(255,255,255,.12);box-shadow:none}
+.ev2-who{display:flex;align-items:center;gap:12px;align-self:stretch;padding-bottom:14px;margin-bottom:14px;border-bottom:1px solid #f0f2f7}.ev2.dk .ev2-who{border-color:rgba(255,255,255,.1)}.ev2-who b{display:block;font-size:17px;line-height:1.25}.ev2-who small{display:block;margin-top:2px;color:#5b6478;font-size:13.5px}.ev2.dk .ev2-who small{color:rgba(255,255,255,.7)}.ev2-who>div{min-width:0}.ev2-who b,.ev2-who small{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.ev2-qrw{position:relative;padding:14px;border-radius:20px;background:#fff;line-height:0}.ev2-qrw .t-qrlogo{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%)}
+.ev2-c{position:absolute;width:26px;height:26px;border:3px solid #1f5eff;pointer-events:none}.ev2-c.tl{top:0;left:0;border-right:0;border-bottom:0;border-top-left-radius:16px}.ev2-c.tr{top:0;right:0;border-left:0;border-bottom:0;border-top-right-radius:16px}.ev2-c.bl{bottom:0;left:0;border-right:0;border-top:0;border-bottom-left-radius:16px}.ev2-c.br{bottom:0;right:0;border-left:0;border-top:0;border-bottom-right-radius:16px}
+.ev2-cta{margin:14px 0 4px;font-size:19px;font-weight:700;text-align:center;letter-spacing:-.01em}
+.ev2-url{display:inline-flex;align-items:center;gap:6px;border:0;background:#f2f5fb;color:#344054;border-radius:999px;padding:6px 12px;font:500 13.5px var(--xss,sans-serif);cursor:pointer;max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.ev2.dk .ev2-url{background:rgba(255,255,255,.1);color:rgba(255,255,255,.85)}
+.ev2-tag{width:100%}.ev2-lab{display:flex;align-items:center;gap:6px;font:600 12px var(--xss,sans-serif);letter-spacing:.06em;text-transform:uppercase;color:#667085;margin:0 0 8px 2px}.ev2.dk .ev2-lab{color:rgba(255,255,255,.6)}
+.ev2-chips{display:flex;gap:8px;overflow-x:auto;padding-bottom:2px;scrollbar-width:none}.ev2-chips::-webkit-scrollbar{display:none}
+.ev2-chips button,.ev2-new{flex:none;height:38px;padding:0 14px;border-radius:999px;border:1px solid #d9e0ec;background:#fff;color:#344054;font:600 13.5px var(--xss,sans-serif);cursor:pointer;display:inline-flex;align-items:center;gap:6px;text-decoration:none;white-space:nowrap}.ev2-chips button.on{background:#1f5eff;border-color:#1f5eff;color:#fff}.ev2-new{border-style:dashed;color:#1748d6}
+.ev2.dk .ev2-chips button,.ev2.dk .ev2-new{background:rgba(255,255,255,.06);border-color:rgba(255,255,255,.16);color:#fff}.ev2.dk .ev2-chips button.on{background:#1f5eff;border-color:#1f5eff}
+.ev2-bar{width:100%;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:4px;padding:6px;border-radius:20px;background:#fff;border:1px solid #e9edf5;box-sizing:border-box}.ev2.dk .ev2-bar{background:rgba(255,255,255,.06);border-color:rgba(255,255,255,.12)}
+.ev2-bar>*{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:5px;min-height:60px;border:0;border-radius:14px;background:none;color:inherit;font:600 12px var(--xss,sans-serif);text-decoration:none;cursor:pointer;text-align:center;padding:6px 2px}.ev2-bar>*:hover,.ev2-bar>*:active{background:#f2f5fb}.ev2.dk .ev2-bar>*:hover{background:rgba(255,255,255,.08)}.ev2-bar svg{color:#1f5eff}.ev2.dk .ev2-bar svg{color:#8fb0ff}
+.ev2-tip{margin:0;text-align:center;font-size:12.5px;color:#667085}.ev2.dk .ev2-tip{color:rgba(255,255,255,.6)}.ev2-tip b{color:#067647}.ev2.dk .ev2-tip b{color:#6ce9a6}
+@media (min-width:768px){.ev2-m{gap:18px;padding-top:12px}.ev2-cta{font-size:22px}}
+
+.ev2-qrw{margin:6px}.ev2-c.tl{top:-6px;left:-6px}.ev2-c.tr{top:-6px;right:-6px}.ev2-c.bl{bottom:-6px;left:-6px}.ev2-c.br{bottom:-6px;right:-6px}.ev2-qrw #scanqr img,.ev2-qrw #scanqr canvas{display:block;border-radius:6px}
+
 </style>
 </head>
 <body><a href="#root" class="x-skip">Skip to content</a>
@@ -6555,6 +6581,21 @@ intView=function(){const live=typeof cloud==='function'&&cloud();if(live&&!INTX.
  ${INTX.err?`<p class="sec-err">${esc(INTX.err)} <button type="button" class="au-inl" onclick="intLoad(true)">Try again</button></p>`:''}<ul class="in-list">${rows}</ul></section>
  ${cal?`<section class="d-box st12-box in-card"><div class="in-h"><span class="cd-bi">${sv('cal',20)}</span><div><b>Calendar</b><small>See your meetings next to your Threads.</small></div></div><ul class="in-list">${cal}</ul></section>`:''}
  <div class="in-note">${sv('lock',15)}<p>Every connection uses the provider&rsquo;s own secure sign-in. Introthread never sees or stores your passwords, and you can disconnect at any time. LinkedIn does not share anyone&rsquo;s connections list with apps; to bring in contacts, use your LinkedIn export file in Contacts.</p></div></div>`};
+
+/* ==== Event mode redesign: one clean screen, big QR, clear event tagging, toolbar ==== */
+Object.assign(SV,{evfs:'<path d="M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5"/>',evsun:'<circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/>',evmoon:'<path d="M20 14.5A8 8 0 1 1 9.5 4 6.5 6.5 0 0 0 20 14.5z"/>'});
+const _vScanEv2=vScan;vScan=function(){const u=me();if(!u)return _vScanEv2.apply(this,arguments);const R=scanRooms();const room=SCAN.room&&DB.rooms.find(x=>x.id===SCAN.room);const n=scanToday(),first=esc((u.name||'').split(' ')[0]);
+ setTimeout(()=>{const q=$('#scanqr');if(q){const sz=Math.max(190,Math.min(innerWidth-96,innerHeight-(innerHeight<760?430:400),420));qr(q,scanUrl(u),sz)}scanWake(true)},20);
+ const sub=[u.role,u.company].filter(Boolean).join(' · ');
+ return `<div class="ev2 ${SCAN.dark?'dk':''}"><header class="ev2-h"><button type="button" class="ev2-ib" aria-label="Close event mode" onclick="scanClose()">${sv('close',20)}</button>
+ <span class="ev2-live" role="status"><i aria-hidden="true"></i>Live<span class="ev2-sep">·</span>Screen stays on</span>
+ <div class="ev2-hr"><button type="button" class="ev2-ib" aria-label="${SCAN.dark?'Light':'Dark'} QR background" onclick="SCAN.dark=!SCAN.dark;render()">${sv(SCAN.dark?'evsun':'evmoon',18)}</button><button type="button" class="ev2-ib" aria-label="Full screen" onclick="scanFull()">${sv('evfs',18)}</button></div></header>
+ <main class="ev2-m"><div class="ev2-card"><div class="ev2-who">${avatarC(u,52)}<div><b>${esc(u.name||'')}</b>${sub?`<small>${esc(sub)}</small>`:''}</div></div>
+ <div class="ev2-qrw"><span class="ev2-c tl"></span><span class="ev2-c tr"></span><span class="ev2-c bl"></span><span class="ev2-c br"></span><div id="scanqr" role="img" aria-label="QR code for introthread.com/${esc(u.handle)}"></div><span class="t-qrlogo"><span class="x-lm"><i></i><i></i></span></span></div>
+ <p class="ev2-cta">Scan to connect with ${first}</p><button type="button" class="ev2-url" onclick="copy('https://introthread.com/${esc(u.handle)}','Link copied')" title="Copy link">introthread.com/${esc(u.handle)} ${sv('copy',14)}</button></div>
+ <section class="ev2-tag" aria-label="Event tagging"><span class="ev2-lab">${sv('pin',14)} Tag new Threads to</span><div class="ev2-chips" role="radiogroup" aria-label="Event"><button type="button" role="radio" aria-checked="${!room}" class="${room?'':'on'}" onclick="SCAN.room='';render()">No event</button>${R.map(r=>`<button type="button" role="radio" aria-checked="${SCAN.room===r.id}" class="${SCAN.room===r.id?'on':''}" onclick="SCAN.room='${r.id}';render()">${esc(r.name)}</button>`).join('')}<a class="ev2-new" href="/app/rooms">${sv('plus',14)} New event</a></div></section>
+ <nav class="ev2-bar" aria-label="More ways to connect"><button type="button" onclick="shareNative()">${sv('send',20)}<span>Share</span></button><button type="button" onclick="tapNFC()">${sv('nfc',20)}<span>NFC</span></button><button type="button" onclick="scanWallpaper()">${sv('photo',20)}<span>Wallpaper</span></button><a href="/app/tap">${sv('user',20)}<span>Add manually</span></a></nav>
+ <p class="ev2-tip">${n?`<b>${n} Thread${n>1?'s':''} today.</b> `:''}Tip: turn your brightness up for faster scanning.</p></main></div>`};
 </script>
 </body>
 </html>
