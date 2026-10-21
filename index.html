@@ -1234,6 +1234,98 @@ html,body,button,input,select,textarea{font-family:var(--xss)}
 .th-tools{flex-wrap:nowrap}.th-filter{padding:0 12px}
 }
 
+/* v9 Rooms */
+.ro-grid{grid-template-columns:minmax(0,1fr) 365px}
+.ro-main{display:flex;flex-direction:column;gap:16px;min-width:0;font-family:var(--xss)}
+.ro-hero{position:relative;overflow:hidden;display:flex;align-items:flex-end;justify-content:space-between;gap:20px;min-height:182px;padding:26px 30px;border-radius:18px;color:#fff;background:linear-gradient(90deg,#0a1020 0%,rgba(10,16,32,.92) 38%,rgba(10,16,32,.45) 70%,rgba(10,16,32,.25)),url(/img/uc-conferences.jpg) right center/cover no-repeat,#0a1020}
+.ro-hc{max-width:470px;align-self:center}
+.ro-hero h2{margin:0 0 8px;font:600 26px var(--xss);letter-spacing:-.01em}
+.ro-hero p{margin:0 0 18px;font-size:14.5px;line-height:1.5;color:#d4dbea}
+.ro-hb{display:flex;gap:12px;flex-wrap:wrap}
+.ro-learn{display:inline-flex;align-items:center;gap:10px;height:46px;padding:0 20px;border-radius:10px;border:1px solid rgba(255,255,255,.35);color:#fff;text-decoration:none;font-weight:600;font-size:14.5px}
+.ro-learn:hover{background:rgba(255,255,255,.1)}
+.ro-learn span{width:22px;height:22px;border-radius:50%;background:#fff;color:#0a1020;display:grid;place-items:center}
+.ro-hs{display:flex;gap:22px;padding:14px 20px;border-radius:14px;background:rgba(10,16,32,.6);border:1px solid rgba(255,255,255,.18);backdrop-filter:blur(8px)}
+.ro-hs span{display:grid;grid-template-columns:auto auto;column-gap:10px;align-items:center}
+.ro-hs svg{grid-row:1/3;color:#fff;opacity:.9}.ro-hs b{font-size:18px;font-weight:600}.ro-hs small{font-size:12px;color:#c7cfdf}
+.ro-bar{display:flex;align-items:center;gap:10px}
+.ro-tabs{display:flex;gap:8px;flex:1;min-width:0;overflow-x:auto;scrollbar-width:none;padding:2px}
+.ro-tabs::-webkit-scrollbar{display:none}
+.ro-tabs button{flex:none;height:40px;padding:0 14px;border:1px solid var(--line);border-radius:10px;background:#fff;font:500 14px var(--xss);color:#344054;cursor:pointer;white-space:nowrap}
+.ro-tabs button.on{background:var(--xb);border-color:var(--xb);color:#fff;font-weight:600}
+.ro-s{display:flex;align-items:center;gap:8px;height:40px;padding:0 12px;border:1px solid var(--line);border-radius:10px;background:#fff;color:var(--xmu);width:220px;flex:none}
+.ro-s input{border:0;outline:none;font:500 13.5px var(--xss);width:100%;background:none;color:var(--xink)}
+.ro-s:focus-within{border-color:var(--xb);box-shadow:0 0 0 3px rgba(31,94,255,.12)}
+.ro-bar .th-filter{height:40px}
+.ro-sh{display:flex;justify-content:space-between;align-items:flex-end;gap:12px;margin-top:4px}
+.ro-sh h3{margin:0;font:600 19px var(--xss);color:var(--xink)}.ro-sh p{margin:3px 0 0;font-size:14px;color:var(--xmu)}
+.ro-va{display:inline-flex;align-items:center;gap:6px;border:0;background:none;color:var(--xb);font:600 14.5px var(--xss);cursor:pointer;text-decoration:none;white-space:nowrap}
+.ro-va.sm{font-size:13.5px}
+.ro-cards{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}
+.ro-card{background:#fff;border:1px solid var(--line);border-radius:14px;overflow:hidden;display:flex;flex-direction:column;box-shadow:0 14px 30px -28px rgba(15,23,42,.35);transition:box-shadow .15s}
+.ro-card:hover{box-shadow:0 18px 36px -24px rgba(31,94,255,.4)}
+.ro-img{position:relative;display:block;height:104px;background-size:cover;background-position:center}
+.ro-img em{position:absolute;left:10px;top:10px;font-style:normal;font-size:12.5px;font-weight:600;padding:3px 9px;border-radius:6px;color:#fff;background:var(--xb)}
+.ro-img em.o{background:#ff6a3d}.ro-img em.g{background:#12a065}.ro-img em.n{background:#475467}
+.ro-img em.pv{left:auto;right:64px;background:rgba(10,16,32,.75);display:inline-flex;gap:4px;align-items:center}
+.ro-dt{position:absolute;right:10px;top:10px;width:46px;padding:5px 0;border-radius:9px;background:#fff;text-align:center;box-shadow:0 6px 14px -6px rgba(0,0,0,.4)}
+.ro-dt small{display:block;font-size:10.5px;font-weight:700;color:#ff6a3d;letter-spacing:.04em}.ro-dt b{display:block;font-size:19px;font-weight:700;color:var(--xink);line-height:1.1}
+.ro-cb{padding:12px 14px 14px;display:flex;flex-direction:column;gap:4px;flex:1}
+.ro-name{font-size:16px;font-weight:600;color:var(--xink);text-decoration:none;line-height:1.25;margin-bottom:4px}
+.ro-name:hover{color:var(--xb)}
+.ro-cb>small{display:flex;align-items:center;gap:6px;font-size:13px;color:#475467}
+.ro-cb>small svg{flex:none;color:var(--xmu)}
+.ro-cb .d-tags{margin-top:5px}
+.ro-ca{display:flex;gap:8px;margin-top:auto;padding-top:12px}
+.ro-ca .d-act{flex:1;display:flex;align-items:center;justify-content:center;text-decoration:none;height:40px}
+.ro-dots{width:42px;height:40px;border:1px solid var(--line)!important;border-radius:9px;font-size:12px;letter-spacing:1px}
+.ro-comms{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px}
+.ro-cm{background:#fff;border:1px solid var(--line);border-radius:14px;padding:14px;display:flex;flex-direction:column;gap:8px}
+.ro-cmh{display:flex;gap:10px;align-items:center}.ro-cmh b{display:block;font-size:14.5px;font-weight:600}.ro-cmh small{font-size:12.5px;color:var(--xmu)}
+.ro-cmi{width:44px;height:44px;border-radius:50%;display:grid;place-items:center;flex:none}
+.ro-cmi.b{background:#eef3ff;color:var(--xb)}.ro-cmi.o{background:#fff1ea;color:#ff6a3d}.ro-cmi.g{background:#e7f6ee;color:#12a065}.ro-cmi.v{background:#f3eefe;color:#7c3aed}
+.ro-cm p{margin:0;font-size:13px;color:#5b6478;line-height:1.4}
+.ro-join{margin-top:auto;height:36px;border:1px solid #c9d6f5;border-radius:9px;background:#fff;color:var(--xb);font:600 13.5px var(--xss);cursor:pointer}
+.ro-join:hover{background:#f3f6ff}
+.ro-cal{font-family:var(--xss)}
+.ro-calh{display:flex;justify-content:space-between;align-items:center;margin:2px 0 10px}.ro-calh b{font-size:16px;font-weight:600}
+.ro-calh button{width:30px;height:30px;border:0;background:none;cursor:pointer;color:var(--xink);border-radius:8px;display:inline-grid;place-items:center}
+.ro-calh button:hover{background:#f2f4f7}.ro-calh button:first-child svg{transform:rotate(180deg)}
+.ro-dow,.ro-days{display:grid;grid-template-columns:repeat(7,1fr);text-align:center}
+.ro-dow span{font-size:12px;color:var(--xmu);padding:4px 0}
+.ro-days button{position:relative;height:36px;border:0;background:none;font:500 14px var(--xss);color:var(--xink);border-radius:10px;cursor:default}
+.ro-days button.out{color:#b8bfcc}
+.ro-days button.has{cursor:pointer}.ro-days button.has:hover{background:#f3f6ff}
+.ro-days button i{position:absolute;left:50%;bottom:3px;width:5px;height:5px;border-radius:50%;background:#ff6a3d;transform:translateX(-50%)}
+.ro-days button.today{background:var(--xb);color:#fff;font-weight:700}.ro-days button.today i{background:#fff}
+.ro-days button.sel{box-shadow:inset 0 0 0 2px var(--xb)}
+.ro-days button:focus-visible{outline:2px solid var(--xb)}
+.ro-up{display:grid;grid-template-columns:52px minmax(0,1fr) 18px;gap:12px;align-items:center;padding:12px 0;border-top:1px solid var(--line);text-decoration:none;color:inherit}
+.ro-up:first-of-type{border-top:0;padding-top:2px}.ro-up>svg{color:var(--xmu)}
+.ro-ud{border:1px solid var(--line);border-radius:10px;text-align:center;padding:6px 0}
+.ro-ud small{display:block;font-size:11px;font-weight:700;color:#ff6a3d}.ro-ud b{display:block;font-size:19px;font-weight:700;color:var(--xink)}
+.ro-ui{min-width:0}.ro-ui b{display:block;font-size:14.5px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.ro-ui small{display:flex;gap:12px;flex-wrap:wrap;font-size:12.5px;color:var(--xmu);margin-top:2px}.ro-ui small span{display:inline-flex;align-items:center;gap:4px}
+.ro-local{font-style:normal;margin-left:6px;color:var(--xb)}
+.ro-host{display:flex;gap:16px;align-items:flex-start}
+.ro-host>span{width:56px;height:56px;border-radius:14px;background:#eef3ff;color:var(--xb);display:grid;place-items:center;flex:none}
+.ro-host b{display:block;font-size:16px;font-weight:600}.ro-host small{display:block;font-size:13.5px;color:var(--xmu);margin:4px 0 12px;line-height:1.45}
+.ro-host .x-btn{width:100%;justify-content:center}
+.ro-new h3{margin:0;font:600 20px var(--xss)}.ro-new>div:first-child p{margin:3px 0 0;color:var(--xmu);font-size:14px}
+.ro-new{display:flex;flex-direction:column;gap:12px;font-family:var(--xss)}
+.ro-new .x-f input{height:44px}.ro-new textarea{height:auto;min-height:60px;padding:10px 14px}
+.ro-g3{display:grid;grid-template-columns:1.3fr 1fr 1fr;gap:10px}.ro-g2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.ro-g2[hidden],.ro-new [hidden]{display:none}
+.ro-seg{width:max-content}
+.ro-fg{display:grid;gap:12px;margin-top:14px}
+.ro-strip{display:flex;flex-wrap:wrap;gap:10px 18px;margin:10px 0 4px;font:500 14px var(--xss);color:#475467}
+.ro-strip span,.ro-strip a{display:inline-flex;align-items:center;gap:6px}.ro-strip a{color:var(--xb);font-weight:600;text-decoration:none}
+.ro-desc{margin:6px 0 0;color:#475467;font-size:14.5px;max-width:720px}
+@media (max-width:1380px){.ro-grid{grid-template-columns:minmax(0,1fr) 330px}.ro-comms{grid-template-columns:repeat(2,minmax(0,1fr))}.ro-hs{gap:14px}}
+@media (max-width:1200px){.ro-grid{grid-template-columns:1fr}.ro-bar{flex-wrap:wrap}.ro-tabs{flex-basis:100%}.ro-s{flex:1;width:auto}}
+@media (max-width:900px){.ro-cards{grid-template-columns:repeat(2,minmax(0,1fr))}.ro-hero{flex-direction:column;align-items:flex-start}}
+@media (max-width:600px){.ro-cards,.ro-comms{grid-template-columns:1fr}.ro-hero{padding:22px}.ro-hs{width:100%;justify-content:space-between}.ro-g3{grid-template-columns:1fr 1fr}.ro-g3 label:first-child{grid-column:1/-1}.ro-g2{grid-template-columns:1fr}}
+
 </style>
 </head>
 <body><a href="#root" class="x-skip">Skip to content</a>
@@ -2355,6 +2447,80 @@ function vThreads(){const all=myThreads();const cnt=s=>all.filter(t=>threadState
  <section class="d-box">${dSecHead('Threads at a glance','/app','View analytics')}<div class="d-glance th-gl"><div class="b">${sv('users',24)}<b>${all.length}</b><small>Total Threads</small></div><div class="g">${sv('shield',24)}<b>${conf}</b><small>Verified (${pct(conf,all.length)}%)</small></div><div class="o">${sv('bell',24)}<b>${wait}</b><small>Awaiting next step</small></div><div class="b">${sv('chart',24)}<b>${res}</b><small>Resolved (${pct(res,all.length)}%)</small></div></div></section>
  <section class="d-box">${dSecHead('Upcoming follow-ups','/app/threads')}${fu.length?fu.map(t=>{const p=thPri(t);return`<div class="th-fu"><span class="th-fud ${p.c}">${thDaysLeft(t)}d</span>${xav(t.other.name,44)}<div class="th-fuw"><a href="/app/thread/${t.id}"><b>${esc(t.other.name)}</b></a><small>${esc([t.other.role,t.other.company].filter(Boolean).join(' · ')||'New connection')}</small><small>${sv('pin',12)} ${esc(t.where||'In person')}</small>${tagChips(t)}</div><button type="button" class="th-cal" aria-label="Add follow-up with ${esc(t.other.name)} to calendar" title="Add to calendar" onclick="dIcs('${t.id}')">${sv('cal',17)}</button></div>`}).join(''):'<p class="d-muted">No follow-ups due. Nice work.</p>'}</section>
  <div class="d7-promo"><span class="d-promo-ic">${sv('spark',22)}</span><div><b>Turn more Threads into opportunities</b><ul>${['Add context and notes','Set follow-up reminders','Track progress to resolution'].map(x=>`<li><i>${sv('check',11,'#fff',3.2)}</i>${x}</li>`).join('')}</ul><a href="/how">Learn more ${sv('arrow',15)}</a></div></div>
+ </div></div>`)}
+
+/* ===== v9 Rooms: events and communities ===== */
+let RF9='all',RQ9='',RDAY='',RCAL=null,RLIM9=6,RFF={fmt:'',priv:'',topic:''},RNT=[];
+const RIMG9=['uc-conferences','uc-communities','uc-professionals','uc-teams'];
+function rm9(r){if(!r)return{};if(!r._m){const L=r.location||'',i=L.indexOf('\n@@');if(i>=0){try{r._m=JSON.parse(L.slice(i+3))}catch(_){r._m={}}r.location=L.slice(0,i)}else r._m=r.meta||{}}return r._m}
+const _render9=render;render=function(){try{(DB.rooms||[]).forEach(rm9)}catch(_){}return _render9.apply(this,arguments)};
+const rYmd=r=>new Date(r.date).toISOString().slice(0,10);
+const ymdL=d=>`${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
+const rFmt=(r,o)=>new Date(r.date).toLocaleDateString('en-GB',Object.assign({timeZone:'UTC'},o));
+function rTzAbbr(tz,ymd){try{return new Intl.DateTimeFormat('en-GB',{timeZone:tz,timeZoneName:'short'}).formatToParts(new Date(ymd+'T12:00:00Z')).find(p=>p.type==='timeZoneName').value}catch(_){return''}}
+function r12(t){if(!t)return'';const[h,m]=t.split(':').map(Number);return`${(h%12)||12}:${String(m).padStart(2,'0')} ${h<12?'AM':'PM'}`}
+function rUtc(ymd,t,tz){const[y,mo,d]=ymd.split('-').map(Number),[h,mi]=t.split(':').map(Number);const g=Date.UTC(y,mo-1,d,h,mi);try{const s=new Date(g).toLocaleString('en-US',{timeZone:tz,hour12:false});const p=new Date(s+' UTC').getTime();return g-(p-g)}catch(_){return g}}
+function rTime(r){const m=rm9(r);if(!m.start)return'Time to be confirmed';const ymd=rYmd(r),tz=m.tz||Intl.DateTimeFormat().resolvedOptions().timeZone;let s=`${r12(m.start)}${m.end?' &ndash; '+r12(m.end):''} (${rTzAbbr(tz,ymd)})`;
+ const mine=Intl.DateTimeFormat().resolvedOptions().timeZone;if(tz!==mine){const u=rUtc(ymd,m.start,tz);s+=`<em class="ro-local">${new Date(u).toLocaleTimeString('en-GB',{hour:'numeric',minute:'2-digit'})} your time</em>`}return s}
+function rPlace(r){const m=rm9(r);if(m.fmt==='online')return'Online'+(m.platform?' ('+esc(m.platform)+')':'');return esc(r.location||'Venue to be confirmed')+(m.fmt==='hybrid'?' &middot; and online':'')}
+function rState(r){const t=ymdL(new Date()),y=rYmd(r);if(y<t)return['n','Past'];if(y===t)return['g','Today'];const n=Math.round((Date.parse(y)-Date.parse(t))/DAY);return n<=7?['o','In '+n+' day'+(n>1?'s':'')]:['b','Upcoming']}
+function rImg(r){return'/img/'+RIMG9[Math.abs([...String(r.id)].reduce((a,c)=>a+c.charCodeAt(0),0))%4]+'.jpg'}
+function rComms(){const T=myThreads();const m={};T.forEach(t=>tagsOf(t).forEach(g=>{(m[g]=m[g]||{n:0,co:{},v:0}).n++;if(t.confirmed)m[g].v++;tagsOf(t).forEach(o=>{if(o!==g)m[g].co[o]=(m[g].co[o]||0)+1})}));return Object.entries(m).map(([k,v])=>({k,n:v.n,v:v.v,co:Object.entries(v.co).sort((a,b)=>b[1]-a[1]).slice(0,3).map(x=>x[0])})).sort((a,b)=>b.n-a.n)}
+function rCalNav(d){const c=RCAL?new Date(RCAL):new Date();c.setDate(1);c.setMonth(c.getMonth()+d);RCAL=c.getTime();window._keepScroll=true;render()}
+function rCal(all){const base=RCAL?new Date(RCAL):new Date();const y=base.getFullYear(),mo=base.getMonth();const first=new Date(y,mo,1),start=new Date(y,mo,1-((first.getDay()+6)%7));const today=ymdL(new Date());const by={};all.forEach(r=>{(by[rYmd(r)]=by[rYmd(r)]||[]).push(r)});
+ let cells='';for(let i=0;i<42;i++){const d=new Date(start);d.setDate(start.getDate()+i);const k=ymdL(d),ev=by[k]||[],out=d.getMonth()!==mo;if(i===35&&out)break;
+  cells+=`<button type="button" class="${out?'out':''} ${k===today?'today':''} ${RDAY===k?'sel':''} ${ev.length?'has':''}" ${ev.length?`onclick="RDAY=RDAY==='${k}'?'':'${k}';RLIM9=6;window._keepScroll=true;render()" aria-label="${d.toLocaleDateString('en-GB',{day:'numeric',month:'long'})}: ${ev.length} Room${ev.length>1?'s':''}" title="${esc(ev.map(r=>r.name).join(', '))}"`:'tabindex="-1" aria-hidden="true"'}>${d.getDate()}${ev.length?'<i></i>':''}</button>`}
+ return`<div class="ro-cal"><div class="ro-calh"><b>${first.toLocaleDateString('en-GB',{month:'long',year:'numeric'})}</b><span><button type="button" aria-label="Previous month" onclick="rCalNav(-1)">${sv('chev',16)}</button><button type="button" aria-label="Next month" onclick="rCalNav(1)">${sv('chev',16)}</button></span></div><div class="ro-dow">${['Mon','Tue','Wed','Thu','Fri','Sat','Sun'].map(x=>`<span>${x}</span>`).join('')}</div><div class="ro-days">${cells}</div></div>`}
+function rFilter(){const tp=[...new Set(DB.rooms.flatMap(r=>rm9(r).topics||[]))];const opt=(id,cur,arr)=>`<select id="${id}" class="th-sort" style="width:100%">${arr.map(([v,l])=>`<option value="${v}" ${cur===v?'selected':''}>${l}</option>`).join('')}</select>`;
+ modal(`<div><div class="row between"><h3 style="margin:0;font:600 19px var(--xss)">Filter Rooms</h3><button class="x" aria-label="Close" onclick="closeModal()">&times;</button></div><div class="ro-fg"><label class="x-f"><span>Format</span>${opt('rff',RFF.fmt,[['','Any format'],['inperson','In person'],['online','Online'],['hybrid','Hybrid']])}</label><label class="x-f"><span>Access</span>${opt('rfp',RFF.priv,[['','Public and private'],['public','Public'],['private','Private (invite only)']])}</label><label class="x-f"><span>Topic</span>${opt('rft',RFF.topic,[['','Any topic'],...tp.map(x=>[x,x])])}</label></div><div class="fu-b"><button type="button" class="t-how" onclick="RFF={fmt:'',priv:'',topic:''};closeModal();render()">Clear</button><button type="button" class="x-btn" onclick="RFF={fmt:$('#rff').value,priv:$('#rfp').value,topic:$('#rft').value};RLIM9=6;closeModal();render()">Apply</button></div></div>`)}
+function newRoomModal(){RNT=[];const tz=Intl.DateTimeFormat().resolvedOptions().timeZone;const tzs=[...new Set([tz,'Europe/London','America/New_York','America/Chicago','America/Los_Angeles','Africa/Nairobi','Africa/Lagos','Europe/Paris','Asia/Dubai','Asia/Singapore'])];
+ modal(`<form class="ro-new" onsubmit="return newRoom9(event)"><div class="row between"><div><h3>Create a Room</h3><p>Every tap inside your Room becomes a Thread.</p></div><button type="button" class="x" aria-label="Close" onclick="closeModal()">&times;</button></div>
+ <label class="x-f"><span>Room name <i>*</i></span><input id="rn" required maxlength="80" placeholder="e.g. London Tech Week Founders Night"></label>
+ <div class="ro-g3"><label class="x-f"><span>Date <i>*</i></span><input id="rd" type="date" required value="${ymdL(new Date())}"></label><label class="x-f"><span>Starts</span><input id="rs" type="time" value="18:00"></label><label class="x-f"><span>Ends</span><input id="re" type="time" value="20:00"></label></div>
+ <label class="x-f"><span>Time zone</span><select id="rz" class="th-sort" style="width:100%">${tzs.map(z=>`<option value="${z}" ${z===tz?'selected':''}>${z.replace(/_/g,' ')} (${rTzAbbr(z,ymdL(new Date()))})</option>`).join('')}</select></label>
+ <div class="x-f"><span>Format</span><div class="x-seg ro-seg">${[['inperson','In person'],['online','Online'],['hybrid','Hybrid']].map(([k,l],i)=>`<button type="button" data-f="${k}" class="${i?'':'on'}" onclick="document.querySelectorAll('.ro-seg button').forEach(b=>b.classList.toggle('on',b===this));$('#rvw').hidden=this.dataset.f==='online';$('#rlw').hidden=this.dataset.f==='inperson'">${l}</button>`).join('')}</div></div>
+ <label class="x-f" id="rvw"><span>Venue</span><input id="rl" maxlength="120" placeholder="Venue, area, city"></label>
+ <div class="ro-g2" id="rlw" hidden><label class="x-f"><span>Platform</span><input id="rp" maxlength="30" placeholder="Zoom, Google Meet, Teams"></label><label class="x-f"><span>Meeting link</span><input id="ru" type="url" maxlength="300" placeholder="https://"></label></div>
+ <div class="ro-g2"><label class="x-f"><span>Access</span><select id="rv" class="th-sort" style="width:100%"><option value="public">Public: anyone with the link</option><option value="private">Private: invite only</option></select></label><label class="x-f"><span>Attendance limit <em>(optional)</em></span><input id="rc" type="number" min="2" max="100000" placeholder="No limit"></label></div>
+ <div class="x-f"><span>Topics <em>(optional, up to 3)</em></span><div class="tp-wrap">${TOPICS.map(x=>`<button type="button" class="tp" aria-pressed="false" data-v="${esc(x)}" onclick="const on=!this.classList.contains('on');if(on&&document.querySelectorAll('.ro-new .tp.on').length>=3)return toast('Pick up to 3 topics');this.classList.toggle('on',on);this.setAttribute('aria-pressed',on)">${esc(x)}</button>`).join('')}</div></div>
+ <label class="x-f"><span>Description <em>(optional)</em></span><textarea id="rx" rows="2" maxlength="280" placeholder="Who is it for and what will happen?"></textarea></label>
+ <button class="t-start" style="height:50px">${sv('cal',18)} Create Room</button></form>`)}
+function newRoom9(e){e.preventDefault();const v=id=>{const x=$('#'+id);return x?String(x.value).trim():''};const n=v('rn');if(!n){toast('Add a Room name');return false}
+ const f=(document.querySelector('.ro-seg button.on')||{}).dataset.f||'inperson';const meta={start:v('rs'),end:v('re'),tz:v('rz'),fmt:f,platform:f==='inperson'?'':v('rp'),link:f==='inperson'?'':v('ru'),priv:v('rv'),cap:+v('rc')||0,topics:[...document.querySelectorAll('.ro-new .tp.on')].map(b=>b.dataset.v),desc:v('rx')};
+ if(meta.link&&!/^https:\/\//i.test(meta.link)){toast('Meeting link must start with https://');return false}
+ const loc=f==='online'?'':v('rl'),date=v('rd');const code=(n.replace(/[^A-Za-z]/g,'').slice(0,3)+Math.floor(10+Math.random()*89)).toUpperCase();
+ if(!cloud()){const r={id:uid(),ownerId:DB.session,name:n,date:new Date(date).getTime(),location:loc,code,created:Date.now(),meta};r._m=meta;DB.rooms.push(r);save();closeModal();toast('Room created');go('/app/room/'+r.id);return false}
+ SB.from('rooms').insert({owner_id:DB.session,name:n,event_date:date,location:loc+'\n@@'+JSON.stringify(meta),code}).select().single().then(({data,error})=>{if(error){toast('Could not create the Room. Please try again.');return fail(error)}const r=mapRoom(data);rm9(r);DB.rooms.push(r);closeModal();toast('Room created');go('/app/room/'+r.id)});return false}
+const _vRoom9=vRoom;vRoom=function(id){const r=DB.rooms.find(x=>x.id===id);if(r)rm9(r);let h=_vRoom9(id);if(!r)return h;const m=rm9(r);
+ const strip=`<div class="ro-strip"><span>${sv('cal',16)} ${rFmt(r,{weekday:'long',day:'numeric',month:'long',year:'numeric'})} &middot; ${rTime(r)}</span><span>${sv(m.fmt==='online'?'globe':'pin',16)} ${rPlace(r)}</span>${m.link?`<a href="${esc(m.link)}" target="_blank" rel="noopener">${sv('link',16)} Join online</a>`:''}<span>${sv(m.priv==='private'?'lock':'users',16)} ${m.priv==='private'?'Private, invite only':'Public'}${m.cap?' &middot; limit '+m.cap:''}</span></div>${m.desc?`<p class="ro-desc">${esc(m.desc)}</p>`:''}`;
+ const i=h.indexOf('</h1>');return i>0?h.slice(0,i+5)+strip+h.slice(i+5):h};
+function vRooms(){const all=myRooms();all.forEach(rm9);const t=ymdL(new Date());const up=all.filter(r=>rYmd(r)>=t).sort((a,b)=>a.date-b.date),past=all.filter(r=>rYmd(r)<t);
+ let R=RF9==='upcoming'?up:RF9==='past'?past.slice().sort((a,b)=>b.date-a.date):RF9==='invites'?[]:[...up,...past.slice().sort((a,b)=>b.date-a.date)];
+ const q=RQ9.toLowerCase().trim();if(q)R=R.filter(r=>[r.name,r.location,r.code,(rm9(r).topics||[]).join(' '),rm9(r).platform||''].join(' ').toLowerCase().includes(q));
+ if(RDAY)R=R.filter(r=>rYmd(r)===RDAY);if(RFF.fmt)R=R.filter(r=>(rm9(r).fmt||'inperson')===RFF.fmt);if(RFF.priv)R=R.filter(r=>(rm9(r).priv||'public')===RFF.priv);if(RFF.topic)R=R.filter(r=>(rm9(r).topics||[]).includes(RFF.topic));
+ const comms=rComms();const conn=all.reduce((a,r)=>a+roomStats(r).T.length,0);const nf=['fmt','priv','topic'].filter(k=>RFF[k]).length;
+ const fmtN=n=>n>=1000?(n/1000).toFixed(1).replace(/\.0$/,'')+'K':n;
+ const tabs=[['all','All rooms',all.length],['upcoming','Upcoming',up.length],['past','Past',past.length],['mine','My rooms',all.length],['invites','Invites',0]];
+ const card=(r,i)=>{const m=rm9(r),s=roomStats(r);const[c,l]=m.fmt==='online'&&rState(r)[1]!=='Past'?['g','Online']:i===0&&RF9!=='past'&&rState(r)[1]!=='Past'&&!q&&!RDAY?['b','Featured']:rState(r);
+  return`<article class="ro-card"><a class="ro-img" href="/app/room/${r.id}" style="background-image:linear-gradient(180deg,rgba(10,16,32,.05),rgba(10,16,32,.35)),url(${rImg(r)})" aria-label="Open ${esc(r.name)}"><em class="${c}">${l}</em>${m.priv==='private'?`<em class="pv">${sv('lock',12)} Private</em>`:''}<span class="ro-dt"><small>${rFmt(r,{month:'short'}).toUpperCase()}</small><b>${rFmt(r,{day:'numeric'})}</b></span></a>
+  <div class="ro-cb"><a href="/app/room/${r.id}" class="ro-name">${esc(r.name)}</a><small>${sv(m.fmt==='online'?'globe':'pin',14)} ${rPlace(r)}</small><small>${sv('users',14)} ${s.T.length} ${s.T.length===1?'person':'people'}${m.cap?' of '+m.cap:''} &middot; ${s.v} verified</small>${(m.topics||[]).length?`<span class="d-tags">${m.topics.map(x=>{const cc=colorFor(x);return`<i style="color:${cc};background:${cc}17">${esc(x)}</i>`}).join('')}</span>`:''}
+  <div class="ro-ca"><a href="/app/room/${r.id}" class="d-act">Open room</a><button type="button" class="d-dots ro-dots" aria-label="More options for ${esc(r.name)}" onclick="rMenu('${r.id}')">&bull;&bull;&bull;</button></div></div></article>`};
+ const ico=['users','spark','chart','brief'],cls=['b','o','g','v'];
+ return shell('rooms',`<div class="t-head"><div><div class="t-eye">Rooms</div><h1 class="t-h1">Events and communities</h1><p class="t-sub">Create Rooms for your events, communities and meetups. Every tap in a Room becomes a Thread.</p></div><button type="button" class="x-btn lg th-new" onclick="newRoomModal()"><span aria-hidden="true">+</span> Create a Room</button></div>
+ <div class="d7-top ro-grid"><div class="ro-main">
+ <section class="ro-hero"><div class="ro-hc"><h2>Turn events into opportunities</h2><p>Host or join events, communities and private networks. Meet people, share your card and build meaningful relationships.</p><div class="ro-hb"><button type="button" class="x-btn lg" onclick="newRoomModal()">Create a Room</button><a href="/rooms" class="ro-learn"><span>${sv('play',10)}</span>Learn more</a></div></div>
+ <div class="ro-hs"><span>${sv('cal',26)}<b>${fmtN(all.length)}</b><small>Events hosted</small></span><span>${sv('user',26)}<b>${fmtN(conn)}</b><small>Connections</small></span><span>${sv('users',26)}<b>${fmtN(comms.length)}</b><small>Communities</small></span></div></section>
+ <div class="ro-bar"><nav class="ro-tabs" aria-label="Room filter">${tabs.map(([k,l,c])=>`<button type="button" class="${RF9===k?'on':''}" aria-pressed="${RF9===k}" onclick="RF9='${k}';RLIM9=6;window._keepScroll=true;render()">${l} (${c})</button>`).join('')}</nav>
+ <label class="ro-s">${sv('search',16)}<input placeholder="Search rooms, events..." value="${esc(RQ9)}" aria-label="Search rooms" oninput="RQ9=this.value;clearTimeout(window._rq9);window._rq9=setTimeout(()=>{window._keepScroll=true;render();const i=document.querySelector('.ro-s input');if(i){i.focus();i.setSelectionRange(i.value.length,i.value.length)}},250)"></label><button type="button" class="th-filter ${nf?'on':''}" onclick="rFilter()">${sv('grid',16)} Filter${nf?` <i>${nf}</i>`:''}</button></div>
+ ${RDAY?`<div class="th-q">Showing Rooms on ${new Date(RDAY+'T12:00:00Z').toLocaleDateString('en-GB',{day:'numeric',month:'long',timeZone:'UTC'})} <button type="button" onclick="RDAY='';render()">Show all dates</button></div>`:''}
+ <div class="ro-sh"><div><h3>${RF9==='past'?'Past rooms':RF9==='upcoming'?'Upcoming rooms':RF9==='invites'?'Invites':RF9==='mine'?'Rooms you host':'Featured rooms'}</h3><p>${RF9==='invites'?'Private Rooms you have been invited to.':RF9==='past'?'See which connections from past events went somewhere.':'Your events and communities, happening now and soon.'}</p></div>${R.length>RLIM9?`<button type="button" class="ro-va" onclick="RLIM9=999;window._keepScroll=true;render()">View all ${sv('arrow',15)}</button>`:''}</div>
+ ${R.length?`<div class="ro-cards">${R.slice(0,RLIM9).map(card).join('')}</div>`:`<div class="d-empty">${sv(RF9==='invites'?'mail':'cal',22)}<div><b>${RF9==='invites'?'No invites yet':all.length?'No Rooms match':'No Rooms yet'}</b><small>${RF9==='invites'?'When someone invites you to a private Room, it will appear here.':all.length?'Try another tab, date or filter.':'Create a Room for your next event. Every tap inside it becomes a Thread.'}</small></div>${RF9==='invites'?'':`<button type="button" class="x-btn sm" onclick="newRoomModal()">Create a Room</button>`}</div>`}
+ <div class="ro-sh"><div><h3>Your communities</h3><p>Interest groups built from the topics on your Threads.</p></div>${comms.length>4?`<a class="ro-va" href="/app/threads">View all ${sv('arrow',15)}</a>`:''}</div>
+ ${comms.length?`<div class="ro-comms">${comms.slice(0,4).map((c,i)=>`<article class="ro-cm"><div class="ro-cmh"><span class="ro-cmi ${cls[i%4]}">${sv(ico[i%4],22)}</span><div><b>${esc(c.k)}</b><small>${c.n} connection${c.n===1?'':'s'} &middot; ${c.v} verified</small></div></div><p>People in your network you met around ${esc(c.k.toLowerCase())}.</p>${c.co.length?`<span class="d-tags">${c.co.map(x=>{const cc=colorFor(x);return`<i style="color:${cc};background:${cc}17">${esc(x)}</i>`}).join('')}</span>`:''}<button type="button" class="ro-join" onclick="TFT=['${esc(c.k).replace(/'/g,'&#39;')}'];TFV=false;TF2='all';TLIM=20;go('/app/threads')">View people</button></article>`).join('')}</div>`:`<div class="d-empty">${sv('users',22)}<div><b>No communities yet</b><small>Add topics when you start Threads and your communities will form here.</small></div><a href="/app/tap" class="x-btn sm">Start a Thread</a></div>`}
+ </div><div class="d-side">
+ <section class="d-box"><div class="d-sh"><b>My calendar</b><button type="button" class="ro-va sm" onclick="RCAL=null;RDAY='';RF9='upcoming';render()">View all ${sv('arrow',14)}</button></div>${rCal(all)}</section>
+ <section class="d-box">${dSecHead('Upcoming events')}${up.length?up.slice(0,3).map(r=>{const m=rm9(r),s=roomStats(r);return`<a class="ro-up" href="/app/room/${r.id}"><span class="ro-ud"><small>${rFmt(r,{month:'short'}).toUpperCase()}</small><b>${rFmt(r,{day:'numeric'})}</b></span><span class="ro-ui"><b>${esc(r.name)}</b><small>${rTime(r)}</small><small><span>${sv(m.fmt==='online'?'globe':'pin',13)} ${rPlace(r)}</span><span>${sv('users',13)} ${s.T.length}</span></small></span>${sv('chev',18)}</a>`}).join(''):`<div class="d7-emp"><span>${sv('cal',24)}</span><div><b>No upcoming events</b><small>Create a Room for your next event and every tap becomes a Thread.</small></div></div>`}</section>
+ <section class="d-box ro-host"><span>${sv('cal',30)}</span><div><b>Host your own event</b><small>Create a Room for your event, community or private network.</small><button type="button" class="x-btn" onclick="newRoomModal()">Create a Room ${sv('arrow',16)}</button></div></section>
  </div></div>`)}
 
 </script>
