@@ -2866,6 +2866,10 @@ html{-webkit-text-size-adjust:100%;text-size-adjust:100%;touch-action:manipulati
 .x-ph-in .x-phone{height:auto!important}
 .x-ph-in .x-scr{height:auto!important;min-height:0!important;padding-bottom:22px}
 }
+
+/* v20 invoice footer */
+.iv-legal{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap;margin-top:22px;padding-top:12px;border-top:1px solid #e4e7ec;font:500 11px var(--xss,system-ui);color:#667085}
+.iv-title dl{row-gap:2px}
 </style>
 </head>
 <body><a href="#root" class="x-skip">Skip to content</a>
@@ -6780,6 +6784,18 @@ if(!IT_BOOTED){const fin=()=>{if(IT_BOOTED)return;IT_BOOTED=true;render()};setTi
 const _renderBoot=render;render=function(){if(!IT_BOOTED&&!me()&&/^\/app(\/|$)/.test(location.pathname)){try{$('#root').innerHTML=itSplash()}catch(_){}return}return _renderBoot.apply(this,arguments)};
 
 const _mnav19=mnav;mnav=function(){let h=_mnav19.apply(this,arguments);return me()?h.replace('class="x-nav-r"','class="x-nav-r it-in"'):h};
+
+/* v20 invoice: international layout details + clean A4 print (no browser header/footer) */
+const INV_SELLER={legal:'Introthread Ltd',address:'',companyNo:'',vatNo:''};
+const _bInvHTML20=bInvHTML;bInvHTML=function(i){let h=_bInvHTML20.apply(this,arguments);const u=me()||{};const paid=i.status==='paid',cur=i.currency||'USD';
+ const extra=`<div><dt>Payment terms</dt><dd>${paid?'Paid in full':'Due on receipt'}</dd></div><div><dt>Currency</dt><dd>${esc(cur)}</dd></div>${u.handle?`<div><dt>Customer ID</dt><dd>${esc(u.handle)}</dd></div>`:''}`;
+ h=h.replace(/(<div class="iv-title"><h2>Invoice<\/h2><dl>[\s\S]*?)(<\/dl>)/,'$1'+extra+'$2');
+ if(INV_SELLER.address)h=h.replace('London &middot; New York<br>',esc(INV_SELLER.address)+'<br>');
+ if(INV_SELLER.vatNo)h=h.replace('www.introthread.com</address>','www.introthread.com<br>VAT no. '+esc(INV_SELLER.vatNo)+'</address>');
+ const legal=[INV_SELLER.legal,INV_SELLER.companyNo?'Company no. '+INV_SELLER.companyNo:'',INV_SELLER.vatNo?'VAT no. '+INV_SELLER.vatNo:'','billing@introthread.com','www.introthread.com'].filter(Boolean).map(esc).join(' &middot; ');
+ const fin=`<div class="iv-legal"><span>${legal}</span><span>${esc(i.number)} &middot; Page 1 of 1</span></div>`;
+ const k=h.lastIndexOf('</article>');return k>0?h.slice(0,k)+fin+h.slice(k):h+fin};
+const _bInvPrint20=bInvPrint;bInvPrint=function(id){const o=window.open;window.open=function(){const w=o.apply(window,arguments);if(!w)return w;const dw=w.document.write.bind(w.document);w.document.write=function(x){return dw(String(x).replace('@page{size:A4;margin:14mm}','@page{size:A4;margin:0}').replace('body{padding:0;margin:0}','body{padding:16mm 17mm 14mm;margin:0;-webkit-print-color-adjust:exact;print-color-adjust:exact}.iv{min-height:calc(297mm - 30mm);display:flex;flex-direction:column}.iv .iv-legal{margin-top:auto}'))};return w};try{return _bInvPrint20.apply(this,arguments)}finally{window.open=o}};
 </script>
 </body>
 </html>
