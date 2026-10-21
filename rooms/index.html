@@ -1961,6 +1961,25 @@ body:has(.scan) .toast{bottom:auto!important;top:calc(70px + env(safe-area-inset
 
 @media (max-width:1023px){.mb-ti em{top:-5px!important;right:auto!important;left:calc(50% + 5px)}}
 
+/* v27 Tap page on phones: tighter header, compact How it works pill, balanced card */
+@media (max-width:1023px){
+ .t-eye{font-size:12px!important;letter-spacing:.16em}
+ .t-head>.t-how{align-self:flex-start!important;width:auto;height:38px;padding:0 14px 0 6px;border-radius:99px;font-size:14px;gap:8px;box-shadow:none}
+ .t-head>.t-how .x-play{width:26px;height:26px}
+ .t-event{padding:12px 14px;gap:12px;border-radius:14px;margin-bottom:14px}.t-event>span{width:42px;height:42px;border-radius:12px}.t-event b{font-size:15px}.t-event small{font-size:12.5px;line-height:1.35;display:block}
+ .t-card{padding:18px 16px 16px!important;border-radius:20px}
+ .t-card-top .x-logo{font-size:17px!important}
+ .t-card-id{margin-top:10px!important}
+ .t-card-id .x-av{width:84px!important;height:84px!important;font-size:28px!important}
+ .t-card-id b{font-size:22px!important;margin-top:10px!important}
+ .t-card-id small{font-size:14px!important}
+ .t-qr{margin-top:14px!important;padding:10px!important;border-radius:14px!important}.t-qr img{width:168px!important;height:168px!important}
+ .t-url{margin-top:8px!important;font-size:14px!important}
+ .t-acts{display:grid!important;grid-template-columns:1fr 1fr;gap:8px!important;width:100%;padding-top:14px!important}
+ .t-acts button{height:42px!important;font-size:13.5px!important;flex:none!important}
+}
+@media (max-width:1023px){.t-h1{font-size:clamp(25px,6.6vw,30px)!important;line-height:1.12!important;margin:6px 0!important}.t-sub{font-size:14.5px!important;line-height:1.5!important}}
+
 </style>
 </head>
 <body><a href="#root" class="x-skip">Skip to content</a>
