@@ -1444,6 +1444,74 @@ html,body,button,input,select,textarea{font-family:var(--xss)}
 @media (max-width:860px){.cd-top2{grid-template-columns:1fr}.cd-pv{max-width:360px;width:100%;margin:0 auto}.cd-grid{grid-template-columns:1fr;grid-template-areas:"left" "right" "stb" "qab" "tips"}.cd-right{grid-template-columns:1fr}.cd-styles{grid-template-columns:repeat(2,1fr)}}
 @media (max-width:560px){.cd-photo{flex-direction:column;align-items:flex-start}.cd-fb{flex-direction:column-reverse;align-items:stretch}.cd-sv{min-width:0}.cd-qrbig{flex-direction:column}.cd-sw{grid-template-columns:repeat(3,1fr)}.cd-qa{grid-template-columns:1fr}}
 
+/* v11 Public profile */
+.pp-grid{display:grid;grid-template-columns:minmax(0,.95fr) minmax(0,1.25fr);gap:28px;align-items:start;font-family:var(--xss)}
+.pp-pv{position:sticky;top:90px}
+.pp-card{position:relative;overflow:hidden;border-radius:20px;padding:24px 22px 18px;display:flex;flex-direction:column;align-items:center;box-shadow:0 36px 64px -40px rgba(8,14,40,.8)}
+.pp-top{align-self:stretch;display:flex;justify-content:space-between;align-items:center}
+.pp-top .x-logo{font-size:20px}
+.pp-sh{display:inline-flex;align-items:center;gap:8px;height:40px;padding:0 16px;border-radius:10px;border:1px solid rgba(255,255,255,.3);background:rgba(255,255,255,.04);color:inherit;font:600 14px var(--xss);cursor:pointer}
+.pp-card.lt .pp-sh{border-color:rgba(15,23,42,.2)}.pp-sh:hover{background:rgba(255,255,255,.12)}
+.pp-id{text-align:center;margin-top:6px}
+.pp-ring{position:relative;display:inline-block;border-radius:50%;padding:5px;background:linear-gradient(135deg,#3b6bff,#7aa2ff)}
+.pp-ring .x-av{margin:0;box-shadow:0 0 0 4px rgba(10,16,32,.55);font-size:44px!important}
+.pp-ring i{position:absolute;right:6px;bottom:8px;width:32px;height:32px;border-radius:50%;background:var(--xb);border:3px solid #fff;display:grid;place-items:center}
+.pp-id h2{margin:14px 0 4px;font:600 30px var(--xss);letter-spacing:-.01em}
+.pp-role{margin:0;font-size:16.5px;color:var(--sub)}.pp-role span{margin:0 4px}
+.pp-hl{margin:8px 0 0;font-size:14px;font-weight:600;letter-spacing:.01em}
+.pp-bio{margin:12px auto 0;max-width:400px;font-size:15px;line-height:1.5;color:var(--sub)}
+.pp-ics{display:flex;gap:14px;margin-top:20px}
+.pp-ics a,.pp-ics span{width:46px;height:46px;border-radius:11px;border:1px solid rgba(255,255,255,.3);display:grid;place-items:center;color:inherit;background:rgba(255,255,255,.04)}
+.pp-card.lt .pp-ics a,.pp-card.lt .pp-ics span{border-color:rgba(15,23,42,.18)}
+.pp-ics span.off{opacity:.38}.pp-ics a:hover{background:rgba(255,255,255,.14)}
+.pp-info{align-self:stretch;margin-top:22px;background:#fff;color:var(--xink);border-radius:14px 14px 0 0;overflow:hidden}
+.pp-facts{display:grid;grid-auto-flow:column;grid-auto-columns:1fr}
+.pp-facts>div{display:flex;align-items:center;gap:10px;padding:14px 14px;font-size:13.5px;line-height:1.3;border-left:1px solid #eef1f5}
+.pp-facts>div:first-child{border-left:0}.pp-facts svg{color:var(--xb);flex:none}
+.pp-facts>div.ok i{width:20px;height:20px;border-radius:50%;background:#12a065;display:grid;place-items:center;flex:none}
+.pp-facts b{display:block;font-weight:600}
+.pp-tps{display:flex;flex-wrap:wrap;gap:8px;padding:12px 14px;border-top:1px solid #eef1f5}
+.pp-tps i{font-style:normal;font-size:13px;font-weight:500;padding:6px 12px;border-radius:99px}
+.pp-tps i.more{color:#475467;background:#fff;border:1px solid var(--line)}
+.pp-empty{padding:16px;font-size:13.5px;color:var(--xmu);text-align:center}
+.pp-save{align-self:stretch;display:flex;align-items:center;justify-content:center;gap:10px;height:50px;border:0;border-radius:0 0 12px 12px;background:var(--xb);color:#fff;font:600 16px var(--xss);cursor:pointer}
+.pp-save:hover{background:#1a52e6}
+.pp-tabbar{display:flex;align-items:flex-end;gap:12px;border-bottom:1px solid var(--line);margin:-6px 0 16px}
+.pp-tabs{border-bottom:0;margin:0;flex:1;min-width:0}
+.pp-st{flex:none;font-size:12.5px;color:var(--xmu);padding-bottom:13px}.pp-st.ok{color:#12a065}.pp-st.err{color:#d14343}
+.pp-box{padding:0}
+.pp-sec{padding:20px}.pp-sec+.pp-sec{border-top:1px solid var(--line)}
+.pp-sec .cd-bh{align-items:center}.pp-sec .cd-bh b em{font-style:normal;font-weight:500;color:var(--xmu);font-size:14px}
+.pp-ai{display:inline-flex;align-items:center;gap:8px;height:42px;padding:0 16px;border:1px solid #c9d6f5;border-radius:10px;background:#fff;color:var(--xb);font:600 14px var(--xss);cursor:pointer;flex:none}
+.pp-ai:hover{background:#f3f6ff}
+.pp-g{gap:14px 20px}.pp-g .x-f input{height:44px}
+.pp-col{display:flex;flex-direction:column;gap:12px}
+.pp-open b{font-size:14px!important}.pp-open small{font-size:12.5px!important}
+.pp-ta{position:relative}.pp-ta textarea{width:100%;height:auto;min-height:118px;padding:10px 14px 24px;border:1px solid #dfe3ea;border-radius:10px;font:500 14px/1.5 var(--xss);resize:vertical;outline:none}
+.pp-ta textarea:focus{border-color:var(--xb);box-shadow:0 0 0 4px rgba(31,94,255,.12)}
+.pp-ta small{position:absolute;right:10px;bottom:7px;font-size:12px;color:var(--xmu)}.pp-ta small b{font-weight:500}
+.pp-tps2{display:flex;flex-wrap:wrap;gap:10px}
+.pp-tp{display:inline-flex;align-items:center;gap:8px;height:40px;padding:0 8px 0 14px;border:1px solid var(--line);border-radius:99px;font-size:14.5px;color:var(--xink);background:#fff}
+.pp-tp button{width:24px;height:24px;border:0;border-radius:50%;background:none;font-size:18px;line-height:1;color:#475467;cursor:pointer}
+.pp-tp button:hover{background:#f2f4f7;color:#d14343}
+.pp-tpa{display:inline-flex;align-items:center;gap:6px;height:40px;padding:0 14px;border:1px solid var(--line);border-radius:99px;color:#475467;cursor:text}
+.pp-tpa input{border:0;outline:none;width:110px;font:500 14.5px var(--xss);background:none}
+.pp-tpa:focus-within{border-color:var(--xb);box-shadow:0 0 0 3px rgba(31,94,255,.12)}
+.pp-sl{display:block;margin:14px 0 6px;font-size:14px}
+.cd-sug button.on{border-color:var(--xb);background:#eef3ff}
+.pp-shw{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.pp-gs{padding:16px;border:1px solid var(--line);border-radius:12px;background:#fff}
+.pp-gs small{font-size:12.5px;color:#4d5156}.pp-gs b{display:block;margin:4px 0;font:400 19px var(--xss);color:#1a0dab}.pp-gs p{margin:0;font-size:13.5px;color:#4d5156;line-height:1.5}
+.pp-bot{display:grid;grid-template-columns:1fr 1fr 1fr;gap:18px;margin-top:22px;font-family:var(--xss)}
+.pp-copy{width:auto!important;padding:0 18px!important;gap:8px;white-space:nowrap}
+.pp-so{display:grid;grid-template-columns:1.2fr 1fr 1.1fr;gap:10px}
+.pp-so button{display:flex;align-items:center;justify-content:center;gap:9px;height:48px;border:1px solid var(--line);border-radius:10px;background:#fff;font:600 14.5px var(--xss);color:var(--xink);cursor:pointer}
+.pp-so button svg{color:var(--xb)}.pp-so button.on{border-color:var(--xb);background:#f3f6ff;box-shadow:0 0 0 1px var(--xb)}
+.pp-so button:hover{border-color:#c9d6f5}
+@media (max-width:1380px){.pp-grid{grid-template-columns:minmax(0,1fr) minmax(0,1.15fr);gap:22px}.pp-id h2{font-size:26px}}
+@media (max-width:1200px){.pp-grid{grid-template-columns:1fr}.pp-pv{position:static;max-width:520px;width:100%;margin:0 auto}.pp-bot{grid-template-columns:1fr 1fr}.pp-bot section:last-child{grid-column:1/-1}}
+@media (max-width:760px){.pp-bot{grid-template-columns:1fr}.pp-shw{grid-template-columns:1fr}.pp-tabbar{flex-direction:column;align-items:stretch}.pp-st{padding:0 0 8px}.pp-facts{grid-auto-flow:row}.pp-facts>div{border-left:0;border-top:1px solid #eef1f5}.pp-facts>div:first-child{border-top:0}.pp-sec .cd-bh{flex-wrap:wrap}.pp-ai{width:100%;justify-content:center}}
+
 </style>
 </head>
 <body><a href="#root" class="x-skip">Skip to content</a>
@@ -2713,6 +2781,63 @@ function vCard(){const u=me();if(!CD||CD.uid!==u.id)cdInit();const pub=!(u.links
 
 
 const _saveCard10=saveCard;saveCard=function(e){if(!$('#cn')){if(e&&e.preventDefault)e.preventDefault();if(!CD)cdInit();return cdSave()}return _saveCard10.call(this,e)};
+/* ===== v11 Public profile (design: Public Profile) ===== */
+let PTAB='info',PP=null,PPT=null;
+function ppInit(){const u=me(),L=u.links||{};PP={uid:u.id,name:u.name||'',role:u.role||'',company:u.company||'',city:u.city||'',bio:u.bio||'',headline:L.headline||'',topics:(L.interests||L.tags||[]).slice(0,10),linkedin:L.linkedin||'',x:L.x||'',website:L.website||'',calendar:L.calendar||'',email:L.email||'',phone:L.phone||'',extra:(L.extra||[]).slice(0,3),open:!!L.open,show:Object.assign({loc:true,co:true,topics:true,bio:true},L.show||{}),seoDesc:L.seoDesc||'',noindex:!!L.noindex}}
+function ppUser(){const u=me();return Object.assign({},u,{name:PP.name,role:PP.role,company:PP.company,city:PP.city,bio:PP.bio,links:Object.assign({},u.links||{},{headline:PP.headline,interests:PP.topics,linkedin:PP.linkedin,x:PP.x,website:PP.website,calendar:PP.calendar,email:PP.email,phone:PP.phone,extra:PP.extra.filter(Boolean),open:PP.open,show:PP.show,seoDesc:PP.seoDesc,noindex:PP.noindex})})}
+function ppCard(u){const t=THEMES[u.theme]||THEMES.midnight,L=u.links||{},S=L.show||{};const tp=L.interests||L.tags||[];
+ const ic=[['li',L.linkedin&&cdHref(L.linkedin),'LinkedIn'],['x',L.x&&cdHref(/^@/.test(L.x)?'x.com/'+L.x.slice(1):L.x),'X'],['cal',L.calendar&&cdHref(L.calendar),'Book a meeting'],['link',L.website&&cdHref(L.website),'Website'],['mail',L.email&&'mailto:'+L.email,'Email']];
+ const facts=[S.loc!==false&&u.city?`<div>${sv('pin',18)}<span>${esc(u.city)}</span></div>`:'',S.co!==false&&u.company?`<div>${sv('building',18)}<span>${esc(u.company)}</span></div>`:'',L.open?`<div class="ok"><i>${sv('check',10,'#fff',3.2)}</i><span>Open to<b>Networking</b></span></div>`:''].filter(Boolean);
+ return`<div class="pp-card ${t.light?'lt':''}" style="background:${t.bg};color:${t.fg};--sub:${t.sub}"><div class="pp-top"><span class="x-logo ${t.light?'':'dk'}"><span class="x-lm"><i></i><i></i></span><span>intro<b>thread</b></span></span><button type="button" class="pp-sh" onclick="shareNative()">${sv('hub',17)} Share</button></div>
+ <div class="pp-id"><span class="pp-ring">${avatarC(u,140)}<i title="Verified account">${sv('check',13,'#fff',3.2)}</i></span><h2>${esc(u.name||'Your name')}</h2><p class="pp-role">${esc(u.role||'Your job title')}${u.company?` <span>&bull;</span> ${esc(u.company)}`:''}</p>${L.headline?`<p class="pp-hl">${esc(L.headline)}</p>`:''}${S.bio!==false&&u.bio?`<p class="pp-bio">${esc(u.bio)}</p>`:''}</div>
+ <div class="pp-ics">${ic.map(([k,h,l])=>h?`<a href="${esc(h)}" target="_blank" rel="noopener" aria-label="${l}" title="${l}">${sv(k,19)}</a>`:`<span class="off" title="Add your ${l} in Links &amp; social">${sv(k,19)}</span>`).join('')}</div>
+ <div class="pp-info">${facts.length?`<div class="pp-facts">${facts.join('')}</div>`:''}${S.topics!==false&&tp.length?`<div class="pp-tps">${tp.slice(0,5).map(x=>{const c=colorFor(x);return`<i style="color:${c};background:${c}17">${esc(x)}</i>`}).join('')}${tp.length>5?`<i class="more" title="${esc(tp.slice(5).join(', '))}">+${tp.length-5}</i>`:''}</div>`:''}${!facts.length&&!(S.topics!==false&&tp.length)?`<div class="pp-empty">Add your location, company and topics to complete your profile.</div>`:''}</div>
+ <button type="button" class="pp-save" onclick="ppVcf()">${sv('user',18)} Save Contact</button></div>`}
+function ppVcf(){const u=ppUser(),L=u.links;const v=['BEGIN:VCARD','VERSION:3.0','FN:'+u.name,u.role?'TITLE:'+u.role:'',u.company?'ORG:'+u.company:'',L.email?'EMAIL:'+L.email:'',L.phone?'TEL:'+L.phone:'','URL:'+profileUrl(u),u.bio?'NOTE:'+u.bio.replace(/\n/g,' '):'','END:VCARD'].filter(Boolean).join('\n');const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([v],{type:'text/vcard'}));a.download=(u.name||'contact').replace(/\s+/g,'-')+'.vcf';document.body.appendChild(a);a.click();a.remove();toast('Contact card downloaded')}
+function ppStatus(s){const e=$('#ppst');if(e){e.textContent=s;e.className='pp-st '+(s==='Saved'?'ok':s==='Saving...'?'':'err')}}
+function ppLive(){const p=$('#ppprev');if(p)p.innerHTML=ppCard(ppUser());const c=$('#ppbc');if(c)c.textContent=(PP.bio||'').length;const d=$('#ppdc');if(d)d.textContent=(PP.seoDesc||'').length;const g=$('#ppgs');if(g)g.innerHTML=ppSnippet()}
+function ppSet(k,v){PP[k]=v;ppLive();ppQueue()}
+function ppQueue(){clearTimeout(PPT);ppStatus('Unsaved changes');PPT=setTimeout(ppSave,900)}
+async function ppSave(){clearTimeout(PPT);const u=me();if(!PP.name.trim()){ppStatus('Full name is required');return}if(!PP.role.trim()){ppStatus('Job title is required');return}
+ if(PP.email&&!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(PP.email.trim())){ppStatus('Check your contact email');return}
+ const nu=ppUser();const patch={name:nu.name.trim(),role:nu.role.trim(),company:nu.company.trim(),city:nu.city.trim(),bio:nu.bio.trim(),links:nu.links};ppStatus('Saving...');
+ const ok=await upd('profiles',u.id,patch);if(!ok){ppStatus('Not saved. Check your connection.');return}Object.assign(u,patch);save();CD=null;PF=null;ppStatus('Saved')}
+function ppF(id,k,l,o={}){return`<label class="x-f"><span>${l}${o.req?' <i>*</i>':o.opt?' <em>(optional)</em>':''}</span>${o.icon?`<div class="cd-in">${sv(o.icon,17)}`:''}<input id="${id}" value="${esc(PP[k]||'')}" maxlength="${o.max||80}" placeholder="${o.ph||''}" ${o.type?`type="${o.type}"`:''} autocomplete="off" oninput="ppSet('${k}',this.value)">${o.clear?`<button type="button" class="cd-clr" aria-label="Clear ${l}" onclick="$('#${id}').value='';ppSet('${k}','')">&times;</button>`:''}${o.icon?'</div>':''}</label>`}
+function ppTopicRm(i){PP.topics.splice(i,1);$('#pptp').innerHTML=ppTopics();ppLive();ppQueue()}
+function ppTopicAdd(v){v=String(v||'').trim().replace(/[,#]/g,'').slice(0,24);if(!v)return;if(PP.topics.length>=10)return toast('You can add up to 10 topics');if(PP.topics.some(x=>x.toLowerCase()===v.toLowerCase()))return toast('That topic is already added');PP.topics.push(v);$('#pptp').innerHTML=ppTopics();ppLive();ppQueue();const i=$('#ppta');if(i)i.focus()}
+function ppTopics(){const sug=TOPICS.filter(x=>!PP.topics.includes(x));return PP.topics.map((x,i)=>`<span class="pp-tp">${esc(x)}<button type="button" aria-label="Remove ${esc(x)}" onclick="ppTopicRm(${i})">&times;</button></span>`).join('')+(PP.topics.length<10?`<label class="pp-tpa">${sv('close',14,'currentColor',2.2).replace('<path d="M6 6l12 12M18 6 6 18"/>','<path d="M12 5v14M5 12h14"/>')}<input id="ppta" list="ppsug" placeholder="Add topic" maxlength="24" onkeydown="if(event.key==='Enter'||event.key===','){event.preventDefault();ppTopicAdd(this.value);this.value=''}" onchange="if(this.value){ppTopicAdd(this.value);this.value=''}"><datalist id="ppsug">${sug.map(x=>`<option value="${esc(x)}">`).join('')}</datalist></label>`:'')}
+function ppAI(){const r=PP.role||'Professional',c=PP.company,tp=PP.topics.slice(0,3);const area=tp.length?tp.join(', '):'partnerships and growth';
+ const hl=[tp.length?tp.join(', ').replace(/, ([^,]*)$/,' & $1'):r,`${r}${c?' at '+c:''}`,`Helping teams grow through ${area.toLowerCase()}`].map(s=>s.slice(0,80));
+ const bio=[`${r}${c?' at '+c:''}. I help teams grow through ${area.toLowerCase()}. Open to connecting with founders, investors and operators.`,`I work at the intersection of ${area.toLowerCase()}. ${r}${c?', '+c:''}. Happy to meet people building something meaningful.`,`${r} focused on ${area.toLowerCase()}. I enjoy turning introductions into real partnerships.`].map(s=>s.slice(0,200));
+ modal(`<div><div class="row between"><h3 style="margin:0;font:600 19px var(--xss)">Suggest a headline and bio</h3><button class="x" aria-label="Close" onclick="closeModal()">&times;</button></div><p class="fu-sub" style="margin-top:6px">Built from your title, company and topics. Pick one of each, then edit it to sound like you.</p>
+ <b class="pp-sl">Headline</b><div class="cd-sug">${hl.map(s=>`<button type="button" data-v="${esc(s)}" onclick="PP.headline=this.dataset.v;const i=$('#pph');if(i)i.value=PP.headline;ppLive();ppQueue();this.parentNode.querySelectorAll('button').forEach(b=>b.classList.toggle('on',b===this))">${esc(s)}</button>`).join('')}</div>
+ <b class="pp-sl">Bio</b><div class="cd-sug">${bio.map(s=>`<button type="button" data-v="${esc(s)}" onclick="PP.bio=this.dataset.v;const i=$('#ppb');if(i)i.value=PP.bio;ppLive();ppQueue();this.parentNode.querySelectorAll('button').forEach(b=>b.classList.toggle('on',b===this))">${esc(s)}</button>`).join('')}</div><div class="fu-b"><button type="button" class="x-btn" onclick="closeModal()">Done</button></div></div>`)}
+function ppSnippet(){const u=ppUser();const t=`${u.name||'Your name'}${u.role?' - '+u.role:''}${u.company?' at '+u.company:''} | Introthread`;const d=(PP.seoDesc||u.bio||'Connect with '+(u.name||'me')+' on Introthread.').slice(0,160);return`<small>introthread.com &rsaquo; ${esc(u.handle)}</small><b>${esc(t)}</b><p>${esc(d)}</p>`}
+async function ppTheme(k){await setTheme(k)}
+function ppShow(k,on){PP.show[k]=on;ppLive();ppQueue()}
+function vProfile(){const u=me();if(!PP||PP.uid!==u.id)ppInit();const pub=!(u.links&&u.links.hidden);const url=profileUrl(u),short='introthread.com/'+u.handle;
+ const tabs=[['info','Profile information'],['links','Links &amp; social'],['look','Appearance'],['seo','SEO &amp; sharing']];let body='';
+ if(PTAB==='info')body=`<section class="pp-sec"><div class="cd-bh"><span class="cd-bi">${sv('user',20)}</span><div><b>Basic information</b><small>Edit your public profile. Changes appear instantly.</small></div><button type="button" class="pp-ai" onclick="ppAI()">${sv('spark',16)} Suggest with AI</button></div>
+  <div class="t-g2 pp-g">${ppF('ppn','name','Full name',{req:1})}${ppF('ppr','role','Job title',{req:1,ph:'e.g. Marketing Director'})}${ppF('ppc','company','Company',{ph:'e.g. Acme Technologies'})}${ppF('pph','headline','Headline',{ph:'e.g. B2B Growth, Partnerships & Technology',max:80})}
+  <div class="pp-col">${ppF('ppl','city','Location',{icon:'pin',clear:1,ph:'City, Country'})}<label class="t-tog pp-open"><input type="checkbox" ${PP.open?'checked':''} onchange="ppSet('open',this.checked)"><span class="t-sw"></span><span><b>Open to networking</b><small>Show this on your profile.</small></span></label></div>
+  <label class="x-f"><span>Bio</span><div class="pp-ta"><textarea id="ppb" maxlength="200" rows="4" placeholder="What you do, who you help and who you want to meet" oninput="ppSet('bio',this.value)">${esc(PP.bio)}</textarea><small><b id="ppbc">${PP.bio.length}</b>/200</small></div></label></div></section>
+  <section class="pp-sec"><div class="cd-bh"><span class="cd-bi">${sv('palette',20)}</span><div><b>Topics &amp; interests <em>(up to 10)</em></b><small>Help people understand what you&rsquo;re interested in.</small></div></div><div class="pp-tps2" id="pptp">${ppTopics()}</div></section>`;
+ else if(PTAB==='links')body=`<section class="pp-sec"><div class="cd-bh"><span class="cd-bi">${sv('link',20)}</span><div><b>Links &amp; social</b><small>These power the icon buttons on your profile. Leave any blank to hide it.</small></div></div><div class="t-g2 pp-g">${ppF('pli','linkedin','LinkedIn',{icon:'li',opt:1,ph:'linkedin.com/in/you',max:200})}${ppF('plx','x','X (Twitter)',{icon:'x',opt:1,ph:'@handle or x.com/you',max:200})}${ppF('plw','website','Website',{icon:'globe',opt:1,ph:'yourcompany.com',max:200})}${ppF('plk','calendar','Booking link',{icon:'cal',opt:1,ph:'cal.com/you',max:200})}${ppF('ple','email','Contact email',{icon:'mail',opt:1,ph:'name@company.com',type:'email',max:120})}${ppF('plp','phone','Phone',{icon:'phone',opt:1,ph:'+44 7700 900000',type:'tel',max:30})}</div><p class="cd-help">Email and phone go only into the contact file people save. They are never shown as text on your profile.</p></section>`;
+ else if(PTAB==='look')body=`<section class="pp-sec"><div class="cd-bh"><span class="cd-bi">${sv('palette',20)}</span><div><b>Card style</b><small>The same style is used on your card and public profile.</small></div></div><div class="cd-styles">${Object.entries(THEMES).map(([k,v])=>`<button type="button" class="cd-sty ${u.theme===k?'on':''}" aria-pressed="${u.theme===k}" onclick="ppTheme('${k}')"><span style="background:${v.bg}">${u.theme===k?`<i>${sv('check',12,'#fff',3.2)}</i>`:''}</span><b>${v.n}</b><small>${esc(v.d||'')}</small></button>`).join('')}</div></section>
+  <section class="pp-sec"><div class="cd-bh"><span class="cd-bi">${sv('eye',20)}</span><div><b>What visitors see</b><small>Choose which details appear on your public profile.</small></div></div><div class="pp-shw">${[['bio','Bio'],['loc','Location'],['co','Company'],['topics','Topics &amp; interests']].map(([k,l])=>`<label class="t-tog"><input type="checkbox" ${PP.show[k]!==false?'checked':''} onchange="ppShow('${k}',this.checked)"><span class="t-sw"></span><span><b>${l}</b></span></label>`).join('')}</div></section>`;
+ else body=`<section class="pp-sec"><div class="cd-bh"><span class="cd-bi">${sv('search',20)}</span><div><b>Search preview</b><small>How your profile can appear in Google and when shared.</small></div></div><div class="pp-gs" id="ppgs">${ppSnippet()}</div>
+  <label class="x-f" style="margin-top:14px"><span class="cd-bl">Search description <small><b id="ppdc">${PP.seoDesc.length}</b>/160</small></span><textarea id="ppd" maxlength="160" rows="3" placeholder="Leave blank to use your bio" oninput="ppSet('seoDesc',this.value)">${esc(PP.seoDesc)}</textarea></label>
+  <label class="t-tog" style="margin-top:12px"><input type="checkbox" ${PP.noindex?'':'checked'} onchange="ppSet('noindex',!this.checked)"><span class="t-sw"></span><span><b>Allow search engines to show my profile</b><small>Turn off to ask Google and Bing not to index your page.</small></span></label></section>`;
+ return shell('pub',`<div class="t-head"><div><div class="t-eye">Public profile</div><h1 class="t-h1">Your professional profile</h1><p class="t-sub">This is what people see when you share your Introthread link or QR code.</p></div><a href="/${esc(u.handle)}" class="t-how" target="_blank" rel="noopener">${sv('eye',18)} View as visitor</a></div>
+ <div class="pp-grid"><div class="pp-pv" id="ppprev">${ppCard(ppUser())}</div>
+ <div class="pp-ed"><div class="pp-tabbar"><nav class="cd-tabs pp-tabs" role="tablist" aria-label="Profile sections">${tabs.map(([k,l])=>`<button type="button" role="tab" aria-selected="${PTAB===k}" class="${PTAB===k?'on':''}" onclick="PTAB='${k}';window._keepScroll=true;render()">${l}</button>`).join('')}</nav><span class="pp-st ok" id="ppst" role="status" aria-live="polite">All changes saved</span></div><div class="d-box pp-box">${body}</div></div></div>
+ <div class="pp-bot"><section class="d-box"><div class="cd-bh"><span class="cd-bi">${sv('link',20)}</span><div><b>Profile link</b><small>Your unique Introthread link.</small></div></div><div class="cd-url"><input value="${esc(short)}" readonly aria-label="Your profile link"><button type="button" class="x-btn pp-copy" onclick="copy('${url}','Link copied')">${sv('copy',17)} Copy link</button></div></section>
+ <section class="d-box"><div class="cd-bh"><span class="cd-bi">${sv('hub',20)}</span><div><b>Share options</b><small>Choose how people can find and connect with you.</small></div></div><div class="pp-so"><button type="button" class="on" onclick="tapQR()">${sv('qr',19)} QR code</button><button type="button" onclick="shareNative()">${sv('link',19)} Link</button><button type="button" onclick="tapNFC()">${sv('nfc',19)} NFC card</button></div></section>
+ <section class="d-box"><div class="cd-bh"><span class="cd-bi">${sv('eye',20)}</span><div><b>Profile visibility</b><small>Control who can view your public profile.</small></div></div><label class="t-tog"><input type="checkbox" ${pub?'checked':''} onchange="cdVis(this.checked)" aria-label="Public profile"><span class="t-sw"></span><span><b>${pub?'Public profile':'Private profile'}</b><small>${pub?'Allow anyone with your link or QR code to view your profile.':'Only you can see your profile right now.'}</small></span></label></section></div>`)}
+/* public page: apply profile SEO settings */
+const _vPub11=vPublic;vPublic=function(hd){const out=_vPub11(hd);setTimeout(()=>{try{const u=DB.users.find(x=>x.handle===String(hd).toLowerCase());if(u&&!(u.links&&u.links.hidden)){const L=u.links||{};document.title=`${u.name}${u.role?' - '+u.role:''}${u.company?' at '+u.company:''} | Introthread`;const d=document.querySelector('meta[name="description"]');if(d)d.setAttribute('content',(L.seoDesc||u.bio||('Connect with '+u.name+' on Introthread.')).slice(0,160));let r=document.querySelector('meta[name="robots"]');if(L.noindex){if(!r){r=document.createElement('meta');r.name='robots';document.head.appendChild(r)}r.content='noindex'}else if(r)r.remove()}}catch(_){}},0);return out};
+const _cdSave11=cdSave;cdSave=async function(e){const r=await _cdSave11.call(this,e);PP=null;return r};
+
 </script>
 </body>
 </html>
