@@ -2815,6 +2815,13 @@ html{-webkit-text-size-adjust:100%;text-size-adjust:100%;touch-action:manipulati
 .th-fuw small{white-space:normal;overflow:visible}
 .th-grid .d-sh b,.th-grid .d-sh a{white-space:nowrap}
 .th-grid .d-sh{gap:10px}.th-grid .d-sh b{font-size:17px}.th-grid .d-sh a{font-size:13px}
+
+/* v13 Public profile: match design */
+.pp-tabbar{display:flex;align-items:center;gap:12px;flex-wrap:nowrap}
+.pp-tabbar .pp-tabs{flex:1;min-width:0;flex-wrap:nowrap!important;overflow-x:auto!important}
+.pp-tabbar .pp-tabs button{white-space:nowrap;padding-left:14px;padding-right:14px}
+.pp-tabbar>*:not(.pp-tabs){flex:none;white-space:nowrap}
+.pp-so button{white-space:nowrap;padding:0 10px}
 </style>
 </head>
 <body><a href="#root" class="x-skip">Skip to content</a>
@@ -6716,6 +6723,8 @@ const _tapMode35=tapMode;tapMode=function(m){_tapMode35(m);const f=document.quer
 const _nt35=newThread;newThread=function(e){const f=document.querySelector('.t-form');if(f&&f.classList.contains('q')){const te=$('#te'),tp=$('#tph');const v=(te&&te.value||'').trim();if(v&&!v.includes('@')&&/^[+\d][\d\s()-]{5,}$/.test(v)&&tp){tp.value=v;te.value=''}}return _nt35.call(this,e)};
 
 const _gcal11=gcalPanel;gcalPanel=function(){return _gcal11.apply(this,arguments).replace('oauth(\'Google\',1)">Connect</button>','oauth(\'Google\',1)">Connect calendar</button>')};
+
+const _vProfile13=vProfile;vProfile=function(){return _vProfile13.apply(this,arguments).replace(/Suggest with AI/g,'Generate with AI')};
 </script>
 </body>
 </html>
