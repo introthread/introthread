@@ -6958,8 +6958,14 @@ const _stMan26=stManage;stManage=async function(){if(!(cloud()&&IT_SV.pay&&isPro
 /* ===== v26b Paystack: refresh plan and receipts from the server (Billing reads prefs.billing) ===== */
 async function itProfReload(){try{const u=me();if(!u||!cloud())return false;const {data}=await SB.from('profiles').select('plan,prefs').eq('id',u.id).single();if(!data)return false;u.plan=data.plan||u.plan;u.prefs=data.prefs||u.prefs;try{save()}catch(e){}window._keepScroll=true;render();return true}catch(e){return false}}
 let IT_SYNCED=false;
-async function itPaySync(force){if(IT_SYNCED&&!force)return;IT_SYNCED=true;const s=await itStatus();if(!s||!s.pay||!cloud())return;const r=await itApi('pay-sync',{});if(r&&r.synced)await itProfReload();return r}
+async function itPaySync(force){if(IT_SYNCED&&!force)return;IT_SYNCED=true;const s=await itStatus();if(!s||!s.pay||!cloud())return null;const r=await itApi('pay-sync',{});if(r&&r.synced)await itProfReload();return r}
 (function(){let n=0;const t=()=>{if(me()&&cloud())return itPaySync();if(n++<60)setTimeout(t,500)};setTimeout(t,1500)})();
+
+/* v26c: "Check for payments" in Billing, with a clear result */
+async function itPayCheck(b){if(b){b.disabled=true;b.textContent='Checking...'}const r=await itPaySync(true);if(b){b.disabled=false;b.textContent='Check for payments'}
+ if(!r)return toast('Card payments are not switched on yet.');if(r.synced)return toast('Payment found. Pro is on and your receipt is below.');
+ toast(r.reason==='no_customer'?'No Paystack payments found for this email yet.':r.error?('Could not check payments ('+r.error+'). Try again in a minute.'):'No completed payments found yet.')}
+const _bInvBox26=bInvoicesBox;bInvoicesBox=function(b){const h=_bInvBox26.apply(this,arguments);if(!(cloud()&&IT_SV.pay))return h;return h+'<div class="it-ai" style="margin-top:12px"><button type="button" class="btn secondary sm" onclick="itPayCheck(this)">Check for payments</button><small>Paid but no receipt? This checks Paystack again.</small></div>'};
 </script>
 </body>
 </html>
