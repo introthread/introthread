@@ -3224,7 +3224,7 @@ function exportMine(){const data={profile:me(),threads:myThreads(),rooms:myRooms
 function delAccount(){if(!confirm('Delete your account and your side of every Thread?'))return;const id=DB.session;DB.threads=DB.threads.filter(t=>t.ownerId!==id);DB.rooms=DB.rooms.filter(r=>r.ownerId!==id);DB.users=DB.users.filter(u=>u.id!==id);DB.session=null;save();toast('Account deleted');go('#/')}
 
 /* ---------- public profile & recipient view ---------- */
-function vPublic(h){const u=DB.users.find(x=>x.handle===h);if(!u)return vNotFound(h);
+function vPublic(h){h=String(h||'').toLowerCase();const u=DB.users.find(x=>String(x.handle||'').toLowerCase()===h);if(!u)return vNotFound(h);
  const L=u.links||{};return`<div class="pub"><div class="pubcard"><div class="center" style="margin-bottom:22px">${logo()}</div>${bizCard(u)}
  <div class="card pad-lg" style="margin-top:18px">${u.bio?`<p style="margin:0 0 16px;line-height:1.6">${esc(u.bio)}</p>`:''}<div class="stack" style="gap:8px">${L.linkedin?`<a class="btn secondary block" href="https://${esc(L.linkedin.replace(/^https?:\/\//,''))}" target="_blank" rel="noopener">${ic('link',16)} LinkedIn</a>`:''}${L.website?`<a class="btn secondary block" href="https://${esc(L.website.replace(/^https?:\/\//,''))}" target="_blank" rel="noopener">${ic('globe',16)} Website</a>`:''}${L.calendar?`<a class="btn secondary block" href="https://${esc(L.calendar.replace(/^https?:\/\//,''))}" target="_blank" rel="noopener">${ic('calendar',16)} Book a meeting</a>`:''}<button class="btn secondary block" onclick="vcard('${u.id}')">${ic('user',16)} Save contact</button></div></div>
  <div class="card pad-lg" style="margin-top:18px;border:2px solid var(--brand)"><div class="eyebrow">Just met ${esc(u.name.split(' ')[0])}?</div><h3 style="margin:6px 0 4px;letter-spacing:-.5px">Start a Thread</h3><p class="small muted" style="margin:0 0 14px">You'll both get a shared record of where you met, and one question: what's next? No app needed.</p>
@@ -4263,7 +4263,7 @@ function vSettings(){const u=me();
 /* ===== v14 Public card page (design: Tap to Thread Profile Card) ===== */
 function pcVcf(id){const u=DB.users.find(x=>x.id===id);if(!u)return;const L=u.links||{};const v=['BEGIN:VCARD','VERSION:3.0','FN:'+u.name,u.role?'TITLE:'+u.role:'',u.company?'ORG:'+u.company:'',L.email?'EMAIL:'+L.email:'',L.phone?'TEL:'+L.phone:'',u.city?'ADR:;;;'+u.city+';;;':'','URL:'+profileUrl(u),'END:VCARD'].filter(Boolean).join('\n');const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([v],{type:'text/vcard'}));a.download=(u.handle||'contact')+'.vcf';document.body.appendChild(a);a.click();a.remove();toast('Contact saved')}
 const _vPub14=vPublic;
-vPublic=function(hd){const h=String(hd).toLowerCase();const u=DB.users.find(x=>x.handle===h);const mine=me()&&u&&me().id===u.id;const prev=_vPub14(hd);
+vPublic=function(hd){const h=String(hd).toLowerCase();const u=DB.users.find(x=>String(x.handle||'').toLowerCase()===h);const mine=me()&&u&&me().id===u.id;const prev=_vPub14(hd);
  if(!u||(u.links&&u.links.hidden&&!mine))return prev;
  const t=THEMES[u.theme]||THEMES.midnight,L=u.links||{},S=L.show||{},f=esc((u.name||'').split(' ')[0]||'them');const site=(L.website||'').replace(/^https?:\/\//,'').replace(/\/$/,'');
  const li=L.linkedin&&cdHref(L.linkedin),xx=L.x&&cdHref(/^@/.test(L.x)?'x.com/'+L.x.slice(1):L.x),cal=L.calendar&&cdHref(L.calendar),web=L.website&&cdHref(L.website),mail=L.email&&'mailto:'+L.email;
