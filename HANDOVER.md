@@ -192,6 +192,13 @@ Tap -> Thread -> one question, "What's next?". Answers stay sealed until both pe
   - `supabase/migrations/012_audit_screen.sql` (NOT YET RUN): triggers that block UPDATE, DELETE and TRUNCATE on audit_log for everyone; drops the old "staff write audit" policy so entries can only be written by the checked admin functions through `audit()` (staff can no longer insert made-up rows from the browser); indexes; `admin_log` also accepts `audit.export`; `audit_category()`; `admin_audit2` (server-side filters, paging, readable targets, counts, staff list). Without 012 the page filters the newest 1,000 entries in the browser and the export is not recorded.
   - Mobile checked with 390px Playwright screenshots (cards, table cards, details panel).
 
+## Where and when you met (21 Oct 2026, after v43)
+- Every new Thread saved from the Tap form (typed, QR scan, business card, paste, contacts) records the exact save time (`other.at`, ISO) and, with the phone's permission, location (`other.geo` = lat, lng, accuracy in metres, fix time, place name). Stored inside `where_met` with the other extras (`tPack`/`tMeta` wrappers, keys `at` and `geo`), so no schema change.
+- Place name comes from OpenStreetMap Nominatim reverse geocoding (browser fetch, low volume). Needs HTTPS (live is fine).
+- Thread page shows "Where and when you met" (time with seconds and time zone, event or place typed, place name, coordinates, accuracy, Open in Maps). CSV export adds the time and location to the Note column.
+- Settings > Your data and privacy has "Save where I meet people" (profiles.prefs.geo; on by default, the phone still asks permission). Only the owner's own location is recorded, never the other person's.
+- Not covered: Threads created by the other person from your public card or Event mode QR (their device, not yours). The privacy policy should mention location data before launch.
+
 ## Honest limits to keep in mind
 - LinkedIn does not let apps read another person's profile from a username. A LinkedIn link gives the profile URL and a best-guess name only; email, phone, title and company must come from paste, QR vCard, business card or contacts.
 - Business card reading needs internet the first time (downloads the text reader, about 10 to 20 seconds on mobile data); the photo itself stays on the device. Handwritten or very stylised cards may misread, which is why the review step exists.

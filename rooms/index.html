@@ -2665,6 +2665,11 @@ button.rm-c{cursor:pointer;transition:border-color .15s,box-shadow .15s}button.r
  .x-mi h1,.x-ftitle,.x-side h1,.x-eye{overflow-wrap:anywhere}
  .x-mi .row,.x-mi .between{flex-wrap:wrap;gap:4px 12px;min-width:0}}
 
+/* where and when you met */
+.geo-b{margin:16px 0;padding:16px 18px;border:1px solid #e4e7ec;border-radius:16px;background:#fff}.geo-h{display:flex;align-items:center;gap:8px;color:#1f5eff;margin-bottom:8px}.geo-h b{color:var(--ink,#101828);font-size:15px}
+.geo-b dl{margin:0;display:grid;gap:8px}.geo-b dt{font-size:12.5px;color:#5b6478}.geo-b dd{margin:2px 0 0;font-size:14px;overflow-wrap:anywhere}.geo-c{font-family:ui-monospace,monospace;font-size:13px}.geo-b small{color:#5b6478}.geo-no{color:#5b6478}
+.geo-l{display:inline-flex;align-items:center;gap:6px;margin-top:10px;color:#1748d6;font-weight:600;font-size:14px;text-decoration:none}.geo-set{margin-bottom:12px}
+
 </style>
 </head>
 <body><a href="#root" class="x-skip">Skip to content</a>
@@ -6364,6 +6369,37 @@ function sfWhen(t){if(!t)return `<span class="sf-la none">Never signed in</span>
  const fresh=ms<15*6e4;return `<span class="sf-la${fresh?' on':''}" title="Last sign-in: ${esc(full)}">${fresh?'<i aria-hidden="true"></i>':''}${esc(rel)}</span>${dd>=1&&dd<7?`<small>${esc(fmtD(t))}</small>`:''}`}
 
 if(typeof closeModal==='function'){const _cmPc=closeModal;closeModal=function(){const m=document.getElementById('modal');if(m)m.classList.remove('pc-host');return _cmPc.apply(this,arguments)}}
+
+/* ==== Where and when you met: exact time and (with permission) location on every new Thread ==== */
+const geoOn=()=>{const u=me();return !(u&&u.prefs&&u.prefs.geo===false)&&typeof navigator!=='undefined'&&'geolocation' in navigator};
+function geoGet(){return new Promise(res=>{if(!geoOn())return res(null);let done=false;const fin=v=>{if(!done){done=true;res(v)}};setTimeout(()=>fin(null),12000);
+ try{navigator.geolocation.getCurrentPosition(p=>fin({lat:+p.coords.latitude.toFixed(6),lng:+p.coords.longitude.toFixed(6),acc:Math.round(p.coords.accuracy||0),fix:new Date(p.timestamp||Date.now()).toISOString()}),()=>fin(null),{enableHighAccuracy:true,timeout:10000,maximumAge:30000})}catch(_){fin(null)}})}
+async function geoPlace(g){try{const r=await fetch(`https://nominatim.openstreetmap.org/reverse?format=jsonv2&zoom=18&lat=${g.lat}&lon=${g.lng}`,{headers:{'Accept-Language':'en'}});if(!r.ok)return null;const d=await r.json(),a=d.address||{};
+ const parts=[d.name||a.amenity||a.building||a.shop||a.office||a.tourism||a.leisure,a.road,a.suburb||a.neighbourhood||a.quarter,a.city||a.town||a.village||a.county,a.country].filter(Boolean);return [...new Set(parts)].slice(0,4).join(', ')||d.display_name||null}catch(_){return null}}
+/* geo and exact time travel inside where_met with the other extras */
+const _tPackG=tPack;tPack=function(where,meta){const base=_tPackG(where,meta);const m={};if(meta&&meta.geo)m.geo=meta.geo;if(meta&&meta.at)m.at=meta.at;if(!Object.keys(m).length)return base;
+ const mm=base.match(/\s*@@(\{.*\})\s*$/);if(mm){let o={};try{o=JSON.parse(mm[1])}catch(_){}return base.slice(0,mm.index)+' @@'+JSON.stringify(Object.assign(o,m))}return base+' @@'+JSON.stringify(m)};
+const _tMetaG=tMeta;tMeta=function(t){if(t&&!t._mx){const mm=String(t.where||'').match(/\s*@@(\{.*\})\s*$/);if(mm){try{const o=JSON.parse(mm[1]);t.other=t.other||{};if(o.geo)t.other.geo=o.geo;if(o.at)t.other.at=o.at}catch(_){}}}return _tMetaG.apply(this,arguments)};
+const _ntGeo=newThread;newThread=function(e){const at=new Date().toISOString();const gp=geoGet();const before=new Set((DB.threads||[]).map(t=>t.id));const r=_ntGeo.apply(this,arguments);
+ let n=0;const iv=setInterval(async()=>{const t=(DB.threads||[]).find(x=>!before.has(x.id)&&x.ownerId===DB.session);if(!t){if(++n>60)clearInterval(iv);return}clearInterval(iv);
+  t.other=t.other||{};t.other.at=at;const g=await gp;await new Promise(z=>setTimeout(z,1500));if(g){t.other.geo=g;const pl=await geoPlace(g);if(pl)t.other.geo.place=pl}
+  if(cloud())await upd('threads',t.id,{where_met:tPack(t.where,Object.assign({},t.other,{src:t.src}))});save();if(String(location.pathname).includes(t.id))render()},150);return r};
+function geoWhenTxt(iso){const d=new Date(iso);return d.toLocaleString('en-GB',{weekday:'short',day:'numeric',month:'short',year:'numeric',hour:'2-digit',minute:'2-digit',second:'2-digit'})+' '+(()=>{try{return new Intl.DateTimeFormat('en-GB',{timeZoneName:'short'}).formatToParts(d).find(x=>x.type==='timeZoneName').value}catch(_){return ''}})()}
+function geoBlock(t){const o=t.other||{},g=o.geo,at=o.at||(t.createdAt?new Date(t.createdAt).toISOString():null);if(!at&&!g)return'';
+ const maps=g?`https://www.google.com/maps/search/?api=1&query=${g.lat},${g.lng}`:'';
+ return `<section class="geo-b" aria-label="Where and when you met"><div class="geo-h">${sv('pin',18)}<b>Where and when you met</b></div>
+ <dl>${at?`<div><dt>Time</dt><dd>${esc(geoWhenTxt(at))}</dd></div>`:''}${t.where&&t.where!=='In person'?`<div><dt>Event or place you entered</dt><dd>${esc(t.where)}</dd></div>`:''}
+ ${g?`<div><dt>Location</dt><dd>${g.place?esc(g.place)+'<br>':''}<span class="geo-c">${g.lat.toFixed(5)}, ${g.lng.toFixed(5)}</span> <small>(accurate to about ${fmtN(g.acc)} m)</small></dd></div>`:`<div><dt>Location</dt><dd class="geo-no">Not recorded${geoOn()?'. Allow location when your phone asks, next time you save a Thread.':'. Turned off in Settings.'}</dd></div>`}</dl>
+ ${g?`<a class="geo-l" href="${maps}" target="_blank" rel="noopener">${sv('ext',14)} Open in Maps</a>`:''}</section>`}
+const _vThreadGeo=vThread;vThread=function(id){const h=_vThreadGeo.apply(this,arguments);const t=findThread(id);if(!t)return h;try{tMeta(t)}catch(_){}const b=geoBlock(t);if(!b)return h;const i=h.indexOf('<div class="rep-l">');return i>=0?h.slice(0,i)+b+h.slice(i):h+b};
+/* exports: add exact time and location columns */
+if(typeof bExportThreads==='function'){const _bx=bExportThreads;bExportThreads=function(){const T=(typeof myThreads==='function'?myThreads():[]);T.forEach(t=>{try{tMeta(t)}catch(_){}});const origNote=T.map(t=>t.note);
+ T.forEach(t=>{const o=t.other||{},g=o.geo;const extra=[o.at?'Met at '+geoWhenTxt(o.at):'',g?`Location: ${g.place?g.place+' ':''}(${g.lat}, ${g.lng}, about ${g.acc} m)`:''].filter(Boolean).join(' | ');if(extra)t.note=(t.note?t.note+' | ':'')+extra});
+ try{return _bx.apply(this,arguments)}finally{T.forEach((t,i)=>t.note=origNote[i])}}}
+/* setting: Settings > privacy card gets a switch */
+const _vSetGeo=vSettings;vSettings=function(){const h=_vSetGeo.apply(this,arguments);const u=me();if(!u)return h;const on=!(u.prefs&&u.prefs.geo===false);
+ const row=`<label class="t-tog st-row geo-set"><input type="checkbox" ${on?'checked':''} onchange="setPref('geo',this.checked)"><span class="t-sw"></span><span><b>Save where I meet people</b><small>When you save a new Thread, record the exact time and your phone's location (with your permission). Only your own location, never the other person's. The place name is looked up with OpenStreetMap.</small></span></label>`;
+ return h.replace('<div class="priv-acts">',row+'<div class="priv-acts">')};
 </script>
 </body>
 </html>
