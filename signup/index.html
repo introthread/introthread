@@ -2678,6 +2678,12 @@ button.rm-c{cursor:pointer;transition:border-color .15s,box-shadow .15s}button.r
 
 @media (max-width:600px){.sec-row{flex-wrap:wrap;gap:8px}.sec-row .pf-btn{white-space:normal}.sec-row>div{flex:1 1 100%}}
 
+/* notifications feed */
+.nf-m{max-width:460px}.nf-l{list-style:none;margin:12px 0 0;padding:0;max-height:60vh;overflow:auto}.nf-l li button{display:flex;gap:12px;align-items:flex-start;width:100%;text-align:left;padding:12px 8px;border:0;border-top:1px solid #f2f4f7;background:none;cursor:pointer;font:inherit;color:inherit;border-radius:10px}.nf-l li button:hover{background:#f8faff}.nf-l li.new button{background:#f5f8ff}
+.nf-i{flex:none;display:inline-flex;align-items:center;justify-content:center;width:32px;height:32px;border-radius:50%}.nf-tx{flex:1;min-width:0;font-size:14px;line-height:1.4}.nf-tx small{display:block;color:#667085;font-size:12px;margin-top:2px}.nf-dot{flex:none;width:8px;height:8px;border-radius:50%;background:#1f5eff;margin-top:6px}
+.nf-empty{display:flex;flex-direction:column;align-items:center;gap:6px;padding:28px 8px;color:#475467;text-align:center}.nf-empty small{color:#667085}.nf-set{display:block;margin-top:12px;text-align:center;color:#1748d6;font-weight:600;font-size:14px}
+.t-bell{position:relative}.t-bell .nf-n{position:absolute;top:2px;right:2px;min-width:18px;height:18px;padding:0 5px;border-radius:999px;background:#f04438;color:#fff;font:700 11px/18px var(--xss,sans-serif);font-style:normal;text-align:center;box-sizing:border-box}
+
 </style>
 </head>
 <body><a href="#root" class="x-skip">Skip to content</a>
@@ -6453,6 +6459,32 @@ const _renderSec=render;render=function(){const pa=location.pathname||'';if(MFAG
 (async()=>{for(let i=0;i<60&&!(typeof cloud==='function'&&cloud());i++)await new Promise(r=>setTimeout(r,250));mfaCheck()})();
 if(SB&&SB.auth&&SB.auth.onAuthStateChange)SB.auth.onAuthStateChange((ev)=>{if(ev==='SIGNED_IN')setTimeout(mfaCheck,300)});
 const _stOtherSec=stOther;stOther=function(u,t){if(t==='security')return secView(u);return _stOtherSec.apply(this,arguments)};
+
+/* ==== Notifications: a real in-app feed in the bell (confirmed, they answered, matched, follow-up due, fading) with unread count ==== */
+const nfKey=()=>'it_nf_read_'+(DB.session||'x');
+function nfRead(){try{const v=localStorage.getItem(nfKey());if(v==null){const n=Date.now()-6e4;localStorage.setItem(nfKey(),String(n));return n}return +v||0}catch(_){return 0}}
+function nfFeed(){const u=me();if(!u)return[];const P=u.prefs||{},on=k=>P[k]!==false,out=[],now=Date.now();
+ myThreads().forEach(t=>{const nm=(t.other&&t.other.name)||'Someone',f=esc(nm.split(' ')[0]),st=threadState(t),E=t.events||[];
+  if(on('inappConfirm'))E.filter(e=>e.k==='confirm'&&!/Verified by both/.test(e.text||'')).forEach(e=>out.push({at:e.at,t,ic:'check',tone:'g',txt:`<b>${f}</b> confirmed your Thread.`}));
+  if(on('inappAnswer'))E.filter(e=>e.k==='answer'&&!/^You /.test(e.text||'')).forEach(e=>out.push({at:e.at,t,ic:'thread',tone:'b',txt:t.mine?`<b>${f}</b> answered. Your answers are revealed.`:`<b>${f}</b> answered &ldquo;What&rsquo;s next?&rdquo;. Answer to see both.`}));
+  if(on('inappMatch')&&st==='matched'){const a=Math.max(...E.filter(e=>e.k==='answer').map(e=>e.at||0),t.createdAt||0);out.push({at:a,t,ic:'spark',tone:'g',txt:`You and <b>${f}</b> matched. Send the follow-up.`});
+   const fu=E.some(e=>e.k==='followup');if(!fu&&now-a>DAY)out.push({at:a+DAY,t,ic:'clock',tone:'o',txt:`Follow-up due with <b>${f}</b>. It has been a day since you matched.`})}
+  if(on('inappNudge')&&st==='open'&&!t.mine&&pulse(t)<.35)out.push({at:(t.createdAt||0)+Math.round(7*DAY*.65),t,ic:'clock',tone:'o',txt:`Your Thread with <b>${f}</b> is fading. Answer &ldquo;What&rsquo;s next?&rdquo;.`});
+  if(on('inappNudge')&&st==='pending'&&now-(t.createdAt||0)>DAY)out.push({at:(t.createdAt||0)+DAY,t,ic:'mail',tone:'m',txt:`<b>${f}</b> has not confirmed yet. Share your link again.`})});
+ return out.filter(x=>x.at&&x.at<=now+6e4).sort((a,b)=>b.at-a.at).slice(0,40)}
+const nfUnread=()=>{const r=nfRead();return nfFeed().filter(x=>x.at>r).length};
+showNudges=function(){const L=nfFeed(),r=nfRead();try{localStorage.setItem(nfKey(),String(Date.now()))}catch(_){}
+ modal(`<div class="cap-m nf-m"><div class="row between"><h3>Notifications</h3><button class="x" aria-label="Close" onclick="closeModal();nfBadge()">&times;</button></div>
+ ${L.length?`<ul class="nf-l">${L.map(x=>`<li class="${x.at>r?'new':''}"><button type="button" onclick="closeModal();nfBadge();go('/app/thread/${x.t.id}')"><span class="nf-i t-${x.tone}w" aria-hidden="true">${sv(x.ic,16)}</span><span class="nf-tx">${x.txt}<small>${ago(x.at)}</small></span>${x.at>r?'<i class="nf-dot" aria-label="New"></i>':''}</button></li>`).join('')}</ul>`:`<div class="nf-empty">${sv('bell',22)}<b>You're all caught up</b><small>Confirmations, answers, matches and follow-ups appear here.</small></div>`}
+ <a class="nf-set" href="/app/settings?tab=notifications" onclick="closeModal()">Notification settings</a></div>`);nfBadge()};
+function nfBadge(){const n=nfUnread();document.querySelectorAll('.t-bell').forEach(b=>{b.querySelectorAll('i,em').forEach(x=>x.remove());b.setAttribute('aria-label',n?`Notifications, ${n} new`:'Notifications');if(n)b.insertAdjacentHTML('beforeend',`<em class="nf-n">${n>9?'9+':n}</em>`)})}
+const _renderNf=render;render=function(){const r=_renderNf.apply(this,arguments);try{if(me()&&(location.pathname||'').startsWith('/app'))nfBadge()}catch(_){}return r};
+/* settings: in-app switches per event, honest email note */
+const _bNotifsNf=bNotifs;bNotifs=function(u){const P=u.prefs||{};const t=(k,l,d)=>bTog(P[k]!==false,l,d,`setPref('${k}',this.checked)`);
+ let h=_bNotifsNf.apply(this,arguments);
+ h=h.replace(/(\$\{bSec\('bell')|<button type="button" class="t-how sm" onclick="showNudges\(\)">Open notifications<\/button>/,m=>m);
+ const extra=t('inappConfirm','When someone confirms a Thread','Shown in the bell.')+t('inappAnswer','When they answer &ldquo;What&rsquo;s next?&rdquo;','Shown in the bell. Their answer stays private until you answer too.')+t('inappMatch','When you match, and when a follow-up is due','Shown in the bell.');
+ const i=h.indexOf('<div class="bl-data"><div><b>Preview</b>');return i>=0?h.slice(0,i)+extra+h.slice(i):h};
 </script>
 </body>
 </html>
