@@ -1718,6 +1718,37 @@ html,body,button,input,select,textarea{font-family:var(--xss)}
 @media (max-width:1100px){.td-grid{grid-template-columns:1fr}.td-head{flex-direction:column}.td-acts{align-items:flex-start}.td-btns{justify-content:flex-start}}
 @media (max-width:700px){.td-two{grid-template-columns:1fr;text-align:left}.td-lock:before,.td-lock:after{display:none}.td-lock{display:flex;align-items:center;gap:10px;text-align:left}.td-lock span{margin:0}.td-who h1{font-size:25px}.td-dl,.td-opps,.td-ans{grid-template-columns:1fr}.td-room{grid-template-columns:64px minmax(0,1fr) 16px}.td-room em{display:none}.td-btns .t-how,.td-btns .x-btn{flex:1;justify-content:center}}
 
+/* v16 account menu */
+.sb-user{display:flex;align-items:center;gap:12px;width:100%;margin-top:14px;padding:10px;border:1px solid transparent;border-radius:12px;background:none;color:#e6ebf5;cursor:pointer;text-align:left;font-family:var(--xss);transition:background .15s,border-color .15s}
+.sb-user:hover,.sb-user[aria-expanded="true"]{background:rgba(255,255,255,.07);border-color:rgba(255,255,255,.12)}
+.sb-user:focus-visible{outline:2px solid #7aa2ff;outline-offset:2px}
+.sb-user .x-av{margin:0;flex:none;box-shadow:none}
+.sb-ui{flex:1;min-width:0}.sb-ui b{display:block;font-size:14.5px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.sb-ui small{display:block;font-size:12.5px;color:#97a2ba}
+.sb-chev{color:#97a2ba;transform:rotate(180deg);transition:transform .15s;display:grid}.sb-user[aria-expanded="true"] .sb-chev{transform:rotate(0)}
+.t-user[aria-expanded="true"] svg:last-child{transform:rotate(180deg)}
+.am{position:fixed;z-index:300;width:320px;max-width:calc(100vw - 16px);max-height:calc(100vh - 16px);overflow:auto;background:#fff;border:1px solid #e4e8f0;border-radius:16px;box-shadow:0 24px 60px -18px rgba(15,23,42,.35),0 4px 12px rgba(15,23,42,.06);font-family:var(--xss);padding:8px;animation:amIn .14s ease-out}
+.am.up{transform-origin:bottom left}.am.down{transform-origin:top right}
+@keyframes amIn{from{opacity:0;transform:scale(.97) translateY(-4px)}to{opacity:1;transform:none}}
+.am-h{display:flex;gap:12px;align-items:center;padding:10px 10px 12px}
+.am-h .x-av{margin:0;flex:none;box-shadow:none}
+.am-hi{min-width:0}.am-hi b{display:block;font-size:15.5px;font-weight:600;color:var(--xink);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.am-hi small{display:block;font-size:13px;color:var(--xmu);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.am-tags{display:flex;gap:6px;margin-top:7px;flex-wrap:wrap}
+.am-plan{display:inline-flex;align-items:center;gap:4px;font-size:11.5px;font-weight:600;padding:3px 8px;border-radius:99px;background:#f2f4f7;color:#475467}
+.am-plan.pro{background:#eef3ff;color:var(--xb)}
+.am-vis{display:inline-flex;align-items:center;gap:5px;font-size:11.5px;font-weight:600;padding:3px 8px;border-radius:99px;background:#e7f6ee;color:#0f8a57}
+.am-vis i{width:6px;height:6px;border-radius:50%;background:currentColor}.am-vis.off{background:#f2f4f7;color:#475467}
+.am-link{display:flex;align-items:center;gap:8px;margin:0 6px 6px;padding:8px 8px 8px 12px;border:1px solid #e4e8f0;border-radius:10px;background:#f8f9fb;font-size:13px;color:#344054}
+.am-link span{flex:1;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.am-link button{width:30px;height:30px;border:0;border-radius:7px;background:#fff;color:var(--xb);display:grid;place-items:center;cursor:pointer;box-shadow:0 1px 2px rgba(15,23,42,.08)}
+.am-g{border-top:1px solid #eef1f5;padding:6px 0}
+.am-it{display:flex;align-items:center;gap:12px;width:100%;height:40px;padding:0 12px;border:0;border-radius:9px;background:none;font:500 14.5px var(--xss);color:var(--xink);cursor:pointer;text-align:left}
+.am-it svg{color:#667085;flex:none}.am-it span{flex:1}
+.am-it:hover,.am-it:focus-visible{background:#f3f6ff;outline:none}.am-it:hover svg,.am-it:focus-visible svg{color:var(--xb)}
+.am-it em{font-style:normal;font-size:11.5px;font-weight:600;padding:2px 8px;border-radius:99px}.am-it em.up{background:#fff1ea;color:#d4501f}
+.am-out{color:#d14343}.am-out svg{color:#d14343!important}.am-out:hover,.am-out:focus-visible{background:#fdf0f0}
+@media (prefers-reduced-motion:reduce){.am{animation:none}}
+
 </style>
 </head>
 <body><a href="#root" class="x-skip">Skip to content</a>
@@ -3170,6 +3201,35 @@ function vThread(id){const t=findThread(id);if(!t||t.ownerId!==DB.session)return
  <div class="td-sec"><div class="td-sh"><b>Tags</b><button type="button" class="td-ed" onclick="tpEdit('${t.id}')">${sv('brief',14)} Edit</button></div><div class="td-tags">${tagChips(t)||''}<button type="button" class="td-add" onclick="tpEdit('${t.id}')">+ Add tag</button></div></div>
  <div class="td-sec"><div class="td-sh"><b>Timeline</b><select class="d7-sel" aria-label="Filter timeline" onchange="TDF=this.value;window._keepScroll=true;render()">${[['all','All activity'],['answers','Answers'],['fu','Follow-ups'],['notes','Notes']].map(([k,l])=>`<option value="${k}" ${TDF===k?'selected':''}>${l}</option>`).join('')}</select></div>${tl.length?`<ol class="td-tl">${tl.map(e=>{const[c]=tdIcon(e.k);return`<li class="${c}"><b>${esc(e.k==='note'?'Note added':e.text||'')}</b><small>${tdWhen(e.at)}</small></li>`}).join('')}</ol>`:'<p class="d-muted">Nothing here yet.</p>'}</div>
  <button type="button" class="td-del" onclick="delThread('${t.id}')">${sv('close',16)} Delete my side of this Thread</button></aside></div>`)}
+
+/* ===== v16 Account menu: one professional dropdown for the top bar and the sidebar footer ===== */
+function amClose(){const m=document.getElementById('acm');if(m)m.remove();document.querySelectorAll('[data-am]').forEach(b=>b.setAttribute('aria-expanded','false'));document.removeEventListener('keydown',amKey,true);document.removeEventListener('mousedown',amOut,true)}
+function amOut(e){const m=document.getElementById('acm');if(m&&!m.contains(e.target)&&!e.target.closest('[data-am]'))amClose()}
+function amKey(e){const m=document.getElementById('acm');if(!m)return;const it=[...m.querySelectorAll('[role="menuitem"]')];const i=it.indexOf(document.activeElement);
+ if(e.key==='Escape'){e.preventDefault();const t=document.querySelector('[data-am][aria-expanded="true"]');amClose();if(t)t.focus()}
+ else if(e.key==='ArrowDown'){e.preventDefault();(it[(i+1)%it.length]||it[0]).focus()}else if(e.key==='ArrowUp'){e.preventDefault();(it[(i-1+it.length)%it.length]||it[0]).focus()}
+ else if(e.key==='Tab'){amClose()}}
+function amGo(path,tab){amClose();if(tab){STAB=tab}go(path)}
+function acctMenu(btn,dir){const open=document.getElementById('acm');if(open){const same=btn&&btn.getAttribute('aria-expanded')==='true';amClose();if(same)return}
+ const u=me();if(!u)return;btn=btn||document.querySelector('.t-user');const pro=u.plan&&u.plan!=='Free';const pub=!(u.links&&u.links.hidden);
+ const it=(ic,l,act,o={})=>`<button type="button" role="menuitem" class="am-it ${o.cls||''}" onclick="${act}">${sv(ic,18)}<span>${l}</span>${o.badge?`<em class="${o.bc||''}">${o.badge}</em>`:''}${o.ext?sv('arrow',14):''}</button>`;
+ const m=document.createElement('div');m.id='acm';m.className='am';m.setAttribute('role','menu');m.setAttribute('aria-label','Account menu');
+ m.innerHTML=`<div class="am-h">${avatarC(u,48)}<div class="am-hi"><b>${esc(u.name||'')}</b><small>${esc(u.email||('introthread.com/'+u.handle))}</small><span class="am-tags"><span class="am-plan ${pro?'pro':''}">${pro?sv('spark',11)+' '+esc(u.plan):'Free plan'}</span><span class="am-vis ${pub?'':'off'}"><i></i>${pub?'Profile live':'Profile private'}</span></span></div></div>
+ <div class="am-link"><span>introthread.com/${esc(u.handle)}</span><button type="button" role="menuitem" aria-label="Copy my link" onclick="copy('${profileUrl(u)}','Link copied')">${sv('copy',15)}</button></div>
+ <div class="am-g">${it('user','My card',"amGo('/app/card')")}${it('globe','Public profile',"amGo('/app/profile')")}${it('eye','View as visitor',`amClose();window.open('/${esc(u.handle)}','_blank','noopener')`,{ext:1})}</div>
+ <div class="am-g">${it('gear','Account settings',"amGo('/app/settings','account')")}${it('shield','Privacy &amp; visibility',"amGo('/app/settings','privacy')")}${it('bell','Notifications',"amGo('/app/settings','notifications')")}${it('brief','Plan &amp; billing',"amGo('/app/settings','billing')",{badge:pro?'':'Upgrade',bc:'up'})}</div>
+ <div class="am-g">${it('mail','Help &amp; support',"amClose();location.href='mailto:hello@introthread.com?subject=Introthread%20support'")}${it('play','How Introthread works',"amClose();go('/how')")}</div>
+ <div class="am-g">${it('out','Log out',"amClose();logout()",{cls:'am-out'})}</div>`;
+ document.body.appendChild(m);btn.setAttribute('aria-expanded','true');
+ const r=btn.getBoundingClientRect(),W=m.offsetWidth,H=m.offsetHeight,vw=innerWidth,vh=innerHeight;let left,top;
+ if(dir==='up'){left=Math.max(8,Math.min(r.left,vw-W-8));top=Math.max(8,r.top-H-8)}else{left=Math.max(8,Math.min(r.right-W,vw-W-8));top=Math.min(r.bottom+8,vh-H-8);if(top<8)top=8}
+ m.style.left=left+'px';m.style.top=top+'px';m.classList.add(dir==='up'?'up':'down');
+ document.addEventListener('keydown',amKey,true);setTimeout(()=>document.addEventListener('mousedown',amOut,true),0);
+ const f=m.querySelector('[role="menuitem"]');if(f)f.focus({preventScroll:true})}
+window.addEventListener('resize',amClose);window.addEventListener('itroute',amClose);window.addEventListener('popstate',amClose);
+const _shell16=shell;shell=function(on,inner){let h=_shell16(on,inner);const u=me();if(!u)return h;const pro=u.plan&&u.plan!=='Free';
+ h=h.replace(/<div class="row" style="margin-top:14px;padding:8px">[\s\S]*?<\/button><\/div><\/aside>/,`<button type="button" class="sb-user" data-am aria-haspopup="menu" aria-expanded="false" onclick="acctMenu(this,'up')">${avatarC(u,40)}<span class="sb-ui"><b>${esc(u.name||'')}</b><small>${pro?esc(u.plan)+' plan':'Free plan'}</small></span><span class="sb-chev">${sv('chevd',16)}</span></button></aside>`);
+ h=h.replace('class="t-user" onclick="acctMenu()"','class="t-user" data-am aria-haspopup="menu" aria-expanded="false" onclick="acctMenu(this,\'down\')"');return h};
 
 </script>
 </body>
