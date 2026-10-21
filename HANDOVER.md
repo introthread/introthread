@@ -1,6 +1,6 @@
 # Introthread - handover for the next AI agent
 
-Last updated: 21 Oct 2026. Read this before making changes.
+Last updated: 21 Oct 2026 (capture v31). Read this before making changes.
 
 ## Where things are
 - Live site: https://www.introthread.com (apex redirects to www). Vercel deploys automatically from `main` of `introthread/introthread` (preset "Other", static).
@@ -38,16 +38,25 @@ Tap -> Thread -> one question, "What's next?". Answers stay sealed until both pe
   - Thread page shows tap-to-call phone and LinkedIn link; edit has phone (`#tep`); vCard and CSV include phone and LinkedIn.
   - Public card guest form has phone and LinkedIn; sign-up step 2 has a quick-fill textarea (`#suq`, `suQuickFill`).
 - LinkedIn follow-up prompt (this commit): when a capture fills the LinkedIn field but the form has no email and no phone, an amber prompt appears under the capture strip ("Ask for their email or phone now") with its own Email and Phone inputs (`#capae`, `#capap`) that write straight into `#te` / `#tph` (`capAsk`, `capAskSync`, `capAskClose`). It confirms "Added to the form. You can save the Thread." and has "Skip for now". It does not appear when the QR already carries an email or phone (e.g. a vCard).
+- Capture v31 (business card reader, richer QR/contacts, new capture UI):
+  - Capture strip redesigned (`capStrip`): a primary "Scan a business card" button plus three tiles (Scan QR, Paste link, Contacts). The old card button had no icon because `SV.photo` did not exist; added `SV.photo`, `SV.card`, `SV.paste`, `SV.chev`.
+  - Business card flow: `capCard(side)` opens a sheet (Take a photo / Choose from gallery, tips, privacy note) and warms the reader. `capCardRun` prepares the photo on a canvas (`capPrepCanvas`: scale to 1800px, grayscale, contrast stretch, auto-invert dark cards by centre brightness), runs Tesseract.js v5 (CDN, cached worker `capWorker`, page-seg mode 11 = sparse text, which reads two-column cards best), retries at 90/270/180 degrees when confidence is low, and shows step progress. Then `capReview` shows the card photo and editable fields for every detail, with "Add the back" (merges a second photo), "Retake", and "Show the text we read". `capReviewUse` fills the form.
+  - Card parser `parseCard` + `ocrFix`: fixes common OCR errors (split emails/websites across lines, "brightwave. co.uk", "linkedin.comyin/", "(at)", O/0 and l/1 in numbers, split P.O. Box numbers). Picks out name (scored, matched against email local part), job title, company (matched against email/website domain, company words, all caps), mobile and second phone (labels M/T/Tel/Mobile/Office/Fax; fax ignored; Kenyan and UK mobile patterns), emails, website, LinkedIn, social handle, address (P.O. Box, street words, cities, UK/US postcodes) and a short note from leftover lines (e.g. a tagline).
+  - Tested on four generated card photos (Kenya, UK two-column, US, dark card) with real Tesseract OCR: every field came out right.
+  - `parseContact` now also handles full vCard 2.1/3/4 (multiple TEL/EMAIL, CELL preferred, ADR, quoted-printable, NOTE, social URLs), MECARD with multiple numbers, BIZCARD, `tel:`, `sms:`, `mailto:`, `MATMSG`, and WhatsApp `wa.me` links. Signatures also pick up second phone, address and social.
+  - Contacts: `capContacts` asks for name, email, tel and address (whatever the phone supports) and fills second phone/email. Where the picker is not available (iPhone Safari by default) the Contacts tile opens `capContactsHelp`: share the contact as a .vcf file and choose it (`capVcfFile`), or paste.
+  - Tap form gained a "More details" section (`#capmore`): Second phone `#tp2`, Second email `#te2`, Website `#tws`, Social `#tso`, Address `#tad`. Card notes go into "One line to remember" `#tx`. These are stored in `where_met` via `tPack` (keys phone2, email2, website, address, social), shown on the Thread page (tap to call, mailto, website, Google Maps link), editable (second phone, website, address), and included in vCard and CSV exports.
 
 ## Honest limits to keep in mind
 - LinkedIn does not let apps read another person's profile from a username. A LinkedIn link gives the profile URL and a best-guess name only; email, phone, title and company must come from paste, QR vCard, business card or contacts.
+- Business card reading needs internet the first time (downloads the text reader, about 10 to 20 seconds on mobile data); the photo itself stays on the device. Handwritten or very stylised cards may misread, which is why the review step exists.
 - iPhone Safari hides the contact picker unless the Contact Picker API feature flag is turned on.
 
 ## Open items / next steps
 1. Agnes to paste the Supabase email templates (Magic Link and Confirm signup, code-based, keep code length 8) and configure Resend SMTP; then run a real end-to-end sign-up test with a real inbox.
 2. Real Google and Microsoft sign-in (Google sign-in is being tested with mkautospareske@gmail.com).
 3. Pro billing (currently simulated) and real outbound email sending.
-4. Agnes's on-phone test of capture: LinkedIn QR, business card, contacts. Fix anything she reports.
+4. Agnes's on-phone test of capture v31: business card (front and back), QR, paste, contacts / .vcf. Fix anything she reports. Real phone-size screenshots of v31 were not taken (needs approval to run the browser preview).
 5. Possible future: move phone/LinkedIn out of `where_met` into proper columns once schema changes are available (the assistant has row access only, no DDL).
 
 ## Testing approach used
