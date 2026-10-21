@@ -1125,6 +1125,45 @@ html,body,button,input,select,textarea{font-family:var(--xss)}
 .main>*{zoom:var(--z)}
 }}
 
+/* v7 Today dashboard */
+.d7-top{display:grid;grid-template-columns:minmax(0,1fr) 340px;gap:20px;align-items:start}
+.d7-top .d-main{display:grid;gap:18px;min-width:0}
+.d7-stats{grid-template-columns:repeat(3,1fr)!important}
+.d-stat-ic{width:60px;height:60px;border-radius:14px}
+.d-stat b{font-size:30px;font-weight:600}
+.d-stat em{font-style:normal;font-size:13px;font-weight:600;color:#12a065;margin-left:8px}
+.d-who b a{color:inherit;text-decoration:none}.d-who b a:hover{color:var(--xb)}
+.d7-bot{display:grid;grid-template-columns:1.05fr .97fr 1.1fr;gap:18px;margin-top:18px;align-items:stretch}
+.d7-qa{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.d-qi{display:flex;align-items:center;gap:12px;padding:12px 14px;border:1px solid var(--line);border-radius:12px;background:#fff;color:var(--xink);text-decoration:none;cursor:pointer;text-align:left;font:inherit;transition:border-color .15s,box-shadow .15s}
+.d-qi:hover{border-color:#c9d6f5;box-shadow:0 8px 18px -14px rgba(31,94,255,.6)}
+.d-qi>span:first-child{color:var(--xb);display:grid;place-items:center;flex:none}
+.d-qi b{display:block;font-size:14px;font-weight:600}.d-qi small{display:block;font-size:12.5px;color:var(--xmu);margin-top:1px}
+.d7-promo{position:relative;overflow:hidden;display:flex;gap:16px;padding:22px 24px;border-radius:18px;color:#fff;font-family:var(--xss);background:radial-gradient(60% 80% at 100% 100%,rgba(255,106,61,.75),transparent 62%),radial-gradient(50% 70% at 90% 0%,rgba(31,94,255,.35),transparent 70%),linear-gradient(135deg,#0b1430,#0a1020)}
+.d7-promo b{display:block;font-size:17px;font-weight:600;margin-bottom:10px}
+.d7-promo ul{list-style:none;margin:0 0 14px;padding:0;display:grid;gap:7px;font-size:14px}
+.d7-promo li{display:flex;align-items:center;gap:9px}
+.d7-promo li i{width:18px;height:18px;border-radius:5px;background:var(--xb);display:grid;place-items:center;flex:none}
+.d7-promo a{display:inline-flex;align-items:center;gap:8px;height:38px;padding:0 16px;border-radius:9px;border:1px solid rgba(255,255,255,.3);color:#fff;font-weight:600;font-size:14px;text-decoration:none}
+.d7-promo a:hover{background:rgba(255,255,255,.1)}
+.d7-emp{display:flex;gap:14px;align-items:flex-start}
+.d7-emp>span{width:52px;height:52px;border-radius:12px;background:#eef3ff;color:var(--xb);display:grid;place-items:center;flex:none}
+.d7-emp b{display:block;font-size:15px;color:var(--xink)}.d7-emp small{display:block;font-size:13px;color:var(--xmu);margin:3px 0 12px;line-height:1.45}
+.d7-sel{height:34px;border:1px solid var(--line);border-radius:9px;padding:0 10px;font:500 13px var(--xss);color:var(--xink);background:#fff;cursor:pointer}
+.d-chart.many small{font-size:10px}
+.fu-m h3{margin:18px 0 4px;font:600 19px var(--xss)}.fu-sub{margin:0 0 14px;color:var(--xmu);font-size:14px}
+.fu-opts{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:14px}
+.fu-opts label{cursor:pointer}.fu-opts input{position:absolute;opacity:0;width:1px;height:1px}
+.fu-opts span{display:flex;align-items:center;gap:9px;padding:11px 12px;border:1px solid var(--line);border-radius:10px;font:500 14px var(--xss);color:var(--xink)}
+.fu-opts span svg{color:var(--xmu)}
+.fu-opts input:checked+span{border-color:var(--xb);background:#eef3ff;box-shadow:0 0 0 1px var(--xb)}
+.fu-opts input:checked+span svg{color:var(--xb)}
+.fu-opts input:focus-visible+span{outline:2px solid var(--xb);outline-offset:2px}
+.fu-m textarea{height:auto;min-height:64px;padding:10px 14px}
+.fu-b{display:flex;gap:10px;justify-content:flex-end;flex-wrap:wrap;margin-top:16px}
+@media (max-width:1200px){.d7-top{grid-template-columns:1fr}.d7-bot{grid-template-columns:1fr 1fr}.d7-promo{grid-column:1/-1}}
+@media (max-width:760px){.d7-stats{grid-template-columns:1fr!important}.d7-bot{grid-template-columns:1fr}.fu-opts{grid-template-columns:1fr}.d-hbtns .t-how{display:none}}
+
 </style>
 </head>
 <body><a href="#root" class="x-skip">Skip to content</a>
@@ -2163,6 +2202,46 @@ const _render2=render;render=function(){const p=RH().slice(1).split('/').filter(
   SB.auth.onAuthStateChange(async(ev,sess)=>{if(ev==='SIGNED_IN'&&sess&&MODE!=='demo'&&!me()){const r=await loadCloud(sess.user);if(r==='ok'){save();render()}}})}
   if(AUTH_CB){if(SB)await new Promise(r=>setTimeout(r,400));const ok=SB&&(await SB.auth.getSession()).data.session;history.replaceState(null,'',ok?'/app':'/login');if(!ok&&window._authErr)setTimeout(()=>toast(window._authErr.replace(/\+/g,' ')),300);else if(ok&&!me()){const r=await loadCloud(ok.user);if(r==='needs-profile'){SU={step:2,name:(ok.user.user_metadata||{}).full_name||'',email:ok.user.email,photo:(ok.user.user_metadata||{}).avatar_url||null};go('#/signup')}}if(ok)setTimeout(()=>toast('Email confirmed. Welcome to Introthread.'),300)}
  render()})();
+
+/* ===== v7 Today dashboard (design: Relationship Today) ===== */
+let DRANGE=7;
+const D_OUT=[['message','Sent a message','mail'],['call','Had a call','phone'],['meeting','Meeting booked','cal'],['opportunity','Opportunity created','spark'],['notnow','Not now, stay in touch','sync'],['resolved','Resolved','check']];
+function fuOpen(id){const t=findThread(id);if(!t)return toast('That Thread is no longer available.');const s=threadState(t);
+ modal(`<div class="fu-m"><div class="row between"><div class="row" style="gap:12px">${xav(t.other.name,46)}<div><b>${esc(t.other.name)}</b><div class="small muted">${esc([t.other.role,t.other.company].filter(Boolean).join(', ')||'New connection')}</div></div></div><button class="x" aria-label="Close" onclick="closeModal()">&times;</button></div>
+ <h3>Record the follow-up</h3><p class="fu-sub">${s==='pending'?'They have not confirmed yet. Resend the confirm link, then log what happened.':'Log what happened so the Thread stays accurate.'}</p>
+ <div class="fu-opts" role="radiogroup" aria-label="Outcome">${D_OUT.map(([k,l,i],n)=>`<label><input type="radio" name="fuo" value="${k}" ${n===0?'checked':''}><span>${sv(i,17)}${l}</span></label>`).join('')}</div>
+ <label class="x-f"><span>Note <em>(optional)</em></span><textarea id="fun" maxlength="200" rows="2" placeholder="e.g. Intro call booked for Friday"></textarea></label>
+ <div class="fu-b"><a class="t-how" href="/app/thread/${t.id}" onclick="closeModal()">${sv('eye',16)} Open Thread</a>${s==='pending'?`<button type="button" class="t-how" onclick="copy(threadLink(findThread('${t.id}')),'Confirm link copied')">${sv('link',16)} Copy confirm link</button>`:''}<button type="button" class="x-btn" onclick="fuSave('${t.id}')">Save outcome</button></div></div>`)}
+async function fuSave(id){const t=findThread(id);const k=(document.querySelector('input[name="fuo"]:checked')||{}).value||'message';const o=D_OUT.find(x=>x[0]===k);const n=($('#fun')||{}).value?$('#fun').value.trim():'';
+ closeModal();if(k==='resolved'){resolve(id,n||'Followed through');return}
+ try{await addEvent(t,'followup',o[1]+(n?': '+n:''));save();toast('Follow-up recorded');render()}catch(e){toast('Could not save the follow-up. Check your connection and try again.')}}
+function vToday(){const u=me(),T=myThreads();const now=Date.now();const wk=T.filter(t=>now-t.createdAt<7*DAY).length;
+ const conf=T.filter(t=>t.confirmed).length,openA=T.filter(t=>threadState(t)==='open');
+ const need=T.filter(t=>['matched','open','pending'].includes(threadState(t))).sort((a,b)=>pulse(a)-pulse(b));
+ const hr=new Date().getHours(),greet=hr<12?'Good morning':hr<18?'Good afternoon':'Good evening';const date=new Date().toLocaleDateString('en-GB',{weekday:'long',day:'numeric',month:'long',year:'numeric'});
+ const pct=(a,b)=>b?Math.round(a/b*100):0;
+ const stat=(ic,c,l,v,up,s)=>`<div class="d-stat"><span class="d-stat-ic ${c}">${sv(ic,26)}</span><div><small>${l}</small><b>${v}${up?`<em>&uarr; ${up}</em>`:''}</b><span>${s}</span></div></div>`;
+ const evs=myRooms().filter(r=>r.date>=new Date().setHours(0,0,0,0)).sort((a,b)=>a.date-b.date).slice(0,3);
+ const days=[...Array(DRANGE)].map((_,i)=>{const d=new Date();d.setHours(0,0,0,0);d.setDate(d.getDate()-DRANGE+1+i);return d.getTime()});
+ const bins=days.map(d0=>{const d1=d0+DAY,inr=x=>x>=d0&&x<d1;const dt=new Date(d0);return{l:DRANGE>7?String(dt.getDate()):dt.toLocaleDateString('en-GB',{weekday:'short'}),n:T.filter(t=>inr(t.createdAt)).length,v:T.filter(t=>t.confirmed&&inr(t.createdAt)).length,r:T.filter(t=>t.resolvedAt&&inr(t.resolvedAt)).length}});
+ const mx=Math.max(1,...bins.map(b=>b.n+b.r));const tot=k=>bins.reduce((a,b)=>a+b[k],0);
+ const acts=T.flatMap(t=>(t.events||[]).map(e=>({e,t}))).sort((a,b)=>b.e.at-a.e.at).slice(0,3);
+ const nrow=t=>{const last=(t.events||[]).slice(-1)[0];const s=threadState(t);return`<div class="d-nrow">${dRing(t)}${xav(t.other.name,52)}<div class="d-who"><b><a href="/app/thread/${t.id}">${esc(t.other.name)}</a>${t.confirmed?`<span class="d-ver" title="Verified">${sv('check',10,'#fff',3.2)}</span>`:''}</b><small>${esc([t.other.role,t.other.company].filter(Boolean).join(', ')||'New connection')}</small>${tagChips(t)}</div><div class="d-st">${dChip(t)}<small>${sv(t.note?'mail':'pin',14)} ${esc(t.note||(t.where?'Met at '+t.where:'')||(last&&last.text)||'Thread started')}</small><small>${sv('cal',14)} ${ago(t.createdAt)}</small></div><button type="button" class="d-act" onclick="${s==='open'&&!t.mine?`go('/app/thread/${t.id}')`:`fuOpen('${t.id}')`}">${s==='open'&&!t.mine?'Answer':'Follow up'}</button><button type="button" class="d-dots" aria-label="More options for ${esc(t.other.name)}" onclick="dMenu('${t.id}')">&#8942;</button></div>`};
+ const qa=(href,fn,ic,l,s)=>`${href?`<a href="${href}"`:`<button type="button" onclick="${fn}"`} class="d-qi"><span>${sv(ic,20)}</span><span><b>${l}</b><small>${s}</small></span>${href?'</a>':'</button>'}`;
+ return shell('today',`<div class="t-head"><div><div class="t-eye">${date}</div><h1 class="t-h1">${greet}, ${esc((u.name||'').split(' ')[0])}</h1><p class="t-sub">${need.length?`${need.length} Thread${need.length>1?'s':''} need${need.length>1?'':'s'} a next step. Start with the relationships most likely to go cold.`:'You are all caught up. Start a Thread at your next meeting.'}</p></div><div class="d-hbtns"><a href="/app/card" class="t-how">${sv('user',18)} My card</a><a href="/app/tap" class="x-btn lg">${sv('nfc',18)} Tap to Thread</a></div></div>
+ <div class="d7-top"><div class="d-main">
+ <div class="d-stats d7-stats">${stat('users','b','Threads',T.length,wk,'All time')}${stat('shield','b','Verified',conf,0,pct(conf,T.length)+'% confirmed by both')}${stat('bell','o','Awaiting answers',openA.length,0,'Need your follow-up')}</div>
+ <section class="d-box">${dSecHead('Needs a next step','/app/threads')}${need.length?need.slice(0,5).map(nrow).join(''):`<div class="d-empty">${sv('check',22)}<div><b>Nothing waiting on you</b><small>New Threads will appear here as soon as you tap.</small></div><a href="/app/tap" class="x-btn sm">Tap to Thread</a></div>`}</section>
+ </div><div class="d-side">
+ <section class="d-box">${dSecHead('Today&rsquo;s meetings')}${gcalPanel()}</section>
+ <section class="d-box">${dSecHead('Upcoming events','/app/rooms')}${evs.length?evs.map(r=>{const d=new Date(r.date);const dd=Math.round((r.date-new Date().setHours(0,0,0,0))/DAY);return`<a class="d-ev" href="/app/room/${r.id}"><span class="d-evd">${d.toLocaleDateString('en-GB',{weekday:'short'})}<b>${d.getDate()}</b></span><span class="d-evl"><i></i></span><span class="d-evt"><b>${esc(r.name)}</b><small>${esc(r.location||'Room '+r.code)}</small></span><em>${dd<=0?'Today':dd===1?'Tomorrow':'In '+dd+' days'}</em></a>`}).join(''):`<div class="d7-emp"><span>${sv('cal',24)}</span><div><b>No upcoming events</b><small>Create a Room for your next event and every tap becomes a Thread.</small><button type="button" class="x-btn sm" onclick="newRoomModal()">Create a Room</button></div></div>`}</section>
+ <section class="d-box"><div class="d-sh"><b>Thread activity</b><select class="d7-sel" aria-label="Date range" onchange="DRANGE=+this.value;window._keepScroll=true;render()">${[7,14,30].map(n=>`<option value="${n}" ${DRANGE===n?'selected':''}>Last ${n} days</option>`).join('')}</select></div><div class="d-chart ${DRANGE>7?'many':''}">${bins.map(b=>`<div class="d-bar" title="${b.l}: ${b.n} new, ${b.v} verified, ${b.r} resolved"><span><i class="r" style="height:${b.r/mx*100}%"></i><i class="n" style="height:${Math.max(0,b.n-b.v)/mx*100}%"></i><i class="v" style="height:${b.v/mx*100}%"></i></span><small>${b.l}</small></div>`).join('')}</div>
+ <div class="d-leg"><span><i class="n"></i>New threads <b>${tot('n')}</b></span><span><i class="v"></i>Verified <b>${tot('v')}</b></span><span><i class="r"></i>Resolved <b>${tot('r')}</b></span></div></section>
+ </div></div>
+ <div class="d7-bot"><section class="d-box">${dSecHead('Recent activity','/app/threads')}${acts.length?acts.map(({e,t})=>`<a class="d-act-row" href="/app/thread/${t.id}"><span class="d-aic">${sv(e.k==='resolved'?'check':e.k==='confirm'?'users':e.k==='followup'?'mail':'pin',17)}</span><span><b>${esc(t.other.name)}</b> ${esc(e.text||'')}<small>${ago(e.at)}</small></span></a>`).join(''):'<p class="d-muted">Activity on your Threads will show here.</p>'}</section>
+ <section class="d-box">${dSecHead('Quick actions')}<div class="d7-qa">${qa('/app/tap',0,'nfc','Tap to Thread','Share instantly')}${qa(0,'shareNative()','send','Share my card','Send your link')}${qa(0,'tapQR()','qr','Scan a QR code','Open a card')}${qa(0,'newRoomModal()','cal','Create a Room','Host an event')}</div></section>
+ <div class="d7-promo"><span class="d-promo-ic">${sv('chart',22)}</span><div><b>Turn more Threads into opportunities</b><ul>${['Add context and notes','Set follow-up reminders','Track progress to resolution'].map(x=>`<li><i>${sv('check',11,'#fff',3.2)}</i>${x}</li>`).join('')}</ul><a href="/how">Learn more ${sv('arrow',15)}</a></div></div>
+ </div>`)}
 
 </script>
 </body>
