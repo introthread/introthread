@@ -1,9 +1,10 @@
 # Introthread - handover for the next AI agent
 
-Last updated: 21 Oct 2026, 3:15 pm Nairobi (after admin redesign v41, screen 8 of 9). Read this before making changes, and update it after every change.
+Last updated: 21 Oct 2026, 3:15 pm Nairobi (after admin redesign v42, screen 9 of 9). Read this before making changes, and update it after every change.
 
 ## Current state (cross-checked 21 Oct 2026)
-- `main` head: the Privacy requests commit (v41). Vercel deploys `main` automatically.
+- `main` head: the Staff commit (v42). Vercel deploys `main` automatically.
+- Migration 011 (`supabase/migrations/011_staff_screen.sql`) is NOT YET RUN. Until it is, the Staff page adds existing accounts directly (no invitations, no pausing, no two-step or last-active columns).
 - Migration 010 (`supabase/migrations/010_privacy_screen.sql`) is NOT YET RUN. Until it is, the Privacy page filters in the browser, has no identity-check step, and people's notes on new requests are dropped (the request itself still saves).
 - Migration 009 (`supabase/migrations/009_plans_screen.sql`) is NOT YET RUN. Agnes must paste it into the Supabase SQL Editor and run it. Until then the Plans page uses its fallback (no descriptions, no people counts, older save function, history from the audit log).
 - Database migrations 002 to 008 are ALL RUN by Agnes and were verified live (21 Oct 2026):
@@ -26,11 +27,11 @@ Last updated: 21 Oct 2026, 3:15 pm Nairobi (after admin redesign v41, screen 8 o
 | 6 | Plans and pricing | v39 | 009 (not yet run) | Done |
 | 7 | Settings | v40 | none (uses existing admin_set_setting) | Done |
 | 8 | Privacy requests | v41 | 010 (not yet run) | Done |
-| 9 | Staff and Audit log | - | - | Next. Wait for Agnes's mockup |
+| 9 | Staff | v42 | 011 (not yet run) | Done (Audit log screen itself not redesigned yet) |
 - Agnes's instruction for each screen: "exact equivalent or better" than her mockup, real backend only, nothing faked. Where a mockup shows something untrue (for example "Stripe connected", "All systems operational"), show the honest state instead and say so in the report.
 - Pattern per screen: new `supabase/migrations/00N_*.sql` (SECURITY DEFINER functions that call `assert_staff(roles)` and write `audit(...)`; revoke from public/anon, grant to authenticated), one JS block and one CSS block appended to `index.html`, an `admLoadTab` override for the tab, a fallback to the older RPC when the new one is missing, a jsdom test, HANDOVER update, one commit.
 - Shared look: KPI cards (`rm-c` / `md-c`), toolbar selects (`mdSel`), list + detail panel grid (`md-g`, drawer below 1180px, Esc closes), sections (`md-sec`), tables (`au-t`), status pills, `admAsk` confirm dialog (reason always required, optional typed DELETE).
-- Global names already taken, do not redeclare (a clash breaks the whole app): `ADMR` (dashboard range), `money`, `usd`, `pct`, `ago`, `fmtT`, `initials`. Prefix new globals per screen: `au*`/`ADMU` Users, `md*`/`ADMM` Moderation, `rm*`/`RMX` Rooms, `rv*`/`RVX` Revenue, `pl*`/`PLX`/`PL_F` Plans (`PLANS` is the older billing constant, do not reuse it), `sg*`/`SGX`/`SG_FEAT`/`SG_LAB` Settings, `pq*`/`PQX`/`PQ_KIND`/`PQ_ST` Privacy. Before adding a global, grep `index.html` for `(const|let|function) name`.
+- Global names already taken, do not redeclare (a clash breaks the whole app): `ADMR` (dashboard range), `money`, `usd`, `pct`, `ago`, `fmtT`, `initials`. Prefix new globals per screen: `au*`/`ADMU` Users, `md*`/`ADMM` Moderation, `rm*`/`RMX` Rooms, `rv*`/`RVX` Revenue, `pl*`/`PLX`/`PL_F` Plans (`PLANS` is the older billing constant, do not reuse it), `sg*`/`SGX`/`SG_FEAT`/`SG_LAB` Settings, `pq*`/`PQX`/`PQ_KIND`/`PQ_ST` Privacy, `sf*`/`SFX`/`SF_ROLES` Staff. Before adding a global, grep `index.html` for `(const|let|function) name`.
 - Roles: owner, admin, moderator, support, finance. `admOk([...])` in the client; `assert_staff([...])` on the server decides.
 
 ## Where things are
@@ -171,6 +172,16 @@ Tap -> Thread -> one question, "What's next?". Answers stay sealed until both pe
   - Not built (no backend for it): bulk select in the table, which the mockup shows.
   - Mobile checked with 390px Playwright screenshots (cards, table cards, modal, empty state).
   - Next: Screen 9 Staff and Audit log.
+- Admin redesign v42 (screen 9 of 9: Staff), `sfLoad`/`sfPage`/`sfManage`, state `SFX`. From Agnes's mockup "Modern Staff Management Dashboard" and her five requirements.
+  - Header "View audit log" (opens the Audit log tab). Cards: Total staff (added this month), Active (how many without two-step), Pending invites (failed/expired), Suspended (paused). The mockup's "% from last month" trends were left out: removals are not tracked as history, so they would be invented.
+  - Staff members: search, role filter, table with name (+You), email, role, two-step (from auth.mfa_factors), status (Active/Suspended), last active (auth last sign-in), and a manage button (owners only, never on yourself). Open and failed invitations are listed in the same table with Pending / Expired / Failed (with reason) and Resend / Revoke. Below 760px rows become cards.
+  - Manage (modal): change role, pause/restore access, remove access (typed REMOVE). Giving the Owner role (invite or change) needs typed OWNER and shows a warning. The only active owner cannot be changed, paused or removed (also enforced on the server).
+  - Invite panel (owners only; others see "ask an owner"): email + role with live checks (valid email, already staff, already pending). Flow: `admin_staff_invite` saves a pending invitation (7 days) and audits it; the browser asks Supabase to send a sign-in email (`signInWithOtp`, shouldCreateUser true, redirect /admin); the result is written back with `admin_staff_invite_sent` (failed + reason if the email failed). When the invited person signs in with that confirmed email and opens /admin, `admBoot` calls `staff_accept_invite()`, which adds them with the invited role and marks the invitation accepted. Supabase sends its normal sign-in or sign-up email, not a custom invitation email.
+  - Roles and permissions: five cards (Owner, Admin, Support, Moderator, Finance) with what each can do and the screens each role can open, computed from `ADM_TABS`, plus live counts.
+  - Role names and the existing permission rules are unchanged. Staff management stays owner-only (same as `admin_set_staff`).
+  - `supabase/migrations/011_staff_screen.sql`: staff.suspended_at/suspended_by/invited_by; `is_staff` and `admin_me` now ignore paused staff (so every server check blocks them); `staff_invites` table (one pending per email); `admin_staff2`, `admin_staff_invite`, `admin_staff_invite_sent`, `admin_staff_invite_resend`, `admin_staff_invite_revoke`, `staff_accept_invite`, `admin_staff_role`, `admin_staff_suspend`, `admin_staff_remove` (all audited; reason required; cannot act on yourself; always keeps one active owner). Without 011 the page falls back to `admin_staff` / `admin_set_staff`.
+  - Mobile checked with 390px Playwright screenshots (table cards, invite panel, manage modal).
+  - Next: redesign the Audit log screen when Agnes sends a mockup.
 
 ## Honest limits to keep in mind
 - LinkedIn does not let apps read another person's profile from a username. A LinkedIn link gives the profile URL and a best-guess name only; email, phone, title and company must come from paste, QR vCard, business card or contacts.
@@ -178,8 +189,8 @@ Tap -> Thread -> one question, "What's next?". Answers stay sealed until both pe
 - iPhone Safari hides the contact picker unless the Contact Picker API feature flag is turned on.
 
 ## Open items / next steps
-1. Agnes: run migrations 009 and then 010 in the Supabase SQL Editor, then reload /admin/plans and /admin/privacy (the update notes disappear).
-1b. Admin redesign screen 9 (table above). Agnes sends one mockup at a time.
+1. Agnes: run migrations 009, 010 and 011 (in that order) in the Supabase SQL Editor, then reload /admin/plans, /admin/privacy and /admin/staff (the update notes disappear).
+1b. Audit log screen redesign (waiting for a mockup). Agnes sends one mockup at a time.
 2. Agnes: sign in as mosemqute@gmail.com, open /admin, set up two-step verification.
 3. Stripe billing (next in the build order after admin): Product + monthly/yearly Prices in USD and GBP, Price IDs into Plans, secret key and webhook secret in Vercel env (never in code), checkout, customer portal, webhook writing `subscriptions` (incl. started_at, canceled_at, amount, current_period_end) and `payments` (amount_usd for totals). The Revenue badge turns green automatically once Stripe ids appear.
 4. Then Google/Microsoft connect, then LinkedIn (agreed build order: contacts and import, admin, Stripe, Google/Microsoft, LinkedIn). No LinkedIn company page yet.
@@ -195,6 +206,6 @@ Tap -> Thread -> one question, "What's next?". Answers stay sealed until both pe
 
 ## Testing approach used
 - Sandbox workflow: write large JS/CSS to the session file store first, copy one file at a time into the sandbox, insert JS before the last `</script>` and CSS before the last `\n</style>`, run `python3 scripts/build_pages.py` (prints "built 10"), keep a `.bak` of `index.html` before each insert.
-- Admin tests mock Supabase by replacing `const SB=(window.supabase` with `const SB=window.__SB?window.__SB:(window.supabase` and setting `__SB` in jsdom `beforeParse`. Per-screen tests are saved in `tests/admin/` (tadm all tabs, tusers, tmod, trm rooms, trv revenue, tpl plans, tsg settings, tpq privacy). Run from the repo root after `npm i jsdom`, for example `timeout 13 node tests/admin/trv.js 2>&1 | grep -v "Not implemented" | tail -1`; a pass ends in `errs []`. They read `index.html` from the current folder. Each covers the full page, detail panel, actions with reasons, and the fallback without the screen's migration. Run at most about 4 tests per command (each takes 10 to 13 seconds).
+- Admin tests mock Supabase by replacing `const SB=(window.supabase` with `const SB=window.__SB?window.__SB:(window.supabase` and setting `__SB` in jsdom `beforeParse`. Per-screen tests are saved in `tests/admin/` (tadm all tabs, tusers, tmod, trm rooms, trv revenue, tpl plans, tsg settings, tpq privacy, tsf staff). Run from the repo root after `npm i jsdom`, for example `timeout 13 node tests/admin/trv.js 2>&1 | grep -v "Not implemented" | tail -1`; a pass ends in `errs []`. They read `index.html` from the current folder. Each covers the full page, detail panel, actions with reasons, and the fallback without the screen's migration. Run at most about 4 tests per command (each takes 10 to 13 seconds).
 - jsdom scripts that load `index.html`, log in to demo mode and exercise flows; a pass ends with an empty error list. Covered: Tap form, sign-up, guest reveal, capture, the LinkedIn follow-up prompt, exports, billing, rooms, Today, thread detail.
 - Playwright phone-viewport screenshots (390x844) for layout checks.
