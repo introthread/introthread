@@ -2693,6 +2693,17 @@ html{-webkit-text-size-adjust:100%;text-size-adjust:100%;touch-action:manipulati
  .topbar>*{min-width:0}.mb-logo{min-width:0;flex-shrink:1}
  input:not([type=checkbox]):not([type=radio]):not([type=range]),select,textarea{font-size:16px!important}}
 
+/* Integrations polish */
+.in-wrap{display:grid;gap:16px}.in-card{padding:20px}.in-h{display:flex;gap:12px;align-items:flex-start;margin-bottom:6px}.in-h>div{flex:1;min-width:0}.in-h b{display:block;font-size:16px}.in-h small{color:#5b6478;font-size:13.5px}
+.in-sum{flex:none;padding:5px 10px;border-radius:999px;background:#eef3ff;color:#1748d6;font:600 12.5px var(--xss,sans-serif)}
+.in-list{list-style:none;margin:0;padding:0}.in-row{display:flex;gap:14px;align-items:center;padding:14px 0;border-top:1px solid #f2f4f7}.in-row:first-child{border-top:0}
+.in-ic{flex:none;display:inline-flex;align-items:center;justify-content:center;width:44px;height:44px;border-radius:12px;border:1px solid #e4e7ec;background:#fff}.in-ic.li{background:#0a66c2;border-color:#0a66c2;color:#fff}
+.in-tx{flex:1;min-width:0}.in-t{display:flex;align-items:center;gap:8px;flex-wrap:wrap}.in-t b{font-size:15px}.in-tx small{display:block;margin-top:3px;color:#5b6478;font-size:13px;line-height:1.45;overflow-wrap:anywhere}.in-tx small b{color:#344054;font-weight:600}.in-warn{color:#b54708}
+.in-pill{display:inline-flex;align-items:center;gap:4px;padding:2px 8px;border-radius:999px;font:600 11.5px var(--xss,sans-serif)}.in-pill.on{background:#ecfdf3;color:#067647}.in-pill.av{background:#eef3ff;color:#1748d6}.in-pill.wait{background:#fffaeb;color:#b54708}.in-pill.off{background:#f2f4f7;color:#475467}
+.in-btn{flex:none;height:40px;padding:0 16px;border-radius:10px;border:1px solid #1f5eff;background:#1f5eff;color:#fff;font:600 14px var(--xss,sans-serif);cursor:pointer}.in-btn:hover{background:#1748d6}.in-btn.ghost{background:#fff;color:#344054;border-color:#d0d5dd}.in-btn.ghost:hover{background:#f9fafb}.in-btn:disabled{opacity:.5;cursor:not-allowed}
+.in-note{display:flex;gap:10px;align-items:flex-start;padding:14px 16px;border-radius:14px;background:#f5f7fb;color:#475467}.in-note p{margin:0;font-size:13px;line-height:1.5}.in-note svg{flex:none;margin-top:2px}
+@media (max-width:480px){.in-row{flex-wrap:wrap}.in-tx{flex-basis:calc(100% - 58px)}.in-btn{width:100%;margin-left:58px;width:calc(100% - 58px)}.in-card{padding:16px}}
+
 </style>
 </head>
 <body><a href="#root" class="x-skip">Skip to content</a>
@@ -6494,6 +6505,56 @@ const _bNotifsNf=bNotifs;bNotifs=function(u){const P=u.prefs||{};const t=(k,l,d)
  h=h.replace(/(\$\{bSec\('bell')|<button type="button" class="t-how sm" onclick="showNudges\(\)">Open notifications<\/button>/,m=>m);
  const extra=t('inappConfirm','When someone confirms a Thread','Shown in the bell.')+t('inappAnswer','When they answer &ldquo;What&rsquo;s next?&rdquo;','Shown in the bell. Their answer stays private until you answer too.')+t('inappMatch','When you match, and when a follow-up is due','Shown in the bell.');
  const i=h.indexOf('<div class="bl-data"><div><b>Preview</b>');return i>=0?h.slice(0,i)+extra+h.slice(i):h};
+
+/* ==== Settings > Integrations: link and unlink Google, Microsoft and LinkedIn sign-in to your account (Supabase identity linking) ==== */
+const INT_P=[['google','Google','g','Sign in with Google and keep your Google account linked.'],['azure','Microsoft','ms','Sign in with Microsoft (Outlook, Microsoft 365) and keep it linked.'],['linkedin_oidc','LinkedIn','li','Sign in with LinkedIn and link your LinkedIn profile.']];
+let INTX={ids:null,on:null,loading:false,err:''};
+async function intLoad(force){if(INTX.loading||(!force&&INTX.ids))return;if(!(typeof cloud==='function'&&cloud())||!SB)return;INTX.loading=true;
+ try{const [{data,error},st]=await Promise.all([SB.auth.getUserIdentities(),fetch((window.INTROTHREAD_CONFIG||{}).supabaseUrl+'/auth/v1/settings',{headers:{apikey:(window.INTROTHREAD_CONFIG||{}).supabaseAnonKey}}).then(r=>r.ok?r.json():null).catch(()=>null)]);
+  if(error)throw error;INTX.ids=(data&&data.identities)||[];INTX.on=st&&st.external?st.external:null;INTX.err=''}catch(e){INTX.err=(e&&e.message)||'Could not load your connections'}
+ INTX.loading=false;if(STAB==='integrations'){window._keepScroll=true;render()}}
+function intIcon(c){return c==='li'?sv('li',20):c==='ms'?(typeof stMs==='function'?stMs():sv('grid',20)):(typeof oG==='function'?oG():sv('globe',20))}
+function intView(){const live=typeof cloud==='function'&&cloud();if(live&&!INTX.ids&&!INTX.loading)setTimeout(()=>intLoad(),0);
+ const ids=INTX.ids||[],n=ids.length;
+ const row=([k,name,c,d])=>{const id=ids.find(x=>x.provider===k);const avail=INTX.on?INTX.on[k]===true:null;const em=id&&id.identity_data&&(id.identity_data.email||id.identity_data.name);
+  let btn,sub;
+  if(!live){btn=`<button type="button" class="st12-cb" disabled>Real accounts only</button>`;sub=d}
+  else if(!INTX.ids){btn=`<button type="button" class="st12-cb" disabled>Checking...</button>`;sub=d}
+  else if(id){const only=n<2;btn=`<button type="button" class="st12-cb on" ${only?'disabled title="This is your only way to sign in. Set a password in Security first."':''} onclick="intDisconnect('${k}')">Disconnect</button>`;sub=`Connected${em?' as '+esc(em):''}.${only?' This is your only way to sign in, so set a password in Security before disconnecting.':''}`}
+  else if(avail===false){btn=`<button type="button" class="st12-cb" disabled>Not set up yet</button>`;sub=`${name} sign-in is not switched on for Introthread yet.`}
+  else{btn=`<button type="button" class="st12-cb" onclick="intConnect('${k}')">Connect</button>`;sub=d}
+  return `<div class="st12-conn"><span class="st12-ci ${c}">${intIcon(c)}</span><div><b>${name}</b><small>${sub}</small></div>${btn}</div>`};
+ const cal=typeof stGConnect==='function'&&typeof gTok==='function'?(()=>{const g=gTok();return `<div class="st12-conn"><span class="st12-ci g">${intIcon('g')}</span><div><b>Google Calendar</b><small>${g?'Connected. Today&rsquo;s meetings show on your dashboard.':'Show today&rsquo;s meetings on your dashboard.'}</small></div>${g?`<button type="button" class="st12-cb on" onclick="stGDisc()">Disconnect</button>`:`<button type="button" class="st12-cb" onclick="stGConnect()">Connect</button>`}</div>`})():'';
+ return `<section class="d-box st12-box"><div class="cd-bh"><span class="cd-bi">${sv('link',20)}</span><div><b>Connected accounts</b><small>Link the accounts you use to sign in. You can sign in with any linked account.</small></div></div>
+ ${INTX.err?`<p class="sec-err">${esc(INTX.err)} <button type="button" class="au-inl" onclick="intLoad(true)">Try again</button></p>`:''}${INT_P.map(row).join('')}${cal}
+ <p class="st12-sec">${sv('lock',13)} Connections use the provider&rsquo;s secure sign-in. Introthread never sees your password. LinkedIn does not share your connections list with any app; to import contacts, use the LinkedIn export file in Contacts.</p></section>`}
+async function intConnect(k){const p=INT_P.find(x=>x[0]===k);try{const opts={redirectTo:location.origin+'/app/settings?tab=integrations'};if(k==='azure')opts.scopes='email';
+ const {error}=await SB.auth.linkIdentity({provider:k,options:opts});if(error)throw error}
+ catch(e){const m=(e&&e.message)||'';toast(/manual linking|disabled|not enabled|unsupported provider|provider is not enabled/i.test(m)?`${p[1]} is not set up yet for Introthread.`:/already/i.test(m)?`That ${p[1]} account is already linked to another Introthread account.`:m||'Could not connect')}}
+async function intDisconnect(k){const p=INT_P.find(x=>x[0]===k),id=(INTX.ids||[]).find(x=>x.provider===k);if(!id)return;if((INTX.ids||[]).length<2)return toast('Set a password in Security before disconnecting your only sign-in.');
+ if(!confirm(`Disconnect ${p[1]}? You will no longer be able to sign in with it.`))return;try{const {error}=await SB.auth.unlinkIdentity(id);if(error)throw error;toast(p[1]+' disconnected');await intLoad(true)}catch(e){toast((e&&e.message)||'Could not disconnect')}}
+/* after returning from a provider, refresh the list; show a clear message if linking failed */
+(function(){try{const q=new URLSearchParams(location.search+'&'+location.hash.replace(/^#/,''));const er=q.get('error_description');if(er&&location.pathname==='/app/settings')setTimeout(()=>toast(/already/i.test(er)?'That account is already linked to another Introthread account.':er),800)}catch(_){}})();
+if(SB&&SB.auth&&SB.auth.onAuthStateChange)SB.auth.onAuthStateChange(ev=>{if(ev==='USER_UPDATED'||ev==='SIGNED_IN'){INTX.ids=null;if(STAB==='integrations')setTimeout(()=>intLoad(true),300)}});
+const _stOtherInt=stOther;stOther=function(u,t){if(t==='integrations'){const h=_stOtherInt.apply(this,arguments);const i=h.indexOf('<section class="d-box st12-box">');const j=i>=0?h.indexOf('</section>',i):-1;return i>=0&&j>=0?h.slice(0,i)+intView()+h.slice(j+10):intView()+h}return _stOtherInt.apply(this,arguments)};
+
+/* ==== Integrations page polish: grouped, status pills, summary ==== */
+intView=function(){const live=typeof cloud==='function'&&cloud();if(live&&!INTX.ids&&!INTX.loading)setTimeout(()=>intLoad(),0);
+ const ids=INTX.ids||[],n=ids.length;let linked=0;
+ const pill=(c,t)=>`<span class="in-pill ${c}">${c==='on'?sv('check',12,'currentColor',2.6):''}${t}</span>`;
+ const row=([k,name,c,d])=>{const id=ids.find(x=>x.provider===k);const avail=INTX.on?INTX.on[k]===true:null;const em=id&&id.identity_data&&(id.identity_data.email||id.identity_data.name);let btn,sub,st;
+  if(!live){st=pill('off','Real accounts only');btn='';sub=d}
+  else if(!INTX.ids){st=pill('off','Checking');btn='';sub=d}
+  else if(id){linked++;const only=n<2;st=pill('on','Connected');sub=em?`Signed in as <b>${esc(em)}</b>`:'Linked to your account';if(only)sub+='<br><span class="in-warn">Your only sign-in method. Set a password in Security before disconnecting.</span>';btn=`<button type="button" class="in-btn ghost" ${only?'disabled':''} onclick="intDisconnect('${k}')">Disconnect</button>`}
+  else if(avail===false){st=pill('wait','Not set up yet');sub=`${name} sign-in has not been switched on for Introthread yet.`;btn=`<button type="button" class="in-btn" disabled>Connect</button>`}
+  else{st=pill('av','Available');sub=d;btn=`<button type="button" class="in-btn" onclick="intConnect('${k}')">Connect</button>`}
+  return `<li class="in-row"><span class="in-ic ${c}" aria-hidden="true">${intIcon(c)}</span><div class="in-tx"><div class="in-t"><b>${name}</b>${st}</div><small>${sub}</small></div>${btn}</li>`};
+ const rows=INT_P.map(row).join('');
+ const cal=typeof stGConnect==='function'&&typeof gTok==='function'?(()=>{const g=gTok();return `<li class="in-row"><span class="in-ic g" aria-hidden="true">${intIcon('g')}</span><div class="in-tx"><div class="in-t"><b>Google Calendar</b>${g?pill('on','Connected'):pill('av','Available')}</div><small>${g?'Today&rsquo;s meetings show on your dashboard.':'Show today&rsquo;s meetings on your dashboard, so you know who you will meet.'}</small></div>${g?`<button type="button" class="in-btn ghost" onclick="stGDisc()">Disconnect</button>`:`<button type="button" class="in-btn" onclick="stGConnect()">Connect</button>`}</li>`})():'';
+ return `<div class="in-wrap"><section class="d-box st12-box in-card"><div class="in-h"><span class="cd-bi">${sv('link',20)}</span><div><b>Sign-in accounts</b><small>Link the accounts you use, then sign in with any of them.</small></div>${live&&INTX.ids?`<span class="in-sum">${linked} of ${INT_P.length} connected</span>`:''}</div>
+ ${INTX.err?`<p class="sec-err">${esc(INTX.err)} <button type="button" class="au-inl" onclick="intLoad(true)">Try again</button></p>`:''}<ul class="in-list">${rows}</ul></section>
+ ${cal?`<section class="d-box st12-box in-card"><div class="in-h"><span class="cd-bi">${sv('cal',20)}</span><div><b>Calendar</b><small>See your meetings next to your Threads.</small></div></div><ul class="in-list">${cal}</ul></section>`:''}
+ <div class="in-note">${sv('lock',15)}<p>Every connection uses the provider&rsquo;s own secure sign-in. Introthread never sees or stores your passwords, and you can disconnect at any time. LinkedIn does not share anyone&rsquo;s connections list with apps; to bring in contacts, use your LinkedIn export file in Contacts.</p></div></div>`};
 </script>
 </body>
 </html>
