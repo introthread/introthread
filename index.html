@@ -1947,6 +1947,20 @@ html,body,button,input,select,textarea{font-family:var(--xss)}
 .scan-ev button{max-width:220px;overflow:hidden;text-overflow:ellipsis}
 body:has(.scan) .toast{bottom:auto!important;top:calc(70px + env(safe-area-inset-top))}
 
+/* v26 bottom bar polish: one baseline for every label, raised Tap button above it */
+@media (max-width:1023px){
+ .mb-bar{align-items:stretch!important;padding-top:4px!important}
+ .mb-t,.mb-tap{position:relative;height:58px;min-height:0!important;display:flex!important;flex-direction:column;align-items:center;justify-content:flex-end;gap:4px;padding:0 0 6px!important;font:600 11px/1 var(--xss)!important;letter-spacing:.01em}
+ .mb-ti{width:52px;height:30px}
+ .mb-ti svg{width:22px;height:22px}
+ .mb-tap b{font-weight:600;color:#667085}.mb-tap.on b{color:var(--xb)}
+ .mb-tap span{position:absolute;top:-22px;left:50%;transform:translateX(-50%);margin:0!important;width:58px;height:58px}
+ .mb-tap:active span{transform:translateX(-50%) scale(.94)}
+ .mb-ti em{right:6px}
+}
+
+@media (max-width:1023px){.mb-ti em{top:-5px!important;right:auto!important;left:calc(50% + 5px)}}
+
 </style>
 </head>
 <body><a href="#root" class="x-skip">Skip to content</a>
@@ -3826,6 +3840,10 @@ const _vTap24=vTap;vTap=function(){return _vTap24().replace('<div class="t-grid"
 const _shell24=shell;shell=function(on,inner){return _shell24(on,inner).replace('<a href="/app/tap" class="mb-tap','<a href="/app/scan" class="mb-tap')};
 /* public card: prefill where you met from an event QR (?at=) */
 const _vPub24=vPublic;vPublic=function(hd){let h=_vPub24(hd);const at=new URLSearchParams(location.search).get('at');if(at&&h.includes('id="gw"')){const v=esc(at.slice(0,120));h=h.replace('id="gw" placeholder="Where did you meet?"',`id="gw" placeholder="Where did you meet?" value="${v}"`).replace('<form class="pc-form"',`<p class="pc-at">${sv('pin',14)} Met at <b>${v}</b></p><form class="pc-form"`)}return h};
+
+/* v26 bottom bar icons: add the missing Today and Threads icons */
+SV.home='<path d="M3.5 10.5 12 3.5l8.5 7"/><path d="M5.5 9v11h13V9"/><path d="M10 20v-5.5h4V20"/>';
+SV.thread='<circle cx="6.5" cy="12" r="3.5"/><circle cx="17.5" cy="12" r="3.5"/><path d="M10 12h4"/>';
 </script>
 </body>
 </html>
