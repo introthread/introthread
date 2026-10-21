@@ -3028,9 +3028,9 @@ su2=function(e){e.preventDefault();const h=slug($('#sh').value);const next=()=>{
  if(DB.users.some(u=>u.handle===h))return taken(),false;
  if(!SB){next();return false}
  SB.rpc('handle_available',{p_handle:h}).then(({data,error})=>{if(error)return fail(error);data?next():taken()});return false};
-su3=async function(){const prof={handle:SU.handle,name:SU.name,role:SU.role,company:SU.company,city:SU.city,bio:SU.bio,photo:SU.photo,theme:SU.theme||'midnight'};
+su3=async function(){const prof={handle:SU.handle,name:SU.name,role:SU.role,company:SU.company,city:SU.city,bio:SU.bio,theme:SU.theme||'midnight'};/* the photo lives in links.photo; profiles has no photo column */
  if(!SB){toast('Accounts are not available right now.');return}
- if(PENDING){const {error}=await SB.from('profiles').insert(Object.assign({id:PENDING.id},prof));if(error)return fail(error);const u=PENDING;PENDING=null;await loadCloud(u);SU={step:1};save();go('#/app');return}
+ if(PENDING){const {error}=await SB.from('profiles').insert(Object.assign({id:PENDING.id},prof,SU.photo?{links:{photo:SU.photo}}:{}));if(error)return fail(error);const u=PENDING;PENDING=null;await loadCloud(u);SU={step:1};save();go('#/app');return}
  const {data,error}=await SB.auth.signUp({email:SU.email,password:SU.pwRaw,options:{data:{profile:prof},emailRedirectTo:'https://www.introthread.com/'}});
  if(error){SU.step=1;render();setTimeout(()=>{const el=$('#serr');if(el)el.textContent=/registered/i.test(error.message)?'An account with this email already exists. Log in instead.':error.message},0);return}
  const email=SU.email,pwTmp=SU.pwRaw;SU={step:1};
