@@ -2822,6 +2822,11 @@ html{-webkit-text-size-adjust:100%;text-size-adjust:100%;touch-action:manipulati
 .pp-tabbar .pp-tabs button{white-space:nowrap;padding-left:14px;padding-right:14px}
 .pp-tabbar>*:not(.pp-tabs){flex:none;white-space:nowrap}
 .pp-so button{white-space:nowrap;padding:0 10px}
+
+/* v14 Thread: when/where block sits inside The moment card */
+.geo-b.geo-in{margin:12px 0 0;padding:12px 0 0;border:0;border-top:1px solid var(--line);border-radius:0;background:none;font-size:13px}
+.geo-b.geo-in .geo-h b{font-size:14px}
+.geo-b.geo-in *{overflow-wrap:anywhere}
 </style>
 </head>
 <body><a href="#root" class="x-skip">Skip to content</a>
@@ -6544,7 +6549,7 @@ function geoBlock(t){const o=t.other||{},g=o.geo,at=o.at||(t.createdAt?new Date(
  <dl>${at?`<div><dt>Time</dt><dd>${esc(geoWhenTxt(at))}</dd></div>`:''}${t.where&&t.where!=='In person'?`<div><dt>Event or place you entered</dt><dd>${esc(t.where)}</dd></div>`:''}
  ${g?`<div><dt>Location</dt><dd>${g.place?esc(g.place)+'<br>':''}<span class="geo-c">${g.lat.toFixed(5)}, ${g.lng.toFixed(5)}</span> <small>(accurate to about ${fmtN(g.acc)} m)</small></dd></div>`:`<div><dt>Location</dt><dd class="geo-no">Not recorded${geoOn()?'. Allow location when your phone asks, next time you save a Thread.':'. Turned off in Settings.'}</dd></div>`}</dl>
  ${g?`<a class="geo-l" href="${maps}" target="_blank" rel="noopener">${sv('ext',14)} Open in Maps</a>`:''}</section>`}
-const _vThreadGeo=vThread;vThread=function(id){const h=_vThreadGeo.apply(this,arguments);const t=findThread(id);if(!t)return h;try{tMeta(t)}catch(_){}const b=geoBlock(t);if(!b)return h;const i=h.indexOf('<div class="rep-l">');return i>=0?h.slice(0,i)+b+h.slice(i):h+b};
+const _vThreadGeo=vThread;vThread=function(id){const h=_vThreadGeo.apply(this,arguments);const t=findThread(id);if(!t)return h;try{tMeta(t)}catch(_){}const b=geoBlock(t);if(!b)return h;let i=h.indexOf('<ul class="td-facts">');if(i>=0){const j=h.indexOf('</ul>',i);if(j>0)return h.slice(0,j+5)+b.replace('class="geo-b"','class="geo-b geo-in"')+h.slice(j+5)}i=h.indexOf('<div class="rep-l">');if(i>=0)return h.slice(0,i)+b+h.slice(i);i=h.lastIndexOf('</div></main>');return i>=0?h.slice(0,i)+b+h.slice(i):h};
 /* exports: add exact time and location columns */
 if(typeof bExportThreads==='function'){const _bx=bExportThreads;bExportThreads=function(){const T=(typeof myThreads==='function'?myThreads():[]);T.forEach(t=>{try{tMeta(t)}catch(_){}});const origNote=T.map(t=>t.note);
  T.forEach(t=>{const o=t.other||{},g=o.geo;const extra=[o.at?'Met at '+geoWhenTxt(o.at):'',g?`Location: ${g.place?g.place+' ':''}(${g.lat}, ${g.lng}, about ${g.acc} m)`:''].filter(Boolean).join(' | ');if(extra)t.note=(t.note?t.note+' | ':'')+extra});
