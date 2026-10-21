@@ -1980,6 +1980,42 @@ body:has(.scan) .toast{bottom:auto!important;top:calc(70px + env(safe-area-inset
 }
 @media (max-width:1023px){.t-h1{font-size:clamp(25px,6.6vw,30px)!important;line-height:1.12!important;margin:6px 0!important}.t-sub{font-size:14.5px!important;line-height:1.5!important}}
 
+/* v29 Today, Threads and Rooms on phones */
+@media (max-width:1023px){
+ .d-tags{display:flex!important;flex-wrap:wrap;gap:6px}
+ /* Today */
+ .d-hbtns{grid-template-columns:1fr!important}.d-hbtns .x-btn{white-space:nowrap;height:46px;justify-content:center}
+ .d7-stats{grid-template-columns:repeat(3,minmax(0,1fr))!important;gap:8px!important}
+ .d7-stats .d-stat{flex-direction:column;align-items:flex-start;gap:8px;padding:12px;border-radius:14px}
+ .d7-stats .d-stat-ic{width:34px;height:34px;border-radius:10px}.d7-stats .d-stat-ic svg{width:18px;height:18px}
+ .d7-stats .d-stat small{font-size:12px}.d7-stats .d-stat b{font-size:22px!important;line-height:1.1}.d7-stats .d-stat em{display:block;margin:2px 0 0;font-size:11px}
+ .d7-stats .d-stat span{font-size:11.5px;line-height:1.3}
+ .d-box{padding:16px!important;border-radius:16px}
+ .d-nrow{grid-template-columns:44px minmax(0,1fr) 28px!important;grid-template-areas:"ring who dots" "st st st" "act act act";gap:10px 12px!important;padding:14px 0!important}
+ .d-nrow>.d-av{display:none}.d-nrow>.d-ring{grid-area:ring;align-self:start}.d-nrow>.d-who{grid-area:who;min-width:0}.d-nrow>.d-st{grid-area:st;min-width:0}.d-nrow>.d-act{grid-area:act;width:100%;height:42px}.d-nrow>.d-dots{grid-area:dots;align-self:start}
+ .d-nrow .d-who b{font-size:15.5px}.d-nrow .d-who small{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;display:block}
+ .d-nrow .d-st small{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:100%}
+ .d7-qa{grid-template-columns:1fr 1fr!important}
+ /* Threads */
+ .th-row{padding:14px!important;gap:10px 12px!important}
+ .th-pri{flex-direction:row!important;align-items:center;gap:8px!important;justify-content:flex-start!important}
+ .th-pri small{white-space:nowrap;font-size:12.5px}
+ .th-ring{width:38px!important;height:38px!important}.th-ring b{font-size:13px}
+ .th-who b{font-size:15.5px}.th-meta{flex-direction:row!important;flex-wrap:wrap;gap:4px 12px!important;margin:4px 0 6px!important}
+ .th-st{gap:6px!important}
+ .th-row>.d-act{height:42px}
+ /* Rooms */
+ .ro-hero{min-height:0;padding:20px!important;gap:16px}.ro-hero h2{font-size:21px}.ro-hero p{font-size:14px;margin-bottom:14px}
+ .ro-hb .x-btn,.ro-learn{height:42px;font-size:14px}
+ .ro-hs{width:100%;justify-content:space-between;gap:8px!important;padding:12px 14px!important}.ro-hs b{font-size:16px}.ro-hs small{font-size:11px}.ro-hs svg{width:20px;height:20px}
+ .ro-sh{align-items:flex-start;flex-wrap:wrap;gap:4px 12px}.ro-sh h3{font-size:18px}.ro-sh p{font-size:13.5px}
+ .ro-img{height:120px}.ro-cb{padding:12px 14px 14px}.ro-name{font-size:15.5px}
+ .ro-cm{padding:14px}
+}
+@media (max-width:420px){.d7-stats .d-stat span{display:none}.d7-qa{grid-template-columns:1fr!important}}
+
+@media (max-width:1023px){.th-row,.th-row.cmp{grid-template-areas:"av who dots" "pri pri pri" "st st st" "btn btn btn"!important}.th-pri{padding:8px 0 0!important;border-top:1px solid #eef1f5!important}}
+
 </style>
 </head>
 <body><a href="#root" class="x-skip">Skip to content</a>
@@ -3866,6 +3902,9 @@ const _vPub24=vPublic;vPublic=function(hd){let h=_vPub24(hd);const at=new URLSea
 /* v26 bottom bar icons: add the missing Today and Threads icons */
 SV.home='<path d="M3.5 10.5 12 3.5l8.5 7"/><path d="M5.5 9v11h13V9"/><path d="M10 20v-5.5h4V20"/>';
 SV.thread='<circle cx="6.5" cy="12" r="3.5"/><circle cx="17.5" cy="12" r="3.5"/><path d="M10 12h4"/>';
+
+/* v29 page changes start at the top (scroll position no longer carries over between pages) */
+window.addEventListener('itroute',()=>setTimeout(()=>window.scrollTo(0,0),0));
 </script>
 </body>
 </html>
