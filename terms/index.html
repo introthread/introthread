@@ -6952,8 +6952,14 @@ const _stMan26=stManage;stManage=async function(){if(!(cloud()&&IT_SV.pay&&isPro
  if(pay==='cancel'){clean();setTimeout(()=>toast('Payment cancelled. Nothing was charged.'),800);return}
  if(pay!=='done'||!ref)return;let n=0;const go2=async()=>{if(!me()||!cloud()){if(n++<40)return setTimeout(go2,250);return}
   const r=await itApi('pay-verify',{reference:ref});clean();
-  if(r&&r.ok){const u=me();u.plan='Pro';try{save()}catch(e){}render();toast('Welcome to Pro. Thank you.');itTrack('subscribed',{interval:r.interval})}
+  if(r&&r.ok){const u=me();u.plan='Pro';try{save()}catch(e){}await itProfReload();IT_SYNCED=true;toast('Welcome to Pro. Your receipt is in Billing.');itTrack('subscribed',{interval:r.interval})}
   else toast(r&&r.status&&r.status!=='success'?'The payment did not go through. Nothing was charged.':'We are confirming your payment. Pro will switch on in a minute.')};go2()})();
+
+/* ===== v26b Paystack: refresh plan and receipts from the server (Billing reads prefs.billing) ===== */
+async function itProfReload(){try{const u=me();if(!u||!cloud())return false;const {data}=await SB.from('profiles').select('plan,prefs').eq('id',u.id).single();if(!data)return false;u.plan=data.plan||u.plan;u.prefs=data.prefs||u.prefs;try{save()}catch(e){}window._keepScroll=true;render();return true}catch(e){return false}}
+let IT_SYNCED=false;
+async function itPaySync(force){if(IT_SYNCED&&!force)return;IT_SYNCED=true;const s=await itStatus();if(!s||!s.pay||!cloud())return;const r=await itApi('pay-sync',{});if(r&&r.synced)await itProfReload();return r}
+(function(){let n=0;const t=()=>{if(me()&&cloud())return itPaySync();if(n++<60)setTimeout(t,500)};setTimeout(t,1500)})();
 </script>
 </body>
 </html>
