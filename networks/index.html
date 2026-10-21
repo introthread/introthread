@@ -2870,6 +2870,14 @@ html{-webkit-text-size-adjust:100%;text-size-adjust:100%;touch-action:manipulati
 /* v20 invoice footer */
 .iv-legal{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap;margin-top:22px;padding-top:12px;border-top:1px solid #e4e7ec;font:500 11px var(--xss,system-ui);color:#667085}
 .iv-title dl{row-gap:2px}
+
+/* v21 Public profile on phones: tabs scroll inside the screen, share buttons fit */
+@media (max-width:760px){
+.pp-tabbar{max-width:100%;min-width:0;overflow:hidden}
+.pp-tabbar .pp-tabs{max-width:100%;overflow-x:auto!important;flex-wrap:nowrap!important}
+.pp-so{grid-template-columns:repeat(3,minmax(0,1fr))!important}
+.pp-so button{min-width:0;padding:0 6px!important;font-size:13px!important;gap:6px!important;white-space:nowrap}
+}
 </style>
 </head>
 <body><a href="#root" class="x-skip">Skip to content</a>
