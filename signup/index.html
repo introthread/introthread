@@ -2817,10 +2817,10 @@ html{-webkit-text-size-adjust:100%;text-size-adjust:100%;touch-action:manipulati
 .th-grid .d-sh{gap:10px}.th-grid .d-sh b{font-size:17px}.th-grid .d-sh a{font-size:13px}
 
 /* v13 Public profile: match design */
-.pp-tabbar{display:flex;align-items:center;gap:12px;flex-wrap:nowrap}
+@media (min-width:1025px){.pp-tabbar{display:flex;align-items:center;gap:12px;flex-wrap:nowrap}
 .pp-tabbar .pp-tabs{flex:1;min-width:0;flex-wrap:nowrap!important;overflow-x:auto!important}
 .pp-tabbar .pp-tabs button{white-space:nowrap;padding-left:14px;padding-right:14px}
-.pp-tabbar>*:not(.pp-tabs){flex:none;white-space:nowrap}
+.pp-tabbar>*:not(.pp-tabs){flex:none;white-space:nowrap}}
 .pp-so button{white-space:nowrap;padding:0 10px}
 
 /* v14 Thread: when/where block sits inside The moment card */
@@ -3874,7 +3874,7 @@ const _render2=render;render=function(){const p=RH().slice(1).split('/').filter(
  if(p[0]==='r'){$('#root').innerHTML=vRoomCode(p[1]);return}
  if(p[0]==='app'&&MODE==='cloud'&&PENDING&&!me()){go('#/signup');return}
  _render2()};
-(async function boot(){
+(async function boot(){await null;
  if(AUTH_CB){$('#root').innerHTML=`<div class="pub"><div class="pubcard center"><div style="margin:80px 0 20px">${logo()}</div><p class="muted">Signing you in...</p></div></div>`}
  if(SB){const {data}=await SB.auth.getSession();const s=data&&data.session;
   if(s&&MODE!=='demo'){const r=await loadCloud(s.user);if(r==='needs-profile'){SU={step:2,name:(s.user.user_metadata||{}).full_name||'',email:s.user.email,photo:(s.user.user_metadata||{}).avatar_url||null};go('#/signup')}}
@@ -6744,6 +6744,8 @@ const _nt35=newThread;newThread=function(e){const f=document.querySelector('.t-f
 const _gcal11=gcalPanel;gcalPanel=function(){return _gcal11.apply(this,arguments).replace('oauth(\'Google\',1)">Connect</button>','oauth(\'Google\',1)">Connect calendar</button>')};
 
 const _vProfile13=vProfile;vProfile=function(){return _vProfile13.apply(this,arguments).replace(/Suggest with AI/g,'Generate with AI')};
+
+const _vContacts18=vContacts;vContacts=function(){const h=_vContacts18.apply(this,arguments);return /class="app[ "]/.test(h)?h:shell('threads',h)};
 </script>
 </body>
 </html>
