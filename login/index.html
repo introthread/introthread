@@ -1593,6 +1593,61 @@ html,body,button,input,select,textarea{font-family:var(--xss)}
 @media (max-width:640px){.hw-head{flex-direction:column;align-items:flex-start}.hw-steps{grid-template-columns:1fr}.hw-see{width:100%;justify-content:center}}
 @media (prefers-reduced-motion:reduce){.hw-waves{animation:none}}
 
+/* v14 Public card page */
+.pc-page{min-height:100vh;padding:34px 16px 48px;font-family:var(--xss);background:radial-gradient(420px 420px at 8% 22%,rgba(31,94,255,.10),transparent 70%),radial-gradient(380px 380px at 92% 60%,rgba(31,94,255,.08),transparent 70%),radial-gradient(300px 300px at 85% 18%,rgba(255,106,61,.07),transparent 70%),#f6f8fc}
+.pc-wrap{max-width:600px;margin:0 auto;display:flex;flex-direction:column;gap:20px}
+.pc-own{display:flex;align-items:center;gap:8px;justify-content:center;padding:10px 14px;border-radius:12px;background:#eef3ff;color:#1f3a8a;font-size:14px}.pc-own a{color:var(--xb);font-weight:600}
+.pc-head{text-align:center}.pc-head .x-logo{font-size:30px;text-decoration:none;justify-content:center}
+.pc-head p{margin:8px 0 0;font-size:12px;letter-spacing:.3em;text-transform:uppercase;color:#5b6478}
+.pc-card{position:relative;overflow:hidden;border-radius:22px;padding:24px 26px 22px;display:flex;flex-direction:column;align-items:center;box-shadow:0 40px 70px -42px rgba(8,14,40,.85);max-width:540px;width:100%;margin:0 auto}
+.pc-top{align-self:stretch;display:flex;justify-content:space-between;align-items:center}.pc-top .x-logo{font-size:19px}
+.pc-tr{display:flex;align-items:center;gap:14px}
+.pc-ver{display:inline-flex;align-items:center;gap:7px;height:34px;padding:0 12px;border-radius:9px;border:1px solid rgba(255,255,255,.3);font-size:13.5px;font-weight:600}
+.pc-card.lt .pc-ver{border-color:rgba(15,23,42,.2)}
+.pc-ver i{width:17px;height:17px;border-radius:50%;background:var(--xb);display:grid;place-items:center}
+.pc-id{text-align:center;margin-top:6px}
+.pc-ring{position:relative;display:inline-block;border-radius:50%;padding:5px;background:linear-gradient(135deg,#3b6bff,#7aa2ff)}
+.pc-ring .x-av{margin:0;box-shadow:0 0 0 4px rgba(10,16,32,.55);font-size:40px!important}
+.pc-ring i{position:absolute;right:4px;bottom:8px;width:30px;height:30px;border-radius:50%;background:var(--xb);border:3px solid #fff;display:grid;place-items:center}
+.pc-id h1{margin:12px 0 4px;font:600 28px var(--xss);letter-spacing:-.01em;color:inherit}
+.pc-id p{margin:0;font-size:16px;color:var(--sub)}.pc-id p span{margin:0 4px}
+.pc-id .pc-hl{margin-top:6px;font-size:14px;font-weight:600;color:inherit}
+.pc-ics{display:flex;gap:14px;margin-top:18px;flex-wrap:wrap;justify-content:center}
+.pc-ics a{width:48px;height:48px;border-radius:11px;border:1px solid rgba(255,255,255,.32);display:grid;place-items:center;color:inherit;background:rgba(255,255,255,.04);transition:background .15s}
+.pc-card.lt .pc-ics a{border-color:rgba(15,23,42,.2)}.pc-ics a:hover{background:rgba(255,255,255,.15)}
+.pc-save{align-self:stretch;display:flex;align-items:center;justify-content:center;gap:10px;height:50px;margin-top:20px;border:0;border-radius:11px;background:var(--xb);color:#fff;font:600 16.5px var(--xss);cursor:pointer;box-shadow:0 14px 26px -14px rgba(31,94,255,.9)}
+.pc-save:hover{background:#1a52e6}
+.pc-rows{align-self:stretch;margin-top:18px;padding-top:16px;border-top:1px solid rgba(255,255,255,.18);display:grid;gap:14px}
+.pc-card.lt .pc-rows{border-color:rgba(15,23,42,.12)}
+.pc-rows>*{display:flex;gap:14px;align-items:flex-start;font-size:15px;line-height:1.45;color:inherit;text-decoration:none}
+.pc-rows svg{flex:none;opacity:.85;margin-top:1px}.pc-rows span{flex:1}.pc-rows a:hover span{text-decoration:underline}
+.pc-box{background:#fff;border:1px solid #e6eaf2;border-radius:18px;padding:20px;box-shadow:0 20px 40px -34px rgba(15,23,42,.35)}
+.pc-bh{display:flex;gap:14px;align-items:flex-start;margin-bottom:16px}
+.pc-bh b{display:block;font-size:19px;font-weight:600;color:var(--xink)}.pc-bh small{display:block;font-size:14.5px;color:var(--xmu);margin-top:3px;line-height:1.45}
+.pc-bi{width:44px;height:44px;border-radius:50%;background:#eef3ff;color:var(--xb);display:grid;place-items:center;flex:none}
+.pc-qa{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.pc-q{display:flex;align-items:center;gap:14px;padding:16px;border:1px solid #e6eaf2;border-radius:12px;text-decoration:none;color:var(--xink);transition:border-color .15s,box-shadow .15s}
+.pc-q:hover{border-color:#c9d6f5;box-shadow:0 10px 22px -16px rgba(31,94,255,.6)}
+.pc-q>svg{color:var(--xmu);flex:none}.pc-q>span:nth-child(2){flex:1;min-width:0}
+.pc-qi{width:48px;height:48px;border-radius:11px;background:var(--xb);color:#fff;display:grid;place-items:center;flex:none}
+.pc-q b{display:block;font-size:15.5px;font-weight:600}.pc-q small{display:block;font-size:13px;color:var(--xmu);margin-top:2px}
+.pc-start{border:2px solid var(--xb);padding:24px}
+.pc-eye{font-size:12.5px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:var(--xb)}
+.pc-start h2{margin:6px 0 4px;font:600 30px var(--xss);letter-spacing:-.02em;color:var(--xink)}
+.pc-form{display:grid;gap:12px}
+.pc-g2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.pc-in{position:relative;display:flex;align-items:center}
+.pc-in>svg{position:absolute;left:14px;color:var(--xmu);pointer-events:none}
+.pc-in input{width:100%;height:50px;padding:0 14px 0 44px;border:1px solid #dfe3ea;border-radius:10px;font:500 15.5px var(--xss);color:var(--xink);background:#fff;outline:none}
+.pc-in input:focus{border-color:var(--xb);box-shadow:0 0 0 4px rgba(31,94,255,.12)}
+.pc-go{display:flex;align-items:center;justify-content:center;gap:10px;height:54px;margin-top:4px;border:0;border-radius:11px;background:var(--xb);color:#fff;font:600 17px var(--xss);cursor:pointer;box-shadow:0 16px 30px -16px rgba(31,94,255,.9)}
+.pc-go:hover{background:#1a52e6}.pc-go:disabled{opacity:.6}
+.pc-priv{display:flex;align-items:center;justify-content:center;gap:7px;margin:4px 0 0;font-size:14px;color:var(--xmu)}
+.pc-own2{display:flex;align-items:center;gap:14px;justify-content:center;margin:6px 0 0;font-size:15px;color:#475467}
+.pc-own2 span{flex:1;max-width:70px;height:1px;background:#d5dbe6}
+.pc-own2 a{display:inline-flex;align-items:center;gap:6px;color:var(--xb);font-weight:700;text-decoration:none}
+@media (max-width:560px){.pc-page{padding:22px 12px 36px}.pc-card{padding:20px 18px}.pc-id h1{font-size:24px}.pc-qa,.pc-g2{grid-template-columns:1fr}.pc-start{padding:18px}.pc-start h2{font-size:25px}.pc-ics{gap:10px}.pc-ics a{width:44px;height:44px}.pc-head .x-logo{font-size:26px}}
+
 </style>
 </head>
 <body><a href="#root" class="x-skip">Skip to content</a>
@@ -2973,6 +3028,34 @@ function vSettings(){const u=me();
  return shell('settings',`<div class="t-head"><div><div class="t-eye">Settings</div><h1 class="t-h1">Account settings</h1><p class="t-sub">Manage your account, privacy, notifications, integrations and preferences.</p></div></div>
  <nav class="cd-tabs st12-tabs" role="tablist" aria-label="Settings sections">${ST_TABS.map(([k,l,i])=>`<button type="button" role="tab" aria-selected="${STAB===k}" class="${STAB===k?'on':''}" onclick="stTab('${k}')">${sv(i,18)} ${l}</button>`).join('')}</nav>
  ${STAB==='account'?stAccount(u):`<div class="st-one st12-one">${stOther(u,STAB)}</div>`}`)}
+
+/* ===== v14 Public card page (design: Tap to Thread Profile Card) ===== */
+function pcVcf(id){const u=DB.users.find(x=>x.id===id);if(!u)return;const L=u.links||{};const v=['BEGIN:VCARD','VERSION:3.0','FN:'+u.name,u.role?'TITLE:'+u.role:'',u.company?'ORG:'+u.company:'',L.email?'EMAIL:'+L.email:'',L.phone?'TEL:'+L.phone:'',u.city?'ADR:;;;'+u.city+';;;':'','URL:'+profileUrl(u),'END:VCARD'].filter(Boolean).join('\n');const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([v],{type:'text/vcard'}));a.download=(u.handle||'contact')+'.vcf';document.body.appendChild(a);a.click();a.remove();toast('Contact saved')}
+const _vPub14=vPublic;
+vPublic=function(hd){const h=String(hd).toLowerCase();const u=DB.users.find(x=>x.handle===h);const mine=me()&&u&&me().id===u.id;const prev=_vPub14(hd);
+ if(!u||(u.links&&u.links.hidden&&!mine))return prev;
+ const t=THEMES[u.theme]||THEMES.midnight,L=u.links||{},S=L.show||{},f=esc((u.name||'').split(' ')[0]||'them');const site=(L.website||'').replace(/^https?:\/\//,'').replace(/\/$/,'');
+ const li=L.linkedin&&cdHref(L.linkedin),xx=L.x&&cdHref(/^@/.test(L.x)?'x.com/'+L.x.slice(1):L.x),cal=L.calendar&&cdHref(L.calendar),web=L.website&&cdHref(L.website),mail=L.email&&'mailto:'+L.email;
+ const ic=[['li',li,'LinkedIn'],['x',xx,'X'],['cal',cal,'Book a meeting'],['link',web,'Website'],['mail',mail,'Email']].filter(x=>x[1]);
+ const qa=[li&&['li','LinkedIn','View my LinkedIn profile',`href="${esc(li)}" target="_blank" rel="noopener"`],web&&['globe','Website','Visit my website',`href="${esc(web)}" target="_blank" rel="noopener"`],cal&&['cal','Book a meeting','Find a time to connect',`href="${esc(cal)}" target="_blank" rel="noopener"`],mail&&!cal&&['mail','Email','Send me a message',`href="${esc(mail)}"`],['user','Save contact','Add to your contacts',`href="#" onclick="event.preventDefault();pcVcf('${u.id}')"`]].filter(Boolean).slice(0,4);
+ const rows=[S.loc!==false&&u.city?`<div>${sv('pin',18)}<span>${esc(u.city)}</span></div>`:'',site?`<a href="${esc(web)}" target="_blank" rel="noopener">${sv('globe',18)}<span>${esc(site)}</span>${sv('chev',16)}</a>`:'',S.bio!==false&&u.bio?`<div>${sv('brief',18)}<span>${esc(u.bio)}</span></div>`:''].filter(Boolean);
+ const fi=(id,icn,ph,o='')=>`<label class="pc-in">${sv(icn,18)}<input id="${id}" placeholder="${ph}" ${o}></label>`;
+ return`<div class="pc-page"><div class="pc-wrap">
+ ${mine?`<div class="pc-own">${sv('eye',16)} This is how visitors see your card. <a href="/app/card">Edit card</a></div>`:''}
+ <header class="pc-head"><a href="/" class="x-logo" aria-label="Introthread home"><span class="x-lm"><i></i><i></i></span><span>intro<b>thread</b></span></a><p>Meet &middot; Connect &middot; Follow through</p></header>
+ <article class="pc-card ${t.light?'lt':''}" style="background:${t.bg};color:${t.fg};--sub:${t.sub}">
+  <div class="pc-top"><span class="x-logo ${t.light?'':'dk'}"><span class="x-lm"><i></i><i></i></span><span>intro<b>thread</b></span></span><span class="pc-tr">${sv('nfc',22)}<span class="pc-ver"><i>${sv('check',9,'#fff',3.4)}</i>Verified</span></span></div>
+  <div class="pc-id"><span class="pc-ring">${avatarC(u,128)}<i>${sv('check',12,'#fff',3.2)}</i></span><h1>${esc(u.name)}</h1><p>${esc(u.role||'')}${u.company&&S.co!==false?`${u.role?' <span>&bull;</span> ':''}${esc(u.company)}`:''}</p>${L.headline?`<p class="pc-hl">${esc(L.headline)}</p>`:''}</div>
+  ${ic.length?`<div class="pc-ics">${ic.map(([k,hr,l])=>`<a href="${esc(hr)}" ${k==='mail'?'':'target="_blank" rel="noopener"'} aria-label="${l}" title="${l}">${sv(k,19)}</a>`).join('')}</div>`:''}
+  <button type="button" class="pc-save" onclick="pcVcf('${u.id}')">${sv('user',19)} Save Contact</button>
+  ${rows.length?`<div class="pc-rows">${rows.join('')}</div>`:''}
+ </article>
+ <section class="pc-box"><div class="pc-bh"><span class="pc-bi">${sv('spark',20)}</span><div><b>Quick actions</b><small>Connect and take the next step.</small></div></div><div class="pc-qa">${qa.map(([k,l,d,attr])=>`<a class="pc-q" ${attr}><span class="pc-qi">${sv(k,22)}</span><span><b>${l}</b><small>${d}</small></span>${sv('chev',16)}</a>`).join('')}</div></section>
+ <section class="pc-box pc-start" id="start"><div class="pc-bh"><span class="pc-bi">${sv('send',20)}</span><div><div class="pc-eye">Just met ${f}?</div><h2>Start a Thread</h2><small>You&rsquo;ll both get a shared record of where you met, and one question: what&rsquo;s next? No app needed.</small></div></div>
+  <form class="pc-form" onsubmit="return guestThread(event,'${u.id}')"><div class="pc-g2">${fi('gn','user','Your name','required maxlength="80" autocomplete="name" aria-label="Your name"')}${fi('ge','mail','Your email','required type="email" maxlength="120" autocomplete="email" aria-label="Your email"')}${fi('gr','brief','Your title (optional)','maxlength="80" autocomplete="organization-title" aria-label="Your title"')}${fi('gc','building','Company (optional)','maxlength="80" autocomplete="organization" aria-label="Company"')}</div>${fi('gw','pin','Where did you meet?','maxlength="120" aria-label="Where did you meet?"')}
+  <button class="pc-go">${sv('send',19)} Start a Thread</button><p class="pc-priv">${sv('lock',14)} We only share your details with ${f}.</p></form></section>
+ <p class="pc-own2"><span></span>Want your own card? <a href="/signup">Create one free ${sv('arrow',15)}</a><span></span></p>
+ </div></div>`};
 
 </script>
 </body>
