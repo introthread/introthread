@@ -1115,6 +1115,16 @@ html,body,button,input,select,textarea{font-family:var(--xss)}
 }
 @media (min-width:1101px) and (max-height:820px){.t-qr img{width:136px;height:136px}.t-card-id .x-av{width:104px!important;height:104px!important}}
 
+/* v6.3 large-screen fit: the app scales like browser zoom so laptops (10in and up) see the full layout */
+:root{--z:1}
+@supports (zoom:1){
+@media (min-width:1024px){
+.sidebar{width:calc(252px*var(--z));padding:calc(20px*var(--z)) calc(14px*var(--z))}
+.sidebar>*{zoom:var(--z)}
+.main{margin-left:calc(252px*var(--z))}
+.main>*{zoom:var(--z)}
+}}
+
 </style>
 </head>
 <body><a href="#root" class="x-skip">Skip to content</a>
@@ -1910,6 +1920,10 @@ function tapInsights(){const T=myThreads().slice().sort((a,b)=>b.createdAt-a.cre
   <div class="t-stats">${st(m30.length,'Threads started')}${st(conf,'Confirmed',m30.length?rate+'% confirmation rate':'')}${st(both,'Both answered','&ldquo;What&rsquo;s next?&rdquo;')}${st(wk,'This week')}</div>
   <div class="t-chart" role="img" aria-label="Threads started in the last 7 days">${days.map(d=>`<div><span style="height:${Math.round(d.n/mx*100)}%" title="${d.n} Thread${d.n===1?'':'s'}"></span><small>${d.l}</small></div>`).join('')}</div></section>
  </div>`}
+
+/* v6.3 large-screen fit: scale = min(width/1700, height/820), between 0.72 and 1, for screens 1024px and wider */
+function fitZ(){const w=innerWidth,hh=innerHeight;let s=1;if(w>=1024)s=Math.max(.72,Math.min(1,w/1700,hh/820));document.documentElement.style.setProperty('--z',s.toFixed(3))}
+fitZ();addEventListener('resize',fitZ);
 /* wrap newThread: Full details + save to contacts */
 const _ntX=newThread;newThread=function(e){const v=id=>{const x=$('#'+id);return x?x.value.trim():''};
  const o={name:v('tn'),email:v('te'),role:v('tr'),company:v('tc'),where:v('tw2')};if(!o.name){e.preventDefault();toast('Add their name to start a Thread');return false}
