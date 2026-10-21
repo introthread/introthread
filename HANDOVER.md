@@ -1,6 +1,6 @@
 # Introthread - handover for the next AI agent
 
-Last updated: 21 Oct 2026 (contacts and import v32). Read this before making changes.
+Last updated: 21 Oct 2026 (admin area v33). Read this before making changes.
 
 ## Where things are
 - Live site: https://www.introthread.com (apex redirects to www). Vercel deploys automatically from `main` of `introthread/introthread` (preset "Other", static).
@@ -56,6 +56,13 @@ Tap -> Thread -> one question, "What's next?". Answers stay sealed until both pe
   - Free limit: real (cloud) accounts not on Pro get 5 new Threads per calendar month (`FREE_LIMIT`, `threadsThisMonth`, `freeLeft`). The Tap page shows "N of 5 free Threads left". At the limit, a sheet offers "See Pro" or "Save as a contact". Demo mode is not limited.
   - Pricing: Free now says "5 new Threads a month", Pro adds "Unlimited Threads", FAQ copy updated. UK visitors (timezone Europe/London or en-GB language) see pounds (`isUK`, `toGBP`; $10->8, $12->10, $96->77, $120->96, $166->129, $199->159, others x0.8).
 - Database migration `supabase/migrations/002_contacts_admin.sql` (NOT YET RUN; Agnes must paste it into Supabase SQL Editor and run): contacts, staff + `is_staff()` function, audit_log, reports, account_status, plans (free 5 Threads, pro), subscriptions, app_settings (free_threads_per_month=5, maintenance, feature switches), privacy_requests. All with row level security. Seeds mosemqute@gmail.com as owner (only works once that email has signed up; re-run the insert after sign-up).
+- Migration 002 verified live in Supabase on 21 Oct 2026: all tables exist, plans (free 5 Threads, pro) and app_settings seeded, mosemqute@gmail.com is owner in `staff`.
+- Admin area v33 at `/admin` (and `/admin/<tab>`), routed by a `render` wrapper:
+  - Gate: signed-in check, `admin_me()` staff check, then two-step verification (Supabase TOTP: enroll with QR, then `challengeAndVerify` to reach aal2). Required while app_settings `admin_require_mfa` is true (default). If an owner is ever locked out, run in SQL editor: `update app_settings set value='false' where key='admin_require_mfa';`
+  - Tabs (shown by role): Dashboard (people, active 7/30 days, Threads, confirm rate, both-answered rate, paying, estimated monthly revenue, contacts, 30-day bar charts, cities, plan split, alerts for open reports and privacy deadlines), Users (search, paging, CSV export, detail with change plan, suspend, ban, reactivate, export data JSON, delete account with typed DELETE), Moderation (open/actioned/dismissed/all), Rooms (delete), Revenue (MRR, run rate, conversion, subscriptions, price list; Stripe not connected yet), Plans and pricing (edit USD/GBP prices and Thread limits), Settings (announcement banner, maintenance mode, feature switches, require 2-step), Privacy requests (30-day clock, overdue flag, start/export/delete/done/reject), Staff (owner adds by email, changes or removes roles), Audit log (filter, CSV export).
+  - Every action asks for a reason and runs through a SECURITY DEFINER function in migration 003 that checks the role (`assert_staff`) and writes the audit log. The browser never holds admin keys. Roles: owner, admin, support, moderator, finance.
+  - Note: `SB` is a global const (not `window.SB`). Tests mock it by replacing `const SB=(window.supabase` with `const SB=window.__SB?window.__SB:(window.supabase` (see `tadm.js`).
+- User side v33: "Report this profile" on public cards and "Report a problem with this Thread" (writes `reports`); suspended or banned accounts see a paused/closed screen (reads `account_status`); maintenance mode screen for non-staff; announcement banner (dismissible per message); Settings has "Your data and privacy" with Request a copy / Delete my account (writes `privacy_requests`); Free limit now reads `free_threads_per_month` from app_settings; `isPro` is case-insensitive (profiles store "Pro").
 
 ## Honest limits to keep in mind
 - LinkedIn does not let apps read another person's profile from a username. A LinkedIn link gives the profile URL and a best-guess name only; email, phone, title and company must come from paste, QR vCard, business card or contacts.
@@ -63,7 +70,7 @@ Tap -> Thread -> one question, "What's next?". Answers stay sealed until both pe
 - iPhone Safari hides the contact picker unless the Contact Picker API feature flag is turned on.
 
 ## Open items / next steps
-0. Agnes to run `supabase/migrations/002_contacts_admin.sql` in Supabase. Then: Phase 2 admin area at /admin (dashboard, users, moderation and Report buttons, audit log, settings, privacy requests), using server-side Supabase Edge Functions for staff actions.
+0. Agnes to run `supabase/migrations/003_admin_functions.sql` in Supabase (002 is done). Then sign in as mosemqute@gmail.com, open /admin, set up two-step verification. Next phase: Stripe billing (checkout, customer portal, webhook writing `subscriptions`).
 1. Agnes to paste the Supabase email templates (Magic Link and Confirm signup, code-based, keep code length 8) and configure Resend SMTP; then run a real end-to-end sign-up test with a real inbox.
 2. Real Google and Microsoft sign-in (Google sign-in is being tested with mkautospareske@gmail.com).
 3. Pro billing (currently simulated) and real outbound email sending.
