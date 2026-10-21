@@ -8,10 +8,11 @@ module.exports = async (req, res) => {
   const c = await caller(req); if (!c) return send(res, 401, { error: 'auth' });
   if (!c.user.email) return send(res, 200, { synced: 0 });
   const cust = await ps('/customer/' + encodeURIComponent(c.user.email));
-  if (!cust || !cust.id) return send(res, 200, { synced: 0 });
+  if (!cust || !cust.id) return send(res, 200, { synced: 0, reason: 'no_customer' });
   const txs = (await ps(`/transaction?customer=${cust.id}&status=success&perPage=50`)) || [];
-  const mine = txs.filter(t => t.status === 'success' && meta(t).user_id === c.user.id && t.plan && (t.plan.plan_code || Object.keys(t.plan).length)).sort((a, b) => Date.parse(a.paid_at || a.created_at) - Date.parse(b.paid_at || b.created_at));
+  const email = String(c.user.email).toLowerCase();
+  const mine = txs.filter(t => t.status === 'success' && (meta(t).user_id === c.user.id || (!meta(t).user_id && String((t.customer || {}).email || email).toLowerCase() === email))).sort((a, b) => Date.parse(a.paid_at || a.created_at) - Date.parse(b.paid_at || b.created_at));
   const db = svc(); let n = 0;
   for (const t of mine) { if (!t.customer) t.customer = cust; await applyCharge(db, c.user.id, t); n++; }
-  return send(res, 200, { synced: n, pro: n > 0 });
+  return send(res, 200, { synced: n, pro: n > 0, found: txs.length });
 };

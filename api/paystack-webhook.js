@@ -26,7 +26,7 @@ module.exports = async (req, res) => {
   };
   const now = new Date().toISOString();
   if (ev.event === 'charge.success') {
-    const uid = await userFor(); if (uid && (d.plan && (d.plan.plan_code || typeof d.plan === 'string'))) await applyCharge(db, uid, d);
+    const uid = await userFor(); if (uid) await applyCharge(db, uid, d);
   } else if (ev.event === 'subscription.create') {
     if (cust) await db.patch(`subscriptions?stripe_customer_id=eq.${encodeURIComponent(cust)}`, { stripe_subscription_id: d.subscription_code, ...(d.next_payment_date ? { current_period_end: d.next_payment_date } : {}), updated_at: now });
   } else if (ev.event === 'subscription.not_renew') {
