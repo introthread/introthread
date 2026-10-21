@@ -2658,6 +2658,13 @@ button.rm-c{cursor:pointer;transition:border-color .15s,box-shadow .15s}button.r
 .pc-stage{max-width:min(320px,calc(100dvh - 300px))!important;min-width:160px}.pc-zoom{max-width:min(320px,calc(100dvh - 300px))!important;min-width:160px}
 .pc-zoom svg{flex:none}
 
+/* login / sign-up on phones: nothing may be wider than the screen (some Android phones with large text or zoom pushed the form off the right edge) */
+@media (max-width:760px){html,body{max-width:100%;overflow-x:hidden}
+ .x-side,.x-main,.x-mi,.x-mi form,.x-mi>*{min-width:0!important;max-width:100%;box-sizing:border-box}
+ .x-mi input,.x-mi select,.x-mi textarea,.x-mi button,.x-mi .x-btn{max-width:100%;box-sizing:border-box}
+ .x-mi h1,.x-ftitle,.x-side h1,.x-eye{overflow-wrap:anywhere}
+ .x-mi .row,.x-mi .between{flex-wrap:wrap;gap:4px 12px;min-width:0}}
+
 </style>
 </head>
 <body><a href="#root" class="x-skip">Skip to content</a>
