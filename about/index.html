@@ -1749,6 +1749,14 @@ html,body,button,input,select,textarea{font-family:var(--xss)}
 .am-out{color:#d14343}.am-out svg{color:#d14343!important}.am-out:hover,.am-out:focus-visible{background:#fdf0f0}
 @media (prefers-reduced-motion:reduce){.am{animation:none}}
 
+/* v17 signed-in routing */
+.it-splash{min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:18px;font-family:var(--xss);background:#f6f8fc;color:var(--xmu)}
+.it-splash .x-logo{font-size:28px}.it-splash p{margin:0;font-size:14.5px}
+.it-spin{width:28px;height:28px;border-radius:50%;border:3px solid #dbe4fb;border-top-color:var(--xb);animation:itspin .8s linear infinite}
+@keyframes itspin{to{transform:rotate(360deg)}}
+.it-dash{display:inline-flex;align-items:center;gap:8px;padding-left:6px!important}.it-dash .x-av{margin:0;box-shadow:none}
+@media (prefers-reduced-motion:reduce){.it-spin{animation-duration:2s}}
+
 </style>
 </head>
 <body><a href="#root" class="x-skip">Skip to content</a>
@@ -3230,6 +3238,32 @@ window.addEventListener('resize',amClose);window.addEventListener('itroute',amCl
 const _shell16=shell;shell=function(on,inner){let h=_shell16(on,inner);const u=me();if(!u)return h;const pro=u.plan&&u.plan!=='Free';
  h=h.replace(/<div class="row" style="margin-top:14px;padding:8px">[\s\S]*?<\/button><\/div><\/aside>/,`<button type="button" class="sb-user" data-am aria-haspopup="menu" aria-expanded="false" onclick="acctMenu(this,'up')">${avatarC(u,40)}<span class="sb-ui"><b>${esc(u.name||'')}</b><small>${pro?esc(u.plan)+' plan':'Free plan'}</small></span><span class="sb-chev">${sv('chevd',16)}</span></button></aside>`);
  h=h.replace('class="t-user" onclick="acctMenu()"','class="t-user" data-am aria-haspopup="menu" aria-expanded="false" onclick="acctMenu(this,\'down\')"');return h};
+
+/* ===== v17 Signed-in routing: stay inside the account ===== */
+const IT_NEXT='it_next',IT_SITE='it_site';
+function itSafeNext(n){return typeof n==='string'&&/^\/app(\/[\w\-\/]*)?$/.test(n.split('?')[0])?n:null}
+function itTakeNext(){try{const n=itSafeNext(sessionStorage.getItem(IT_NEXT));sessionStorage.removeItem(IT_NEXT);return n}catch(_){return null}}
+function itSplash(msg){return`<div class="it-splash" role="status" aria-live="polite"><span class="x-logo"><span class="x-lm"><i></i><i></i></span><span>intro<b>thread</b></span></span><span class="it-spin" aria-hidden="true"></span><p>${msg||'Loading your account...'}</p></div>`}
+/* show a branded loader (not the marketing page or login) while a saved session is restored */
+try{if(SB&&!AUTH_CB&&/^\/app(\/|$)/.test(location.pathname)&&!me()){$('#root').innerHTML=itSplash()}}catch(_){}
+try{if(/[?&]site=1/.test(location.search))sessionStorage.setItem(IT_SITE,'1')}catch(_){}
+const _go17=go;go=function(h){let p=String(h).replace(/^#/,'')||'/';if(/^\/app\/?$/.test(p)&&me()){const n=itTakeNext();if(n)p=n}if(p.startsWith('/app')){try{sessionStorage.removeItem(IT_SITE)}catch(_){}}return _go17(p)};
+const _render17=render;render=function(){const path=location.pathname||'/',p=path.split('/').filter(Boolean);const authed=!!me();
+ if(p[0]==='app'&&!authed&&!(typeof PENDING!=='undefined'&&PENDING)){try{sessionStorage.setItem(IT_NEXT,path+location.search)}catch(_){}history.replaceState(null,'','/login');return _render17()}
+ if((p[0]==='login'||p[0]==='signup')&&authed&&!(p[0]==='signup'&&typeof SU!=='undefined'&&SU.step>1&&typeof PENDING!=='undefined'&&PENDING)){history.replaceState(null,'',itTakeNext()||'/app');return _render17()}
+ if(!p[0]&&authed){let site=false;try{site=sessionStorage.getItem(IT_SITE)==='1'}catch(_){}if(!site){history.replaceState(null,'','/app');return _render17()}}
+ return _render17()};
+/* sign out: return to the login page with a clear message; handle sessions ended elsewhere */
+logout=async function(){try{if(cloud())await SB.auth.signOut()}catch(_){}clearCloud();DB.session=null;MODE=null;save();try{sessionStorage.removeItem(IT_NEXT);sessionStorage.removeItem(IT_SITE);sessionStorage.removeItem('it_gtok')}catch(_){}history.replaceState(null,'','/login');render();toast('You have been signed out')};
+if(SB){SB.auth.onAuthStateChange(ev=>{if(ev==='SIGNED_OUT'&&MODE==='cloud'){clearCloud();DB.session=null;MODE=null;save();if(location.pathname.startsWith('/app')){try{sessionStorage.setItem(IT_NEXT,location.pathname)}catch(_){}history.replaceState(null,'','/login');render();toast('Your session ended. Please log in again.')}}})}
+/* marketing pages when signed in: show the way back to the account instead of sign-up buttons */
+const _mnav17=mnav;mnav=function(on){let h=_mnav17(on);const u=me();if(!u)return h;
+ const dash=`<a href="/app" class="x-btn it-dash">${avatarC(u,26)}<span>Go to dashboard</span>${sv('arrow',15)}</a>`;let done=false;
+ h=h.replace(/<a href="#?\/signup" class="x-btn[^"]*"[^>]*>[\s\S]*?<\/a>/g,()=>{if(done)return'';done=true;return dash});if(!done)h=h.replace('</nav>','</nav>'+dash);return h};
+/* in-app logo goes to the dashboard, not the public home page */
+const _shell17=shell;shell=function(on,inner){let h=_shell17(on,inner);return h.replace(/(<aside class="sidebar">[\s\S]*?)href="#?\/"/,'$1href="/app" aria-label="Introthread dashboard"')};
+/* account menu: link to the public website without being bounced back */
+const _acct17=acctMenu;acctMenu=function(btn,dir){_acct17(btn,dir);const m=document.getElementById('acm');if(!m)return;const g=[...m.querySelectorAll('.am-g')];const help=g[g.length-2];if(help&&!m.querySelector('[data-site]')){help.insertAdjacentHTML('beforeend',`<button type="button" role="menuitem" class="am-it" data-site onclick="amClose();try{sessionStorage.setItem('${IT_SITE}','1')}catch(_){};go('/')">${sv('globe',18)}<span>Introthread website</span></button>`)}};
 
 </script>
 </body>
