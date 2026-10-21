@@ -1,9 +1,10 @@
 # Introthread - handover for the next AI agent
 
-Last updated: 21 Oct 2026, 2:45 pm Nairobi (after admin redesign v38, screen 5 of 9). Read this before making changes, and update it after every change.
+Last updated: 21 Oct 2026, 3:00 pm Nairobi (after admin redesign v39, screen 6 of 9). Read this before making changes, and update it after every change.
 
 ## Current state (cross-checked 21 Oct 2026)
-- `main` head: commit 7da72f9 (Revenue screen). Vercel deploys `main` automatically.
+- `main` head: the Plans and pricing commit (v39). Vercel deploys `main` automatically.
+- Migration 009 (`supabase/migrations/009_plans_screen.sql`) is NOT YET RUN. Agnes must paste it into the Supabase SQL Editor and run it. Until then the Plans page uses its fallback (no descriptions, no people counts, older save function, history from the audit log).
 - Database migrations 002 to 008 are ALL RUN by Agnes and were verified live (21 Oct 2026):
   - 002/003: tables `staff`, `audit_log`, `reports`, `account_status`, `plans`, `subscriptions`, `app_settings`, `contacts`, `privacy_requests`; admin functions.
   - 004: `admin_stats_range` exists. 005: `admin_notes` table exists. 006: `reports.outcome` column exists. 007: `admin_rooms2` exists. 008: `payments` table and `subscriptions.started_at` exist; `admin_revenue` exists.
@@ -21,14 +22,14 @@ Last updated: 21 Oct 2026, 2:45 pm Nairobi (after admin redesign v38, screen 5 o
 | 3 | Moderation | v36 | 006 | Done |
 | 4 | Rooms | v37 | 007 | Done |
 | 5 | Revenue | v38 | 008 | Done |
-| 6 | Plans and pricing | - | - | Next. Wait for Agnes's mockup |
-| 7 | Settings | - | - | To do |
+| 6 | Plans and pricing | v39 | 009 (not yet run) | Done |
+| 7 | Settings | - | - | Next. Wait for Agnes's mockup |
 | 8 | Privacy requests | - | - | To do |
 | 9 | Staff and Audit log | - | - | To do |
 - Agnes's instruction for each screen: "exact equivalent or better" than her mockup, real backend only, nothing faked. Where a mockup shows something untrue (for example "Stripe connected", "All systems operational"), show the honest state instead and say so in the report.
 - Pattern per screen: new `supabase/migrations/00N_*.sql` (SECURITY DEFINER functions that call `assert_staff(roles)` and write `audit(...)`; revoke from public/anon, grant to authenticated), one JS block and one CSS block appended to `index.html`, an `admLoadTab` override for the tab, a fallback to the older RPC when the new one is missing, a jsdom test, HANDOVER update, one commit.
 - Shared look: KPI cards (`rm-c` / `md-c`), toolbar selects (`mdSel`), list + detail panel grid (`md-g`, drawer below 1180px, Esc closes), sections (`md-sec`), tables (`au-t`), status pills, `admAsk` confirm dialog (reason always required, optional typed DELETE).
-- Global names already taken, do not redeclare (a clash breaks the whole app): `ADMR` (dashboard range), `money`, `usd`, `pct`, `ago`, `fmtT`, `initials`. Prefix new globals per screen: `au*`/`ADMU` Users, `md*`/`ADMM` Moderation, `rm*`/`RMX` Rooms, `rv*`/`RVX` Revenue. Before adding a global, grep `index.html` for `(const|let|function) name`.
+- Global names already taken, do not redeclare (a clash breaks the whole app): `ADMR` (dashboard range), `money`, `usd`, `pct`, `ago`, `fmtT`, `initials`. Prefix new globals per screen: `au*`/`ADMU` Users, `md*`/`ADMM` Moderation, `rm*`/`RMX` Rooms, `rv*`/`RVX` Revenue, `pl*`/`PLX`/`PL_F` Plans (`PLANS` is the older billing constant, do not reuse it). Before adding a global, grep `index.html` for `(const|let|function) name`.
 - Roles: owner, admin, moderator, support, finance. `admOk([...])` in the client; `assert_staff([...])` on the server decides.
 
 ## Where things are
@@ -134,8 +135,20 @@ Tap -> Thread -> one question, "What's next?". Answers stay sealed until both pe
   - Price list from the plans table (USD, GBP, monthly and yearly, Thread limit, Stripe linked or not, status) with Edit prices (goes to Plans).
   - Recent payments (6) with View all modal (filters Paid, Failed, Refunded).
   - Needs `supabase/migrations/008_revenue_screen.sql` (subscriptions.started_at, canceled_at, amount; new `payments` table written only by the Stripe webhook; sub_mrr_usd, admin_revenue, admin_subs2, admin_payments). Without it the page estimates from current subscriptions and plan prices and hides charts.
-  - Stripe itself (checkout, webhook writing subscriptions and payments) is still to build, per the agreed build order.
+  - Stripe itself (checkout, webhook writing subscriptions and payments) is still to build, per the agreed build order. When it is built, /pricing and in-app billing should read prices from the `plans` table.
   - Next: Screen 6 Plans and pricing.
+- Admin redesign v39 (screen 6 of 9: Plans and pricing), `plLoad`/`plPage`/`plCard`, state `PLX`. Built from Agnes's mockup "Introthread Plans & Pricing Dashboard":
+  - Header with Pricing history button. Honest info banner: changes are saved at once and audited, the Free Thread limit applies at once, but card payments are not on yet (Stripe not connected), so nobody is charged a new price. The mockup's "Changes apply immediately" was softened for that reason.
+  - One card per plan (Free blue with gift icon, Pro orange with crown), Active/Hidden pill, chips for people on the plan, Stripe prices linked or not (Pro), last updated and by whom.
+  - Fields: Plan name, Description (needs 009), USD and GBP per month and per year with currency prefixes, New Threads per month with an Unlimited tick box (Pro only; Free must have a number because the app reads `free_threads_per_month`), Offer this plan switch (Pro only; Free cannot be hidden). Free prices are read-only at 0.
+  - Live checks under each field (required name, prices 0 to 100000 with at most 2 decimals, whole-number Thread limit), yearly saving hint ("Saves 17% against monthly (2 months free)"; amber when yearly costs more than 12 months), live Plan summary.
+  - Save button is disabled until something changes; status reads "No changes to save" / "N unsaved changes" / "Fix the highlighted field". Undo changes button. Saving opens `admAsk` with a before/after table and a reason; price changes on Pro add a note that existing subscribers keep their price until changed in Stripe.
+  - Unsaved edits on the other plan are kept when one plan is saved. Leaving the tab (admGo) or the page asks first when there are unsaved changes.
+  - Pricing history modal: every plan change with date, staff member, reason and before -> after values, filter by plan. Older entries from `admin_update_plan` show "set to" values.
+  - Read-only for roles other than owner/finance (inputs disabled, note shown).
+  - `supabase/migrations/009_plans_screen.sql`: plans.description, updated_at, updated_by; `admin_plans2` (plans + people per plan + who changed it), `admin_plan_save` (server-side validation, records only real changes with before/after in the audit log, keeps `free_threads_per_month` in app_settings in step), `admin_plan_history`. Without 009 the page loads plans from the table, saves with `admin_update_plan`, and reads history from `admin_audit`.
+  - Not yet true, to fix with Stripe: the public /pricing page and in-app billing still use built-in prices (`PLANS` constant), not the `plans` table. Make them read the table when checkout is built.
+  - Next: Screen 7 Settings.
 
 ## Honest limits to keep in mind
 - LinkedIn does not let apps read another person's profile from a username. A LinkedIn link gives the profile URL and a best-guess name only; email, phone, title and company must come from paste, QR vCard, business card or contacts.
@@ -143,7 +156,8 @@ Tap -> Thread -> one question, "What's next?". Answers stay sealed until both pe
 - iPhone Safari hides the contact picker unless the Contact Picker API feature flag is turned on.
 
 ## Open items / next steps
-1. Admin redesign screens 6 to 9 (table above). Agnes sends one mockup at a time.
+1. Agnes: run migration 009 in the Supabase SQL Editor, then reload /admin/plans (the update note disappears).
+1b. Admin redesign screens 7 to 9 (table above). Agnes sends one mockup at a time.
 2. Agnes: sign in as mosemqute@gmail.com, open /admin, set up two-step verification.
 3. Stripe billing (next in the build order after admin): Product + monthly/yearly Prices in USD and GBP, Price IDs into Plans, secret key and webhook secret in Vercel env (never in code), checkout, customer portal, webhook writing `subscriptions` (incl. started_at, canceled_at, amount, current_period_end) and `payments` (amount_usd for totals). The Revenue badge turns green automatically once Stripe ids appear.
 4. Then Google/Microsoft connect, then LinkedIn (agreed build order: contacts and import, admin, Stripe, Google/Microsoft, LinkedIn). No LinkedIn company page yet.
@@ -159,6 +173,6 @@ Tap -> Thread -> one question, "What's next?". Answers stay sealed until both pe
 
 ## Testing approach used
 - Sandbox workflow: write large JS/CSS to the session file store first, copy one file at a time into the sandbox, insert JS before the last `</script>` and CSS before the last `\n</style>`, run `python3 scripts/build_pages.py` (prints "built 10"), keep a `.bak` of `index.html` before each insert.
-- Admin tests mock Supabase by replacing `const SB=(window.supabase` with `const SB=window.__SB?window.__SB:(window.supabase` and setting `__SB` in jsdom `beforeParse`. Per-screen tests are saved in `tests/admin/` (tadm all tabs, tusers, tmod, trm rooms, trv revenue). Run from the repo root after `npm i jsdom`, for example `timeout 13 node tests/admin/trv.js 2>&1 | grep -v "Not implemented" | tail -1`; a pass ends in `errs []`. They read `index.html` from the current folder. Each covers the full page, detail panel, actions with reasons, and the fallback without the screen's migration. Run at most about 4 tests per command (each takes 10 to 13 seconds).
+- Admin tests mock Supabase by replacing `const SB=(window.supabase` with `const SB=window.__SB?window.__SB:(window.supabase` and setting `__SB` in jsdom `beforeParse`. Per-screen tests are saved in `tests/admin/` (tadm all tabs, tusers, tmod, trm rooms, trv revenue, tpl plans). Run from the repo root after `npm i jsdom`, for example `timeout 13 node tests/admin/trv.js 2>&1 | grep -v "Not implemented" | tail -1`; a pass ends in `errs []`. They read `index.html` from the current folder. Each covers the full page, detail panel, actions with reasons, and the fallback without the screen's migration. Run at most about 4 tests per command (each takes 10 to 13 seconds).
 - jsdom scripts that load `index.html`, log in to demo mode and exercise flows; a pass ends with an empty error list. Covered: Tap form, sign-up, guest reveal, capture, the LinkedIn follow-up prompt, exports, billing, rooms, Today, thread detail.
 - Playwright phone-viewport screenshots (390x844) for layout checks.
