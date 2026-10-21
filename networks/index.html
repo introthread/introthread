@@ -2730,6 +2730,23 @@ html{-webkit-text-size-adjust:100%;text-size-adjust:100%;touch-action:manipulati
 
 .ev2-qrw{margin:6px}.ev2-c.tl{top:-6px;left:-6px}.ev2-c.tr{top:-6px;right:-6px}.ev2-c.bl{bottom:-6px;left:-6px}.ev2-c.br{bottom:-6px;right:-6px}.ev2-qrw #scanqr img,.ev2-qrw #scanqr canvas{display:block;border-radius:6px}
 
+/* ==== Invoice v2 ==== */
+.iv{max-width:760px;margin:auto;background:#fff;color:#101828;font:400 14px/1.5 var(--xss,sans-serif);padding:28px;border:1px solid #e9edf5;border-radius:16px;box-sizing:border-box;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+.iv h2{margin:0;font-size:28px;font-weight:700;letter-spacing:-.01em}.iv h3{margin:0 0 6px;font:600 11px var(--xss,sans-serif);letter-spacing:.08em;text-transform:uppercase;color:#667085}
+.iv-top{display:flex;justify-content:space-between;gap:24px;flex-wrap:wrap;padding-bottom:20px;border-bottom:3px solid #1f5eff}.iv-logo{display:block}
+.iv-from{font-style:normal;margin-top:10px;color:#475467;font-size:13px;line-height:1.55}.iv-from b{display:block;color:#101828;font-size:14px}
+.iv-title{text-align:right;min-width:220px}.iv-title dl{margin:10px 0 0;display:grid;gap:2px}.iv-title dl div{display:flex;justify-content:flex-end;gap:12px;font-size:13px}.iv-title dt{color:#667085}.iv-title dd{margin:0;font-weight:600;min-width:110px}
+.iv-st{display:inline-block;margin-top:10px;padding:4px 12px;border-radius:999px;font:700 11.5px var(--xss,sans-serif);letter-spacing:.08em;text-transform:uppercase}.iv-st.g{background:#ecfdf3;color:#067647}.iv-st.o{background:#fff6ed;color:#c4320a}.iv-st.r{background:#fef3f2;color:#b42318}.iv-st.n{background:#f2f4f7;color:#475467}
+.iv-parties{display:flex;justify-content:space-between;gap:24px;flex-wrap:wrap;padding:20px 0}.iv-parties>div{display:flex;flex-direction:column;min-width:0}.iv-parties span{color:#475467;font-size:13px;overflow-wrap:anywhere}.iv-parties b{font-size:15px}
+.iv-amt{text-align:right;padding:14px 18px;border-radius:12px;background:#f5f8ff}.iv-amt strong{font-size:26px;font-weight:700;letter-spacing:-.01em}.iv-amt span{font-size:12.5px}
+.iv-t{width:100%;border-collapse:collapse;margin-top:4px}.iv-t th{background:#0f1b3d;color:#fff;font:600 11.5px var(--xss,sans-serif);letter-spacing:.05em;text-transform:uppercase;text-align:left;padding:10px 12px}.iv-t th:first-child{border-radius:8px 0 0 8px}.iv-t th:last-child{border-radius:0 8px 8px 0}
+.iv-t td{padding:12px;border-bottom:1px solid #eef0f4;vertical-align:top}.iv-t td small{display:block;color:#667085;font-size:12px}.iv-t .n{text-align:right;white-space:nowrap}
+.iv-sum{display:flex;justify-content:flex-end;margin-top:12px}.iv-sum dl{margin:0;min-width:280px;display:grid}.iv-sum dl div{display:flex;justify-content:space-between;gap:16px;padding:6px 12px;font-size:13.5px}.iv-sum dt{color:#475467}.iv-sum dd{margin:0;font-weight:600;font-variant-numeric:tabular-nums}
+.iv-sum .tot{border-top:1px solid #d0d5dd;margin-top:4px;padding-top:10px}.iv-sum .tot dt,.iv-sum .tot dd{color:#101828;font-weight:700;font-size:15px}.iv-sum .due{background:#0f1b3d;border-radius:8px;margin-top:6px}.iv-sum .due dt,.iv-sum .due dd{color:#fff;font-weight:700}
+.iv-foot{display:grid;grid-template-columns:1fr 1fr;gap:20px;margin-top:24px;padding-top:16px;border-top:1px solid #eef0f4}.iv-foot p{margin:0;color:#475467;font-size:12.5px}.iv-thanks{grid-column:1/-1;text-align:center;color:#1f5eff!important;font-weight:600;font-size:13px!important;margin-top:4px!important}
+@media (max-width:600px){.iv{padding:18px;border-radius:12px}.iv-title{text-align:left;min-width:0}.iv-title dl div{justify-content:space-between}.iv-amt{text-align:left;width:100%}.iv-t th:nth-child(2),.iv-t td:nth-child(2),.iv-t th:nth-child(3),.iv-t td:nth-child(3){display:none}.iv-sum dl{min-width:0;width:100%}.iv-foot{grid-template-columns:1fr}}
+@media print{.iv{border:0;padding:0}}
+
 </style>
 </head>
 <body><a href="#root" class="x-skip">Skip to content</a>
@@ -6596,6 +6613,25 @@ const _vScanEv2=vScan;vScan=function(){const u=me();if(!u)return _vScanEv2.apply
  <section class="ev2-tag" aria-label="Event tagging"><span class="ev2-lab">${sv('pin',14)} Tag new Threads to</span><div class="ev2-chips" role="radiogroup" aria-label="Event"><button type="button" role="radio" aria-checked="${!room}" class="${room?'':'on'}" onclick="SCAN.room='';render()">No event</button>${R.map(r=>`<button type="button" role="radio" aria-checked="${SCAN.room===r.id}" class="${SCAN.room===r.id?'on':''}" onclick="SCAN.room='${r.id}';render()">${esc(r.name)}</button>`).join('')}<a class="ev2-new" href="/app/rooms">${sv('plus',14)} New event</a></div></section>
  <nav class="ev2-bar" aria-label="More ways to connect"><button type="button" onclick="shareNative()">${sv('send',20)}<span>Share</span></button><button type="button" onclick="tapNFC()">${sv('nfc',20)}<span>NFC</span></button><button type="button" onclick="scanWallpaper()">${sv('photo',20)}<span>Wallpaper</span></button><a href="/app/tap">${sv('user',20)}<span>Add manually</span></a></nav>
  <p class="ev2-tip">${n?`<b>${n} Thread${n>1?'s':''} today.</b> `:''}Tip: turn your brightness up for faster scanning.</p></main></div>`};
+
+/* ==== Invoice v2: professional international layout with the Introthread logo ==== */
+const invLogo=(h=30)=>`<svg class="iv-logo" height="${h}" viewBox="0 0 196 40" role="img" aria-label="Introthread"><circle cx="16" cy="20" r="12" fill="#0f1b3d"/><circle cx="32" cy="20" r="12" fill="#ff6a3d" fill-opacity=".95"/><text x="52" y="28" font-family="sans-serif" font-size="24" font-weight="600" fill="#0f1b3d" textLength="140" lengthAdjust="spacingAndGlyphs">intro<tspan fill="#1f5eff">thread</tspan></text></svg>`;
+bInvHTML=function(i){const b=bGet(),d=b.details||{},u=me()||{};const cur=i.currency||'USD';const paid=i.status==='paid',overdue=i.status==='open'&&Date.now()>i.due,voided=i.status!=='paid'&&i.status!=='open';
+ const st=paid?['Paid','g']:voided?['Void','n']:overdue?['Overdue','r']:['Due','o'];const rate=(String(i.taxLabel||'').match(/([\d.]+)%/)||[])[1];
+ const due=paid?0:i.total;const ctry=(typeof COUNTRIES!=='undefined'?(COUNTRIES.find(c=>c[0]===d.country)||[])[1]:'')||'';
+ return `<article class="iv" aria-label="Invoice ${esc(i.number)}">
+ <header class="iv-top"><div>${invLogo(34)}<address class="iv-from"><b>Introthread Ltd</b>London &middot; New York<br>billing@introthread.com<br>www.introthread.com</address></div>
+ <div class="iv-title"><h2>Invoice</h2><dl><div><dt>Invoice number</dt><dd>${esc(i.number)}</dd></div><div><dt>Issue date</dt><dd>${bDate(i.date)}</dd></div><div><dt>${paid?'Paid on':'Due date'}</dt><dd>${bDate(paid?i.paidAt:i.due)}</dd></div>${i.period?`<div><dt>Service period</dt><dd>${bDate(i.period[0])} &ndash; ${bDate(i.period[1])}</dd></div>`:''}</dl><span class="iv-st ${st[1]}">${st[0]}</span></div></header>
+ <section class="iv-parties"><div><h3>Bill to</h3><b>${esc(d.name||u.name||'')}</b>${d.company?`<span>${esc(d.company)}</span>`:''}${d.address?`<span>${esc(d.address)}</span>`:''}${ctry?`<span>${esc(ctry)}</span>`:''}<span>${esc(d.email||u.email||'')}</span>${d.vat?`<span>Tax ID: ${esc(d.vat)}</span>`:''}</div>
+ <div class="iv-amt"><h3>${paid?'Amount paid':'Amount due'}</h3><strong>${money(paid?i.total:due)}</strong><span>${cur}${paid?'':' &middot; due '+bDate(i.due)}</span></div></section>
+ <table class="iv-t"><thead><tr><th scope="col">Description</th><th scope="col" class="n">Qty</th><th scope="col" class="n">Unit price</th>${rate?`<th scope="col" class="n">Tax</th>`:''}<th scope="col" class="n">Amount (${cur})</th></tr></thead>
+ <tbody>${(i.lines||[]).map(l=>`<tr><td><b>${esc(l.d)}</b>${i.period?`<small>${bDate(i.period[0])} &ndash; ${bDate(i.period[1])}</small>`:''}</td><td class="n">1</td><td class="n">${money(l.amount)}</td>${rate?`<td class="n">${rate}%</td>`:''}<td class="n">${money(l.amount)}</td></tr>`).join('')}</tbody></table>
+ <div class="iv-sum"><dl><div><dt>Subtotal</dt><dd>${money(i.subtotal)}</dd></div><div><dt>${esc(i.taxLabel||'Tax')}${rate?` on ${money(i.subtotal)}`:''}</dt><dd>${money(i.tax)}</dd></div><div class="tot"><dt>Total (${cur})</dt><dd>${money(i.total)}</dd></div>${paid?`<div><dt>Amount paid</dt><dd>&minus;${money(i.total)}</dd></div>`:''}<div class="due"><dt>Balance due</dt><dd>${money(due)}</dd></div></dl></div>
+ <footer class="iv-foot"><div><h3>Payment</h3><p>${paid?`Paid ${bDate(i.paidAt)}${i.method?' with '+esc(i.method):''}${MODE==='demo'?' (demo, simulated)':''}.`:`Pay online in Introthread under Settings &gt; Billing by ${bDate(i.due)}.`}</p></div>
+ <div><h3>Notes</h3><p>Prices are in ${cur}. ${i.tax?'Tax is shown as charged at the rate for your billing country.':'No tax was charged on this invoice.'} Questions: billing@introthread.com, quoting ${esc(i.number)}.</p></div>
+ <p class="iv-thanks">Thank you for using Introthread.</p></footer></article>`};
+bInvPrint=function(id){const i=bGet().invoices.find(x=>x.id===id);if(!i)return;const w=window.open('','_blank');if(!w)return toast('Allow pop-ups to download the invoice.');
+ const css=[...document.querySelectorAll('style')].map(s=>s.textContent).join('\n');w.document.write(`<!doctype html><html lang="en"><head><meta charset="utf-8"><title>${i.number} - Introthread invoice</title><style>${css}@page{size:A4;margin:14mm}html,body{background:#fff!important;overflow:visible!important}body{padding:0;margin:0}.iv{box-shadow:none;border:0;max-width:none;padding:0}</style></head><body>${bInvHTML(i)}<scr`+`ipt>setTimeout(()=>print(),400)</scr`+`ipt></body></html>`);w.document.close()};
 </script>
 </body>
 </html>
