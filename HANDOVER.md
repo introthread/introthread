@@ -1,9 +1,12 @@
 # Introthread - handover for the next AI agent
 
-Last updated: 21 Oct 2026, 2:45 pm Nairobi (after admin redesign v38, screen 5 of 9). Read this before making changes, and update it after every change.
+Last updated: 21 Oct 2026, 3:15 pm Nairobi (after admin redesign v43, Audit log). Read this before making changes, and update it after every change.
 
 ## Current state (cross-checked 21 Oct 2026)
-- `main` head: commit 7da72f9 (Revenue screen). Vercel deploys `main` automatically.
+- `main` head: the Audit log commit (v43). Vercel deploys `main` automatically.
+- Migration 011 (`supabase/migrations/011_staff_screen.sql`) is NOT YET RUN. Until it is, the Staff page adds existing accounts directly (no invitations, no pausing, no two-step or last-active columns).
+- Migration 010 (`supabase/migrations/010_privacy_screen.sql`) is NOT YET RUN. Until it is, the Privacy page filters in the browser, has no identity-check step, and people's notes on new requests are dropped (the request itself still saves).
+- Migration 009 (`supabase/migrations/009_plans_screen.sql`) is NOT YET RUN. Agnes must paste it into the Supabase SQL Editor and run it. Until then the Plans page uses its fallback (no descriptions, no people counts, older save function, history from the audit log).
 - Database migrations 002 to 008 are ALL RUN by Agnes and were verified live (21 Oct 2026):
   - 002/003: tables `staff`, `audit_log`, `reports`, `account_status`, `plans`, `subscriptions`, `app_settings`, `contacts`, `privacy_requests`; admin functions.
   - 004: `admin_stats_range` exists. 005: `admin_notes` table exists. 006: `reports.outcome` column exists. 007: `admin_rooms2` exists. 008: `payments` table and `subscriptions.started_at` exist; `admin_revenue` exists.
@@ -13,18 +16,6 @@ Last updated: 21 Oct 2026, 2:45 pm Nairobi (after admin redesign v38, screen 5 o
 - Lockout fix if two-step breaks: `update app_settings set value='false' where key='admin_require_mfa';`
 - Every admin screen still has a fallback for a missing migration, but none are needed now. Do not remove the fallbacks; they keep the page usable if a future migration is not yet run.
 
-## Admin sizing spec (use for every mockup, screens 6 to 9)
-Mockups are images, so they are not measured pixel by pixel. Each screen uses this one fixed set of sizes so all 9 screens match each other. Ask for mockups drawn on a 1440px-wide desktop frame at 1x (a Retina/2x screenshot is 2880px wide: halve every measurement).
-- Shell: sidebar 256px (collapsed rail 76px, saved in localStorage `it_adm_col`), navy #0b1226, padding 18px 12px 14px. Nav items 14.5px weight 500, padding 11px 12px, radius 12px, icon gap 12px. Sidebar becomes a drawer below 1024px.
-- Content: padding 30px 36px 64px, max-width 1320px. Phone: padding 20px 16px 80px.
-- KPI cards (`rm-c` / `md-c`): padding 18px 20px, radius 16px, 1px border #e6e9f0, white. Number 28px weight 600 tabular (24px on phone), label 12px. Rows of 3, 4 or 6, gap 16px; they wrap to 2 then 1 on small screens.
-- List + details (`md-g`): columns 1fr : 1.25fr, gap 16px. Details turn into a slide-over drawer below 1180px (Moderation, Rooms) or 1280px (Users). Esc closes.
-- Sections (`md-sec`): radius 14px, padding 14px.
-- Tables (`au-t`): 14px text, header 11.5px uppercase weight 600, cell padding 12px, min-width 760px and scroll inside their box; stacked rows on phones.
-- Colours: blue #1f5eff (hover #1748d6), orange #ff6b3d (badges and warnings only), page #f6f7fb, ink #0b1122, muted #5b6478, lines #e6e9f0.
-- Fonts: sans-serif / ui-sans-serif only, headings weight 400.
-- Checks: desktop 1440px and 1280px, tablet 1024px, phone 390x844 (nothing wider than the screen).
-
 ## Admin redesign: progress (9 screens, from Agnes's mockups, one at a time)
 | # | Screen | Version | Migration | Status |
 |---|---|---|---|---|
@@ -33,14 +24,14 @@ Mockups are images, so they are not measured pixel by pixel. Each screen uses th
 | 3 | Moderation | v36 | 006 | Done |
 | 4 | Rooms | v37 | 007 | Done |
 | 5 | Revenue | v38 | 008 | Done |
-| 6 | Plans and pricing | - | - | Next. Wait for Agnes's mockup |
-| 7 | Settings | - | - | To do |
-| 8 | Privacy requests | - | - | To do |
-| 9 | Staff and Audit log | - | - | To do |
+| 6 | Plans and pricing | v39 | 009 (not yet run) | Done |
+| 7 | Settings | v40 | none (uses existing admin_set_setting) | Done |
+| 8 | Privacy requests | v41 | 010 (not yet run) | Done |
+| 9 | Staff | v42 | 011 (not yet run) | Done (Audit log screen itself not redesigned yet) |
 - Agnes's instruction for each screen: "exact equivalent or better" than her mockup, real backend only, nothing faked. Where a mockup shows something untrue (for example "Stripe connected", "All systems operational"), show the honest state instead and say so in the report.
 - Pattern per screen: new `supabase/migrations/00N_*.sql` (SECURITY DEFINER functions that call `assert_staff(roles)` and write `audit(...)`; revoke from public/anon, grant to authenticated), one JS block and one CSS block appended to `index.html`, an `admLoadTab` override for the tab, a fallback to the older RPC when the new one is missing, a jsdom test, HANDOVER update, one commit.
 - Shared look: KPI cards (`rm-c` / `md-c`), toolbar selects (`mdSel`), list + detail panel grid (`md-g`, drawer below 1180px, Esc closes), sections (`md-sec`), tables (`au-t`), status pills, `admAsk` confirm dialog (reason always required, optional typed DELETE).
-- Global names already taken, do not redeclare (a clash breaks the whole app): `ADMR` (dashboard range), `money`, `usd`, `pct`, `ago`, `fmtT`, `initials`. Prefix new globals per screen: `au*`/`ADMU` Users, `md*`/`ADMM` Moderation, `rm*`/`RMX` Rooms, `rv*`/`RVX` Revenue. Before adding a global, grep `index.html` for `(const|let|function) name`.
+- Global names already taken, do not redeclare (a clash breaks the whole app): `ADMR` (dashboard range), `money`, `usd`, `pct`, `ago`, `fmtT`, `initials`. Prefix new globals per screen: `au*`/`ADMU` Users, `md*`/`ADMM` Moderation, `rm*`/`RMX` Rooms, `rv*`/`RVX` Revenue, `pl*`/`PLX`/`PL_F` Plans (`PLANS` is the older billing constant, do not reuse it), `sg*`/`SGX`/`SG_FEAT`/`SG_LAB` Settings, `pq*`/`PQX`/`PQ_KIND`/`PQ_ST` Privacy, `sf*`/`SFX`/`SF_ROLES` Staff. Before adding a global, grep `index.html` for `(const|let|function) name`.
 - Roles: owner, admin, moderator, support, finance. `admOk([...])` in the client; `assert_staff([...])` on the server decides.
 
 ## Where things are
@@ -146,8 +137,67 @@ Tap -> Thread -> one question, "What's next?". Answers stay sealed until both pe
   - Price list from the plans table (USD, GBP, monthly and yearly, Thread limit, Stripe linked or not, status) with Edit prices (goes to Plans).
   - Recent payments (6) with View all modal (filters Paid, Failed, Refunded).
   - Needs `supabase/migrations/008_revenue_screen.sql` (subscriptions.started_at, canceled_at, amount; new `payments` table written only by the Stripe webhook; sub_mrr_usd, admin_revenue, admin_subs2, admin_payments). Without it the page estimates from current subscriptions and plan prices and hides charts.
-  - Stripe itself (checkout, webhook writing subscriptions and payments) is still to build, per the agreed build order.
+  - Stripe itself (checkout, webhook writing subscriptions and payments) is still to build, per the agreed build order. When it is built, /pricing and in-app billing should read prices from the `plans` table.
   - Next: Screen 6 Plans and pricing.
+- Admin redesign v39 (screen 6 of 9: Plans and pricing), `plLoad`/`plPage`/`plCard`, state `PLX`. Built from Agnes's mockup "Introthread Plans & Pricing Dashboard":
+  - Header with Pricing history button. Honest info banner: changes are saved at once and audited, the Free Thread limit applies at once, but card payments are not on yet (Stripe not connected), so nobody is charged a new price. The mockup's "Changes apply immediately" was softened for that reason.
+  - One card per plan (Free blue with gift icon, Pro orange with crown), Active/Hidden pill, chips for people on the plan, Stripe prices linked or not (Pro), last updated and by whom.
+  - Fields: Plan name, Description (needs 009), USD and GBP per month and per year with currency prefixes, New Threads per month with an Unlimited tick box (Pro only; Free must have a number because the app reads `free_threads_per_month`), Offer this plan switch (Pro only; Free cannot be hidden). Free prices are read-only at 0.
+  - Live checks under each field (required name, prices 0 to 100000 with at most 2 decimals, whole-number Thread limit), yearly saving hint ("Saves 17% against monthly (2 months free)"; amber when yearly costs more than 12 months), live Plan summary.
+  - Save button is disabled until something changes; status reads "No changes to save" / "N unsaved changes" / "Fix the highlighted field". Undo changes button. Saving opens `admAsk` with a before/after table and a reason; price changes on Pro add a note that existing subscribers keep their price until changed in Stripe.
+  - Unsaved edits on the other plan are kept when one plan is saved. Leaving the tab (admGo) or the page asks first when there are unsaved changes.
+  - Pricing history modal: every plan change with date, staff member, reason and before -> after values, filter by plan. Older entries from `admin_update_plan` show "set to" values.
+  - Read-only for roles other than owner/finance (inputs disabled, note shown).
+  - `supabase/migrations/009_plans_screen.sql`: plans.description, updated_at, updated_by; `admin_plans2` (plans + people per plan + who changed it), `admin_plan_save` (server-side validation, records only real changes with before/after in the audit log, keeps `free_threads_per_month` in app_settings in step), `admin_plan_history`. Without 009 the page loads plans from the table, saves with `admin_update_plan`, and reads history from `admin_audit`.
+  - Since 21 Oct (after v42): the public /pricing page, Settings > Subscription and Billing read prices, names, descriptions and Thread limits from the `plans` table at load (`planSync`/`planApply` update `PLANS` and the GBP map; helpers `proM`, `proY`, `usd0`, `thrTxt`). The Free Thread limit still comes from app_settings `free_threads_per_month` (kept in step by `admin_plan_save`). Feature bullet lists and the Room pass ($199) are still in code. Stripe checkout must charge the same table prices.
+  - Next: Screen 7 Settings.
+- Admin redesign v40 (screen 7 of 9: Settings), `sgLoad`/`sgPage`, state `SGX`. From Agnes's mockup "Introthread Settings Dashboard" and her brief (keep backend actions and permissions, reason for every global change, audit log, confirm before maintenance, no settings the app does not support). No migration: everything goes through the existing `admin_set_setting(k,v,reason)` (owner/admin; `admin_require_mfa` owner only), which writes the audit log.
+  - Header with "View changes log" (modal of `setting.*` entries from `admin_audit`, with readable values).
+  - Announcement banner: message (160 max, counter), style (Information / Warning), Show banner switch, live preview using the real `.ann` banner style, Live / Not showing pill, unsaved state, Undo, Publish confirm with preview and reason. Showing a banner with no message is blocked.
+  - Maintenance mode: status pill, explainer, switch, optional message (200 max). New key `maintenance_message` (saved through admin_set_setting); `vMaint` now shows it on the "Back shortly" screen. Turning maintenance ON needs a reason AND typing MAINTENANCE (red button). Turning off or changing the message needs a reason.
+  - Features: Business card scan, Contact import, LinkedIn import, Rooms, with descriptions, On/Off text and switches; each change asks for a reason. IMPORTANT: before v40 these switches were saved but the app ignored them. v40 makes them real by wrapping `capCard` (card_scan), `ctImport` (contact_import), `importParse` (LinkedIn Connections.csv blocked when linkedin_import is off) and `vRooms`/`vRoom` (rooms; shows "Rooms are turned off for now"). Applies to everyone, including staff, the next time the app loads.
+  - Security: two-step requirement switch (owner only; turning it OFF needs typing TURN OFF), plus read-only "Built in" rows for staff roles (link to Staff), data exports and email masking, which are fixed rules in the code, not settings.
+  - Left out on purpose because the app does not support them: Session timeout, Allow staff to export data switch, Show email addresses switch, and the Danger zone (Clear all data, Reset settings). Add them only with real backend support.
+  - Unsaved announcement or maintenance edits are kept when the other card is saved; leaving the tab or page asks first.
+  - Next: Screen 8 Privacy requests.
+- Admin redesign v41 (screen 8 of 9: Privacy requests), `pqLoad`/`pqPage`/`pqOpen`/`pqAct`, state `PQX`. From Agnes's mockup and brief (connect to the existing workflow, enforce staff permissions, record actions, treat 30 days as a reminder, not a universal legal rule).
+  - Header button "Learn about GDPR & CCPA" (matches the mockup; opens the privacy guide: practical steps for identity, data copy, deletion, correction, deadlines, records; "not legal advice"; UK GDPR one month and CCPA 45 days, both extendable, with links to the ICO and the California AG).
+  - Cards (click to filter): Total, Open (overdue or due within 7 days), Actioned (status done), Dismissed (status rejected). Open = open + in_progress.
+  - Toolbar: status tabs with counts, date filter (any, 7, 30, 90 days, 12 months), debounced search by name, handle, email or request ID (PR-XXXXXXXX = first 8 hex characters of the id).
+  - Table: Request ID, Person, Type, Reason (the person's own optional note), Received, Respond by (with days left / overdue), Status, Review/View. Below 760px each row becomes a card. Empty state explains where people make requests and links the guide. Bottom strip: what requests are, a checklist, and what a data copy includes (matches `admin_export_user`).
+  - Request detail (modal): person, email, dates, note, then steps: 1 Check identity (Mark identity checked, needs 010), 2 Export data (`admExportAsk`) / Delete account (`admDeleteAsk`, owner and admin only, blocked for staff accounts) / Correct (opens the person in Users), 3 Start / Mark actioned / Dismiss. Closing warns when no export or deletion is recorded or identity is not checked. History shows privacy actions plus exports and deletions of that account since the request. The modal reopens after each action.
+  - Roles: owner, admin, support (same as before). Every action needs a reason and is audited.
+  - User side: the request form in the app's Settings now has an optional "Anything we should know?" note (500 max) saved as `details`; if 010 is not run yet it retries without the note.
+  - `supabase/migrations/010_privacy_screen.sql`: privacy_requests.details, identity_checked_at/by, resolution; `admin_privacy2` (counts, search, filters, paging), `admin_privacy_detail`, `admin_privacy_act` (start, verify, done, reject; checked transitions; closed requests cannot change; reason required; audited). Without 010 the page uses `admin_privacy` and `admin_set_privacy` and history from `admin_audit`.
+  - Not built (no backend for it): bulk select in the table, which the mockup shows.
+  - Mobile checked with 390px Playwright screenshots (cards, table cards, modal, empty state).
+  - Next: Screen 9 Staff and Audit log.
+- Admin redesign v42 (screen 9 of 9: Staff), `sfLoad`/`sfPage`/`sfManage`, state `SFX`. From Agnes's mockup "Modern Staff Management Dashboard" and her five requirements.
+  - Header "View audit log" (opens the Audit log tab). Cards: Total staff (added this month), Active (how many without two-step), Pending invites (failed/expired), Suspended (paused). The mockup's "% from last month" trends were left out: removals are not tracked as history, so they would be invented.
+  - Staff members: search, role filter, table with name (+You), email, role, two-step (from auth.mfa_factors), status (Active/Suspended), last active (auth last sign-in), and a manage button (owners only, never on yourself). Open and failed invitations are listed in the same table with Pending / Expired / Failed (with reason) and Resend / Revoke. Below 760px rows become cards.
+  - Manage (modal): change role, pause/restore access, remove access (typed REMOVE). Giving the Owner role (invite or change) needs typed OWNER and shows a warning. The only active owner cannot be changed, paused or removed (also enforced on the server).
+  - Invite panel (owners only; others see "ask an owner"): email + role with live checks (valid email, already staff, already pending). Flow: `admin_staff_invite` saves a pending invitation (7 days) and audits it; the browser asks Supabase to send a sign-in email (`signInWithOtp`, shouldCreateUser true, redirect /admin); the result is written back with `admin_staff_invite_sent` (failed + reason if the email failed). When the invited person signs in with that confirmed email and opens /admin, `admBoot` calls `staff_accept_invite()`, which adds them with the invited role and marks the invitation accepted. Supabase sends its normal sign-in or sign-up email, not a custom invitation email.
+  - Roles and permissions: five cards (Owner, Admin, Support, Moderator, Finance) with what each can do and the screens each role can open, computed from `ADM_TABS`, plus live counts.
+  - Role names and the existing permission rules are unchanged. Staff management stays owner-only (same as `admin_set_staff`).
+  - `supabase/migrations/011_staff_screen.sql`: staff.suspended_at/suspended_by/invited_by; `is_staff` and `admin_me` now ignore paused staff (so every server check blocks them); `staff_invites` table (one pending per email); `admin_staff2`, `admin_staff_invite`, `admin_staff_invite_sent`, `admin_staff_invite_resend`, `admin_staff_invite_revoke`, `staff_accept_invite`, `admin_staff_role`, `admin_staff_suspend`, `admin_staff_remove` (all audited; reason required; cannot act on yourself; always keeps one active owner). Without 011 the page falls back to `admin_staff` / `admin_set_staff`.
+  - Mobile checked with 390px Playwright screenshots (table cards, invite panel, manage modal).
+  - Next: redesign the Audit log screen when Agnes sends a mockup.
+- Admin redesign v43 (Audit log), `alLoad`/`alPage`/`alOpen`/`alExport`, state `ALX`. From Agnes's mockup "Modern Audit Log Dashboard" and brief (no fake activity, no editing or deleting entries, keep backend and permissions).
+  - Cards (real counts only): Events today (vs yesterday), Staff active today (and total events), Security events today (vs yesterday), Exports today (or failed actions today). The mockup's percentage trends were replaced by plain "+N vs yesterday".
+  - Toolbar: search (action, staff member, target, reason, details), action type (Users, Moderation, Rooms, Billing, Privacy, Settings, Security, Export, Other), staff member, date range (24 hours to all time, default 30 days), outcome (Completed / Failed; Failed = actions whose code contains "failed", for example staff.invite_failed), Clear filters.
+  - Table: Event (readable label + category pill, Failed pill), Staff member (name + role), Date and time, Target (readable name: user, plan, room, privacy request, staff invitation email, setting), Reason, Details. Pages of 25. Below 760px rows become cards.
+  - Details panel (modal): action code, category, outcome, staff member and role, exact time with seconds, target and target ID, reason, before/after table when the entry has changes, other details, a link to the related screen, Copy entry ID, and an immutability note.
+  - Export CSV exports the filtered list (up to 5,000), asks for a reason and is recorded as `audit.export` (any staff member can export, as before).
+  - Empty state: activity icon, "No activity recorded yet" and an explanation; filtered empty state with Clear filters. Immutability note at the bottom.
+  - `supabase/migrations/012_audit_screen.sql` (NOT YET RUN): triggers that block UPDATE, DELETE and TRUNCATE on audit_log for everyone; drops the old "staff write audit" policy so entries can only be written by the checked admin functions through `audit()` (staff can no longer insert made-up rows from the browser); indexes; `admin_log` also accepts `audit.export`; `audit_category()`; `admin_audit2` (server-side filters, paging, readable targets, counts, staff list). Without 012 the page filters the newest 1,000 entries in the browser and the export is not recorded.
+  - Mobile checked with 390px Playwright screenshots (cards, table cards, details panel).
+
+## Where and when you met (21 Oct 2026, after v43)
+- Every new Thread saved from the Tap form (typed, QR scan, business card, paste, contacts) records the exact save time (`other.at`, ISO) and, with the phone's permission, location (`other.geo` = lat, lng, accuracy in metres, fix time, place name). Stored inside `where_met` with the other extras (`tPack`/`tMeta` wrappers, keys `at` and `geo`), so no schema change.
+- Place name comes from OpenStreetMap Nominatim reverse geocoding (browser fetch, low volume). Needs HTTPS (live is fine).
+- Thread page shows "Where and when you met" (time with seconds and time zone, event or place typed, place name, coordinates, accuracy, Open in Maps). CSV export adds the time and location to the Note column.
+- Settings > Your data and privacy has "Save where I meet people" (profiles.prefs.geo; on by default, the phone still asks permission). Only the owner's own location is recorded, never the other person's.
+- Not covered: Threads created by the other person from your public card or Event mode QR (their device, not yours). The privacy policy should mention location data before launch.
 
 ## Honest limits to keep in mind
 - LinkedIn does not let apps read another person's profile from a username. A LinkedIn link gives the profile URL and a best-guess name only; email, phone, title and company must come from paste, QR vCard, business card or contacts.
@@ -155,7 +205,9 @@ Tap -> Thread -> one question, "What's next?". Answers stay sealed until both pe
 - iPhone Safari hides the contact picker unless the Contact Picker API feature flag is turned on.
 
 ## Open items / next steps
-1. Admin redesign screens 6 to 9 (table above). Agnes sends one mockup at a time.
+0. Agnes: run migration 013 (`013_fix_ambiguous.sql`) now. Live, /admin/users failed with 'column reference "plan" is ambiguous' and /admin/audit with 'column reference "actor" is ambiguous': a function parameter had the same name as a column (plan in admin_users2 from 005; actor/outcome in admin_audit2 from 012). 013 qualifies every reference; 005 and 012 are patched in place for fresh setups. Lesson: in plpgsql functions never reuse a column name as a parameter name, or always qualify it (function_name.param).
+1. Agnes: migrations 009, 010 and 011 are run and verified (staff invitation tested: Pending, then Accepted, both in the audit log). Run migration 012 next, then reload /admin/audit (the update note disappears).
+1b. All admin screens are redesigned (v34 to v43). Agnes sends one mockup at a time.
 2. Agnes: sign in as mosemqute@gmail.com, open /admin, set up two-step verification.
 3. Stripe billing (next in the build order after admin): Product + monthly/yearly Prices in USD and GBP, Price IDs into Plans, secret key and webhook secret in Vercel env (never in code), checkout, customer portal, webhook writing `subscriptions` (incl. started_at, canceled_at, amount, current_period_end) and `payments` (amount_usd for totals). The Revenue badge turns green automatically once Stripe ids appear.
 4. Then Google/Microsoft connect, then LinkedIn (agreed build order: contacts and import, admin, Stripe, Google/Microsoft, LinkedIn). No LinkedIn company page yet.
@@ -171,6 +223,17 @@ Tap -> Thread -> one question, "What's next?". Answers stay sealed until both pe
 
 ## Testing approach used
 - Sandbox workflow: write large JS/CSS to the session file store first, copy one file at a time into the sandbox, insert JS before the last `</script>` and CSS before the last `\n</style>`, run `python3 scripts/build_pages.py` (prints "built 10"), keep a `.bak` of `index.html` before each insert.
-- Admin tests mock Supabase by replacing `const SB=(window.supabase` with `const SB=window.__SB?window.__SB:(window.supabase` and setting `__SB` in jsdom `beforeParse`. Per-screen tests are saved in `tests/admin/` (tadm all tabs, tusers, tmod, trm rooms, trv revenue). Run from the repo root after `npm i jsdom`, for example `timeout 13 node tests/admin/trv.js 2>&1 | grep -v "Not implemented" | tail -1`; a pass ends in `errs []`. They read `index.html` from the current folder. Each covers the full page, detail panel, actions with reasons, and the fallback without the screen's migration. Run at most about 4 tests per command (each takes 10 to 13 seconds).
+- Admin tests mock Supabase by replacing `const SB=(window.supabase` with `const SB=window.__SB?window.__SB:(window.supabase` and setting `__SB` in jsdom `beforeParse`. Per-screen tests are saved in `tests/admin/` (tadm all tabs, tusers, tmod, trm rooms, trv revenue, tpl plans, tsg settings, tpq privacy, tsf staff, tal audit log). Run from the repo root after `npm i jsdom`, for example `timeout 13 node tests/admin/trv.js 2>&1 | grep -v "Not implemented" | tail -1`; a pass ends in `errs []`. They read `index.html` from the current folder. Each covers the full page, detail panel, actions with reasons, and the fallback without the screen's migration. Run at most about 4 tests per command (each takes 10 to 13 seconds).
 - jsdom scripts that load `index.html`, log in to demo mode and exercise flows; a pass ends with an empty error list. Covered: Tap form, sign-up, guest reveal, capture, the LinkedIn follow-up prompt, exports, billing, rooms, Today, thread detail.
 - Playwright phone-viewport screenshots (390x844) for layout checks.
+
+## Server features v25 (21 Oct 2026, night): email, reminders, AI drafts, analytics
+- Vercel functions in `api/` (Node, CommonJS, no dependencies; `api/_lib/common.js` shared, not a route). Each returns 503 `not_configured` until its keys exist, so nothing breaks before setup.
+  - `POST /api/notify {thread_id}`: emails the other person the confirm link `/t/<guest_token>` once per Thread (marker event `note` "Confirm link emailed"). Uses the caller's Supabase token, so RLS limits it to the owner. Client calls it from the `addEvent` wrapper on kind `tap`.
+  - `GET /api/cron-nudge`: daily Vercel Cron (06:00 UTC, `vercel.json` `crons`). Threads 48-72h old, unresolved, not closed with Not now; one email per owner listing them; marker "Reminder emailed"; respects `profiles.prefs.nudge`.
+  - `POST /api/ai-draft {thread_id}`: Anthropic (if `ANTHROPIC_API_KEY`) else OpenAI (`OPENAI_API_KEY`), optional `AI_MODEL`. Respects `prefs.ai`. Client shows "Rewrite with AI" under `#draft` only when `/api/status` says `ai:true`.
+  - `GET /api/status`: booleans only (email, ai, nudges).
+- Vercel env vars needed: `RESEND_API_KEY`, `NOTIFY_FROM` (optional, default `Introthread <hello@introthread.com>`), `SUPABASE_SERVICE_ROLE_KEY` + `CRON_SECRET` (reminders), `ANTHROPIC_API_KEY` or `OPENAI_API_KEY`. Redeploy after adding.
+- Analytics: PostHog loads only when `posthogKey` is set in `config.js` AND the visitor taps Allow on the consent bar (`it_consent` in localStorage). No names or emails sent; identify uses the user id. Events: thread_started, thread_confirmed, thread_answered, followup_sent, thread_resolved, ai_draft_used, plus page views.
+- Local mock test: `node /home/user/apitest.js` (sandbox only).
+- Payments: Stripe on hold; Paystack planned with the user (not built yet).

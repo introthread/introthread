@@ -2945,6 +2945,14 @@ html{-webkit-text-size-adjust:100%;text-size-adjust:100%;touch-action:manipulati
 @media (max-width:760px){main .d7-bot{grid-template-columns:minmax(0,1fr)!important;gap:14px!important}main .d7-bot>*{grid-column:1/-1!important;min-width:0}
 main .d7-bot .d-sh{flex-wrap:nowrap;gap:10px}main .d7-bot .d-sh b{white-space:nowrap}main .d7-bot .d-sh a{white-space:nowrap;flex:none}}
 @media (min-width:761px) and (max-width:1200px){main .d7-bot{grid-template-columns:repeat(2,minmax(0,1fr))!important}main .d7-bot>.d7-promo{grid-column:1/-1!important}}
+
+/* v25 server features: AI rewrite button, analytics consent */
+.it-ai{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-top:10px}.it-ai small{color:var(--muted,#6b7385);font-size:12px}
+.it-ai button[disabled]{opacity:.6;cursor:progress}
+.it-cons{position:fixed;left:12px;right:12px;bottom:calc(12px + env(safe-area-inset-bottom));z-index:9000;max-width:560px;margin:0 auto;background:#0f1218;color:#fff;border-radius:14px;padding:14px 16px;display:flex;gap:12px;align-items:center;flex-wrap:wrap;box-shadow:0 10px 30px rgba(15,18,24,.25);font-size:14px;line-height:1.45}
+.it-cons p{margin:0;flex:1 1 240px;min-width:0}.it-cons a{color:#8ea2ff}.it-cons div{display:flex;gap:8px;flex:none}
+.it-cons button{border:0;border-radius:10px;padding:9px 14px;font:inherit;font-weight:700;cursor:pointer}.it-cons .y{background:#3157ff;color:#fff}.it-cons .n{background:rgba(255,255,255,.12);color:#fff}
+@media (max-width:760px){body.app .it-cons,.it-cons.up{bottom:calc(84px + env(safe-area-inset-bottom))}}
 </style>
 </head>
 <body><a href="#root" class="x-skip">Skip to content</a>
@@ -6894,6 +6902,36 @@ const _vPub23=vPublic;vPublic=function(hd){let h=_vPub23.apply(this,arguments);c
  setTimeout(()=>{const e1=document.getElementById('pcqr1'),e2=document.getElementById('pcqr2');try{if(e1&&!e1.childNodes.length)qr(e1,url,150);if(e2&&!e2.childNodes.length)qr(e2,url,240)}catch(_){}const bk=document.querySelector('#pcflip .pc-back');if(bk)bk.inert=true},0);
  return h};
 document.addEventListener('keydown',e=>{if(e.key==='Escape'&&PCF&&document.getElementById('pcflip'))pcFlip(false)});
+
+/* ===== v25 server features (each turns on only when its key is set in Vercel) ===== */
+let IT_SRV=null;
+function itStatus(){if(IT_SRV)return IT_SRV;IT_SRV=fetch('/api/status').then(r=>r.ok?r.json():{}).catch(()=>({}));return IT_SRV}
+async function itApi(path,body){try{if(!cloud()||!SB)return null;const {data}=await SB.auth.getSession();const s=data&&data.session;if(!s)return null;
+ const r=await fetch('/api/'+path,{method:'POST',headers:{'Content-Type':'application/json',Authorization:'Bearer '+s.access_token,apikey:CFG.supabaseAnonKey||''},body:JSON.stringify(body||{})});let j={};try{j=await r.json()}catch(e){}return Object.assign({status:r.status},j)}catch(e){return null}}
+/* Analytics: PostHog, only after consent, only when a key is in config.js. No emails or names are sent. */
+let IT_PH=false;
+function itConsent(){try{return localStorage.getItem('it_consent')}catch(e){return null}}
+function itPHLoad(){if(IT_PH||!CFG.posthogKey||itConsent()!=='yes')return;IT_PH=true;const host=CFG.posthogHost||'https://eu.i.posthog.com';
+ const sc=document.createElement('script');sc.async=true;sc.src=host.replace('.i.posthog.com','-assets.i.posthog.com')+'/static/array.js';
+ sc.onload=()=>{try{window.posthog.init(CFG.posthogKey,{api_host:host,person_profiles:'identified_only',capture_pageview:'history_change',autocapture:false,disable_session_recording:true,persistence:'localStorage'});if(DB&&DB.session)window.posthog.identify(DB.session)}catch(e){}};document.head.appendChild(sc)}
+function itTrack(ev,props){try{if(ev&&IT_PH&&window.posthog&&window.posthog.capture)window.posthog.capture(ev,props||{})}catch(e){}}
+function itConsentSet(v){try{localStorage.setItem('it_consent',v)}catch(e){}const b=document.querySelector('.it-cons');if(b)b.remove();if(v==='yes')itPHLoad()}
+function itConsentAsk(){if(!CFG.posthogKey||itConsent()||document.querySelector('.it-cons')||/^\/admin/.test(location.pathname))return;
+ const d=document.createElement('div');d.className='it-cons';d.setAttribute('role','region');d.setAttribute('aria-label','Analytics choice');
+ d.innerHTML='<p>Can we count how people use Introthread, so we can improve it? No ads, no selling data. <a href="/privacy#cookies">Privacy</a></p><div><button type="button" class="n" onclick="itConsentSet(\'no\')">No thanks</button><button type="button" class="y" onclick="itConsentSet(\'yes\')">Allow</button></div>';document.body.appendChild(d)}
+/* Thread invitation email + funnel events */
+const _addEv25=addEvent;addEvent=async function(t,k,text){const r=await _addEv25.apply(this,arguments);
+ try{if(k==='tap'&&cloud()&&t&&t.id){itApi('notify',{thread_id:t.id}).then(x=>{if(x&&x.sent)toast('Confirm link emailed to '+String((t.other&&t.other.name)||'them').split(' ')[0])})}
+ itTrack({tap:'thread_started',answer:'thread_answered',resolved:'thread_resolved',followup:'followup_sent',confirm:'thread_confirmed'}[k],{room:!!(t&&t.roomId)})}catch(e){}return r};
+/* AI follow-up: a "Rewrite with AI" button under the drafted follow-up */
+function itThreadId(){const m=(location.pathname+location.hash).match(/thread\/([0-9a-f-]{36})/i);return m?m[1]:null}
+async function itAiRewrite(b){const id=itThreadId(),d=document.getElementById('draft');if(!id||!d)return;b.disabled=true;const o=b.textContent;b.textContent='Writing...';
+ const r=await itApi('ai-draft',{thread_id:id});b.disabled=false;b.textContent=o;
+ if(r&&r.draft){d.value=r.draft;d.dispatchEvent(new Event('input',{bubbles:true}));toast('New draft ready. Edit before sending.');itTrack('ai_draft_used')}
+ else toast(r&&r.error==='ai_off'?'AI drafts are off in Settings.':'Could not write a draft right now. Your original draft is unchanged.')}
+function itAiBtn(){const d=document.getElementById('draft');if(!d||d.dataset.itai||!cloud()||!itThreadId())return;const u=me();if(u&&(u.prefs||{}).ai===false)return;d.dataset.itai='1';
+ itStatus().then(s=>{if(!s||!s.ai||!document.body.contains(d)||d.parentNode.querySelector('.it-ai'))return;d.insertAdjacentHTML('afterend','<div class="it-ai"><button type="button" class="btn secondary sm" onclick="itAiRewrite(this)">Rewrite with AI</button><small>Uses this Thread only. Never sent without you.</small></div>')})}
+const _render25s=render;render=function(){const r=_render25s.apply(this,arguments);setTimeout(()=>{try{itAiBtn();itConsentAsk();itPHLoad()}catch(e){}},0);return r};
 </script>
 </body>
 </html>
