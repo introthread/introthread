@@ -1,6 +1,6 @@
 # Introthread - handover for the next AI agent
 
-Last updated: 21 Oct 2026 (admin redesign v34, screen 1 of 9). Read this before making changes.
+Last updated: 21 Oct 2026 (admin redesign v35, screen 2 of 9). Read this before making changes.
 
 ## Where things are
 - Live site: https://www.introthread.com (apex redirects to www). Vercel deploys automatically from `main` of `introthread/introthread` (preset "Other", static).
@@ -68,6 +68,15 @@ Tap -> Thread -> one question, "What's next?". Answers stay sealed until both pe
   - Dashboard (`admDash2`, `admDashLoad`): range select 7/30/90 days (saved `it_adm_range`), Refresh with spinner and "Updated" time; 8 KPI cards (People, Active, Threads, Confirmed %, Both answered %, Paying, Monthly revenue, Contacts) with real previous-period comparisons, linked cards go to Users/Revenue; Operations panel (urgent/review/info: open reports and age, privacy deadlines, two-step off, staff without two-step, maintenance, billing not connected, suspended accounts) with action buttons; New people / New Threads charts with y-axis, date labels, hover and arrow-key tooltips, empty states; funnel (Threads > confirmed > answered > both answered); locations and plan mix with bars; skeleton loading and error card.
   - Data comes from `admin_stats_range(days)` in `supabase/migrations/004_dashboard_ranges.sql`. If 004 is not run yet, the page falls back to `admin_stats` (30 days only, other ranges disabled, note shown).
   - Next: Screen 2 Users (Agnes's brief: search + filters by plan/status, overview counts total/active/suspended/pending, side detail panel with account info, activity, Threads, notes, usage; actions change plan, send login link, reset password, suspend, delete with permissions and confirmation; permission-controlled exports, protect sensitive data). Login link and password reset need a server-side function (Supabase Edge Function with the service key, or the user-facing reset email flow) because the browser cannot call admin auth APIs.
+- Admin redesign v35 (screen 2 of 9: Users), `auLoad`/`auPage`/`auPanel`:
+  - Overview cards (clickable status filters): Total (+joined this month), Active (signed in within 30 days), Suspended or banned, Pending (email not confirmed or profile not finished).
+  - Toolbar: debounced search (name, handle, email, company), plan and status filters, sort (newest, oldest, recently signed in, name, most Threads), removable filter chips, Clear all. Sortable column headers with aria-sort.
+  - Table with select boxes (select all on page, bulk bar with Export selected), row "..." menu (keyboard: arrows, Esc), pagination with 10/25/50 per page (saved `it_adm_per`). Phones get a stacked card layout.
+  - Details panel (sticky right column on wide screens, slide-over drawer below 1280px, Esc closes): Overview (account details, change plan, usage, actions), Activity timeline (sign-up, sign-ins, Threads, confirmations, answers, staff actions), Threads (other person shown as first name + initial only; private notes never shown), Notes (private staff notes, add/delete).
+  - Actions, all with reason and audit log: change plan, send login link (`SB.auth.signInWithOtp` with shouldCreateUser false), reset password (`SB.auth.resetPasswordForEmail`; the app already handles the recovery link), suspend/reactivate, delete (typed DELETE), invite user (`signInWithOtp` with shouldCreateUser true). No service key needed: Supabase sends these emails from the public client. Email actions are recorded through `admin_log`.
+  - Data protection: exports only for owner/admin, recorded with count and filters; emails masked server-side (`admin_mask_email`) for moderator and finance roles; full email fetched only for email actions (`admin_user_email`, owner/admin/support).
+  - Needs `supabase/migrations/005_users_screen.sql` (admin_users2, admin_user_more, admin_notes table, admin_add_note, admin_delete_note, admin_log, admin_user_email). Without it the page falls back to the old list (no counts/filters/notes) with a note.
+  - Next: Screen 3 Moderation.
 
 ## Honest limits to keep in mind
 - LinkedIn does not let apps read another person's profile from a username. A LinkedIn link gives the profile URL and a best-guess name only; email, phone, title and company must come from paste, QR vCard, business card or contacts.
@@ -75,7 +84,7 @@ Tap -> Thread -> one question, "What's next?". Answers stay sealed until both pe
 - iPhone Safari hides the contact picker unless the Contact Picker API feature flag is turned on.
 
 ## Open items / next steps
-0. 002 and 003 are run. Agnes to run `supabase/migrations/004_dashboard_ranges.sql` for 7/90-day dashboard ranges. Admin redesign continues with screen 2 (Users). Then sign in as mosemqute@gmail.com, open /admin, set up two-step verification. Next phase: Stripe billing (checkout, customer portal, webhook writing `subscriptions`).
+0. 002 and 003 are run. Agnes to run `supabase/migrations/004_dashboard_ranges.sql` and `005_users_screen.sql`. Admin redesign continues with screen 3 (Moderation). Then sign in as mosemqute@gmail.com, open /admin, set up two-step verification. Next phase: Stripe billing (checkout, customer portal, webhook writing `subscriptions`).
 1. Agnes to paste the Supabase email templates (Magic Link and Confirm signup, code-based, keep code length 8) and configure Resend SMTP; then run a real end-to-end sign-up test with a real inbox.
 2. Real Google and Microsoft sign-in (Google sign-in is being tested with mkautospareske@gmail.com).
 3. Pro billing (currently simulated) and real outbound email sending.
