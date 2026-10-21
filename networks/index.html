@@ -1332,6 +1332,118 @@ html,body,button,input,select,textarea{font-family:var(--xss)}
 .ro-ph b{font-size:16px;font-weight:600;color:var(--xink)}.ro-ph small{font-size:13.5px;color:var(--xmu);line-height:1.45}
 .ro-ph em{font-style:normal;display:inline-flex;align-items:center;gap:6px;margin-top:8px;color:var(--xb);font-weight:600;font-size:14px}
 
+/* v10 My card */
+.cd-grid{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,.66fr) 340px;grid-template-areas:"left left right" "stb qab tips";gap:18px 20px;align-items:start;font-family:var(--xss)}
+.cd-left{grid-area:left;min-width:0}.cd-right{grid-area:right;display:grid;gap:18px;min-width:0}
+.cd-stb{grid-area:stb}.cd-qab{grid-area:qab}.cd-tipb{grid-area:tips}
+.cd-tabs{display:flex;gap:4px;border-bottom:1px solid var(--line);margin:-6px 0 18px;overflow-x:auto;scrollbar-width:none}
+.cd-tabs::-webkit-scrollbar{display:none}
+.cd-tabs button{flex:none;height:44px;padding:0 16px;border:0;background:none;font:500 15px var(--xss);color:#475467;cursor:pointer;box-shadow:inset 0 -2px 0 transparent}
+.cd-tabs button.on{color:var(--xb);font-weight:600;box-shadow:inset 0 -2.5px 0 var(--xb)}
+.cd-tabs button:hover{color:var(--xink)}
+.cd-top2{display:grid;grid-template-columns:minmax(0,1fr) 315px;gap:18px;align-items:stretch}
+.cd-form{display:flex;flex-direction:column;gap:14px;padding:20px}
+.cd-form .x-f input{height:44px}
+.cd-form textarea{height:auto;min-height:84px;padding:10px 14px;resize:vertical}
+.cd-photo{display:flex;gap:22px;align-items:center}
+.cd-pav{position:relative;flex:none;border-radius:50%;padding:4px;background:linear-gradient(135deg,#cfe0ff,#e9efff)}
+.cd-pav .x-av{margin:0;box-shadow:none}
+.cd-cam{position:absolute;right:2px;bottom:4px;width:34px;height:34px;border-radius:50%;background:var(--xb);color:#fff;display:grid;place-items:center;border:3px solid #fff;cursor:pointer}
+.cd-photo b{display:block;font-size:15.5px;font-weight:600}.cd-photo small{display:block;font-size:13px;color:var(--xmu);margin:3px 0 12px}
+.cd-pb{display:flex;gap:10px;flex-wrap:wrap}
+.cd-pb label{cursor:pointer}
+.t-how.sm{height:40px;padding:0 14px;font-size:14px}
+.cd-rm{display:inline-flex;align-items:center;gap:7px;height:40px;padding:0 16px;border:1px solid #f7c6c6;border-radius:10px;background:#fff5f5;color:#d14343;font:600 14px var(--xss);cursor:pointer}
+.cd-in{position:relative;display:flex;align-items:center}
+.cd-in>svg{position:absolute;left:13px;color:var(--xmu);pointer-events:none}
+.cd-in input{padding-left:40px!important}
+.cd-clr{position:absolute;right:8px;width:28px;height:28px;border:0;background:none;font-size:20px;color:var(--xmu);cursor:pointer;border-radius:6px}
+.cd-clr:hover{background:#f2f4f7}
+.cd-bl{display:flex!important;justify-content:space-between;width:100%}.cd-bl small{font-weight:500;color:var(--xmu);font-size:13px}.cd-bl small b{font-weight:500}
+.cd-fb{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-top:auto;padding-top:4px}
+.cd-sv{min-width:200px;justify-content:center}
+.cd-help{margin:0;font-size:13.5px;color:var(--xmu)}
+.cd-sug{display:grid;gap:8px;margin-top:6px}
+.cd-sug button{text-align:left;padding:12px 14px;border:1px solid var(--line);border-radius:10px;background:#fff;font:500 14px/1.45 var(--xss);color:var(--xink);cursor:pointer}
+.cd-sug button:hover{border-color:var(--xb);background:#f5f8ff}
+.cd-pv{min-width:0}
+.cd-card{position:relative;overflow:hidden;height:100%;min-height:500px;border-radius:20px;padding:22px 22px 20px;display:flex;flex-direction:column;align-items:center;box-shadow:0 34px 60px -38px rgba(8,14,40,.75)}
+.cd-top{align-self:stretch;display:flex;justify-content:space-between;align-items:center}
+.cd-top .x-logo{font-size:18px}
+.cd-id{text-align:center;margin-top:16px}
+.cd-ring{display:inline-block;border-radius:50%;padding:4px;background:linear-gradient(135deg,#3b6bff,#7aa2ff)}
+.cd-ring .x-av{margin:0;box-shadow:0 0 0 3px rgba(10,16,32,.6)}
+.cd-id b{display:flex;align-items:center;justify-content:center;gap:7px;font-size:21px;font-weight:600;margin-top:12px}
+.cd-id small{display:block;font-size:14px;color:var(--sub);margin-top:3px}
+.cd-ics{display:flex;gap:10px;margin-top:16px}
+.cd-ics a,.cd-ics span{width:40px;height:40px;border-radius:10px;border:1px solid rgba(255,255,255,.28);display:grid;place-items:center;color:inherit;background:rgba(255,255,255,.04)}
+.cd-ics span.off{opacity:.38}
+.cd-card.lt .cd-ics a,.cd-card.lt .cd-ics span{border-color:rgba(15,23,42,.18)}
+.cd-ics a:hover{background:rgba(255,255,255,.14)}
+.cd-save{align-self:stretch;display:flex;align-items:center;justify-content:center;gap:9px;height:46px;margin-top:16px;border:0;border-radius:10px;background:var(--xb);color:#fff;font:600 15px var(--xss);cursor:pointer}
+.cd-rows{align-self:stretch;margin-top:16px;padding-top:12px;border-top:1px solid rgba(255,255,255,.16);display:grid;gap:10px}
+.cd-card.lt .cd-rows{border-color:rgba(15,23,42,.12)}
+.cd-rows div{display:flex;gap:10px;align-items:flex-start;font-size:13.5px;line-height:1.4}
+.cd-rows svg{flex:none;opacity:.8;margin-top:1px}
+.cd-ph{color:var(--sub)}
+.cd-tags{margin-top:12px}
+.cd-bh{display:flex;gap:12px;align-items:flex-start;margin-bottom:14px}
+.cd-bh b{display:block;font-size:16px;font-weight:600;color:var(--xink)}.cd-bh small{display:block;font-size:13px;color:var(--xmu);margin-top:2px;line-height:1.4}
+.cd-bh>div{flex:1;min-width:0}
+.cd-bi{width:40px;height:40px;border-radius:50%;background:#eef3ff;color:var(--xb);display:grid;place-items:center;flex:none}
+.cd-bi.o{background:#fff4e5;color:#f59e0b}
+.cd-st{display:grid;grid-template-columns:repeat(3,1fr);background:#f4f6fa;border-radius:10px;padding:3px;margin-bottom:14px}
+.cd-st button{height:36px;border:0;border-radius:8px;background:none;font:500 14px var(--xss);color:#475467;cursor:pointer}
+.cd-st button.on{background:#fff;color:var(--xb);font-weight:600;box-shadow:0 1px 3px rgba(15,23,42,.12),inset 0 -2px 0 var(--xb)}
+.cd-qr{position:relative;width:max-content;margin:0 auto 14px;padding:10px;border:1px solid var(--line);border-radius:14px;background:#fff;line-height:0}
+.cd-qr img{width:150px;height:150px;image-rendering:pixelated}
+.cd-qr.lg img{width:200px;height:200px}
+.cd-url{display:flex;gap:8px}
+.cd-url input{flex:1;min-width:0;height:44px;border:1px solid var(--line);border-radius:10px;padding:0 12px;font:500 14.5px var(--xss);color:var(--xink);background:#f8f9fb}
+.cd-url .x-btn{width:46px;height:44px;padding:0;justify-content:center}
+.cd-dl{width:100%;height:48px;margin-top:10px;font-size:15.5px}
+.cd-cap{margin:10px 0 0;text-align:center;font-size:12.5px;color:var(--xmu)}
+.cd-sh{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:10px}
+.cd-sh a{height:40px;border:1px solid var(--line);border-radius:10px;display:grid;place-items:center;font:600 13.5px var(--xss);color:var(--xink);text-decoration:none}
+.cd-sh a:hover{border-color:var(--xb);color:var(--xb)}
+.cd-nfc{display:flex;gap:12px;align-items:flex-start;padding:14px;border-radius:12px;background:#f5f8ff}
+.cd-nfc span{color:var(--xb)}.cd-nfc p{margin:0;font-size:13.5px;color:#475467;line-height:1.45}
+.cd-pill{flex:none;font-size:12px;font-weight:600;padding:4px 10px;border-radius:99px;background:#e7f6ee;color:#0f8a57}
+.cd-pill.off{background:#f2f4f7;color:#475467}
+.cd-vt{margin-bottom:10px}.cd-vt b{font-size:13.5px!important;font-weight:500!important}
+.cd-visit{display:flex;align-items:center;justify-content:center;gap:6px;height:38px;border:1px solid #dbe4fb;border-radius:10px;background:#f8faff;color:var(--xb);font:600 13.5px var(--xss);text-decoration:none}
+.cd-lock{display:flex;align-items:center;gap:6px;margin-top:10px;font-size:12.5px;color:var(--xmu)}.cd-lock a{color:var(--xb)}
+.cd-sw{display:grid;grid-template-columns:repeat(6,1fr);gap:8px}
+.cd-sw button{border:1px solid var(--line);border-radius:10px;background:#fff;padding:5px 5px 7px;cursor:pointer;text-align:left}
+.cd-sw button.on{border-color:var(--xb);box-shadow:0 0 0 1.5px var(--xb)}
+.cd-sw span{position:relative;display:block;height:58px;border-radius:7px}
+.cd-sw i,.cd-sty i{position:absolute;right:5px;top:5px;width:20px;height:20px;border-radius:50%;background:var(--xb);display:grid;place-items:center;border:2px solid #fff}
+.cd-sw small{display:block;font-size:12.5px;color:var(--xink);margin-top:5px;padding-left:2px}
+.cd-qa{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.cd-qa button{display:flex;align-items:center;gap:10px;min-height:46px;padding:8px 12px;border:1px solid var(--line);border-radius:10px;background:#fff;font:600 13.5px var(--xss);color:var(--xink);cursor:pointer;text-align:left}
+.cd-qa button svg{color:var(--xb);flex:none}
+.cd-qa button:hover{border-color:#c9d6f5}
+.cd-tips{list-style:none;margin:0;padding:0;display:grid;gap:10px}
+.cd-tips li{display:flex;align-items:center;gap:10px;font-size:14px;color:#475467}
+.cd-tips i{width:20px;height:20px;border-radius:50%;border:1.5px solid #d0d5dd;display:grid;place-items:center;flex:none}
+.cd-tips li.ok i{background:#12a065;border-color:#12a065}.cd-tips li.ok{color:var(--xink)}
+.cd-pbar{height:6px;border-radius:99px;background:#eef1f5;margin-top:14px;overflow:hidden}.cd-pbar span{display:block;height:100%;background:#12a065;border-radius:99px;transition:width .3s}
+.cd-styles{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+.cd-sty{border:1px solid var(--line);border-radius:12px;background:#fff;padding:8px 8px 10px;text-align:left;cursor:pointer}
+.cd-sty.on{border-color:var(--xb);box-shadow:0 0 0 1.5px var(--xb)}
+.cd-sty span{position:relative;display:block;height:86px;border-radius:8px;margin-bottom:8px}
+.cd-sty b{display:block;font-size:14px;font-weight:600}.cd-sty small{font-size:12.5px;color:var(--xmu)}
+.cd-qrbig{display:flex;gap:22px;align-items:center}.cd-qrbig .cd-qr{margin:0}
+.cd-qrbig b{font-size:17px;font-weight:600}.cd-qrbig p{margin:6px 0 14px;font-size:14px;color:#475467;line-height:1.5}
+.cd-adv{display:grid;gap:12px}
+.cd-adv>div{display:grid;grid-template-columns:1fr auto;grid-template-rows:auto auto;column-gap:16px;align-items:center;padding:14px;border:1px solid var(--line);border-radius:12px}
+.cd-adv b{font-size:14.5px;font-weight:600}.cd-adv small{grid-column:1;font-size:13px;color:var(--xmu)}
+.cd-adv .t-how{grid-column:2;grid-row:1/3}
+@media (max-width:1380px){.cd-grid{grid-template-columns:minmax(0,1fr) minmax(0,1fr) 320px}.cd-top2{grid-template-columns:minmax(0,1fr) 290px}.cd-sw{grid-template-columns:repeat(3,1fr)}}
+@media (max-width:1200px){.cd-grid{grid-template-columns:1fr 1fr;grid-template-areas:"left left" "right right" "stb qab" "tips tips"}.cd-right{grid-template-columns:1fr 1fr;align-items:start}}
+@media (max-width:860px){.cd-top2{grid-template-columns:1fr}.cd-pv{max-width:360px;width:100%;margin:0 auto}.cd-grid{grid-template-columns:1fr;grid-template-areas:"left" "right" "stb" "qab" "tips"}.cd-right{grid-template-columns:1fr}.cd-styles{grid-template-columns:repeat(2,1fr)}}
+@media (max-width:560px){.cd-photo{flex-direction:column;align-items:flex-start}.cd-fb{flex-direction:column-reverse;align-items:stretch}.cd-sv{min-width:0}.cd-qrbig{flex-direction:column}.cd-sw{grid-template-columns:repeat(3,1fr)}.cd-qa{grid-template-columns:1fr}}
+
 </style>
 </head>
 <body><a href="#root" class="x-skip">Skip to content</a>
@@ -2534,6 +2646,73 @@ function vRooms(){const all=myRooms();all.forEach(rm9);const t=ymdL(new Date());
 function seedDemoRooms9(){try{if(MODE==='demo'&&DB.session&&!DB.rooms.some(x=>x.demoUp)){const d=n=>{const x=new Date();x.setDate(x.getDate()+n);return Date.parse(ymdL(x))};
  [['Kenya Investment Networking Meetup',3,'Nairobi, Kenya',{start:'17:00',end:'20:00',tz:'Africa/Nairobi',fmt:'inperson',priv:'public',cap:120,topics:['Investing','Funding']}],['AI for Business Leaders',7,'',{start:'14:00',end:'16:00',tz:'Africa/Nairobi',fmt:'online',platform:'Zoom',link:'https://zoom.us',priv:'public',cap:500,topics:['Technology','Product']}],['Women in Tech Community',12,'Nairobi, Kenya',{start:'18:00',end:'20:00',tz:'Africa/Nairobi',fmt:'hybrid',priv:'private',cap:80,topics:['Community','Mentoring']}]].forEach(([n,dd,loc,m])=>DB.rooms.push({id:uid(),ownerId:DB.session,name:n,date:d(dd),location:loc,code:(n.replace(/[^A-Za-z]/g,'').slice(0,3)+Math.floor(10+Math.random()*89)).toUpperCase(),created:Date.now(),meta:m,_m:m,demoUp:1}));save()}}catch(_){}}
 const _render91=render;render=function(){seedDemoRooms9();return _render91.apply(this,arguments)};
+/* ===== v10 My card (design: Digital My Card) ===== */
+let CTAB='basic',SHT='qr',CD=null;
+function cdInit(){const u=me();const L=u.links||{};CD={name:u.name||'',role:u.role||'',company:u.company||'',city:u.city||'',bio:u.bio||'',linkedin:L.linkedin||'',x:L.x||'',website:L.website||'',calendar:L.calendar||'',email:L.email||'',phone:L.phone||'',tags:(L.tags||[]).slice(0,3),open:!!L.open,uid:u.id}}
+function cdUser(){const u=me();return Object.assign({},u,{name:CD.name,role:CD.role,company:CD.company,city:CD.city,bio:CD.bio,links:Object.assign({},u.links||{},{linkedin:CD.linkedin,x:CD.x,website:CD.website,calendar:CD.calendar,email:CD.email,phone:CD.phone,tags:CD.tags,open:CD.open})})}
+const cdHref=v=>!v?'':/^https?:\/\//i.test(v)?v:'https://'+v;
+function cdCard(u){const t=THEMES[u.theme]||THEMES.midnight,L=u.links||{};const site=(L.website||'').replace(/^https?:\/\//,'').replace(/\/$/,'');
+ const ic=[['li',L.linkedin&&cdHref(L.linkedin),'LinkedIn'],['x',L.x&&cdHref(/^@/.test(L.x)?'x.com/'+L.x.slice(1):L.x),'X'],['cal',L.calendar&&cdHref(L.calendar),'Book a meeting'],['link',L.website&&cdHref(L.website),'Website'],['mail',L.email&&'mailto:'+L.email,'Email']];
+ return`<div class="cd-card ${t.light?'lt':''}" style="background:${t.bg};color:${t.fg};--sub:${t.sub}"><div class="cd-top"><span class="x-logo ${t.light?'':'dk'}"><span class="x-lm"><i></i><i></i></span><span>intro<b>thread</b></span></span>${sv('nfc',22)}</div>
+ <div class="cd-id"><span class="cd-ring">${avatarC(u,112)}</span><b>${esc(u.name||'Your name')}${u.email||u._c?`<span class="d-ver" title="Verified account">${sv('check',10,'#fff',3.2)}</span>`:''}</b><small>${esc(u.role||'Your job title')}</small>${u.company?`<small>${esc(u.company)}</small>`:''}</div>
+ <div class="cd-ics">${ic.map(([k,h,l])=>h?`<a href="${esc(h)}" target="_blank" rel="noopener" aria-label="${l}" title="${l}">${sv(k,17)}</a>`:`<span class="off" title="Add your ${l} in Links &amp; social">${sv(k,17)}</span>`).join('')}</div>
+ <button type="button" class="cd-save" onclick="cdVcf()">${sv('user',17)} Save Contact</button>
+ <div class="cd-rows">${u.city?`<div>${sv('pin',16)}<span>${esc(u.city)}</span></div>`:''}${site?`<div>${sv('globe',16)}<span>${esc(site)}</span></div>`:''}${u.bio?`<div>${sv('brief',16)}<span>${esc(u.bio)}</span></div>`:''}${L.open?`<div>${sv('spark',16)}<span>Open to opportunities</span></div>`:''}${!u.city&&!site&&!u.bio?`<div><span class="cd-ph">Add your location, website and bio to complete your card.</span></div>`:''}</div>
+ ${(L.tags||[]).length?`<div class="t-tags cd-tags">${L.tags.map((x,k)=>`<span class="${['b','v','g'][k]}">${esc(x)}</span>`).join('')}</div>`:''}</div>`}
+function cdLive(){const p=$('#cdprev');if(p)p.innerHTML=cdCard(cdUser());const c=$('#cdbc');if(c)c.textContent=(CD.bio||'').length;const tp=$('#cdtips');if(tp)tp.outerHTML=cdTips()}
+function cdIn(k,v){CD[k]=v;cdLive()}
+function cdF(id,k,l,o={}){return`<label class="x-f"><span>${l}${o.req?' <i>*</i>':o.opt?' <em>(optional)</em>':''}</span>${o.icon?`<div class="cd-in">${sv(o.icon,17)}`:''}<input id="${id}" value="${esc(CD[k]||'')}" ${o.req?'required':''} maxlength="${o.max||80}" placeholder="${o.ph||''}" ${o.type?`type="${o.type}"`:''} autocomplete="${o.ac||'off'}" oninput="cdIn('${k}',this.value)">${o.clear?`<button type="button" class="cd-clr" aria-label="Clear ${l}" onclick="$('#${id}').value='';cdIn('${k}','')">&times;</button>`:''}${o.icon?'</div>':''}</label>`}
+function cdBioSuggest(){const r=CD.role||'professional',c=CD.company,tp=CD.tags.length?CD.tags.join(', ').toLowerCase():'partnerships and growth';const opts=[`${r}${c?' at '+c:''}. I help teams grow through ${tp}.`,`I connect people and ideas in ${tp}. ${r}${c?', '+c:''}.`,`${r} focused on ${tp}. Always happy to meet people building something meaningful.`].map(s=>s.slice(0,160));
+ modal(`<div><div class="row between"><h3 style="margin:0;font:600 19px var(--xss)">Improve your bio</h3><button class="x" aria-label="Close" onclick="closeModal()">&times;</button></div><p class="fu-sub" style="margin-top:6px">Suggestions based on your title, company and topics. Pick one, then edit it to sound like you.</p><div class="cd-sug">${opts.map((s,i)=>`<button type="button" onclick="CD.bio=this.dataset.v;closeModal();const b=$('#cdb');if(b)b.value=CD.bio;cdLive()" data-v="${esc(s)}">${esc(s)}</button>`).join('')}</div></div>`)}
+async function cdSave(e){if(e)e.preventDefault();const u=me();if(!CD.name.trim()){toast('Add your full name');return false}if(!CD.role.trim()){toast('Add your job title');return false}
+ for(const k of ['linkedin','website','calendar']){const v=CD[k].trim();if(v&&/\s/.test(v)){toast('Check your '+k+' link, it contains spaces');return false}}
+ if(CD.email&&!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(CD.email.trim())){toast('Check your contact email');return false}
+ const links=Object.assign({},u.links||{},{linkedin:CD.linkedin.trim(),x:CD.x.trim(),website:CD.website.trim(),calendar:CD.calendar.trim(),email:CD.email.trim(),phone:CD.phone.trim(),tags:CD.tags,open:CD.open});
+ const patch={name:CD.name.trim(),role:CD.role.trim(),company:CD.company.trim(),city:CD.city.trim(),bio:CD.bio.trim(),links};
+ const b=$('#cdsave');if(b){b.disabled=true;b.dataset.l=b.innerHTML;b.innerHTML='Saving...'}
+ const ok=await upd('profiles',u.id,patch);if(b){b.disabled=false;b.innerHTML=b.dataset.l}if(!ok)return false;Object.assign(u,patch);save();toast('Card updated');window._keepScroll=true;render();return false}
+function cdVcf(){const u=cdUser(),L=u.links;const v=['BEGIN:VCARD','VERSION:3.0','FN:'+u.name,u.role?'TITLE:'+u.role:'',u.company?'ORG:'+u.company:'',L.email?'EMAIL:'+L.email:'',L.phone?'TEL:'+L.phone:'',u.city?'ADR:;;;'+u.city+';;;':'','URL:'+profileUrl(u),u.bio?'NOTE:'+u.bio.replace(/\n/g,' '):'','END:VCARD'].filter(Boolean).join('\n');const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([v],{type:'text/vcard'}));a.download=(u.name||'contact').replace(/\s+/g,'-')+'.vcf';document.body.appendChild(a);a.click();a.remove();toast('Contact card downloaded')}
+function cdPrint(){const u=cdUser();const d=document.createElement('div');qr(d,profileUrl(u),400);const img=d.querySelector('img');const w=window.open('','_blank');if(!w)return toast('Allow pop-ups to print your card.');
+ w.document.write(`<!doctype html><title>${esc(u.name)} - Introthread card</title><style>body{font-family:sans-serif;display:flex;justify-content:center;padding:40px}.c{width:85mm;height:55mm;border:1px solid #ddd;border-radius:4mm;padding:6mm;display:flex;gap:5mm;align-items:center;box-sizing:border-box}.c img{width:30mm;height:30mm}b{font-size:15pt;display:block}span{display:block;font-size:9.5pt;color:#444;margin-top:1mm}small{display:block;margin-top:3mm;font-size:8.5pt;color:#1f5eff}@media print{body{padding:0}}</style><div class="c"><div style="flex:1"><b>${esc(u.name)}</b><span>${esc(u.role||'')}</span><span>${esc(u.company||'')}</span><small>introthread.com/${esc(u.handle)}</small></div>${img?`<img src="${img.src}" alt="QR code">`:''}</div><scr`+`ipt>setTimeout(()=>print(),300)</scr`+`ipt>`);w.document.close()}
+async function cdVis(on){const u=me();const links=Object.assign({},u.links||{},{hidden:!on});if(await upd('profiles',u.id,{links})){u.links=links;save();toast(on?'Your card is public':'Your card is now private');window._keepScroll=true;render()}}
+async function cdTheme(k){await setTheme(k)}
+function cdTagT(x){const i=CD.tags.indexOf(x);if(i>=0)CD.tags.splice(i,1);else{if(CD.tags.length>=3)return toast('Pick up to 3 topics');CD.tags.push(x)}document.querySelectorAll('.cd-tp .tp').forEach(b=>{const on=CD.tags.includes(b.dataset.v);b.classList.toggle('on',on);b.setAttribute('aria-pressed',on)});cdLive()}
+function cdTips(){const u=cdUser(),L=u.links;const nl=['linkedin','x','website','calendar','email'].filter(k=>L[k]).length;const T=[['Add a clear professional photo',!!u.photo],['Write a compelling bio',(u.bio||'').length>=40],['Include your key links',nl>=2],['Keep your information up to date',!!(u.role&&u.company&&u.city)]];const n=T.filter(x=>x[1]).length;
+ return`<section class="d-box cd-tipb" id="cdtips"><div class="cd-bh"><span class="cd-bi o">${sv('spark',20)}</span><div><b>Profile tips</b><small>${n===4?'Your card is complete.':n+' of 4 done'}</small></div></div><ul class="cd-tips">${T.map(([l,d])=>`<li class="${d?'ok':''}"><i>${d?sv('check',11,'#fff',3.2):''}</i>${l}</li>`).join('')}</ul><div class="cd-pbar" role="progressbar" aria-valuemin="0" aria-valuemax="4" aria-valuenow="${n}" aria-label="Card completeness"><span style="width:${n*25}%"></span></div></section>`}
+function cdShare(u){const url=profileUrl(u),short='introthread.com/'+u.handle;const tabs=`<div class="cd-st" role="tablist">${[['qr','QR code'],['link','Link'],['nfc','NFC card']].map(([k,l])=>`<button type="button" role="tab" aria-selected="${SHT===k}" class="${SHT===k?'on':''}" onclick="SHT='${k}';window._keepScroll=true;render()">${l}</button>`).join('')}</div>`;
+ const urlRow=`<div class="cd-url"><input value="${esc(short)}" readonly aria-label="Your card link"><button type="button" class="x-btn" aria-label="Copy link" onclick="copy('${url}','Link copied')">${sv('copy',18)}</button></div>`;
+ const body=SHT==='qr'?`<div class="cd-qr"><div id="qrCard9"></div><span class="t-qrlogo"><span class="x-lm"><i></i><i></i></span></span></div>${urlRow}<button type="button" class="t-start cd-dl" onclick="tapDownloadQR()">${sv('arrow',18).replace('M5 12h14M13 6l6 6-6 6','M12 5v14M6 13l6 6 6-6')} Download QR code</button><p class="cd-cap">Print it, add to your email signature or use it at events.</p>`
+ :SHT==='link'?`${urlRow}<div class="cd-sh">${[['WhatsApp',`https://wa.me/?text=${encodeURIComponent('My Introthread card: '+url)}`],['Email',`mailto:?subject=${encodeURIComponent('My Introthread card')}&body=${encodeURIComponent(url)}`],['LinkedIn',`https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(url)}`],['SMS',`sms:?&body=${encodeURIComponent(url)}`]].map(([l,h])=>`<a href="${h}" target="_blank" rel="noopener">${l}</a>`).join('')}</div><button type="button" class="t-start cd-dl" onclick="shareNative()">${sv('send',18)} Share my card</button><p class="cd-cap">Your link always shows your latest card, even on printed QR codes.</p>`
+ :`<div class="cd-nfc"><span>${sv('nfc',30)}</span><p>Write your link to any NFC card or sticker. A tap on their phone opens your card, no app needed.</p></div><button type="button" class="t-start cd-dl" onclick="tapNFC()">${sv('nfc',18)} Write to an NFC card</button><p class="cd-cap">Works in Chrome on Android. On iPhone, use your QR code or link.</p>`;
+ return`<section class="d-box cd-share"><div class="cd-bh"><span class="cd-bi">${sv('hub',20)}</span><div><b>Share your card</b><small>Meet people instantly, no app needed.</small></div></div>${tabs}${body}</section>`}
+function vCard(){const u=me();if(!CD||CD.uid!==u.id)cdInit();const pub=!(u.links&&u.links.hidden);const cu=cdUser();
+ const tabs=[['basic','Basic information'],['links','Links &amp; social'],['style','Card style'],['share','QR code &amp; sharing'],['adv','Advanced']];
+ let form='';
+ if(CTAB==='basic')form=`<div class="cd-photo"><span class="cd-pav">${avatarC(u,112)}<label class="cd-cam" aria-label="Upload photo">${sv('photo',16)}<input type="file" hidden accept="image/jpeg,image/png,image/webp" onchange="pickPhoto(this,1)"></label></span><div><b>Profile photo</b><small>JPG, PNG or WebP (max 5MB)</small><div class="cd-pb"><label class="t-how sm">${sv('photo',16)} ${u.photo?'Change photo':'Upload photo'}<input type="file" hidden accept="image/jpeg,image/png,image/webp" onchange="pickPhoto(this,1)"></label>${u.photo?`<button type="button" class="cd-rm" onclick="removePhoto()">${sv('close',15)} Remove</button>`:''}</div></div></div>
+  <div class="t-g2">${cdF('cdn','name','Full name',{req:1,ac:'name'})}${cdF('cdr','role','Job title',{req:1,ph:'e.g. Marketing Director'})}${cdF('cdc','company','Company',{ph:'e.g. Acme Technologies'})}${cdF('cdl','city','Location',{icon:'pin',clear:1,ph:'City, Country'})}</div>
+  <label class="x-f"><span class="cd-bl">Bio <small id="cdbcw"><b id="cdbc">${(CD.bio||'').length}</b>/160</small></span><textarea id="cdb" maxlength="160" rows="3" placeholder="What you do and who you help" oninput="cdIn('bio',this.value)">${esc(CD.bio)}</textarea></label>`;
+ else if(CTAB==='links')form=`<p class="cd-help">These links power the icons on your card. Leave any blank to hide it.</p><div class="t-g2">${cdF('cli','linkedin','LinkedIn',{icon:'li',opt:1,ph:'linkedin.com/in/you',max:200})}${cdF('cx','x','X (Twitter)',{icon:'x',opt:1,ph:'@handle or x.com/you',max:200})}${cdF('cw','website','Website',{icon:'globe',opt:1,ph:'yourcompany.com',max:200})}${cdF('ck','calendar','Booking link',{icon:'cal',opt:1,ph:'cal.com/you or calendly.com/you',max:200})}${cdF('ce','email','Contact email',{icon:'mail',opt:1,ph:'name@company.com',type:'email',max:120})}${cdF('cp','phone','Phone',{icon:'phone',opt:1,ph:'+44 7700 900000',type:'tel',max:30})}</div><p class="cd-help">Your email and phone are only added to the contact file people save. They are not shown as text on your public card.</p>`;
+ else if(CTAB==='style')form=`<div class="cd-styles">${Object.entries(THEMES).map(([k,v])=>`<button type="button" class="cd-sty ${u.theme===k?'on':''}" aria-pressed="${u.theme===k}" onclick="cdTheme('${k}')"><span style="background:${v.bg}">${u.theme===k?`<i>${sv('check',12,'#fff',3.2)}</i>`:''}</span><b>${v.n}</b><small>${esc(v.d||'')}</small></button>`).join('')}</div>
+  <div class="x-f cd-tp"><span>Card topics <em>(up to 3, shown on your card)</em></span><div class="tp-wrap">${[...new Set([...TOPICS,...CD.tags])].map(x=>`<button type="button" class="tp ${CD.tags.includes(x)?'on':''}" aria-pressed="${CD.tags.includes(x)}" data-v="${esc(x)}" onclick="cdTagT(this.dataset.v)">${esc(x)}</button>`).join('')}</div></div>
+  <label class="t-tog"><input type="checkbox" ${CD.open?'checked':''} onchange="cdIn('open',this.checked)"><span class="t-sw"></span><span><b>Open to opportunities</b><small>Show a badge on your card.</small></span></label>`;
+ else if(CTAB==='share')form=`<div class="cd-qrbig"><div class="cd-qr lg"><div id="qrCard10"></div><span class="t-qrlogo"><span class="x-lm"><i></i><i></i></span></span></div><div><b>Your dynamic QR code</b><p>Print it once. It always opens your latest card, so you never need to reprint after changes.</p><div class="cd-pb"><button type="button" class="x-btn" onclick="tapDownloadQR()">Download PNG</button><button type="button" class="t-how" onclick="tapQR()">${sv('qr',16)} Full screen</button><button type="button" class="t-how" onclick="cdPrint()">Print card</button></div></div></div>`;
+ else form=`<div class="cd-adv"><div><b>Your Introthread link</b><small>introthread.com/${esc(u.handle)}</small><a class="t-how sm" href="/app/settings">Change in Settings</a></div><div><b>Contact file</b><small>Download your card as a contact (vCard) to share by email or AirDrop.</small><button type="button" class="t-how sm" onclick="cdVcf()">Download .vcf</button></div><div><b>Public profile</b><small>Choose what appears on your full public profile page.</small><a class="t-how sm" href="/app/profile">Edit public profile</a></div><div><b>Visibility</b><small>${pub?'Anyone with your link or QR code can view your card.':'Only you can see your card right now.'}</small><button type="button" class="t-how sm" onclick="cdVis(${!pub})">${pub?'Make private':'Make public'}</button></div></div>`;
+ const showSave=['basic','links','style'].includes(CTAB);
+ setTimeout(()=>{const a=$('#qrCard9');if(a)qr(a,profileUrl(u),150);const b=$('#qrCard10');if(b)qr(b,profileUrl(u),200)},20);
+ return shell('card',`<div class="t-head"><div><div class="t-eye">My card</div><h1 class="t-h1">Your professional identity</h1><p class="t-sub">Create and customise your Introthread card. Share it via QR code, link or NFC. Changes update instantly.</p></div><a href="/${esc(u.handle)}" class="t-how" target="_blank" rel="noopener">${sv('eye',18)} View public profile</a></div>
+ <div class="cd-grid">
+ <div class="cd-left"><nav class="cd-tabs" role="tablist" aria-label="Card sections">${tabs.map(([k,l])=>`<button type="button" role="tab" aria-selected="${CTAB===k}" class="${CTAB===k?'on':''}" onclick="CTAB='${k}';window._keepScroll=true;render()">${l}</button>`).join('')}</nav>
+ <div class="cd-top2"><form class="d-box cd-form" onsubmit="return cdSave(event)" autocomplete="off" novalidate>${form}${showSave?`<div class="cd-fb">${CTAB==='basic'?`<button type="button" class="t-how" onclick="cdBioSuggest()">${sv('spark',16)} Improve my bio</button>`:'<span></span>'}<button class="x-btn lg cd-sv" id="cdsave">${sv('lock',17)} Save changes</button></div>`:''}</form>
+ <div class="cd-pv" id="cdprev">${cdCard(cu)}</div></div></div>
+ <div class="cd-right">${cdShare(u)}
+ <section class="d-box cd-vis"><div class="cd-bh"><span class="cd-bi">${sv('globe',20)}</span><div><b>Card visibility</b><small>Allow anyone with your link or QR code to view your card.</small></div><span class="cd-pill ${pub?'':'off'}">${pub?'Public':'Private'}</span></div><label class="t-tog cd-vt"><input type="checkbox" ${pub?'checked':''} onchange="cdVis(this.checked)" aria-label="Card is public"><span class="t-sw"></span><span><b>${pub?'Visible to anyone with your link':'Hidden from visitors'}</b></span></label><a class="cd-visit" href="/${esc(u.handle)}" target="_blank" rel="noopener">View as visitor ${sv('arrow',14)}</a><small class="cd-lock">${sv('lock',14)} Control what information is visible on your <a href="/app/profile">public profile</a>.</small></section></div>
+ <section class="d-box cd-stb"><div class="cd-bh"><span class="cd-bi">${sv('palette',20)}</span><div><b>Card style</b><small>Choose a style for your Introthread card.</small></div></div><div class="cd-sw">${Object.entries(THEMES).map(([k,v])=>`<button type="button" class="${u.theme===k?'on':''}" aria-pressed="${u.theme===k}" aria-label="${v.n} style" onclick="cdTheme('${k}')"><span style="background:${v.bg}">${u.theme===k?`<i>${sv('check',11,'#fff',3.2)}</i>`:''}</span><small>${v.n}</small></button>`).join('')}</div></section>
+ <section class="d-box cd-qab"><div class="cd-bh"><span class="cd-bi">${sv('spark',20)}</span><div><b>Quick actions</b><small>Common actions for your card.</small></div></div><div class="cd-qa"><button type="button" onclick="shareNative()">${sv('send',18)} Share my card</button><button type="button" onclick="cdPrint()">${sv('brief',18)} Print card</button><button type="button" onclick="toast('Apple Wallet passes are coming soon.')">${sv('wallet',18)} Add to Apple Wallet</button><button type="button" onclick="toast('Google Wallet passes are coming soon.')">${sv('wallet',18)} Add to Google Wallet</button></div></section>
+ ${cdTips()}
+ </div>`)}
+
+
+const _saveCard10=saveCard;saveCard=function(e){if(!$('#cn')){if(e&&e.preventDefault)e.preventDefault();if(!CD)cdInit();return cdSave()}return _saveCard10.call(this,e)};
 </script>
 </body>
 </html>
