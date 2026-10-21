@@ -2747,6 +2747,23 @@ html{-webkit-text-size-adjust:100%;text-size-adjust:100%;touch-action:manipulati
 @media (max-width:600px){.iv{padding:18px;border-radius:12px}.iv-title{text-align:left;min-width:0}.iv-title dl div{justify-content:space-between}.iv-amt{text-align:left;width:100%}.iv-t th:nth-child(2),.iv-t td:nth-child(2),.iv-t th:nth-child(3),.iv-t td:nth-child(3){display:none}.iv-sum dl{min-width:0;width:100%}.iv-foot{grid-template-columns:1fr}}
 @media print{.iv{border:0;padding:0}}
 
+
+/* v8 laptop fit (13.3in at 100%) */
+@media (min-width:1025px){
+.t-grid{align-items:start!important}
+.t-card{position:sticky;top:76px}
+.t-card-id{margin-top:14px!important}
+.t-acts{margin-top:16px!important}
+.t-card-id .x-av{width:104px!important;height:104px!important;font-size:36px!important}
+.t-event{padding:12px 16px;margin-bottom:16px}
+.th-tabs,.ro-tabs,.pp-tabs{flex-wrap:wrap;overflow:visible!important;mask-image:none!important;-webkit-mask-image:none!important}
+.ct-seg{margin:0 0 12px}
+}
+@media (min-width:1025px) and (max-width:1440px){
+.content{padding-left:24px!important;padding-right:24px!important}
+.d7-top{grid-template-columns:minmax(0,1fr) 300px!important}
+.th-tabs button{height:38px;padding:0 12px;font-size:14px}
+}
 </style>
 </head>
 <body><a href="#root" class="x-skip">Skip to content</a>
@@ -6632,6 +6649,8 @@ bInvHTML=function(i){const b=bGet(),d=b.details||{},u=me()||{};const cur=i.curre
  <p class="iv-thanks">Thank you for using Introthread.</p></footer></article>`};
 bInvPrint=function(id){const i=bGet().invoices.find(x=>x.id===id);if(!i)return;const w=window.open('','_blank');if(!w)return toast('Allow pop-ups to download the invoice.');
  const css=[...document.querySelectorAll('style')].map(s=>s.textContent).join('\n');w.document.write(`<!doctype html><html lang="en"><head><meta charset="utf-8"><title>${i.number} - Introthread invoice</title><style>${css}@page{size:A4;margin:14mm}html,body{background:#fff!important;overflow:visible!important}body{padding:0;margin:0}.iv{box-shadow:none;border:0;max-width:none;padding:0}</style></head><body>${bInvHTML(i)}<scr`+`ipt>setTimeout(()=>print(),400)</scr`+`ipt></body></html>`);w.document.close()};
+
+const _vThreads8=vThreads;vThreads=function(){let h=_vThreads8.apply(this,arguments);const b=ctBar('t');if(h.startsWith(b)){h=h.slice(b.length);h=h.replace(/(<div class="content"[^>]*>)/,'$1'+b)}return h};
 </script>
 </body>
 </html>
