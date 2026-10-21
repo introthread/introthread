@@ -1874,6 +1874,34 @@ html,body,button,input,select,textarea{font-family:var(--xss)}
 .mbs-e{text-align:center;color:var(--xmu);padding:40px 10px}
 @media (prefers-reduced-motion:reduce){.modal,.am.sheet,.am-bd,.mbs{animation:none!important}}
 
+/* v22 mobile fit: nothing may be wider than the screen (keeps the bottom bar on screen) */
+@media (max-width:1023px){
+ html,body{overflow-x:clip;max-width:100%}
+ .app,.main,.content{min-width:0;max-width:100vw}
+ .content>*{max-width:100%}
+ .th-bar{flex-wrap:wrap!important}.th-tools{width:100%;min-width:0;overflow-x:auto;scrollbar-width:none;flex-wrap:nowrap!important;padding-bottom:2px}.th-tools::-webkit-scrollbar{display:none}.th-tools>*{flex:none}.th-sort{flex:1 0 140px!important;min-width:140px}
+ .t-grid,.pp-grid,.cd-grid,.cd-top2,.td-grid,.st12-grid,.d7-top,.ro-grid,.th-grid,.bl-grid{grid-template-columns:minmax(0,1fr)!important}
+ .t-card,.t-form,.pp-pv,.pp-card,.pp-ed,.cd-card,.cd-pv{max-width:100%!important;min-width:0}
+ .t-form-h{flex-wrap:wrap}.t-seg{max-width:100%}.t-g2{grid-template-columns:minmax(0,1fr) minmax(0,1fr)}
+ .pp-tabbar{min-width:0}.pp-tabs{overflow-x:auto}
+ .t-acts{flex-wrap:wrap}.t-acts button{flex:1 1 40%}
+}
+@media (max-width:560px){.t-g2,.pp-g{grid-template-columns:minmax(0,1fr)!important}.t-opts{grid-template-columns:1fr!important}.t-priv{border-left:0!important;padding-left:0!important}}
+
+@media (max-width:1023px){.t-tog span b,.t-priv b{white-space:normal!important}.t-tog>span:last-child{min-width:0}}
+
+@media (max-width:1023px){.cd-adv>div{grid-template-columns:minmax(0,1fr) auto!important}.cd-adv small{min-width:0;overflow-wrap:anywhere}}
+@media (max-width:560px){.cd-adv>div{grid-template-columns:minmax(0,1fr)!important;row-gap:8px}.cd-adv .t-how{grid-column:1!important;grid-row:auto!important;justify-self:start}}
+
+@media (max-width:1023px){
+ .content .grid{grid-template-columns:minmax(0,1fr)!important}.content .grid>*,.livefeed{min-width:0;max-width:100%}
+ .bl-int,.bl-ftabs{max-width:100%;overflow-x:auto;scrollbar-width:none}.bl-int button{white-space:nowrap}
+ .th-row,.th-row.cmp{grid-template-columns:52px minmax(0,1fr) 26px!important;grid-template-areas:"av who dots" "pri st st" "btn btn btn";gap:10px 12px;padding:14px}
+ .th-row>.d-av{grid-area:av;width:52px!important;height:52px!important}.th-who{grid-area:who}.th-row>.d-dots{grid-area:dots;align-self:start}
+ .th-pri{grid-area:pri;border-right:0!important;padding-right:0!important}.th-st{grid-area:st}.th-row>.d-act{grid-area:btn;width:100%}
+}
+@media (max-width:480px){.bl-int button{padding:7px 10px;font-size:12.5px}}
+
 </style>
 </head>
 <body><a href="#root" class="x-skip">Skip to content</a>
@@ -3682,7 +3710,7 @@ const _shell21=shell;shell=function(on,inner){let h=_shell21(on,inner);const u=m
  const tab=(href,ic,l,k,badge)=>`<a href="${href}" class="mb-t ${on===k?'on':''}" ${on===k?'aria-current="page"':''}><span class="mb-ti">${sv(ic,22)}${badge?`<em>${badge>99?'99+':badge}</em>`:''}</span><span>${l}</span></a>`;
  const bar=`<nav class="mobile-tab mb-bar" aria-label="Main">${tab('/app','home','Today','today')}${tab('/app/threads','thread','Threads','threads',n)}<a href="/app/tap" class="mb-tap ${on==='tap'?'on':''}" aria-label="Tap to Thread"><span>${sv('nfc',24)}</span><b>Tap</b></a>${tab('/app/rooms','cal','Rooms','rooms')}<button type="button" class="mb-t ${['card','pub','settings'].includes(on)?'on':''}" data-am aria-haspopup="menu" aria-expanded="false" onclick="acctMenu(this,'sheet')"><span class="mb-ti mb-av">${avatarC(u,26)}</span><span>More</span></button></nav>`;
  h=h.replace(/<nav class="mobile-tab">[\s\S]*?<\/nav>/,bar);
- h=h.replace('<div class="topbar">',`<div class="topbar"><a href="/app" class="mb-logo" aria-label="Introthread dashboard"><span class="x-lm"><i></i><i></i></span><span>intro<b>thread</b></span></a><button type="button" class="mb-sbtn" aria-label="Search" onclick="mbSearch()">${sv('search',20)}</button>`);
+ h=h.replace('<div class="topbar">',`<div class="topbar"><a href="/app" class="mb-logo" aria-label="Introthread dashboard"><span class="x-lm"><i></i><i></i></span><span>intro<b>thread</b></span></a><button type="button" class="mb-sbtn" aria-label="Search" onclick="mbSearch()">${ic('search',20)}</button>`);
  return h};
 /* account menu becomes a bottom sheet on phones and tablets */
 const _acct21=acctMenu;acctMenu=function(btn,dir){_acct21(btn,dir);const m=document.getElementById('acm');if(!m||!isMb())return;
