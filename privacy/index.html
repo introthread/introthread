@@ -2841,6 +2841,31 @@ html{-webkit-text-size-adjust:100%;text-size-adjust:100%;touch-action:manipulati
 #modal.pc-host .pc-zoom{max-width:min(320px,calc(100dvh - 330px))!important;min-width:140px}
 #modal.pc-host .pc-acts{position:sticky!important;bottom:0;display:flex!important;visibility:visible!important;opacity:1!important;background:#fff;z-index:5;flex:none}
 #modal.pc-host .pc-acts .ad-btn{display:inline-flex!important;visibility:visible!important;opacity:1!important}
+
+/* v19 website header on phones when signed in: avatar button + menu only */
+@media (max-width:760px){
+.x-nav-r{gap:10px;flex:none;min-width:0}
+.x-nav-r.it-in>a.x-btn:not(.it-dash){display:none!important}
+.it-dash{width:44px;height:44px;padding:0!important;justify-content:center;border-radius:50%!important;flex:none}
+.it-dash>span,.it-dash>svg{display:none!important}
+.it-dash .x-av{width:34px!important;height:34px!important;font-size:12px!important}
+}
+
+/* v19b website header on small phones when signed out: everything fits */
+@media (max-width:430px){
+.x-nav-r:not(.it-in){gap:8px}
+.x-nav-r:not(.it-in) .x-login{font-size:14px;padding:0 4px}
+.x-nav-r:not(.it-in)>a.x-btn{padding:0 12px!important;height:38px;font-size:13.5px;white-space:nowrap}
+.x-nav-r:not(.it-in)>a.x-btn svg{display:none}
+.x-nav .x-logo,.x-nav-in .x-logo{font-size:19px}
+}
+
+/* v19c How it works on phones: the phone picture fits its content (no empty half screen) */
+@media (max-width:760px){
+.x-ph-in .x-ph-art{min-height:0!important;height:auto!important;padding:10px 0 24px}
+.x-ph-in .x-phone{height:auto!important}
+.x-ph-in .x-scr{height:auto!important;min-height:0!important;padding-bottom:22px}
+}
 </style>
 </head>
 <body><a href="#root" class="x-skip">Skip to content</a>
@@ -6753,6 +6778,8 @@ var IT_BOOTED=!(typeof SB!=='undefined'&&SB)||!itHasSess()||(typeof MODE!=='unde
 if(!IT_BOOTED){const fin=()=>{if(IT_BOOTED)return;IT_BOOTED=true;render()};setTimeout(fin,8000);
  SB.auth.getSession().then(async({data})=>{const s=data&&data.session;if(s){let n=0;while(!me()&&n++<70)await new Promise(r=>setTimeout(r,100))}fin()}).catch(fin)}
 const _renderBoot=render;render=function(){if(!IT_BOOTED&&!me()&&/^\/app(\/|$)/.test(location.pathname)){try{$('#root').innerHTML=itSplash()}catch(_){}return}return _renderBoot.apply(this,arguments)};
+
+const _mnav19=mnav;mnav=function(){let h=_mnav19.apply(this,arguments);return me()?h.replace('class="x-nav-r"','class="x-nav-r it-in"'):h};
 </script>
 </body>
 </html>
