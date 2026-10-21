@@ -2,7 +2,7 @@
 // Verifies Paystack's signature, then keeps subscriptions, payments and the Pro plan in step.
 const crypto = require('crypto');
 const { send } = require('./_lib/common');
-const { svc, applyCharge } = require('./_lib/pay');
+const { svc, applyCharge, setBilling, meta } = require('./_lib/pay');
 const raw = req => new Promise(r => { let d = ''; req.on('data', c => d += c); req.on('end', () => r(d)); req.on('error', () => r('')); });
 
 module.exports = async (req, res) => {
@@ -18,7 +18,7 @@ module.exports = async (req, res) => {
   const d = ev.data || {}, db = svc();
   const cust = (d.customer || {}).customer_code;
   const userFor = async () => {
-    const m = (d.metadata || {}).user_id;
+    const m = meta(d).user_id;
     if (m && /^[0-9a-f-]{36}$/i.test(m)) return m;
     if (!cust) return null;
     const s = await db.get(`subscriptions?stripe_customer_id=eq.${encodeURIComponent(cust)}&select=user_id`);
@@ -30,14 +30,16 @@ module.exports = async (req, res) => {
   } else if (ev.event === 'subscription.create') {
     if (cust) await db.patch(`subscriptions?stripe_customer_id=eq.${encodeURIComponent(cust)}`, { stripe_subscription_id: d.subscription_code, ...(d.next_payment_date ? { current_period_end: d.next_payment_date } : {}), updated_at: now });
   } else if (ev.event === 'subscription.not_renew') {
-    if (d.subscription_code) await db.patch(`subscriptions?stripe_subscription_id=eq.${encodeURIComponent(d.subscription_code)}`, { status: 'canceling', canceled_at: now, updated_at: now });
+    const s = d.subscription_code ? await db.get(`subscriptions?stripe_subscription_id=eq.${encodeURIComponent(d.subscription_code)}&select=user_id,current_period_end`) : [];
+    if (s[0]) { await db.patch(`subscriptions?user_id=eq.${s[0].user_id}`, { status: 'canceling', canceled_at: now, updated_at: now }); await setBilling(db, s[0].user_id, b => Object.assign(b, { cancelAt: Date.parse(s[0].current_period_end) || Date.now() })); }
   } else if (ev.event === 'subscription.disable') {
     const s = d.subscription_code ? await db.get(`subscriptions?stripe_subscription_id=eq.${encodeURIComponent(d.subscription_code)}&select=user_id`) : [];
-    if (s[0]) { await db.patch(`subscriptions?user_id=eq.${s[0].user_id}`, { status: 'canceled', canceled_at: now, updated_at: now }); await db.patch(`profiles?id=eq.${s[0].user_id}`, { plan: 'Free' }); }
+    if (s[0]) { await db.patch(`subscriptions?user_id=eq.${s[0].user_id}`, { status: 'canceled', canceled_at: now, updated_at: now }); await setBilling(db, s[0].user_id, b => Object.assign(b, { plan: 'free', status: 'canceled', cancelAt: null }), 'Free'); }
   } else if (ev.event === 'invoice.payment_failed') {
     const uid = await userFor();
     if (uid) {
       await db.patch(`subscriptions?user_id=eq.${uid}`, { status: 'past_due', updated_at: now });
+      await setBilling(db, uid, b => Object.assign(b, { status: 'past_due' }));
       const tx = d.transaction || {};
       await db.insertIgnore('payments', { user_id: uid, plan_id: 'pro', amount: Number(d.amount || tx.amount || 0) / 100, currency: String(tx.currency || 'kes').toLowerCase(), status: 'failed', stripe_invoice_id: 'ps_' + (tx.reference || d.invoice_code || now), failure_reason: String(d.description || 'Card payment failed').slice(0, 200) }, 'stripe_invoice_id');
     }
