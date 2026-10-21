@@ -1,6 +1,6 @@
 # Introthread - handover for the next AI agent
 
-Last updated: 21 Oct 2026 (admin area v33). Read this before making changes.
+Last updated: 21 Oct 2026 (admin redesign v34, screen 1 of 9). Read this before making changes.
 
 ## Where things are
 - Live site: https://www.introthread.com (apex redirects to www). Vercel deploys automatically from `main` of `introthread/introthread` (preset "Other", static).
@@ -63,6 +63,11 @@ Tap -> Thread -> one question, "What's next?". Answers stay sealed until both pe
   - Every action asks for a reason and runs through a SECURITY DEFINER function in migration 003 that checks the role (`assert_staff`) and writes the audit log. The browser never holds admin keys. Roles: owner, admin, support, moderator, finance.
   - Note: `SB` is a global const (not `window.SB`). Tests mock it by replacing `const SB=(window.supabase` with `const SB=window.__SB?window.__SB:(window.supabase` (see `tadm.js`).
 - User side v33: "Report this profile" on public cards and "Report a problem with this Thread" (writes `reports`); suspended or banned accounts see a paused/closed screen (reads `account_status`); maintenance mode screen for non-staff; announcement banner (dismissible per message); Settings has "Your data and privacy" with Request a copy / Delete my account (writes `privacy_requests`); Free limit now reads `free_threads_per_month` from app_settings; `isPro` is case-insensitive (profiles store "Pro").
+- Admin redesign v34 (screen 1 of 9: Dashboard). Agnes is redesigning the 9 admin screens one at a time against her mockups (navy sidebar, electric blue, restrained orange). Rules she set: keep all functionality/permissions, real data only (no fake trends), show an em dash when a metric cannot be calculated (distinct from 0), date range must work across the whole dashboard, loading/error/empty states everywhere, consistent across all 9 screens.
+  - New shell (`vAdmin` override, classes `adm2-*`): navy sidebar with icons, collapsible icon rail on desktop (saved in localStorage `it_adm_col`), slide-in drawer with scrim below 1024px (Esc closes), skip link, sign-out button (`admSignOut`), back-to-app button, orange badges for open reports/privacy.
+  - Dashboard (`admDash2`, `admDashLoad`): range select 7/30/90 days (saved `it_adm_range`), Refresh with spinner and "Updated" time; 8 KPI cards (People, Active, Threads, Confirmed %, Both answered %, Paying, Monthly revenue, Contacts) with real previous-period comparisons, linked cards go to Users/Revenue; Operations panel (urgent/review/info: open reports and age, privacy deadlines, two-step off, staff without two-step, maintenance, billing not connected, suspended accounts) with action buttons; New people / New Threads charts with y-axis, date labels, hover and arrow-key tooltips, empty states; funnel (Threads > confirmed > answered > both answered); locations and plan mix with bars; skeleton loading and error card.
+  - Data comes from `admin_stats_range(days)` in `supabase/migrations/004_dashboard_ranges.sql`. If 004 is not run yet, the page falls back to `admin_stats` (30 days only, other ranges disabled, note shown).
+  - Next: Screen 2 Users (Agnes's brief: search + filters by plan/status, overview counts total/active/suspended/pending, side detail panel with account info, activity, Threads, notes, usage; actions change plan, send login link, reset password, suspend, delete with permissions and confirmation; permission-controlled exports, protect sensitive data). Login link and password reset need a server-side function (Supabase Edge Function with the service key, or the user-facing reset email flow) because the browser cannot call admin auth APIs.
 
 ## Honest limits to keep in mind
 - LinkedIn does not let apps read another person's profile from a username. A LinkedIn link gives the profile URL and a best-guess name only; email, phone, title and company must come from paste, QR vCard, business card or contacts.
@@ -70,7 +75,7 @@ Tap -> Thread -> one question, "What's next?". Answers stay sealed until both pe
 - iPhone Safari hides the contact picker unless the Contact Picker API feature flag is turned on.
 
 ## Open items / next steps
-0. Agnes to run `supabase/migrations/003_admin_functions.sql` in Supabase (002 is done). Then sign in as mosemqute@gmail.com, open /admin, set up two-step verification. Next phase: Stripe billing (checkout, customer portal, webhook writing `subscriptions`).
+0. 002 and 003 are run. Agnes to run `supabase/migrations/004_dashboard_ranges.sql` for 7/90-day dashboard ranges. Admin redesign continues with screen 2 (Users). Then sign in as mosemqute@gmail.com, open /admin, set up two-step verification. Next phase: Stripe billing (checkout, customer portal, webhook writing `subscriptions`).
 1. Agnes to paste the Supabase email templates (Magic Link and Confirm signup, code-based, keep code length 8) and configure Resend SMTP; then run a real end-to-end sign-up test with a real inbox.
 2. Real Google and Microsoft sign-in (Google sign-in is being tested with mkautospareske@gmail.com).
 3. Pro billing (currently simulated) and real outbound email sending.
