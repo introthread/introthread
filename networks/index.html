@@ -1823,6 +1823,57 @@ html,body,button,input,select,textarea{font-family:var(--xss)}
 @media (max-width:1280px){.bl-grid{grid-template-columns:1fr}.bl-plans{grid-template-columns:repeat(2,minmax(0,1fr))}}
 @media (max-width:760px){.bl-plans,.bl-res,.bl-dm{grid-template-columns:1fr}.bl-tr{grid-template-columns:1fr 1fr;row-gap:4px}.bl-th{display:none}.bl-ta{grid-column:1/-1;justify-content:flex-start}.bl-curh{flex-direction:column}.bl-int{margin-left:0}.cd-bh{flex-wrap:wrap}}
 
+/* v21 mobile and tablet navigation */
+.mb-logo,.mb-sbtn{display:none}
+@media (max-width:1023px){
+ .sidebar{display:none!important}.main{margin-left:0!important}
+ .topbar{height:60px!important;padding:0 14px!important;gap:10px;padding-top:env(safe-area-inset-top)!important;box-sizing:content-box}
+ .topbar .search,.t-chip{display:none!important}
+ .mb-logo{display:inline-flex;align-items:center;gap:6px;margin-right:auto;font:600 19px var(--xss);color:var(--xink);text-decoration:none}.mb-logo b{color:var(--xb);font-weight:600}
+ .mb-sbtn{display:grid;place-items:center;width:42px;height:42px;border:0;border-radius:12px;background:#f2f4f8;color:var(--xink);cursor:pointer}
+ .t-tb{gap:8px!important}.t-user span,.t-user>svg:last-child{display:none!important}.t-user{padding:0!important;border:0!important;background:none!important}
+ .t-bell{width:42px;height:42px}
+ .content{padding:18px 16px calc(104px + env(safe-area-inset-bottom))!important;max-width:none!important}
+ .mb-bar{display:grid!important;grid-template-columns:repeat(5,1fr);align-items:end;position:fixed;left:0;right:0;bottom:0;z-index:60;height:auto;padding:6px 6px calc(6px + env(safe-area-inset-bottom))!important;background:rgba(255,255,255,.92)!important;backdrop-filter:saturate(1.6) blur(16px);-webkit-backdrop-filter:saturate(1.6) blur(16px);border-top:1px solid rgba(15,23,42,.08)!important;box-shadow:0 -8px 24px -18px rgba(15,23,42,.35)}
+ .mb-t{display:flex!important;flex-direction:column;align-items:center;justify-content:center;gap:3px;min-height:52px;border:0;background:none;color:#667085!important;font:600 11px var(--xss)!important;text-decoration:none;cursor:pointer;border-radius:12px;-webkit-tap-highlight-color:transparent}
+ .mb-t:active{background:#f2f4f8}
+ .mb-ti{position:relative;display:grid;place-items:center;width:48px;height:30px;border-radius:99px;transition:background .15s}
+ .mb-t.on{color:var(--xb)!important}.mb-t.on .mb-ti{background:#e8efff}
+ .mb-ti em{position:absolute;top:-3px;right:4px;min-width:17px;height:17px;padding:0 4px;border-radius:99px;background:#ff6a3d;color:#fff;font:700 10px/17px var(--xss);font-style:normal;border:2px solid #fff;box-sizing:content-box}
+ .mb-av .x-av{margin:0;box-shadow:0 0 0 2px #fff,0 0 0 3px #d0d5dd}.mb-t.on .mb-av .x-av{box-shadow:0 0 0 2px #fff,0 0 0 3.5px var(--xb)}
+ .mb-tap{display:flex;flex-direction:column;align-items:center;gap:3px;text-decoration:none;color:var(--xink);font:600 11px var(--xss)}
+ .mb-tap span{width:56px;height:56px;margin-top:-26px;border-radius:50%;display:grid;place-items:center;color:#fff;background:linear-gradient(145deg,#3b6bff,#1f5eff);box-shadow:0 10px 22px -8px rgba(31,94,255,.8),0 0 0 5px #fff;transition:transform .15s}
+ .mb-tap:active span{transform:scale(.94)}.mb-tap.on b{color:var(--xb)}
+ .t-head{flex-direction:column;align-items:stretch!important;gap:14px!important;margin-bottom:16px!important}
+ .t-h1{font-size:clamp(26px,7vw,34px)!important}.t-sub{font-size:15px!important}
+ .t-head>a,.t-head>button,.d-hbtns{align-self:stretch}.d-hbtns{display:grid!important;grid-template-columns:1fr 1fr;gap:10px}.d-hbtns>*{justify-content:center}
+ .t-head>.t-how,.t-head>.x-btn{justify-content:center}
+ .cd-tabs,.th-tabs,.ro-tabs,.st12-tabs{scroll-snap-type:x proximity;-webkit-overflow-scrolling:touch;mask-image:linear-gradient(90deg,transparent 0,#000 14px,#000 calc(100% - 22px),transparent);-webkit-mask-image:linear-gradient(90deg,transparent 0,#000 14px,#000 calc(100% - 22px),transparent);padding-left:6px!important;padding-right:18px!important}
+ .cd-tabs button,.th-tabs button,.ro-tabs button,.st12-tabs button{scroll-snap-align:center}
+ .modal-back{align-items:flex-end!important;padding:0!important}
+ .modal{width:100%!important;max-width:none!important;max-height:92vh!important;border-radius:22px 22px 0 0!important;padding:24px 20px calc(22px + env(safe-area-inset-bottom))!important;animation:mbUp .22s cubic-bezier(.2,.8,.2,1)!important}
+ .toast{bottom:calc(96px + env(safe-area-inset-bottom))!important}
+ .am.sheet{position:fixed;left:0!important;right:0!important;bottom:0!important;top:auto!important;width:100%!important;max-width:none!important;max-height:86vh;border-radius:22px 22px 0 0;padding:6px 10px calc(14px + env(safe-area-inset-bottom));animation:mbUp .22s cubic-bezier(.2,.8,.2,1);z-index:310}
+ .am-bd{position:fixed;inset:0;z-index:305;background:rgba(10,16,32,.42);backdrop-filter:blur(2px);animation:mbFade .2s}
+ .am-grab{display:block;width:40px;height:5px;border-radius:99px;background:#d0d5dd;margin:6px auto 4px}
+ .am.sheet .am-it{height:48px;font-size:15.5px}
+ input,select,textarea{font-size:16px!important}
+}
+@media (max-width:1023px) and (min-width:700px){.content{padding-left:28px!important;padding-right:28px!important}.mb-bar{left:50%;right:auto;transform:translateX(-50%);width:min(560px,calc(100% - 32px));bottom:calc(12px + env(safe-area-inset-bottom));border-radius:22px;border:1px solid rgba(15,23,42,.08)!important;padding-bottom:6px!important}.modal{max-width:620px!important;margin:0 auto;border-radius:22px 22px 0 0!important}.am.sheet{max-width:560px!important;margin:0 auto;left:50%!important;right:auto!important;transform:translateX(-50%)}}
+@keyframes mbUp{from{transform:translateY(100%)}to{transform:none}}@keyframes mbFade{from{opacity:0}to{opacity:1}}
+@media (min-width:700px) and (max-width:1023px){@keyframes mbUp{from{transform:translate(-50%,100%)}to{transform:translateX(-50%)}}.modal{animation:mbFade .2s!important}}
+.mbs{position:fixed;inset:0;z-index:400;background:#fff;display:flex;flex-direction:column;font-family:var(--xss);animation:mbFade .15s}
+.mbs-open{overflow:hidden}
+.mbs-h{display:flex;gap:10px;align-items:center;padding:calc(10px + env(safe-area-inset-top)) 14px 10px;border-bottom:1px solid var(--line)}
+.mbs-in{flex:1;display:flex;align-items:center;gap:8px;height:46px;padding:0 14px;border-radius:12px;background:#f2f4f8;color:var(--xmu)}.mbs-in input{flex:1;border:0;background:none;outline:none;font:500 16px var(--xss);color:var(--xink)}
+.mbs-x{border:0;background:none;color:var(--xb);font:600 15px var(--xss);cursor:pointer}
+.mbs-r{flex:1;overflow:auto;padding:8px 10px calc(20px + env(safe-area-inset-bottom))}
+.mbs-l{display:block;padding:14px 8px 6px;font-size:12px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--xmu)}
+.mbs-i{display:flex;align-items:center;gap:12px;width:100%;min-height:52px;padding:8px;border:0;border-radius:12px;background:none;text-align:left;font:500 15.5px var(--xss);color:var(--xink);cursor:pointer}
+.mbs-i:active,.mbs-i:hover{background:#f3f6ff}.mbs-i>svg:first-child{color:var(--xb)}.mbs-i>span{flex:1;min-width:0}.mbs-i b{display:block;font-weight:600}.mbs-i small{display:block;font-size:13px;color:var(--xmu);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.mbs-i>svg:last-child{color:#98a2b3}.mbs-i .d-av{flex:none}
+.mbs-e{text-align:center;color:var(--xmu);padding:40px 10px}
+@media (prefers-reduced-motion:reduce){.modal,.am.sheet,.am-bd,.mbs{animation:none!important}}
+
 </style>
 </head>
 <body><a href="#root" class="x-skip">Skip to content</a>
@@ -3608,6 +3659,52 @@ amGo=function(path,tab){amClose();const url=path==='/app/settings'?stUrl(tab):pa
  if(location.pathname+location.search!==url){if(location.pathname===url.split('?')[0])history.pushState(null,'',url);else return go(url)}window._keepScroll=false;render();window.scrollTo(0,0)};
 stTab=function(t){if(!stTabKeys().includes(t))t='account';STAB=t;if(location.pathname==='/app/settings')history.replaceState(null,'',stUrl(t));window._keepScroll=true;render()};
 const _render20=render;render=function(){if(location.pathname==='/app/settings'){const t=new URLSearchParams(location.search).get('tab')||'account';if(stTabKeys().includes(t))STAB=t}return _render20()};
+/* ===== v21 Navigation: same-page links always respond, tabs have their own URLs ===== */
+const _go21=go;go=function(h){const p=String(h).replace(/^#/,'')||'/';if(p===location.pathname+location.search&&!window._rendering){window._keepScroll=false;try{amClose()}catch(_){}render();window.scrollTo(0,0);return}return _go21(h)};
+/* each tabbed page keeps its tab in the address, so menus, refresh and links land on the right tab */
+const TABSYNC=[
+ {path:'/app/profile',param:'tab',def:'info',keys:['info','links','look','seo'],get:()=>PTAB,set:v=>{PTAB=v}},
+ {path:'/app/card',param:'tab',def:'basic',keys:['basic','links','style','share','adv'],get:()=>CTAB,set:v=>{CTAB=v}},
+ {path:'/app/threads',param:'status',def:'all',keys:['all','matched','open','pending','resolved','closed'],get:()=>TF2,set:v=>{TF2=v;TLIM=20}},
+ {path:'/app/rooms',param:'view',def:'all',keys:['all','upcoming','past','mine','invites'],get:()=>RF9,set:v=>{RF9=v;RLIM9=6}}];
+const _render21=render;render=function(){const ts=TABSYNC.find(t=>t.path===location.pathname);const href=location.pathname+location.search;
+ if(ts&&href!==window._tsLast){const v=new URLSearchParams(location.search).get(ts.param);ts.set(ts.keys.includes(v)?v:ts.def)}
+ window._rendering=true;try{_render21()}finally{window._rendering=false}
+ if(ts&&location.pathname===ts.path){const v=ts.get(),sp=new URLSearchParams(location.search);if(v===ts.def)sp.delete(ts.param);else sp.set(ts.param,v);const qs=sp.toString(),want=ts.path+(qs?'?'+qs:'');if(want!==location.pathname+location.search)history.replaceState(null,'',want)}
+ window._tsLast=location.pathname+location.search;mbAfterRender()};
+/* privacy link opens the right Public profile tab */
+const _bPrivacy21=bPrivacy;bPrivacy=function(u){return _bPrivacy21(u).replace(`href="/app/profile" onclick="PTAB='look'"`,'href="/app/profile?tab=look"')};
+
+/* ===== v21 Mobile and tablet navigation (screens under 1024px) ===== */
+const MB_BP=1024;const isMb=()=>innerWidth<MB_BP;
+function mbOpenCount(){return myThreads().filter(t=>['open','pending','matched'].includes(threadState(t))).length}
+const _shell21=shell;shell=function(on,inner){let h=_shell21(on,inner);const u=me();if(!u)return h;const n=mbOpenCount();
+ const tab=(href,ic,l,k,badge)=>`<a href="${href}" class="mb-t ${on===k?'on':''}" ${on===k?'aria-current="page"':''}><span class="mb-ti">${sv(ic,22)}${badge?`<em>${badge>99?'99+':badge}</em>`:''}</span><span>${l}</span></a>`;
+ const bar=`<nav class="mobile-tab mb-bar" aria-label="Main">${tab('/app','home','Today','today')}${tab('/app/threads','thread','Threads','threads',n)}<a href="/app/tap" class="mb-tap ${on==='tap'?'on':''}" aria-label="Tap to Thread"><span>${sv('nfc',24)}</span><b>Tap</b></a>${tab('/app/rooms','cal','Rooms','rooms')}<button type="button" class="mb-t ${['card','pub','settings'].includes(on)?'on':''}" data-am aria-haspopup="menu" aria-expanded="false" onclick="acctMenu(this,'sheet')"><span class="mb-ti mb-av">${avatarC(u,26)}</span><span>More</span></button></nav>`;
+ h=h.replace(/<nav class="mobile-tab">[\s\S]*?<\/nav>/,bar);
+ h=h.replace('<div class="topbar">',`<div class="topbar"><a href="/app" class="mb-logo" aria-label="Introthread dashboard"><span class="x-lm"><i></i><i></i></span><span>intro<b>thread</b></span></a><button type="button" class="mb-sbtn" aria-label="Search" onclick="mbSearch()">${sv('search',20)}</button>`);
+ return h};
+/* account menu becomes a bottom sheet on phones and tablets */
+const _acct21=acctMenu;acctMenu=function(btn,dir){_acct21(btn,dir);const m=document.getElementById('acm');if(!m||!isMb())return;
+ m.classList.remove('up','down');m.classList.add('sheet');m.style.left='';m.style.top='';
+ if(!document.getElementById('acmb')){const bd=document.createElement('div');bd.id='acmb';bd.className='am-bd';bd.onclick=amClose;document.body.appendChild(bd)}
+ if(!m.querySelector('.am-grab'))m.insertAdjacentHTML('afterbegin','<span class="am-grab" aria-hidden="true"></span>');
+ const pages=m.querySelector('.am-g');if(pages&&!m.querySelector('[data-mbnav]'))pages.insertAdjacentHTML('afterbegin',`<button type="button" role="menuitem" class="am-it" data-mbnav onclick="amGo('/app/tap')">${sv('nfc',18)}<span>Tap to Thread</span></button>`)};
+const _amClose21=amClose;amClose=function(){_amClose21();const b=document.getElementById('acmb');if(b)b.remove()};
+/* full-screen search */
+function mbSearch(){if(document.getElementById('mbs'))return;const d=document.createElement('div');d.id='mbs';d.className='mbs';d.setAttribute('role','dialog');d.setAttribute('aria-label','Search');
+ d.innerHTML=`<div class="mbs-h"><label class="mbs-in">${sv('search',18)}<input id="mbsq" type="search" placeholder="Search people, companies, Rooms" autocomplete="off" enterkeyhint="search"></label><button type="button" class="mbs-x" onclick="mbSearchClose()">Cancel</button></div><div class="mbs-r" id="mbsr"></div>`;
+ document.body.appendChild(d);document.body.classList.add('mbs-open');const i=d.querySelector('input');i.addEventListener('input',mbSearchRun);i.addEventListener('keydown',e=>{if(e.key==='Escape')mbSearchClose();if(e.key==='Enter'){e.preventDefault();const v=i.value.trim();mbSearchClose();TQ2=v;Q=v;TF2='all';go('/app/threads')}});mbSearchRun();setTimeout(()=>i.focus(),30)}
+function mbSearchClose(){const d=document.getElementById('mbs');if(d)d.remove();document.body.classList.remove('mbs-open')}
+function mbSearchRun(){const q=(($('#mbsq')||{}).value||'').toLowerCase().trim();const r=$('#mbsr');if(!r)return;
+ if(!q){r.innerHTML=`<small class="mbs-l">Go to</small>${[['/app','home','Today'],['/app/threads','thread','Threads'],['/app/tap','nfc','Tap to Thread'],['/app/rooms','cal','Rooms'],['/app/card','user','My card'],['/app/profile','globe','Public profile'],['/app/settings','gear','Settings'],['/app/settings?tab=help','mail','Help &amp; support']].map(([h,ic,l])=>`<button type="button" class="mbs-i" onclick="mbSearchClose();go('${h}')">${sv(ic,18)}<span>${l}</span>${sv('chev',14)}</button>`).join('')}`;return}
+ const T=myThreads().filter(t=>[t.other.name,t.other.company,t.other.role,t.where,tagsOf(t).join(' ')].join(' ').toLowerCase().includes(q)).slice(0,8);const R=myRooms().filter(x=>[x.name,x.location].join(' ').toLowerCase().includes(q)).slice(0,4);
+ r.innerHTML=(T.length?`<small class="mbs-l">People</small>${T.map(t=>`<button type="button" class="mbs-i" onclick="mbSearchClose();go('/app/thread/${t.id}')">${xav(t.other.name,34)}<span><b>${esc(t.other.name)}</b><small>${esc([t.other.role,t.other.company].filter(Boolean).join(', ')||t.where)}</small></span>${sv('chev',14)}</button>`).join('')}`:'')+(R.length?`<small class="mbs-l">Rooms</small>${R.map(x=>`<button type="button" class="mbs-i" onclick="mbSearchClose();go('/app/room/${x.id}')">${sv('cal',18)}<span><b>${esc(x.name)}</b><small>${esc(x.location||'')}</small></span>${sv('chev',14)}</button>`).join('')}`:'')+(!T.length&&!R.length?`<p class="mbs-e">No results for &ldquo;${esc(q)}&rdquo;</p>`:'')}
+window.addEventListener('itroute',mbSearchClose);window.addEventListener('popstate',mbSearchClose);
+/* keep the active tab visible in scrollable tab strips */
+function mbAfterRender(){if(!isMb())return;requestAnimationFrame(()=>document.querySelectorAll('.cd-tabs,.th-tabs,.ro-tabs,.st12-tabs').forEach(n=>{const a=n.querySelector('.on');if(a&&n.scrollWidth>n.clientWidth)n.scrollLeft=Math.max(0,a.offsetLeft-(n.clientWidth-a.offsetWidth)/2)}))}
+/* resizing between desktop and mobile closes the sheet and re-renders the layout once */
+let _mbWas=isMb();window.addEventListener('resize',()=>{const now=isMb();if(now!==_mbWas){_mbWas=now;mbSearchClose();if(me()&&location.pathname.startsWith('/app')){window._keepScroll=true;render()}}});
 </script>
 </body>
 </html>
