@@ -3601,6 +3601,13 @@ setPlan=function(){bUpgrade()};
 const _acct19=acctMenu;acctMenu=function(btn,dir){_acct19(btn,dir);const m=document.getElementById('acm');if(!m)return;[...m.querySelectorAll('.am-it')].forEach(b=>{if(/Help/.test(b.textContent))b.setAttribute('onclick',"amGo('/app/settings','help')")})};
 const _render19=render;render=function(){if(me()&&(location.pathname||'').startsWith('/app')){bLifecycle();if(DRANGE>7&&!has('analytics')){DRANGE=7;setTimeout(()=>bLocked('analytics'),0)}}return _render19()};
 
+/* ===== v20 Deep links for Settings tabs: /app/settings?tab=notifications works from any page ===== */
+const stTabKeys=()=>ST_TABS.map(t=>t[0]);
+function stUrl(t){return'/app/settings'+(t&&t!=='account'?'?tab='+t:'')}
+amGo=function(path,tab){amClose();const url=path==='/app/settings'?stUrl(tab):path;if(tab)STAB=tab;
+ if(location.pathname+location.search!==url){if(location.pathname===url.split('?')[0])history.pushState(null,'',url);else return go(url)}window._keepScroll=false;render();window.scrollTo(0,0)};
+stTab=function(t){if(!stTabKeys().includes(t))t='account';STAB=t;if(location.pathname==='/app/settings')history.replaceState(null,'',stUrl(t));window._keepScroll=true;render()};
+const _render20=render;render=function(){if(location.pathname==='/app/settings'){const t=new URLSearchParams(location.search).get('tab')||'account';if(stTabKeys().includes(t))STAB=t}return _render20()};
 </script>
 </body>
 </html>
