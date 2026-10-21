@@ -160,7 +160,7 @@ Tap -> Thread -> one question, "What's next?". Answers stay sealed until both pe
   - Unsaved announcement or maintenance edits are kept when the other card is saved; leaving the tab or page asks first.
   - Next: Screen 8 Privacy requests.
 - Admin redesign v41 (screen 8 of 9: Privacy requests), `pqLoad`/`pqPage`/`pqOpen`/`pqAct`, state `PQX`. From Agnes's mockup and brief (connect to the existing workflow, enforce staff permissions, record actions, treat 30 days as a reminder, not a universal legal rule).
-  - Header with Privacy guide (practical steps for identity, data copy, deletion, correction, deadlines, records; "not legal advice"; UK GDPR one month and CCPA 45 days, both extendable, with links to the ICO and the California AG).
+  - Header button "Learn about GDPR & CCPA" (matches the mockup; opens the privacy guide: practical steps for identity, data copy, deletion, correction, deadlines, records; "not legal advice"; UK GDPR one month and CCPA 45 days, both extendable, with links to the ICO and the California AG).
   - Cards (click to filter): Total, Open (overdue or due within 7 days), Actioned (status done), Dismissed (status rejected). Open = open + in_progress.
   - Toolbar: status tabs with counts, date filter (any, 7, 30, 90 days, 12 months), debounced search by name, handle, email or request ID (PR-XXXXXXXX = first 8 hex characters of the id).
   - Table: Request ID, Person, Type, Reason (the person's own optional note), Received, Respond by (with days left / overdue), Status, Review/View. Below 760px each row becomes a card. Empty state explains where people make requests and links the guide. Bottom strip: what requests are, a checklist, and what a data copy includes (matches `admin_export_user`).
