@@ -1,0 +1,39 @@
+{
+ "name": "Introthread",
+ "short_name": "Introthread",
+ "start_url": "/app",
+ "scope": "/",
+ "display": "standalone",
+ "background_color": "#0b1224",
+ "theme_color": "#0b1224",
+ "icons": [
+  {
+   "src": "/img/icon-192.png",
+   "sizes": "192x192",
+   "type": "image/png"
+  },
+  {
+   "src": "/img/icon-512.png",
+   "sizes": "512x512",
+   "type": "image/png",
+   "purpose": "any maskable"
+  }
+ ],
+ "shortcuts": [
+  {
+   "name": "Show my QR",
+   "short_name": "My QR",
+   "url": "/app/scan",
+   "icons": [
+    {
+     "src": "/img/icon-192.png",
+     "sizes": "192x192"
+    }
+   ]
+  },
+  {
+   "name": "Start a Thread",
+   "url": "/app/tap"
+  }
+ ]
+}
