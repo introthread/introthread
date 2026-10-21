@@ -2541,7 +2541,12 @@ button.rm-c{cursor:pointer;transition:border-color .15s,box-shadow .15s}button.r
 .ad-btn.pri.bad{background:#d92d20;border-color:#d92d20;box-shadow:none}.ad-btn.pri.bad:hover{background:#b42318;border-color:#b42318}
 .sg-foot{display:flex;gap:8px;align-items:center;margin:18px 0 0;color:#5b6478;font-size:13px}.sg-foot svg{flex:none}
 @media (max-width:1100px){.sg-g{grid-template-columns:minmax(0,1fr)}}
-@media (max-width:480px){.sg-sec{padding:14px}.sg-sh{flex-wrap:wrap}.sg-sh .sg-pill{order:3}.sg-list li{flex-wrap:wrap}.sg-list li>div{flex-basis:calc(100% - 54px)}.sg-list li .sg-state{margin-left:54px;text-align:left;flex:1}.sg-foot{align-items:flex-start}}
+.pl-ft [hidden],.sg-sec [hidden]{display:none!important}.sg-ta textarea{min-height:92px}
+@media (max-width:480px){.sg-sec{padding:16px;gap:14px}.sg-sh{flex-wrap:wrap;column-gap:12px;row-gap:8px}.sg-sh>div{flex:1 1 calc(100% - 56px)}.sg-sh .sg-pill{margin-left:56px}.sg-ic{width:44px;height:44px}.sg-sh h2{font-size:17px}
+ .sg-list li{display:grid;grid-template-columns:40px minmax(0,1fr) auto;column-gap:12px;row-gap:8px;align-items:start}.sg-list li>.sg-ri{grid-row:1/span 2}.sg-list li>div{grid-column:2;grid-row:1}
+ .sg-list li.sw>div{grid-row:1/span 2}.sg-list li.sw>.sg-state{grid-column:3;grid-row:1;text-align:right;align-self:end}.sg-list li.sw>.sg-sw{grid-column:3;grid-row:2;justify-self:end}
+ .sg-list li.inf>.sg-state,.sg-list li.inf>button{grid-column:2;grid-row:2;justify-self:start;text-align:left}
+ .sg-box{padding:14px;gap:12px}.sg-box .sg-ic{width:40px;height:40px}.pl-ft .ad-btn.pri{flex:1 1 100%}.pl-ft .ad-btn:not(.pri){flex:0 0 auto}.sg-foot{align-items:flex-start}}
 
 </style>
 </head>
@@ -5858,7 +5863,7 @@ function sgPage(){const ed=sgCan();
 /* announcement */
 function sgAnn(){const a=APPSET.announcement||{},ed=sgCan(),dis=ed?'':' disabled';
  return `<section class="ad-card sg-sec" aria-labelledby="sgat">${sgSecH('sgmega','b','<span id="sgat">Announcement banner</span>','Show a message at the top of the app until each person closes it.',`<span class="sg-pill" id="sgast"></span>`)}
- <div class="pl-f"><label for="sgatext">Message</label><div class="pl-in np sg-ta" id="sgaw"><textarea id="sgatext" rows="2" maxlength="160" placeholder="e.g. New: import your LinkedIn connections" oninput="sgAnnInput()"${dis}>${esc(a.text||'')}</textarea></div><div class="sg-cnt"><small class="pl-err" id="sgaerr" role="alert"></small><small id="sgacnt">0 / 160</small></div></div>
+ <div class="pl-f"><label for="sgatext">Message</label><div class="pl-in np sg-ta" id="sgaw"><textarea id="sgatext" rows="3" maxlength="160" placeholder="e.g. New: import your LinkedIn connections" oninput="sgAnnInput()"${dis}>${esc(a.text||'')}</textarea></div><div class="sg-cnt"><small class="pl-err" id="sgaerr" role="alert"></small><small id="sgacnt">0 / 160</small></div></div>
  <div class="pl-2"><div class="pl-f"><label for="sgatone">Banner style</label><label class="md-sel sg-sel">${sv('info',17)}<select id="sgatone" onchange="sgAnnInput()"${dis}><option value="info" ${a.tone!=='warn'?'selected':''}>Information</option><option value="warn" ${a.tone==='warn'?'selected':''}>Warning</option></select>${sv('chevd',16)}</label></div>
  <div class="pl-f"><span class="sg-lab" id="sgaonl">Show banner</span><div class="sg-swr">${sgSw('sgaon',a.on,'sgAnnInput()','Show banner',!ed)}<span id="sgaonx" class="ad-mu"></span></div></div></div>
  <div class="sg-pv"><span class="sg-lab">Preview</span><div class="sg-pvb"><div class="ann sg-ann" id="sgapv" aria-hidden="true"><span></span><button type="button" tabindex="-1">&times;</button></div></div></div>
@@ -5885,7 +5890,7 @@ function sgMaint(){const on=APPSET.maintenance===true,ed=sgCan(),dis=ed?'':' dis
  return `<section class="ad-card sg-sec" aria-labelledby="sgmt">${sgSecH('sgwrench','o','<span id="sgmt">Maintenance mode</span>','Pause the app for everyone except staff. Public cards stay visible.',`<span class="sg-pill ${on?'warn':'off'}">${on?sv('alert',13)+' On: app paused':'Off'}</span>`)}
  <div class="sg-box"><span class="sg-ic t-bw" aria-hidden="true">${sv('lock',22)}</span><div><b>When maintenance mode is on</b><p>Signed-in people see a "Back shortly" screen with your message and cannot use the app. Public cards and Thread guest pages stay open. Staff can still use the app and the admin area.</p></div></div>
  <div class="sg-swr">${sgSw('sgmon',on,'sgMaintInput()','Enable maintenance mode',!ed)}<label for="sgmon" class="sg-swl">Enable maintenance mode</label></div>
- <div class="pl-f"><label for="sgmmsg">Message <span>(optional)</span></label><div class="pl-in np" id="sgmw"><input id="sgmmsg" type="text" maxlength="200" autocomplete="off" placeholder="Introthread is in maintenance mode. Please check back soon." value="${esc(APPSET.maintenance_message||'')}" oninput="sgMaintInput()"${dis}></div><div class="sg-cnt"><small class="ad-mu">Shown on the maintenance screen. Leave empty for the standard message.</small><small id="sgmcnt">0 / 200</small></div></div>
+ <div class="pl-f"><label for="sgmmsg">Message <span>(optional)</span></label><div class="pl-in np" id="sgmw"><input id="sgmmsg" type="text" maxlength="200" autocomplete="off" placeholder="e.g. Back at 6 pm Nairobi time." value="${esc(APPSET.maintenance_message||'')}" oninput="sgMaintInput()"${dis}></div><div class="sg-cnt"><small class="ad-mu">Shown on the maintenance screen. Leave empty for the standard message.</small><small id="sgmcnt">0 / 200</small></div></div>
  <small class="ad-mu sg-when">${sgWhen('maintenance')}</small>
  ${ed?`<div class="pl-ft"><button type="button" class="ad-btn pri" id="sgmsv" onclick="sgMaintSave()" disabled>${sv('plsave',17)} Save changes</button><button type="button" class="ad-btn" id="sgmrs" hidden onclick="sgMaintReset()">${sv('plundo',16)} Undo</button><span class="pl-st ok" id="sgmst" role="status"></span></div>`:''}</section>`}
 const sgMaintRead=()=>({on:!!($('#sgmon')||{}).checked,msg:(($('#sgmmsg')||{}).value||'').trim()});
@@ -5903,17 +5908,17 @@ function sgMaintSave(){if(!sgCan()||!sgMaintDirty())return;const a=sgMaintRead()
 /* features */
 function sgFeat(){const ed=sgCan();
  return `<section class="ad-card sg-sec" aria-labelledby="sgft">${sgSecH('grid','b','<span id="sgft">Features</span>','Turn features on or off for everyone. Turning one off hides nothing that people have already saved.')}
- <ul class="sg-list">${SG_FEAT.map(([k,l,d,ic])=>{const on=sgOn(k),dep=k==='linkedin_import'&&!sgOn('contact_import');return `<li><span class="sg-ri" aria-hidden="true">${ic==='li'?sv('li',20,'none').replace('fill="none" stroke="none"','fill="currentColor" stroke="none"'):sv(ic,20)}</span><div><b id="sgfl_${k}">${l}</b><p>${d}${dep?' <span class="sg-dep">Has no effect while Contact import is off.</span>':''}</p></div><span class="sg-state ${on?'on':'off'}">${on?'On':'Off'}</span>${sgSw('sgf_'+k,on,`sgFeatAsk('${k}',this.checked);this.checked=!this.checked`,l,!ed)}</li>`}).join('')}</ul>
+ <ul class="sg-list">${SG_FEAT.map(([k,l,d,ic])=>{const on=sgOn(k),dep=k==='linkedin_import'&&!sgOn('contact_import');return `<li class="sw"><span class="sg-ri" aria-hidden="true">${ic==='li'?sv('li',20,'none').replace('fill="none" stroke="none"','fill="currentColor" stroke="none"'):sv(ic,20)}</span><div><b id="sgfl_${k}">${l}</b><p>${d}${dep?' <span class="sg-dep">Has no effect while Contact import is off.</span>':''}</p></div><span class="sg-state ${on?'on':'off'}">${on?'On':'Off'}</span>${sgSw('sgf_'+k,on,`sgFeatAsk('${k}',this.checked);this.checked=!this.checked`,l,!ed)}</li>`}).join('')}</ul>
  <small class="ad-mu sg-when">${sgWhen('features')}</small></section>`}
 function sgFeatAsk(k,on){if(!sgCan())return;const f=SG_FEAT.find(x=>x[0]===k)||[k,k];
  admAsk({title:(on?'Turn on ':'Turn off ')+f[1],danger:!on,body:on?`${f[1]} becomes available to everyone the next time they open the app.`:`${f[1]} stops working for everyone the next time they open the app. Data already saved is kept.`,cta:on?'Turn on':'Turn off',
   run:async r=>{await arpc('admin_set_setting',{k:'features',v:Object.assign({},APPSET.features||{},{[k]:on}),reason:r});await appSetLoad(true)}})}
 /* security */
 function sgSec(){const mfa=APPSET.admin_require_mfa!==false,own=sgOwner();
- const row=(ic,t,p,right)=>`<li><span class="sg-ri" aria-hidden="true">${sv(ic,20)}</span><div><b>${t}</b><p>${p}</p></div>${right}</li>`;
+ const row=(ic,t,p,right,c)=>`<li class="${c||'inf'}"><span class="sg-ri" aria-hidden="true">${sv(ic,20)}</span><div><b>${t}</b><p>${p}</p></div>${right}</li>`;
  const fixed='<span class="sg-state fx">Built in</span>';
  return `<section class="ad-card sg-sec" aria-labelledby="sgst">${sgSecH('shield','b','<span id="sgst">Security</span>','Protection for staff and the admin area.')}
- <ul class="sg-list">${row('lock','Require two-step verification for staff',`Staff must use an authenticator app to open the admin area. Recommended on.${own?'':' Only owners can change this.'}`,`<span class="sg-state ${mfa?'on':'off'}">${mfa?'On':'Off'}</span>${sgSw('sgmfa',mfa,"sgMfaAsk(this.checked);this.checked=!this.checked",'Require two-step verification for staff',!own)}`)}
+ <ul class="sg-list">${row('lock','Require two-step verification for staff',`Staff must use an authenticator app to open the admin area. Recommended on.${own?'':' Only owners can change this.'}`,`<span class="sg-state ${mfa?'on':'off'}">${mfa?'On':'Off'}</span>${sgSw('sgmfa',mfa,"sgMfaAsk(this.checked);this.checked=!this.checked",'Require two-step verification for staff',!own)}`,'sw')}
  ${row('users','Staff roles','Owner, admin, moderator, support and finance. Each role only sees the screens it needs.',`<button type="button" class="au-inl" onclick="admGo('staff')">Manage staff</button>`)}
  ${row('sgimport','Data exports','Only owners and admins can export user data, and finance can export subscriptions. Every export is recorded.',fixed)}
  ${row('sgmail','Email addresses in admin','Hidden from moderator and finance roles. Shown in full only for email actions by owners, admins and support.',fixed)}</ul>
