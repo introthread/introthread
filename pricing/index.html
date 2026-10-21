@@ -6964,8 +6964,13 @@ async function itPaySync(force){if(IT_SYNCED&&!force)return;IT_SYNCED=true;const
 /* v26c: "Check for payments" in Billing, with a clear result */
 async function itPayCheck(b){if(b){b.disabled=true;b.textContent='Checking...'}const r=await itPaySync(true);if(b){b.disabled=false;b.textContent='Check for payments'}
  if(!r)return toast('Card payments are not switched on yet.');if(r.synced)return toast('Payment found. Pro is on and your receipt is below.');
- toast(r.reason==='no_customer'?'No Paystack payments found for this email yet.':r.error?('Could not check payments ('+r.error+'). Try again in a minute.'):'No completed payments found yet.')}
+ toast(r.reason==='no_customer'?'No Paystack payments found for this email yet.':r.reason==='none'?'Paystack knows this email but shows no completed payments for it yet.':r.error?('Could not check payments ('+r.error+'). Try again in a minute.'):'No completed payments found yet.')}
 const _bInvBox26=bInvoicesBox;bInvoicesBox=function(b){const h=_bInvBox26.apply(this,arguments);if(!(cloud()&&IT_SV.pay))return h;return h+'<div class="it-ai" style="margin-top:12px"><button type="button" class="btn secondary sm" onclick="itPayCheck(this)">Check for payments</button><small>Paid but no receipt? This checks Paystack again.</small></div>'};
+
+/* v26d: one source of truth for the plan in Billing. If the server has switched the account to Pro (profiles.plan),
+   Billing shows Pro even before the receipt details arrive. Demo accounts are unchanged. */
+const _bGet26=bGet;bGet=function(u){const b=_bGet26.apply(this,arguments);try{u=u||me();if(cloud()&&u&&String(u.plan||'').toLowerCase()==='pro'&&!(b.plan==='pro'&&['active','trialing','past_due'].includes(b.status))){b.plan='pro';b.status='active'}
+ if(cloud()&&u&&String(u.plan||'').toLowerCase()!=='pro'&&b.plan==='pro'&&b.provider==='paystack'&&b.status==='canceled'){b.plan='free'}}catch(e){}return b};
 </script>
 </body>
 </html>
