@@ -1091,6 +1091,30 @@ html,body,button,input,select,textarea{font-family:var(--xss)}
 }
 @media (min-width:1101px) and (max-height:820px){.t-head{margin-bottom:12px}.t-h1{font-size:34px}.t-qr img{width:128px;height:128px}.t-form{gap:10px}.t-form .x-f input{height:40px}.t-form .t-note textarea{min-height:56px}}
 
+/* v6.2 match design: alignment, sidebar, chips, card */
+.t-chip{background:#f3f5f9;border-color:transparent;font-weight:500}
+.t-chip svg:last-child{color:#7a8396}
+.sidebar .nav{font-size:15.5px;font-weight:500;padding:11px 14px;gap:14px;margin:3px 0}
+.sidebar .nav svg{width:21px;height:21px}
+.sidebar .navgroup{font-size:12px;letter-spacing:.12em;margin:22px 0 8px;padding:0 14px}
+.sidebar .btn.primary{height:46px;font-size:15.5px;font-weight:600}
+.t-seg{flex:none}.t-seg button{white-space:nowrap}
+.t-form-h>div:first-child{min-width:0}
+.t-g2{align-items:start}
+.t-where summary{height:44px}
+.tp-wrap{gap:9px 10px}
+.tp-wrap .tp{height:34px;padding:0 15px;font-size:14px}
+.tp-add{width:140px!important;height:34px!important;font-size:14px!important;color:var(--xink)}
+.t-tog span b,.t-priv b{white-space:nowrap}
+.t-card-id{margin-top:auto!important}
+.t-acts{margin-top:auto}
+.t-card-id .x-av{width:128px!important;height:128px!important;font-size:42px!important}
+@media (min-width:1101px){
+.t-grid{grid-template-columns:minmax(340px,.7fr) minmax(0,1.3fr)!important}
+.t-qr img{width:160px;height:160px}
+}
+@media (min-width:1101px) and (max-height:820px){.t-qr img{width:136px;height:136px}.t-card-id .x-av{width:104px!important;height:104px!important}}
+
 </style>
 </head>
 <body><a href="#root" class="x-skip">Skip to content</a>
@@ -1344,7 +1368,7 @@ function shell(on,inner){const u=me();const open=myThreads().filter(t=>['open','
  <div class="navgroup">You</div>${nav('#/app/card','user','My card','card')}${nav('#/app/profile','globe','Public profile','pub')}${nav('#/app/settings','gear','Settings','settings')}
  <div style="margin-top:auto" class="card pad" ><div class="small" style="font-weight:850">Your Warmth</div><div class="small muted" style="margin:4px 0 10px">${myThreads().filter(t=>t.confirmed).length} verified relationships</div>${warmBar(Math.min(5,1+Math.floor(myThreads().filter(t=>t.resolvedAt).length/2)))}</div>
  <div class="row" style="margin-top:14px;padding:8px">${av(u.name,'sm')}<div style="flex:1;min-width:0"><b class="small" style="display:block">${esc(u.name)}</b><span class="tiny muted">${esc(u.plan)} plan</span></div><button class="x" title="Log out" onclick="logout()">${ic('out',15)}</button></div></aside>
- <main class="main"><div class="topbar"><div class="search">${ic('search',16)}<input placeholder="Search Threads, people, rooms, events..." oninput="Q=this.value" onkeydown="if(event.key==='Enter')go('#/app/threads')"></div><div class="t-tb"><button type="button" class="t-chip" onclick="copy('${profileUrl(u)}','Link copied')" title="Copy your link">${sv('globe',16)} introthread.com/${esc(u.handle)}</button><button type="button" class="t-bell" onclick="showNudges()" aria-label="Nudges">${sv('bell',20)}${nudges().length?'<i></i>':''}</button><button type="button" class="t-user" onclick="acctMenu()">${avatarC(u,40)}<span><b>${esc(u.name)}</b><small>${esc(u.role||u.plan+' plan')}</small></span>${sv('chevd',16)}</button></div></div><div class="content">${inner}</div></main>
+ <main class="main"><div class="topbar"><div class="search">${ic('search',16)}<input placeholder="Search Threads, people, rooms, events..." oninput="Q=this.value" onkeydown="if(event.key==='Enter')go('#/app/threads')"></div><div class="t-tb"><button type="button" class="t-chip" onclick="copy('${profileUrl(u)}','Link copied')" title="Copy your link">${sv('globe',16)}<span>introthread.com/${esc(u.handle)}</span>${sv('copy',16)}</button><button type="button" class="t-bell" onclick="showNudges()" aria-label="Nudges">${sv('bell',20)}${nudges().length?'<i></i>':''}</button><button type="button" class="t-user" onclick="acctMenu()">${avatarC(u,40)}<span><b>${esc(u.name)}</b><small>${esc(u.role||u.plan+' plan')}</small></span>${sv('chevd',16)}</button></div></div><div class="content">${inner}</div></main>
  <nav class="mobile-tab">${[['#/app','home','Today','today'],['#/app/threads','thread','Threads','threads'],['#/app/tap','tap','Tap','tap'],['#/app/rooms','room','Rooms','rooms'],['#/app/card','user','Card','card']].map(([h,i,l,k])=>`<a href="${h}" class="${on===k?'on':''}">${ic(i,20)}${l}</a>`).join('')}</nav></div>`}
 let Q='';
 function logout(){DB.session=null;save();toast('Logged out');go('#/')}
@@ -1835,7 +1859,7 @@ function tapDownloadQR(){const u=me();const d=document.createElement('div');qr(d
 function tapVcf(o){const lines=['BEGIN:VCARD','VERSION:3.0','FN:'+o.name,o.role?'TITLE:'+o.role:'',o.company?'ORG:'+o.company:'',/@/.test(o.email)?'EMAIL:'+o.email:(o.email?'TEL:'+o.email:''),'NOTE:Met via Introthread'+(o.where?' at '+o.where:''),'END:VCARD'].filter(Boolean).join('\n');const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([lines],{type:'text/vcard'}));a.download=(o.name||'contact').replace(/\s+/g,'-')+'.vcf';document.body.appendChild(a);a.click();a.remove()}
 function tapNoteCount(){const n=$('#tx');if(n&&$('#txc'))$('#txc').textContent=n.value.length}
 function vTap(){const u=me();const rooms=myRooms();const t=THEMES[u.theme]||THEMES.midnight;
- return shell('tap',`<div class="t-head"><div><div class="t-eye">Tap to Thread</div><h1 class="t-h1">Share your card, start a Thread</h1><p class="t-sub">Hold this screen up, tap an NFC card, scan the QR code or send your link. The other person needs no app.</p></div><a href="/how" class="t-how"><span class="x-play">${sv('play',10)}</span>How it works</a></div>
+ return shell('tap',`<div class="t-head"><div><div class="t-eye">Tap to Thread</div><h1 class="t-h1">Share your card, start a Thread</h1><p class="t-sub">Connect instantly. Share your card via NFC, QR code or link. The other person needs no app.</p></div><a href="/how" class="t-how"><span class="x-play">${sv('play',10)}</span>How it works</a></div>
 <div class="t-grid">
 <div class="t-card ${t.light?'lt':''}" style="background:${t.bg};color:${t.fg};--sub:${t.sub}">
  <div class="t-card-top"><span class="x-logo ${t.light?'':'dk'}" style="font-size:20px"><span class="x-lm"><i></i><i></i></span><span>intro<b>thread</b></span></span>${sv('nfc',24)}</div>
