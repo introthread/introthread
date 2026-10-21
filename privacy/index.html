@@ -3670,7 +3670,7 @@ const POLICY=[['who','Who we are','<p>Introthread (&ldquo;we&rdquo;, &ldquo;us&r
 ['ai','AI follow-up drafts','<p>If you switch on &ldquo;Draft follow-ups with AI&rdquo;, we send the context of that one Thread (names, where you met, your note and your answers) to our AI provider to write a suggested message. Drafts are never sent without you. Our AI provider processes this data only to create the draft, under a data processing agreement, and may not use it to train its models. You can switch this off at any time in Settings.</p>'],
 ['use','How and why we use it','<p>We use your data to provide the service you asked for (contract), to keep it secure and improve it (legitimate interests), and to send service messages such as sign-in codes, Thread invitations to the person you met, and follow-up reminders you have switched on. When you start a Thread with someone, we email them once so they can confirm it; they can ignore it and nothing more is sent. We do not sell your personal data and we do not use it for third-party advertising.</p>'],
 ['sharing','Who can see what','<p>Your public card is visible to anyone with your link. A Thread is only created when both people confirm it. Your answer to What&rsquo;s next? stays hidden until both people reply, and your private notes are never shown to anyone else. Event organisers and networks only see aggregate results, and only where you opted in.</p>'],
-['processors','Service providers and transfers','<p>We use trusted providers to run Introthread, including hosting (Vercel), database and authentication (Supabase), email delivery (Resend), payments (Stripe), AI follow-up drafts when you switch them on, sign-in with Google, Microsoft or LinkedIn when you choose it, fonts (Google Fonts) and place names for saved locations (OpenStreetMap Nominatim, which receives only coordinates). Where data is transferred outside the UK or EEA, we rely on appropriate safeguards such as the UK International Data Transfer Addendum or Standard Contractual Clauses.</p>'],
+['processors','Service providers and transfers','<p>We use trusted providers to run Introthread, including hosting (Vercel), database and authentication (Supabase), email delivery (Resend), payments (Paystack), AI follow-up drafts when you switch them on, sign-in with Google, Microsoft or LinkedIn when you choose it, fonts (Google Fonts) and place names for saved locations (OpenStreetMap Nominatim, which receives only coordinates). Where data is transferred outside the UK or EEA, we rely on appropriate safeguards such as the UK International Data Transfer Addendum or Standard Contractual Clauses.</p>'],
 ['retention','How long we keep it','<p>We keep your data while your account is active. If you delete your account, we delete your card and your side of every Thread within 30 days, except where we must keep limited records by law.</p>'],
 ['rights','Your rights','<p>Under UK GDPR and applicable US state laws you can access, correct, export or delete your data, object to or restrict certain processing, and withdraw consent at any time. You can export or delete your data in Settings, or email <a href="mailto:privacy@introthread.com">privacy@introthread.com</a>. You may also complain to the UK Information Commissioner&rsquo;s Office (ico.org.uk).</p>'],
 ['cookies','Cookies and storage','<p>We only use storage that is strictly necessary to keep you signed in and remember your preferences. We do not use advertising cookies. If we add product analytics to understand how the service is used, we will ask for your consent first where the law requires it and update this policy.</p>'],
@@ -6932,6 +6932,28 @@ async function itAiRewrite(b){const id=itThreadId(),d=document.getElementById('d
 function itAiBtn(){const d=document.getElementById('draft');if(!d||d.dataset.itai||!cloud()||!itThreadId())return;const u=me();if(u&&(u.prefs||{}).ai===false)return;d.dataset.itai='1';
  itStatus().then(s=>{if(!s||!s.ai||!document.body.contains(d)||d.parentNode.querySelector('.it-ai'))return;d.insertAdjacentHTML('afterend','<div class="it-ai"><button type="button" class="btn secondary sm" onclick="itAiRewrite(this)">Rewrite with AI</button><small>Uses this Thread only. Never sent without you.</small></div>')})}
 const _render25s=render;render=function(){const r=_render25s.apply(this,arguments);setTimeout(()=>{try{itAiBtn();itConsentAsk();itPHLoad()}catch(e){}},0);return r};
+
+/* ===== v26 Paystack billing (on only when /api/status says pay:true) ===== */
+let IT_SV={};try{itStatus().then(x=>{IT_SV=x||{}})}catch(e){}
+async function itPay(interval,b){if(b){b.disabled=true;b.textContent='Opening secure payment...'}const r=await itApi('pay-init',{interval});
+ if(r&&r.url){itTrack('checkout_started',{interval});location.href=r.url;return}
+ if(b){b.disabled=false;b.textContent='Continue to secure payment'}toast(r&&r.error==='auth'?'Please sign in again.':'Payment could not start. Nothing was charged. Try again in a moment.')}
+const _bUp26=bUpgrade;bUpgrade=function(interval){if(!(cloud()&&IT_SV.pay))return _bUp26.apply(this,arguments);interval=interval||BINT;
+ if(isPro())return toast('You already have Pro');
+ modal(`<div class="bl-co"><div class="row between"><h3>Upgrade to Pro</h3><button class="x" aria-label="Close" onclick="closeModal()">&times;</button></div>
+ <div class="x-seg bl-int" style="margin:12px 0">${[['month','Monthly '+money(proM())],['year','Yearly '+money(proY())]].map(([k,l])=>`<button type="button" class="${interval===k?'on':''}" onclick="closeModal();bUpgrade('${k}')">${l}</button>`).join('')}</div>
+ <ul class="bl-incl">${PLANS.pro.features.slice(1).map(f=>`<li>${sv('check',13,'currentColor',2.6)}${f}</li>`).join('')}</ul>
+ <button type="button" class="x-btn lg block" onclick="itPay('${interval}',this)">Continue to secure payment</button>
+ <p class="bl-fine c">${sv('lock',12)} Card payment on Paystack's secure page. Charged in Kenyan shillings; your bank converts it. Renews ${interval==='year'?'yearly':'monthly'} until you cancel.</p></div>`)};
+const _stMan26=stManage;stManage=async function(){if(!(cloud()&&IT_SV.pay&&isPro()))return _stMan26.apply(this,arguments);toast('Opening your subscription...');
+ const r=await itApi('pay-manage',{});if(r&&r.url){location.href=r.url;return}return _stMan26.apply(this,arguments)};
+(function(){const q=new URLSearchParams(location.search),pay=q.get('pay');if(!pay)return;const ref=q.get('reference')||q.get('trxref');
+ const clean=()=>{try{history.replaceState(null,'',location.pathname+location.hash)}catch(e){}};
+ if(pay==='cancel'){clean();setTimeout(()=>toast('Payment cancelled. Nothing was charged.'),800);return}
+ if(pay!=='done'||!ref)return;let n=0;const go2=async()=>{if(!me()||!cloud()){if(n++<40)return setTimeout(go2,250);return}
+  const r=await itApi('pay-verify',{reference:ref});clean();
+  if(r&&r.ok){const u=me();u.plan='Pro';try{save()}catch(e){}render();toast('Welcome to Pro. Thank you.');itTrack('subscribed',{interval:r.interval})}
+  else toast(r&&r.status&&r.status!=='success'?'The payment did not go through. Nothing was charged.':'We are confirming your payment. Pro will switch on in a minute.')};go2()})();
 </script>
 </body>
 </html>
