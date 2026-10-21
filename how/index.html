@@ -1757,6 +1757,18 @@ html,body,button,input,select,textarea{font-family:var(--xss)}
 .it-dash{display:inline-flex;align-items:center;gap:8px;padding-left:6px!important}.it-dash .x-av{margin:0;box-shadow:none}
 @media (prefers-reduced-motion:reduce){.it-spin{animation-duration:2s}}
 
+/* v18 email codes and idle sign-out */
+.otp{font-family:var(--xss)}
+.otp-st{margin-bottom:26px}.otp-st{grid-template-columns:repeat(4,1fr)}
+.otp-ic{width:56px;height:56px;border-radius:16px;background:#eef3ff;color:var(--xb);display:grid;place-items:center;margin-bottom:16px}
+.otp .x-fsub b{color:var(--xink)}
+.otp-note{display:flex;gap:8px;align-items:flex-start;margin:16px 0 0;padding:12px 14px;border-radius:12px;font-size:14px;line-height:1.45}
+.otp-note.ok{background:#e7f6ee;color:#0f6b45}.otp-note.err{background:#fdecec;color:#b42318}.otp-note[hidden]{display:none}
+.otp-in{height:60px!important;text-align:center;font:600 28px var(--xss)!important;letter-spacing:.5em;padding-left:.5em!important}
+.otp-res{margin-top:10px}.otp-res:disabled{opacity:.6;cursor:not-allowed}
+.otp-sec{display:flex;align-items:center;justify-content:center;gap:6px;margin-top:18px;font-size:12.5px;color:var(--xmu)}
+.idle-m{text-align:left;font-family:var(--xss)}.idle-m h3{margin:4px 0 6px;font:600 20px var(--xss)}.idle-m p{margin:0;color:#475467;font-size:14.5px;line-height:1.5}.idle-m b{color:var(--xink)}
+
 </style>
 </head>
 <body><a href="#root" class="x-skip">Skip to content</a>
@@ -2193,8 +2205,7 @@ su3=async function(){const prof={handle:SU.handle,name:SU.name,role:SU.role,comp
  if(error){SU.step=1;render();setTimeout(()=>{const el=$('#serr');if(el)el.textContent=/registered/i.test(error.message)?'An account with this email already exists. Log in instead.':error.message},0);return}
  const email=SU.email,pwTmp=SU.pwRaw;SU={step:1};
  if(data.session){const r=await loadCloud(data.user);if(r){save();go('#/app');modal(`<div class="center"><div style="width:64px;height:64px;border-radius:50%;background:#e8f8f0;display:grid;place-items:center;margin:auto">${ic('check',30,'#12a065',3)}</div><h2 style="letter-spacing:-.8px">Your card is live</h2><p class="muted">introthread.com/${esc(prof.handle)}</p><button class="btn primary" onclick="closeModal();go('#/app/tap')">Start sharing</button></div>`)}}
- else if(await (async()=>{try{const s=await SB.auth.signInWithPassword({email,password:pwTmp});if(s.data&&s.data.session){const r=await loadCloud(s.data.user);if(r&&r!=='needs-profile'){save();go('/app');toast('Your card is live. Welcome to Introthread.');return true}}}catch(_){}return false})()){}
- else{go('#/login');modal(`<div class="center"><div style="width:64px;height:64px;border-radius:50%;background:var(--soft);display:grid;place-items:center;margin:auto">${ic('mail',28,'#3157ff')}</div><h2 style="letter-spacing:-.8px">Confirm your email</h2><p class="muted">We sent a link to <b>${esc(email)}</b>. Click it to activate your card at introthread.com/${esc(prof.handle)}.</p><button class="btn primary" onclick="closeModal()">OK</button></div>`)}};
+ else{OTP={kind:'signup',email,handle:prof.handle,sent:Date.now(),err:'',msg:'We emailed you a 6-digit code. Enter it below to finish creating your account.'};SU={step:'code'};render()}};
 
 /* thread actions */
 answer=async function(id,k){const t=findThread(id);if(!(await upd('threads',id,{mine:k})))return;t.mine=k;if(k)await addEvent(t,'answer','You answered "What\'s next?"');save();render();if(k)toast(t.theirs?'Answers revealed':'Answer locked in privately')};
@@ -3265,6 +3276,70 @@ const _mnav17=mnav;mnav=function(on){let h=_mnav17(on);const u=me();if(!u)return
 const _shell17=shell;shell=function(on,inner){let h=_shell17(on,inner);return h.replace(/(<aside class="sidebar">[\s\S]*?)href="#?\/"/,'$1href="/app" aria-label="Introthread dashboard"')};
 /* account menu: link to the public website without being bounced back */
 const _acct17=acctMenu;acctMenu=function(btn,dir){_acct17(btn,dir);const m=document.getElementById('acm');if(!m)return;const g=[...m.querySelectorAll('.am-g')];const help=g[g.length-2];if(help&&!m.querySelector('[data-site]')){help.insertAdjacentHTML('beforeend',`<button type="button" role="menuitem" class="am-it" data-site onclick="amClose();try{sessionStorage.setItem('${IT_SITE}','1')}catch(_){};go('/')">${sv('globe',18)}<span>Introthread website</span></button>`)}};
+
+/* ===== v18 Email codes: verify on sign-up, code on every password login, 20-minute idle sign-out ===== */
+let OTP=null,LG=null;
+const otpMask=e=>{const[a,b]=String(e||'').split('@');return(a?a[0]+'\u2022\u2022\u2022':'')+'@'+(b||'')};
+function otpLeft(){return OTP?Math.max(0,60-Math.floor((Date.now()-OTP.sent)/1000)):0}
+function otpTick(){const b=$('#otpres');if(!b)return;const s=otpLeft();b.disabled=s>0;b.textContent=s>0?`Resend code in ${s}s`:'Resend code';if(s>0)setTimeout(otpTick,1000)}
+function otpView(o){const signup=o.kind==='signup';
+ setTimeout(()=>{const i=$('#otpin');if(i)i.focus();otpTick()},30);
+ return`<div class="otp">${signup?`<div class="x-stepper otp-st"><div class="x-st-line"><i style="width:100%"></i></div>${['Create account','Your identity','Choose card','Confirm email'].map((l,i)=>`<div class="x-st ${i<3?'done':'on'}"><span>${i<3?sv('check',12,'#fff',3):i+1}</span><small>${l}</small></div>`).join('')}</div>`:''}
+ <span class="otp-ic">${sv(signup?'mail':'shield',26)}</span><h1 class="x-ftitle">${signup?'Confirm your email':'Enter your sign-in code'}</h1>
+ <p class="x-fsub">${signup?'We&rsquo;ve sent a 6-digit code to':'For extra security, we&rsquo;ve emailed a sign-in code to'} <b>${esc(otpMask(o.email))}</b>. Enter it below to ${signup?'finish creating your account':'continue'}.</p>
+ ${o.msg?`<div class="otp-note ok" role="status">${sv('check',15)} ${o.msg}</div>`:''}<div class="otp-note err" id="otperr" role="alert" ${o.err?'':'hidden'}>${esc(o.err||'')}</div>
+ <form class="x-form" onsubmit="return otpVerify(event)"><label class="x-f"><span>${signup?'Verification code':'Sign-in code'}</span><input id="otpin" class="otp-in" inputmode="numeric" autocomplete="one-time-code" pattern="[0-9]*" maxlength="10" placeholder="000000" required oninput="this.value=this.value.replace(/\\D/g,'');if(this.value.length===6&&!window._otpBusy)this.form.requestSubmit()"></label>
+ <button class="x-btn lg block" id="otpgo">${signup?'Verify &amp; create account':'Verify &amp; continue'} ${sv('arrow',17)}</button></form>
+ <button type="button" class="x-btn ghost lg block otp-res" id="otpres" onclick="otpResend()">Resend code</button>
+ <p class="x-alt">${signup?'Wrong email?':'Not you?'} <a href="#" onclick="event.preventDefault();otpCancel()">${signup?'Start over':'Use a different account'}</a></p>
+ <p class="otp-sec">${sv('lock',13)} Codes expire after a short time and can be used once.</p></div>`}
+function otpShell(o){return`<div class="x-auth" style="--sw:47%">${authSide(o.kind==='signup'?1:0)}<main class="x-main"><div class="x-mi" style="--mw:460px">${otpView(o)}</div></main></div>`}
+function otpErr(m){const e=$('#otperr');if(OTP)OTP.err=m;if(e){e.textContent=m;e.hidden=!m}}
+async function otpVerify(e){e.preventDefault();if(!OTP||window._otpBusy)return false;const code=($('#otpin').value||'').trim();if(!/^\d{6,10}$/.test(code)){otpErr('Enter the 6-digit code from your email.');return false}
+ const b=$('#otpgo');window._otpBusy=true;b.disabled=true;const lab=b.innerHTML;b.textContent='Verifying...';otpErr('');
+ try{const {data,error}=await SB.auth.verifyOtp({email:OTP.email,token:code,type:OTP.kind==='signup'?'signup':'email'});
+  if(error||!data||!data.session){otpErr(/expired/i.test((error||{}).message||'')?'That code has expired. Tap Resend code for a new one.':'That code is not valid. Check the latest email and try again.');return false}
+  window._otpPending=false;const kind=OTP.kind;OTP=null;LG=null;const r=await loadCloud(data.user);
+  if(r==='needs-profile'){SU={step:2,name:(data.user.user_metadata||{}).full_name||'',email:data.user.email};go('/signup');return false}
+  if(r){save();itIdleMark();go('/app');toast(kind==='signup'?'Your account is verified. Welcome to Introthread.':'Welcome back, '+((me()||{}).name||'').split(' ')[0])}}
+ catch(_){otpErr('Something went wrong. Check your connection and try again.')}
+ finally{window._otpBusy=false;const bb=$('#otpgo');if(bb){bb.disabled=false;bb.innerHTML=lab}}return false}
+async function otpResend(){if(!OTP||otpLeft()>0)return;const b=$('#otpres');b.disabled=true;b.textContent='Sending...';
+ const {error}=OTP.kind==='signup'?await SB.auth.resend({type:'signup',email:OTP.email,options:{emailRedirectTo:'https://www.introthread.com/'}}):await SB.auth.signInWithOtp({email:OTP.email,options:{shouldCreateUser:false}});
+ if(error){otpErr(/rate|seconds|many/i.test(error.message)?'Please wait a moment before requesting another code.':error.message);b.disabled=false;b.textContent='Resend code';return}
+ OTP.sent=Date.now();OTP.msg='A new code is on its way. Use the latest email.';otpErr('');toast('New code sent');otpTick()}
+function otpCancel(){const k=OTP&&OTP.kind;OTP=null;LG=null;window._otpPending=false;if(k==='signup'){SU={step:1};go('/signup')}else go('/login');render()}
+/* sign-up: stay on the sign-up screen and enter the code */
+const _vSignup18=vSignup;vSignup=function(){if(SU&&SU.step==='code'&&OTP&&OTP.kind==='signup'){document.body.classList.remove('x-open');return otpShell(OTP)}return _vSignup18()};
+/* login: password first, then a one-time code sent to the email */
+const _vLogin18=vLogin;vLogin=function(){if(LG&&OTP&&OTP.kind==='login'){document.body.classList.remove('x-open');return otpShell(OTP)}return _vLogin18()};
+const _loadCloud18=loadCloud;loadCloud=async function(user){if(window._otpPending)return null;return _loadCloud18(user)};
+doLogin=function(e){e.preventDefault();const em=$('#le').value.trim().toLowerCase(),pw=$('#lp').value;const er=$('#lerr');
+ if(em==='demo@introthread.com'){demoLogin();return false}
+ if(!SB){er.textContent='Accounts are not available right now. Try the demo account.';return false}
+ const b=e.target.querySelector('button:not([type="button"])');b.disabled=true;const lab=b.innerHTML;b.textContent='Checking...';er.textContent='';window._otpPending=true;
+ (async()=>{try{const {error}=await SB.auth.signInWithPassword({email:em,password:pw});
+  if(error){window._otpPending=false;if(/confirm/i.test(error.message)){OTP={kind:'signup',email:em,sent:0,err:'',msg:'Your email is not verified yet. Tap Resend code to get a new verification code.'};SU={step:'code'};go('/signup');return}er.textContent='That email and password do not match.';return}
+  await SB.auth.signOut({scope:'local'});
+  const r=await SB.auth.signInWithOtp({email:em,options:{shouldCreateUser:false}});
+  if(r.error){window._otpPending=false;er.textContent=/rate|seconds|many/i.test(r.error.message)?'Too many code requests. Please wait a minute and try again.':'We could not send your sign-in code. Please try again.';return}
+  OTP={kind:'login',email:em,sent:Date.now(),err:'',msg:'We&rsquo;ve emailed you a 6-digit code. Please check your inbox.'};LG={step:'code'};render()}
+ catch(_){window._otpPending=false;er.textContent='Something went wrong. Check your connection and try again.'}
+ finally{const bb=e.target.querySelector('button:not([type="button"])');if(bb){bb.disabled=false;bb.innerHTML=lab}}})();return false};
+/* idle sign-out after 20 minutes, with a 2-minute warning */
+const IT_IDLE=20*60*1000,IT_WARN=2*60*1000,IT_LAST='it_last';let _idleW=null,_idleMarkAt=0;
+function itIdleMark(force){const n=Date.now();if(!force&&n-_idleMarkAt<10000)return;_idleMarkAt=n;try{localStorage.setItem(IT_LAST,String(n))}catch(_){}if(_idleW){_idleW=null;const m=$('#idlem');if(m)closeModal()}}
+function itIdleLast(){try{return+localStorage.getItem(IT_LAST)||0}catch(_){return 0}}
+async function itIdleOut(){_idleW=null;try{closeModal()}catch(_){}await logout();try{localStorage.removeItem(IT_LAST)}catch(_){}toast('You were signed out after 20 minutes of inactivity')}
+function itIdleCheck(){if(!me())return;const last=itIdleLast();if(!last){itIdleMark(true);return}const idle=Date.now()-last;
+ if(idle>=IT_IDLE){itIdleOut();return}
+ if(idle>=IT_IDLE-IT_WARN){const left=Math.ceil((IT_IDLE-idle)/1000);if(!_idleW){_idleW=1;modal(`<div class="idle-m" id="idlem"><span class="otp-ic">${sv('lock',24)}</span><h3>Are you still there?</h3><p>For your security, you will be signed out in <b id="idles">${Math.floor(left/60)}:${String(left%60).padStart(2,'0')}</b> because of inactivity.</p><div class="fu-b"><button type="button" class="t-how" onclick="itIdleOut()">Sign out now</button><button type="button" class="x-btn" onclick="itIdleMark(true);closeModal()">Stay signed in</button></div></div>`)}else{const s=$('#idles');if(s)s.textContent=`${Math.floor(left/60)}:${String(left%60).padStart(2,'0')}`}}}
+['mousedown','keydown','touchstart','scroll','wheel'].forEach(ev=>document.addEventListener(ev,()=>{if(me()&&!_idleW)itIdleMark()},{passive:true,capture:true}));
+document.addEventListener('visibilitychange',()=>{if(!document.hidden)itIdleCheck()});
+window.addEventListener('storage',e=>{if(e.key===IT_LAST&&_idleW){_idleW=null;try{closeModal()}catch(_){}}});
+setInterval(itIdleCheck,1000);
+const _render18=render;render=function(){if(me()){const last=itIdleLast();if(last&&Date.now()-last>=IT_IDLE){itIdleOut();return}if(!last)itIdleMark(true)}return _render18()};
+const _demo18=demoLogin;demoLogin=async function(){itIdleMark(true);return _demo18.apply(this,arguments)};
 
 </script>
 </body>
