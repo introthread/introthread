@@ -1,6 +1,6 @@
 # Introthread - handover for the next AI agent
 
-Last updated: 21 Oct 2026 (admin redesign v35, screen 2 of 9). Read this before making changes.
+Last updated: 21 Oct 2026 (admin redesign v36, screen 3 of 9). Read this before making changes.
 
 ## Where things are
 - Live site: https://www.introthread.com (apex redirects to www). Vercel deploys automatically from `main` of `introthread/introthread` (preset "Other", static).
@@ -77,6 +77,16 @@ Tap -> Thread -> one question, "What's next?". Answers stay sealed until both pe
   - Data protection: exports only for owner/admin, recorded with count and filters; emails masked server-side (`admin_mask_email`) for moderator and finance roles; full email fetched only for email actions (`admin_user_email`, owner/admin/support).
   - Needs `supabase/migrations/005_users_screen.sql` (admin_users2, admin_user_more, admin_notes table, admin_add_note, admin_delete_note, admin_log, admin_user_email). Without it the page falls back to the old list (no counts/filters/notes) with a note.
   - Next: Screen 3 Moderation.
+- Admin redesign v36 (screen 3 of 9: Moderation), `mdLoad`/`mdPage`/`mdPanel`, state `ADMM`:
+  - Cards (click to filter): Open reports (shows how many are over 24 hours old), Actioned, Dismissed, All reports in the chosen range.
+  - Toolbar: search (user, reason, details), Status (Open, In review, Actioned, Dismissed, All), Type (Profile, Thread, Room), Severity (High, Medium, Low), Date (7/30/90 days, all time; saved `it_mod_days`).
+  - Left: report list with severity and status pills, "Over 24h" marker, count of reports on the same item, sort (newest, oldest, most serious), Show more. Empty state with Refresh.
+  - Right: "Select a report" intro (What you'll see + safety box) until a report is picked; then Reported content, Reported user, Reporter details, Recommended action (rules by reason, report history, reporter reliability), Context and evidence (details + other reports on the same item), Moderation history (audit log). Drawer below 1180px; Esc closes.
+  - Actions (owner/admin/moderator; support is read-only): Take for review (assigns to you), Dismiss, Take action with Record only / Suspend / Ban (owner, admin) / Delete Room (owner, admin), plus "also close other open reports about the same item". Staff accounts cannot be suspended from here. Reason required; all audited.
+  - Moderation guidelines open in a modal (header button and the panel's safety box).
+  - Severity: Harassment or hate and Fake/impersonating = High; Spam and Inappropriate = Medium; others Low; 2+ reports on the same item raise it to Medium, 3+ to High.
+  - Needs `supabase/migrations/006_moderation.sql` (reports.assigned_to, reports.outcome, report_subject, report_severity, admin_reports2, admin_report_detail, admin_report_take, admin_moderate). Without it the page works from the newest 300 reports with the old functions, and shows a note.
+  - Next: Screen 4 Rooms.
 
 ## Honest limits to keep in mind
 - LinkedIn does not let apps read another person's profile from a username. A LinkedIn link gives the profile URL and a best-guess name only; email, phone, title and company must come from paste, QR vCard, business card or contacts.
