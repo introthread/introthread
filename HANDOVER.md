@@ -1,6 +1,6 @@
 # Introthread - handover for the next AI agent
 
-Last updated: 21 Oct 2026 (capture v31). Read this before making changes.
+Last updated: 21 Oct 2026 (contacts and import v32). Read this before making changes.
 
 ## Where things are
 - Live site: https://www.introthread.com (apex redirects to www). Vercel deploys automatically from `main` of `introthread/introthread` (preset "Other", static).
@@ -46,6 +46,16 @@ Tap -> Thread -> one question, "What's next?". Answers stay sealed until both pe
   - `parseContact` now also handles full vCard 2.1/3/4 (multiple TEL/EMAIL, CELL preferred, ADR, quoted-printable, NOTE, social URLs), MECARD with multiple numbers, BIZCARD, `tel:`, `sms:`, `mailto:`, `MATMSG`, and WhatsApp `wa.me` links. Signatures also pick up second phone, address and social.
   - Contacts: `capContacts` asks for name, email, tel and address (whatever the phone supports) and fills second phone/email. Where the picker is not available (iPhone Safari by default) the Contacts tile opens `capContactsHelp`: share the contact as a .vcf file and choose it (`capVcfFile`), or paste.
   - Tap form gained a "More details" section (`#capmore`): Second phone `#tp2`, Second email `#te2`, Website `#tws`, Social `#tso`, Address `#tad`. Card notes go into "One line to remember" `#tx`. These are stored in `where_met` via `tPack` (keys phone2, email2, website, address, social), shown on the Thread page (tap to call, mailto, website, Google Maps link), editable (second phone, website, address), and included in vCard and CSV exports.
+- Agnes's decisions (21 Oct 2026): prices in US dollars, pounds shown to UK visitors; Free plan = 5 new Threads a month; admin Owner = mosemqute@gmail.com; build order: contacts + file import (done), then admin area, then Stripe, then Google/Microsoft connect, then LinkedIn sign-in/share. No LinkedIn company page yet (needed before a LinkedIn developer app). Full plan: Town doc "Introthread: connections, LinkedIn, admin and revenue plan".
+- Contacts and file import v32:
+  - New page `/app/contacts` (`vContacts`, routed through the `vToday` fallback). Threads and Contacts pages share a segmented switch (`ctBar`).
+  - Contact = private, unconfirmed person; Thread = confirmed by both. Imports never send anything.
+  - Import (`ctImport` > `ctFile` > `ctPreview` > `ctDoImport`): auto-detects LinkedIn Connections.csv (skips the "Notes:" preamble), Google Contacts CSV (old and new formats, ":::" multi-values), Outlook CSV (ignores the Mr/Mrs "Title" column), any CSV with name/email columns (comma, semicolon or tab), and multi-contact .vcf. Preview with checkboxes, select all, and duplicates (matched on email, last 9 phone digits, LinkedIn URL against Contacts and Threads) marked "Already saved" and left out.
+  - Contact row: Invite (prefills the Tap form via `capApply`), and a menu: email, call, LinkedIn, delete. Search and source filter chips. Step-by-step export guides for LinkedIn, Google, Outlook, iPhone/Android.
+  - Storage: Supabase table `contacts` (see migration). If the table is missing, contacts are kept on the device (`_local`) with a notice, and upload automatically once the table exists (`ctLoad`).
+  - Free limit: real (cloud) accounts not on Pro get 5 new Threads per calendar month (`FREE_LIMIT`, `threadsThisMonth`, `freeLeft`). The Tap page shows "N of 5 free Threads left". At the limit, a sheet offers "See Pro" or "Save as a contact". Demo mode is not limited.
+  - Pricing: Free now says "5 new Threads a month", Pro adds "Unlimited Threads", FAQ copy updated. UK visitors (timezone Europe/London or en-GB language) see pounds (`isUK`, `toGBP`; $10->8, $12->10, $96->77, $120->96, $166->129, $199->159, others x0.8).
+- Database migration `supabase/migrations/002_contacts_admin.sql` (NOT YET RUN; Agnes must paste it into Supabase SQL Editor and run): contacts, staff + `is_staff()` function, audit_log, reports, account_status, plans (free 5 Threads, pro), subscriptions, app_settings (free_threads_per_month=5, maintenance, feature switches), privacy_requests. All with row level security. Seeds mosemqute@gmail.com as owner (only works once that email has signed up; re-run the insert after sign-up).
 
 ## Honest limits to keep in mind
 - LinkedIn does not let apps read another person's profile from a username. A LinkedIn link gives the profile URL and a best-guess name only; email, phone, title and company must come from paste, QR vCard, business card or contacts.
@@ -53,6 +63,7 @@ Tap -> Thread -> one question, "What's next?". Answers stay sealed until both pe
 - iPhone Safari hides the contact picker unless the Contact Picker API feature flag is turned on.
 
 ## Open items / next steps
+0. Agnes to run `supabase/migrations/002_contacts_admin.sql` in Supabase. Then: Phase 2 admin area at /admin (dashboard, users, moderation and Report buttons, audit log, settings, privacy requests), using server-side Supabase Edge Functions for staff actions.
 1. Agnes to paste the Supabase email templates (Magic Link and Confirm signup, code-based, keep code length 8) and configure Resend SMTP; then run a real end-to-end sign-up test with a real inbox.
 2. Real Google and Microsoft sign-in (Google sign-in is being tested with mkautospareske@gmail.com).
 3. Pro billing (currently simulated) and real outbound email sending.
