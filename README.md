@@ -7,7 +7,7 @@ Identity → Share → Connect → Remember → Follow Up → Grow
 Introthread starts with a digital business card and turns every introduction into a lasting professional relationship. Users create a professional identity, share it by QR, NFC, link, email, SMS or wallet, capture the connection, keep the context of where and why they met, and follow up at the right time.
 
 - Website: [introthread.com](https://introthread.com)
-- Launch market: United Kingdom (London first), then major US markets
+- Market: global, for professionals everywhere
 
 ## Connected accounts and services
 
