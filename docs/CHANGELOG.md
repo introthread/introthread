@@ -3,6 +3,12 @@
 Everything built so far, newest first. Full technical detail for each item is in `HANDOVER.md`. How Rooms, events, communities and the Room pass work: `docs/ROOMS.md`.
 
 ## 22 Oct 2026
+- **v45: Weekly digest.**
+  - `api/weekly-digest.js` runs every Monday at 06:00 UTC (Vercel Cron).
+  - It goes to people who turned on Settings > Weekly summary (off by default).
+  - Content: last week's new, confirmed, matched and resolved Threads, plus up to 8 open Threads that need a step.
+  - At most one email per person per week.
+  - Needs `CRON_SECRET`, `SUPABASE_SERVICE_ROLE_KEY` and `RESEND_API_KEY`.
 - **v44: Guided first visit.**
   - New signed-in users who have no Threads yet see a 4-step welcome: your card, Tap to Thread, What's next?, and Rooms.
   - Each step has Back, Next and Skip, and works with the keyboard; Esc closes it.
