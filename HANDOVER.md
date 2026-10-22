@@ -55,8 +55,7 @@ Last updated: 22 Oct 2026, 3:00 pm Nairobi (after v37 security hardening and mig
    - Workflow file: `docs/deps-check.yml`. The owner must copy it to `.github/workflows/`.
    - Results on 22 Oct: qrcode-generator 1.4.4 -> 1.5.2 is available (same major). The hash is printed by the script. Test QR codes before switching.
    - tesseract.js 7 and qrcode-generator 2 are new major versions; not adopted.
-7. Ideas offered but not built:
-   - guided first visit
+7. Ideas, built in this order: (1) DONE v44, guided first visit (`js/first-visit.js`, test `/home/user/fttest.py`). Still to build:
    - weekly digest
    - match celebration screen
    - install-as-app prompt

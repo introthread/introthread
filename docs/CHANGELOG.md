@@ -3,6 +3,13 @@
 Everything built so far, newest first. Full technical detail for each item is in `HANDOVER.md`. How Rooms, events, communities and the Room pass work: `docs/ROOMS.md`.
 
 ## 22 Oct 2026
+- **v44: Guided first visit.**
+  - New signed-in users who have no Threads yet see a 4-step welcome: your card, Tap to Thread, What's next?, and Rooms.
+  - Each step has Back, Next and Skip, and works with the keyboard; Esc closes it.
+  - The last step opens card setup.
+  - It shows once per account on each device, and `itTour()` reopens it.
+  - It never shows in demo mode.
+  - Code: `js/first-visit.js`.
 - **v43: Monthly library check.**
   - `scripts/check_deps.py` lists every outside library, the safe updates in the same major version and any new major versions, and checks the integrity hashes.
   - `tesseract.js` is pinned to 5.1.1, the version already in use.

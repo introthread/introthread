@@ -3016,6 +3016,15 @@ html body .pc-m .pc-stage{max-width:min(320px,calc(100dvh - 380px))!important;mi
 
 /* v39 Sessions */
 .ses-box .x-btn{margin:4px 0 10px}.ses-p{display:block!important;padding:6px 0 10px 4px}.ses-m{display:flex;align-items:center;gap:8px;padding:6px 0;min-height:32px;cursor:pointer}.ses-m input{width:18px;height:18px}
+
+/* v44 Guided first visit */
+.ft-back{position:fixed;inset:0;z-index:9999;background:rgba(15,18,24,.55);display:flex;align-items:center;justify-content:center;padding:16px}
+.ft-card{background:#fff;border-radius:18px;max-width:420px;width:100%;padding:22px 22px 18px;box-shadow:0 20px 50px rgba(15,18,24,.25)}
+.ft-card h2{margin:12px 0 8px;font:600 21px var(--xss);letter-spacing:-.3px}.ft-card p{margin:0;color:#4b5565;line-height:1.55}
+.ft-n{font-size:13px;color:#4b5565}.ft-skip{background:none;border:0;color:#1f5eff;font:600 14px var(--xss);cursor:pointer;min-height:32px;padding:0 6px}
+.ft-ic{display:inline-flex;width:44px;height:44px;border-radius:12px;background:#eef3ff;color:#1f5eff;align-items:center;justify-content:center;margin-top:12px}
+.ft-dots{display:flex;gap:6px;margin:16px 0}.ft-dots i{width:8px;height:8px;border-radius:50%;background:#d0d5dd}.ft-dots i.on{background:#1f5eff;width:20px;border-radius:4px}
+.ft-b{display:flex;justify-content:space-between;align-items:center;gap:10px}
 </style>
 </head>
 <body><a href="#root" class="x-skip">Skip to content</a>
@@ -7065,5 +7074,6 @@ window.addEventListener('resize',()=>{try{pcFit()}catch(e){}});
 <script src="/js/admin-idle.js"></script>
 <script src="/js/room-sessions.js"></script>
 <script src="/js/billing-sync.js"></script>
+<script src="/js/first-visit.js"></script>
 </body>
 </html>
