@@ -43,7 +43,7 @@ async def main():
         for W, H in SIZES:
             pg = await b.new_page(viewport={'width': W, 'height': H})
             pg.on('pageerror', lambda e: errs.append(str(e)[:160]))
-            await pg.route('**/*', lambda r: r.fulfill(body=html, content_type='text/html') if r.request.url.startswith('https://local.test/') and r.request.resource_type == 'document' else r.abort() if 'supabase' in r.request.url else r.continue_())
+            await pg.route('**/*', lambda r: r.fulfill(body=html, content_type='text/html') if r.request.url.startswith('https://local.test/') and r.request.resource_type == 'document' else r.fulfill(body=open(r.request.url.split('local.test/', 1)[1].split('?')[0]).read(), content_type='application/javascript') if r.request.url.startswith('https://local.test/js/') else r.abort() if 'supabase' in r.request.url else r.continue_())
             await pg.goto('https://local.test/'); await pg.wait_for_timeout(700)
             await pg.evaluate('demoLogin()'); await pg.wait_for_timeout(300)
             await pg.evaluate("go('/app/settings')"); await pg.wait_for_timeout(500)

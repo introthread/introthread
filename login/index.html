@@ -7004,32 +7004,10 @@ const _vPub23=vPublic;vPublic=function(hd){let h=_vPub23.apply(this,arguments);c
  setTimeout(()=>{const e1=document.getElementById('pcqr1'),e2=document.getElementById('pcqr2');try{if(e1&&!e1.childNodes.length)qr(e1,url,150);if(e2&&!e2.childNodes.length)qr(e2,url,240)}catch(_){}const bk=document.querySelector('#pcflip .pc-back');if(bk)bk.inert=true},0);
  return h};
 document.addEventListener('keydown',e=>{if(e.key==='Escape'&&PCF&&document.getElementById('pcflip'))pcFlip(false)});
-
-/* v28 WCAG: accessible names match visible text; no aria-label on <label>; clickable non-buttons reachable by keyboard */
-function itA11y(){try{
- document.querySelectorAll('[role=link][aria-label^="Open Thread with"],a.ro-img[aria-label],a.ro-up[aria-label],a.ro-card[aria-label]').forEach(e=>e.removeAttribute('aria-label'));
- document.querySelectorAll('#root button:not([aria-label])').forEach(b=>{if(!b.innerText.trim()&&b.textContent.trim())b.setAttribute('aria-label',b.textContent.trim().replace(/\s+/g,' ').slice(0,60))});
- document.querySelectorAll('label[aria-label]').forEach(l=>{const i=l.querySelector('input,select,textarea');if(i&&!i.getAttribute('aria-label'))i.setAttribute('aria-label',l.getAttribute('aria-label'));l.removeAttribute('aria-label')});
- document.querySelectorAll('#root [onclick]:not(a):not(button):not(input):not(select):not(textarea):not(label):not([tabindex])').forEach(e=>{if(e.closest('button,a'))return;if(e.querySelector('button,a[href],input,select,textarea,[role=button],[role=link]'))return;e.setAttribute('tabindex','0');if(!e.getAttribute('role'))e.setAttribute('role','button')});
-}catch(e){}}
-document.addEventListener('keydown',e=>{const t=e.target;if((e.key==='Enter'||e.key===' ')&&t&&t.matches&&t.matches('[role=button][tabindex]:not(button),[role=link][tabindex]:not(a)')&&t.hasAttribute('onclick')){e.preventDefault();t.click()}});
-const _render28=render;render=function(){const r=_render28.apply(this,arguments);setTimeout(itA11y,0);return r};
-new MutationObserver(()=>{clearTimeout(window._a11yT);window._a11yT=setTimeout(itA11y,60)}).observe(document.documentElement,{childList:true,subtree:true});
-
-/* v32 photo crop: measure, don't guess. Shrink the picture until Save photo/Cancel sit inside the window AND inside every box that could clip them; plus a Save button in the header that can never be pushed off */
-function pcFit(){const m=document.querySelector('.pc-m');if(!m)return;const st=m.querySelector('.pc-stage'),acts=m.querySelector('.pc-acts'),zm=m.querySelector('.pc-zoom');if(!st||!acts)return;
- const set=v=>{[st,zm].forEach(e=>{if(!e)return;e.style.setProperty('width',v+'px','important');e.style.setProperty('max-width',v+'px','important');e.style.setProperty('min-width','0','important')})};
- if(!m.querySelector('.pc-hsave')){const x=m.querySelector('.row.between .x');if(x){const b=document.createElement('button');b.type='button';b.className='pcb pri pc-hsave';b.textContent='Save';b.setAttribute('aria-label','Save photo');b.onclick=()=>pcUse();b.style.cssText='height:36px!important;padding:0 14px!important;margin-left:auto;margin-right:8px;flex:none';x.parentNode.insertBefore(b,x)}}
- set(320);m.scrollTop=0;
- const k=(st.getBoundingClientRect().width/(st.offsetWidth||1))||1;
- for(let i=0,v=320;i<14;i++){const r=acts.getBoundingClientRect();let lim=window.innerHeight-8;
-  for(let p=acts.parentElement;p&&p!==document.body;p=p.parentElement){const c=getComputedStyle(p);if(/(auto|scroll|hidden|clip)/.test(c.overflowY)){lim=Math.min(lim,p.getBoundingClientRect().bottom-4)}}
-  if(r.bottom<=lim||v<=120)break;v=Math.max(120,Math.floor(v-(r.bottom-lim)/k-2));set(v)}
- try{if(typeof pcDraw==='function')pcDraw()}catch(e){}}
-const _pcOpen31=pcOpen;pcOpen=function(){const r=_pcOpen31.apply(this,arguments);try{pcFit();requestAnimationFrame(pcFit);setTimeout(pcFit,250)}catch(e){}return r};
-window.addEventListener('resize',()=>{try{pcFit()}catch(e){}});
 </script>
 <script src="/js/payments.js"></script>
+<script src="/js/a11y.js"></script>
+<script src="/js/photo-crop.js"></script>
 <script src="/js/rooms-access.js"></script>
 <script src="/js/admin-idle.js"></script>
 <script src="/js/room-sessions.js"></script>

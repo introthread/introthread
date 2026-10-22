@@ -3,6 +3,10 @@
 Everything built so far, newest first. Full technical detail for each item is in `HANDOVER.md`. How Rooms, events, communities and the Room pass work: `docs/ROOMS.md`.
 
 ## 22 Oct 2026
+- **v51: Code split, step 3.**
+  - Accessibility helpers moved to `js/a11y.js` and photo crop sizing to `js/photo-crop.js`, both formatted.
+  - `tests/app/photo_crop.py` now loads the `/js` files.
+  - No change in behaviour.
 - **v50: Code split, step 2.**
   - Server features and payments moved from `index.html` to `js/payments.js`.
   - All `/js` files are formatted for readability with Prettier.
