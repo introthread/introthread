@@ -1,6 +1,6 @@
 # Rooms, events, communities and the Room pass
 
-How Rooms work in Introthread today, for staff, organisers and the next developer. Written 22 Oct 2026 from the code on `main`. Where something is not built yet, it says so.
+How Rooms work in Introthread today, for staff, organisers and the next developer. Written 22 Oct 2026, updated for v36 (Rooms access). Server rules are in `supabase/migrations/014_rooms_access.sql`. **Migration 014 must be run by Agnes in the Supabase SQL Editor** before joining, private Rooms, seat limits, members and card-paid Room passes work on the live site. Until then the app falls back to the older behaviour.
 
 ## 1. What a Room is
 A Room is a shared space for one gathering. Every Thread (tap) made inside a Room is tagged to it (`threads.room_id`), so the organiser gets results for the whole gathering.
@@ -25,7 +25,9 @@ Status logic: `rmStatus()` in `index.html` and `room_status()` in `supabase/migr
    - Attendance limit (optional), up to 3 topics, short description (optional)
 3. Press **Create Room**. The Room gets a short code (3 letters from the name + 2 digits, e.g. `KEN42`) and a join link `introthread.com/r/CODE`.
 
-The app form always creates an **Event**. To make a Room a **Community** or **Team meeting**, staff change the type in Admin > Rooms > Edit room (section 5). Adding a type choice to the app form is an open item.
+The form now has **Type** (Event, Community, Team meeting). Communities and team meetings can **repeat**: every week, every 2 weeks or every month. The Room page shows the type, how often it repeats and the **next session** date. Staff can still change the type in Admin > Rooms > Edit room.
+
+Attendance limit: up to 1,000 (the form no longer accepts more).
 
 Storage: table `rooms` (`owner_id, name, event_date, location, code`). Extra details (times, time zone, format, link, access, limit, topics, description, type) are saved as JSON after a `\n@@` marker inside `rooms.location`, so no schema change was needed. Read them with `rm9(r)` in the app and `room_meta()` in SQL.
 
@@ -33,12 +35,15 @@ Storage: table `rooms` (`owner_id, name, event_date, location, code`). Extra det
 - **Join link:** `introthread.com/r/CODE`. It opens the "You're in the Room" page (`vRoomCode`), which explains that tapping or scanning someone's card starts a Thread tagged to the event, and offers **Get your free card**.
 - **QR code:** each Room page shows a QR for the join link. Put it on screens, badges and tables. In Admin > Rooms there is a QR modal with **Download PNG**.
 - **Event mode** (`/app/scan`): full-screen QR of your card for the event, with event tagging through `?at=`, keep-screen-awake, light/dark, share, NFC, wallpaper download.
-- **Private Rooms:** marked "Private, invite only" on the Room page. Share the link only with invited people. Note: the join page does not yet block people without an invitation; private is a label, not enforced access.
+- **Joining:** the join page loads the Room from the database (`room_public`) and shows its name, date, type, access, organiser and how many people have joined. People sign in (or sign up), then press **Join Room**. After sign-in they are brought back to the same Room page. Joined Rooms appear under **Rooms you have joined** in the app and in the Tap form's "Where did you meet?" list.
+- **Private Rooms (enforced):** private Rooms hide the place, description and online link from people who are not members. Invited people (organiser adds their emails on the Room page) get in straight away when they sign in with that email. Anyone else can **Request to join**; the organiser sees them under **Waiting for you** and presses **Let in** or **Decline**. Checked in the database (`room_join`, `room_member_set`), not only in the app.
+- **Attendance limit (enforced):** joining and approving stop at the Room's limit, or 1,000 if no limit is set. Visitors see "This Room is full". Checked in the database with a lock, so two people cannot take the last place at the same time.
 
 ## 4. During and after
 - Room page (`/app/room/<id>`): date, time and time zone, place or **Join online** link, access, limit, description, QR, and results.
 - Results (`roomStats`): Threads made, confirmed by both, answered, meetings agreed, introductions.
 - Organisers can export results as CSV.
+- **People in this Room** (on the Room page): the organiser sees members (with Remove), join requests (Let in / Decline) and, for private Rooms, the invitation list (add or remove emails). Members see the other members (name, role, company, link to their card) and can **Leave this Room**. Functions: `room_members_list`, `room_invite`, `room_uninvite`, `room_leave`.
 
 ## 5. Admin > Rooms (staff)
 - Cards: total Rooms, total attendees, active Rooms, Room links used.
@@ -55,15 +60,18 @@ Storage: table `rooms` (`owner_id, name, event_date, location, code`). Extra det
 - Passes are counted as `roomCredits` inside the person's billing record (`profiles.prefs.billing`). Creating an extra Room uses one credit ("Room pass used").
 - Where to buy: Settings > Billing (**Buy a Room pass**) or the prompt above.
 
-How payment works today:
-- **Live site:** card payment for Room passes is **not built yet**. The button is **Request invoice**: it creates a pending invoice "Room pass, one event" ($199 + tax) and says the pass unlocks once it is paid. People pay by bank transfer through billing@introthread.com.
-- **Gap to fix:** nothing yet adds the credit automatically when that invoice is paid. Until it is built, staff must mark the invoice paid and add the credit by hand.
-- Paystack (v26) currently covers **Pro subscriptions only** (`/api/pay-init {interval}`). Next step: a one-off Paystack charge for `kind:'rooms'` that adds one `roomCredits` in `/api/pay-verify` and the webhook.
-- Demo mode simulates the card payment and adds the credit at once.
+How payment works now (v36):
+- **Card payment (automatic):** when card payments are switched on (`/api/status` says `pay:true`), **Buy a Room pass** opens Paystack's secure page. The price is shown as $199 and charged once in Kenyan shillings (`ROOM_PASS_KES`, default 199 x `KES_PER_USD` = KES 25,870). When the payment succeeds, `/api/pay-verify` (on return) and the webhook (`charge.success` with `metadata.kind = 'rooms'`) add **one unused pass** in `room_passes`, record the payment and add a paid receipt to Billing. Each payment reference adds only one pass, even if both run.
+- **Enforced in the database:** creating a second or later Room needs an unused pass. A database trigger (`rooms_need_pass`) uses one pass and links it to the new Room. Without a pass it refuses with `room_pass_required`, and the app opens Buy a Room pass. Staff creating Rooms from Admin are exempt.
+- **Bank transfer:** if card payments are off, the button is still **Request invoice**. When the money arrives, staff open Admin > Users > the person > **Room passes** > **Add a Room pass** and give a reason, such as the invoice number. This uses `admin_room_pass_grant` (owner, admin, finance) and is audited.
+- The app reads unused passes with `my_room_passes()`.
+- Demo mode simulates the card payment and adds the pass at once.
 
-## 7. Open items
-1. Type choice (Event / Community / Team meeting) in the app's Create a Room form.
-2. Enforce Private Rooms on the join page (invite list or approval).
-3. Room pass payment through Paystack, with the credit added automatically.
-4. Enforce the attendance limit and the 1,000-attendee cap on joining.
-5. Community-specific features (members list, recurring sessions) if wanted.
+## 7. Before it works live
+1. Agnes: run `supabase/migrations/014_rooms_access.sql` in the Supabase SQL Editor.
+2. Card payments for Room passes use the same Paystack keys as Pro (`PAYSTACK_SECRET_KEY`, `SUPABASE_SERVICE_ROLE_KEY`). Optional: `ROOM_PASS_KES` to set the shilling price.
+3. Test once in Paystack test mode: buy a pass, create a second Room, join a private Room from another account, approve, and fill a Room with a limit of 2.
+
+## 8. Not built (possible next steps)
+- Emailing invitations automatically. For now the organiser sends the Room link themselves.
+- Separate attendance for each repeat session of a community. All sessions share one Room and one member list.

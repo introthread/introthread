@@ -281,3 +281,28 @@ Tap -> Thread -> one question, "What's next?". Answers stay sealed until both pe
 - v34: root cause found. The owner's ad blocker hides any element classed `ad-btn` (generic cosmetic filter), which removed Save photo, Cancel and the header Save from the popup while the × (class `x`) stayed. The popup buttons now use `.pcb`. Follow-up done in v35.
 
 - v35: every class starting `ad-` (ad-btn, ad-card, ad-h, ad-sel, ad-opl, etc., 430 uses) renamed to `ix-` in index.html and tests/admin/*.js, so ad blockers no longer hide admin buttons or cards. **Never name a class `ad-...` again.** All 10 admin node tests, admcheck 390/1366 with axe, sweep 390/1366 app, axe on all pages, keyboard pass and photo_crop pass after the rename.
+
+## Rooms access v36 (22 Oct 2026)
+- **Agnes must run `supabase/migrations/014_rooms_access.sql`.** It adds:
+  - tables `room_passes`, `room_members` and `room_invites`
+  - a `rooms_need_pass` trigger: the 2nd and later Rooms need an unused pass; staff are exempt
+  - helper functions `owns_room` and `is_room_member`, which policies use so the policies never call each other (that would be infinite recursion)
+  - a "members read rooms" policy
+  - functions `room_public` (anon), `room_join`, `room_leave`, `room_member_set`, `room_invite`, `room_uninvite`, `room_members_list`, `my_room_passes` and `admin_room_pass_grant`
+- **API:**
+  - `pay-init {kind:'rooms'}` starts a one-off KES charge with metadata kind rooms.
+  - `applyRoomPass` in `api/_lib/pay.js` inserts the pass, ignoring a duplicate reference, then records the payment and the receipt.
+  - `pay-verify` and the webhook branch on `meta.kind === 'rooms'`.
+  - Mock test: `node /home/user/roompaytest.js`.
+- **Client:**
+  - The v36 block uses prefixes `ra*`/`RA` for the Room page and passes, and `rj*`/`RJ` for the join page. Do not use `rm*`, which is admin Rooms.
+  - The Create form gets Type and Repeats (`rk`, `rr`).
+  - `pay=done&kind=rooms` is handled.
+  - `vTap` lists every Room the person can see in cloud mode.
+  - Admin Users panel: Room passes > Add a Room pass.
+- **Fallbacks:** if 014 is missing, the join page shows the old static page, the members box is hidden, and passes fall back to `prefs.billing.roomCredits`.
+- **Tests that passed:**
+  - `/home/user/ratest.py`: demo create of a community with weekly repeat
+  - `/home/user/rjtest.py`: every join page state
+  - all 10 admin tests, the app sweep at 390 and 1366, photo_crop and the API mock
+- The database functions are written but not yet run against a real database. Test them in Supabase after running 014.

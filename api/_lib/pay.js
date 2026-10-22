@@ -3,6 +3,8 @@ const { SB_URL } = require('./common');
 const PS = 'https://api.paystack.co';
 const PLAN = { month: process.env.PAYSTACK_PLAN_MONTH || 'PLN_igm7c0i78tlx9jz', year: process.env.PAYSTACK_PLAN_YEAR || 'PLN_scrctkdhtg6us1f' };
 const KES_PER_USD = Number(process.env.KES_PER_USD || 130);
+// Room pass: one extra Room, $199 shown, charged in KES. Override with ROOM_PASS_KES (whole shillings).
+const ROOM_PASS_KES = Number(process.env.ROOM_PASS_KES || Math.round(199 * KES_PER_USD));
 
 async function ps(path, opt = {}) {
   const r = await fetch(PS + path, { ...opt, headers: { Authorization: 'Bearer ' + process.env.PAYSTACK_SECRET_KEY, 'Content-Type': 'application/json' } });
@@ -61,5 +63,26 @@ async function setBilling(db, userId, fn, plan) {
   prefs.billing = fn(Object.assign({}, prefs.billing || {}));
   return db.patch(`profiles?id=eq.${userId}`, plan ? { prefs, plan } : { prefs });
 }
+
+// A paid Room pass: add one unused pass (once per reference), record the payment and a paid receipt.
+async function applyRoomPass(db, userId, tx) {
+  const ref = 'ps_' + tx.reference;
+  const amount = Number(tx.amount || 0) / 100, cur = String(tx.currency || 'KES').toLowerCase();
+  const paid = new Date(tx.paid_at || tx.paidAt || Date.now());
+  await db.insertIgnore('room_passes', { user_id: userId, reference: ref, amount, currency: cur, source: 'paystack' }, 'reference');
+  await db.insertIgnore('payments', { user_id: userId, plan_id: null, amount, currency: cur, amount_usd: cur === 'usd' ? amount : Math.round(amount / KES_PER_USD * 100) / 100, status: 'succeeded', stripe_invoice_id: ref, stripe_payment_intent: String(tx.id || '') }, 'stripe_invoice_id');
+  const auth = tx.authorization || {};
+  await setBilling(db, userId, b => {
+    b.invoices = Array.isArray(b.invoices) ? b.invoices : [];
+    if (!b.invoices.some(i => i && (i.id === ref || i.ref === tx.reference))) {
+      b.seq = (b.seq || 0) + 1;
+      const t = paid.getTime(), desc = 'Room pass, one event';
+      b.invoices.unshift({ id: ref, ref: tx.reference, number: 'IT-' + paid.getFullYear() + '-' + String(b.seq).padStart(4, '0'), date: t, due: t, desc, lines: [{ d: desc, amount }], subtotal: amount, taxLabel: 'Tax', tax: 0, total: amount, currency: cur.toUpperCase(), status: 'paid', paidAt: t, method: auth.last4 ? ((auth.brand || auth.card_type || 'Card').trim() + ' ending ' + auth.last4) : 'Card (Paystack)', kind: 'rooms' });
+    }
+    return b;
+  });
+  const left = await db.get(`room_passes?user_id=eq.${userId}&used_at=is.null&select=id`);
+  return { kind: 'rooms', amount, currency: cur, passes: Array.isArray(left) ? left.length : null };
+}
 const meta = tx => { let m = tx && tx.metadata; if (typeof m === 'string') { try { m = JSON.parse(m); } catch (e) { m = {}; } } return m || {}; };
-module.exports = { PS, PLAN, ps, svc, applyCharge, planCode, setBilling, meta };
+module.exports = { PS, PLAN, ROOM_PASS_KES, ps, svc, applyCharge, applyRoomPass, planCode, setBilling, meta };

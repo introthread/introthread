@@ -3,6 +3,13 @@
 Everything built so far, newest first. Full technical detail for each item is in `HANDOVER.md`. How Rooms, events, communities and the Room pass work: `docs/ROOMS.md`.
 
 ## 22 Oct 2026
+- **v36: Rooms access.** Needs migration 014.
+  - **Room pass card payment:** Paystack, one-off. The pass is added automatically and the database enforces passes when Rooms are created. Staff can add a pass by hand after a bank transfer.
+  - **Room types in the app:** Event, Community and Team meeting, with repeat sessions and the next session date.
+  - **Real join page:** private Rooms are enforced, with invitations and join requests.
+  - **Attendance limit:** enforced, maximum 1,000.
+  - **Members list:** shown on the Room page. Joined Rooms appear in the app.
+- **Docs:** `docs/ROOMS.md` and this change log. (6a67adc)
 - **v35 - Ad blockers no longer hide admin screens.** Every style name starting with `ad-` (430 uses) is renamed to `ix-`. Ad blockers hide anything named `ad-...`. Never use that prefix again. (commit 4084fef)
 - **v31 to v34 - Profile photo popup: Save photo always visible.** Root cause: the popup buttons were named `ad-btn` and the owner's ad blocker hid them. Fixes:
   - buttons renamed (`pcb`)
