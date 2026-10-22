@@ -1,8 +1,72 @@
 # Introthread - handover for the next AI agent
 
-Last updated: 21 Oct 2026, 3:15 pm Nairobi (after admin redesign v43, Audit log). Read this before making changes, and update it after every change.
+Last updated: 22 Oct 2026, 3:00 pm Nairobi (after v37 security hardening and migration 016). Read this section first, then ARCHITECTURE-ESSENTIALS.md and AGENTS.md. Update this file and docs/CHANGELOG.md with every change.
 
-## Current state (cross-checked 21 Oct 2026)
+## START HERE: state on 22 Oct 2026
+**Repo docs:**
+- README.md: index of all docs
+- ARCHITECTURE-ESSENTIALS.md: one page
+- ARCHITECTURE.md
+- AGENTS.md: rules
+- PRD.md
+- SECURITY-AUDIT.md
+- docs/ROOMS.md
+- docs/CHANGELOG.md: every change with commit links
+- this file: full history below
+
+**Live and verified:**
+- **Deploys:** `main` deploys to https://www.introthread.com. The latest code commits are v37 security (251723b) and migration 016 (cb5106b).
+- **Database:**
+  - Migrations 014 (Rooms access) and 016 (security fix) are run.
+  - 016's self-check showed all 8 rows ok: visitors and other users cannot read `prefs` or `plan`; card fields are public; `my_profile()`, the `profiles_guard` trigger and `profiles_len_chk` exist.
+  - 015 was run first but did not take effect, so 016 re-applies it.
+  - Leaked-password protection is on and the sign-in limits were checked (reported by the owner).
+- **Rooms (v36), live test in Paystack test mode, all passed:**
+  - Room pass purchase (KES 25,870), then a second Room
+  - private Room request, then Let in
+  - limit of 2 filled
+  - full Room message for signed-out visitors and for a signed-in non-member
+  - Test Rooms QAP55 and QAS41 stay on the live site. The owner said do NOT delete them.
+- **Billing page after 016:** Pro active, receipts IT-2026-0001 and 0002 show, 0 unused passes.
+- **Photo popup:** Save photo is visible. The root cause was ad blockers hiding `ad-` classes; all were renamed to `ix-` (v35).
+- **Admin:** all screens are redesigned, including the Audit log (v43, done 21 Oct). Do not redo it unless Agnes sends a new mockup.
+
+**Pending (owner or Agnes):**
+1. Confirm the public card (introthread.com/mosesmunyi in a private window) still shows name, photo and links after 016. The owner's screenshot did not arrive.
+2. Check whether migrations 012 (audit screen) and 013 (fix ambiguous columns) were run. Open /admin/users and /admin/audit; if either shows "column reference ... is ambiguous", run 013.
+3. Agnes: turn on Google, Microsoft and LinkedIn sign-in providers.
+4. Agnes: set up Resend email (`RESEND_API_KEY`, `NOTIFY_FROM`) and verify the domain. Then do a real end-to-end sign-up test.
+5. Company legal details for invoices: address, company number, VAT number. Invoices currently say "Introthread Ltd, London and New York".
+6. Paystack: switch to live keys and live plan codes before launch. USD once the Kenyan USD account is approved.
+7. Optional: give the GitHub connection "workflow" permission so agents can edit `.github/workflows`. Dependabot needs it too.
+8. Real-device checks: iPhone and Android, VoiceOver, QR scan of the back of the public card. Also check whether the darker chip and tag colours look too heavy.
+
+**Pending (code, not started):**
+1. Room invitations are not emailed (organisers send the link). This needs Resend.
+2. Community sessions share one Room and one member list; there is no per-session attendance.
+3. `prefs.billing` is still written by the browser for display. Move the Billing display to `subscriptions`, `payments` and `room_passes`, which only the server writes (SECURITY-AUDIT.md item 7).
+4. **Refactor plan** in ARCHITECTURE.md: split `index.html` into modules screen by screen, fold the `vNN` overrides into the functions they wrap, and replace `onclick` so the CSP can drop `unsafe-inline`. Do it one screen per commit, with tests after each.
+5. Faster loading of the website pages.
+6. Monthly dependency review: when a pinned CDN version changes, update its URL and SRI hash together.
+7. Ideas offered but not built:
+   - guided first visit
+   - weekly digest
+   - match celebration screen
+   - install-as-app prompt
+   - instant page navigation
+   - company logo on the card
+
+**Sandbox test tools** (in /home/user of the agent sandbox; they are not in the repo and must be recreated if the sandbox is gone):
+- **Layout and accessibility:** `sweep.py WxH app|site`, `axetest.py 390|1366`, `kbtest.py`, `admcheck.py 390|1366 [axe]`
+- **Other app checks:** `csptest.py`, `stagetest.py`
+- **Rooms:** `ratest.py` (create a community), `rjtest.py` (join page states), `looptest.py ok|fail` (render-loop check with a simulated Supabase)
+- **API mocks:** `roompaytest.js`, `paytest.js`, `synctest.js`
+- **In the repo:** `tests/admin/*.js` and `tests/app/photo_crop.py`
+
+---
+
+## Earlier state notes (21 Oct 2026, kept for history)
+
 - `main` head: the Audit log commit (v43). Vercel deploys `main` automatically.
 - Migration 011 (`supabase/migrations/011_staff_screen.sql`) is NOT YET RUN. Until it is, the Staff page adds existing accounts directly (no invitations, no pausing, no two-step or last-active columns).
 - Migration 010 (`supabase/migrations/010_privacy_screen.sql`) is NOT YET RUN. Until it is, the Privacy page filters in the browser, has no identity-check step, and people's notes on new requests are dropped (the request itself still saves).

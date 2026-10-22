@@ -3,6 +3,9 @@
 Everything built so far, newest first. Full technical detail for each item is in `HANDOVER.md`. How Rooms, events, communities and the Room pass work: `docs/ROOMS.md`.
 
 ## 22 Oct 2026
+- **Migration 016:** re-applies the 015 profile privacy fix. 015 had not taken effect. The self-check showed all 8 rows ok. (cb5106b)
+- **Live Rooms test (Paystack test mode):** all passed. Signed-out visitors to a full Room now see "This Room is full". (f14b360)
+- **pay-sync:** Room pass payments never switch Pro on. (e769814)
 - **v37: Security hardening.** Needs migration 015. Details in SECURITY-AUDIT.md.
   - Private profile fields are hidden from the public.
   - People can no longer upgrade themselves to Pro.
