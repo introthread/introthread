@@ -264,3 +264,8 @@ Tap -> Thread -> one question, "What's next?". Answers stay sealed until both pe
 - Users, Moderation, Rooms, Revenue, Privacy requests, Staff, Audit log: node tests all pass; at 390 and 1366px nothing wider than the screen, no cut-off buttons or headings, no script errors; axe-core 0 violations after fixes.
 - Fixes: closed mobile sidebar drawer is now `visibility:hidden` (it was reachable by Tab and screen readers while off-screen); red status pill `.t-r` darker for contrast; `itA11y()` no longer makes rows that contain buttons focusable (nested-interactive on Privacy and Audit rows) and names icon-only buttons on phones (Export CSV, Invite user) from their hidden label.
 - Test: `python3 /home/user/admcheck.py 390|1366 [axe]` (uses /home/user/mock.js).
+
+## Automated check: profile photo crop (22 Oct 2026)
+- `python3 tests/app/photo_crop.py` (run from the repo root) opens the real crop dialog from Settings at 14 sizes (1920x1080 down to 320x568, including short laptop windows 1310x640, 1280x600, 1280x520 and small phones) and checks Save photo is fully visible: inside the screen, inside the scrolling dialog, and not covered (checked at its corners and centre), before and after zooming. Exits with code 1 and names the failing sizes otherwise.
+- Verified it catches the bug: with the sticky button bar removed and a taller picture, it fails on 1310x640, 1280x600, 1280x520, 1024x600 and the small phones.
+- Run it after any change to the photo dialog, modals or global CSS.
