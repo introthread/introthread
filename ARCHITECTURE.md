@@ -68,10 +68,26 @@ Each returns 503 `not_configured` until its keys exist.
 - Every table has row-level security. Privileged work runs in `security definer` functions that check `auth.uid()` or `assert_staff()`.
 - Migrations are numbered and safe to re-run. 015 adds the security hardening.
 
-## Refactor plan (not done yet, on purpose)
+## Refactor plan (in progress, one step per commit)
 The single-file, layered design works and is fully tested, but it is hard to read. A safe refactor would:
 1. split it into `app/*.js` modules and `styles/*.css`, keeping the same global names;
 2. fold each `vNN` override into the function it wraps, one screen at a time, re-running the tests after each step;
 3. replace inline `onclick` with event listeners, so the CSP can drop `unsafe-inline`.
 
 This is several days of careful work and should be done screen by screen, never in one commit.
+
+### Progress
+- **Step 1 (v41, 22 Oct 2026), done:** the newest feature code moved out of `index.html` into `/js` files, loaded after the main script in this order:
+  1. `rooms-access.js`
+  2. `admin-idle.js`
+  3. `room-sessions.js`
+  4. `billing-sync.js`
+
+  The app's start-up (`boot`) now waits for `DOMContentLoaded`, so every file has run before the first screen is drawn. Before, it waited one microtask, which was only enough when all the code was inline.
+- **Next steps:**
+  - Move the older blocks into `/js`, newest first, one file per feature: payments (v26), accessibility (v28), photo crop (v30-v34), then the admin screens.
+  - Move CSS into `/css` files.
+  - Fold the overrides into the functions they wrap.
+  - Replace `onclick`.
+
+  Run the full test list after each step.

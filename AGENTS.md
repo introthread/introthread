@@ -6,7 +6,9 @@
    - Make ONE commit per change, containing `index.html`, the 9 rebuilt pages, any `api/` files and the docs. Vercel's Hobby plan allows about 100 deploys a day.
    - Never commit in parallel.
 3. **Build:** `rm -f _shot.html && python3 scripts/build_pages.py`. It must print `built 10`.
-4. **Editing `index.html`:**
+4. **New code goes in `/js/<feature>.js`.** Add the `<script src>` after the existing ones at the end of `index.html`; the load order matters. The files share the main script's globals. Browser tests must serve `/js/*`; see the route helper in the sandbox tests.
+
+   **Editing `index.html`:**
    - Add CSS before the FIRST `</style>` (`s.index`). The last `</style>` is inside an invoice template string.
    - Add JS before the last `</script>`.
    - Wrap existing functions; do not rewrite them.

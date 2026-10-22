@@ -3,6 +3,10 @@
 Everything built so far, newest first. Full technical detail for each item is in `HANDOVER.md`. How Rooms, events, communities and the Room pass work: `docs/ROOMS.md`.
 
 ## 22 Oct 2026
+- **v41: Code split, step 1.**
+  - Rooms access, admin idle sign-out, Sessions and Billing sync moved from `index.html` into `/js` files.
+  - The app now starts once every file has loaded.
+  - No change in behaviour.
 - **v40: Billing shows server-only data.** Needs migration 018.
   - The database keeps the payment server's plan, status, renewal date, card and paid receipts; the browser can no longer change them.
   - Billing details and invoice requests still work.

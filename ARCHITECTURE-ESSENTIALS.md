@@ -1,7 +1,7 @@
 # Architecture essentials (read this first)
 
 - **Product:** Introthread turns a real-life meeting into a Thread. Tap or scan a card, both people confirm, each answers one question ("What's next?"), and answers stay sealed until both reply.
-- **Front end:** one single-page app in `index.html` (HTML, CSS and JS inline, about 1.2 MB). `scripts/build_pages.py` copies it into 9 static marketing pages with their own SEO head. Always rebuild and commit `index.html` and all 9 pages together.
+- **Front end:** a single-page app in `index.html`, plus feature files in `/js`, loaded in order after the main script (since v41). The main page holds the HTML, CSS and older JS inline, about 1.2 MB.. `scripts/build_pages.py` copies it into 9 static marketing pages with their own SEO head. Always rebuild and commit `index.html` and all 9 pages together.
 - **Back end:**
   - Supabase: Postgres with row-level security, Auth and RPC functions. Schema in `supabase/schema.sql`, changes in `supabase/migrations/NNN_*.sql`, which Agnes runs by hand.
   - Vercel serverless functions in `api/`.
