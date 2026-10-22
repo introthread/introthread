@@ -245,3 +245,7 @@ Tap -> Thread -> one question, "What's next?". Answers stay sealed until both pe
 - Client: `bUpgrade` and `stManage` switch to Paystack only when `/api/status` returns `pay:true` (needs `PAYSTACK_SECRET_KEY` + `SUPABASE_SERVICE_ROLE_KEY` in Vercel). Otherwise the old "Request invoice" flow stays.
 - Mock test: `node /home/user/paytest.js`.
 - Before live: switch to live key and live plan codes; enable USD when a Kenyan USD account is approved.
+
+## Deployments (22 Oct 2026)
+- Vercel Hobby allows about 100 deployments a day and every commit to `main` is one. On 21 Oct the limit was reached, so the last commits (Paystack receipts fix, Check for payments, Billing plan fix) were on GitHub but not deployed. Commit each change as ONE commit (index.html, api files and rebuilt pages together).
+- If commits pile up while limited, Vercel does not deploy them later on its own: push one new commit (or Vercel > Deployments > Create Deployment from `main`) once the limit clears.
