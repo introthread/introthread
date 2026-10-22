@@ -2992,6 +2992,10 @@ html body .cnt{background:#c2410c!important;color:#fff!important}
 /* v29 admin: closed mobile drawer hidden from keyboard and screen readers; status pill contrast */
 @media(max-width:1024px){html body .adm2:not(.open) .adm2-side{visibility:hidden;transition:transform .22s ease,visibility 0s linear .22s}html body .adm2.open .adm2-side{visibility:visible;transition:transform .22s ease}}
 html body .t-r{color:#b42318!important}
+
+/* v30 photo crop: Save photo always visible, whatever the screen height or zoom */
+html body .pc-m .pc-acts{position:sticky;bottom:0;z-index:2;background:#fff;padding:12px 0 2px;margin-top:8px;box-shadow:0 -10px 14px -10px rgba(15,18,24,.12)}
+html body .pc-m .pc-stage{max-width:min(320px,calc(100dvh - 380px))!important;min-width:150px}
 </style>
 </head>
 <body><a href="#root" class="x-skip">Skip to content</a>
