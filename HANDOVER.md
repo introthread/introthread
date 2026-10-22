@@ -31,6 +31,12 @@ Last updated: 22 Oct 2026, 3:00 pm Nairobi (after v37 security hardening and mig
 - **Photo popup:** Save photo is visible. The root cause was ad blockers hiding `ad-` classes; all were renamed to `ix-` (v35).
 - **Admin:** all screens are redesigned, including the Audit log (v43, done 21 Oct). Do not redo it unless Agnes sends a new mockup.
 
+**Brand (v48):**
+- Logo = the thread mark: two dots (blue `#1f5eff` and orange `#ff5a1f`) joined by a gradient thread. On dark backgrounds the left dot is white and the thread starts in `#6ea0ff`.
+- Files are in `img/brand/`.
+- In the app it is drawn by the CSS on `.x-lm` (an SVG background); the old `<i>` circles are hidden.
+- Do not bring back overlapping circles; they look like Mastercard.
+
 **Pending (owner or Agnes):**
 1. Confirm the public card (introthread.com/mosesmunyi in a private window) still shows name, photo and links after 016. The owner's screenshot did not arrive.
 2. Check whether migrations 012 (audit screen) and 013 (fix ambiguous columns) were run. Open /admin/users and /admin/audit; if either shows "column reference ... is ambiguous", run 013.

@@ -3,6 +3,14 @@
 Everything built so far, newest first. Full technical detail for each item is in `HANDOVER.md`. How Rooms, events, communities and the Room pass work: `docs/ROOMS.md`.
 
 ## 22 Oct 2026
+- **v48: New logo everywhere.** The overlapping circles looked like a card-brand logo, so they were replaced by the thread mark: two dots, blue and orange, joined by a thread. Updated:
+  - website and app top bars, phone bar, admin sidebar and QR centre (CSS `.x-lm`)
+  - the built-in logo icon and the invoice logo
+  - the browser tab icon
+  - the app icons (192, 512 and Apple touch)
+  - the social preview image
+
+  Brand files are in `img/brand/`: logos for light and dark, the mark, and the LinkedIn logo and banner.
 - **v47: Install-as-app prompt.**
   - A small bar on phones offers "Get the Introthread app" after 3 visits or the first Thread.
   - Android and Chrome: one tap opens the browser's own install prompt.

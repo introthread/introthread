@@ -31,7 +31,7 @@
 <meta name="twitter:image" content="https://www.introthread.com/img/og.jpg">
 <!--/meta-->
 <script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Organization","@id":"https://www.introthread.com/#org","name":"Introthread","url":"https://www.introthread.com/","logo":"https://www.introthread.com/img/icon-512.png","email":"hello@introthread.com"},{"@type":"WebSite","@id":"https://www.introthread.com/#site","name":"Introthread","url":"https://www.introthread.com/","publisher":{"@id":"https://www.introthread.com/#org"}},{"@type":"SoftwareApplication","name":"Introthread","applicationCategory":"BusinessApplication","operatingSystem":"Web, iOS, Android","url":"https://www.introthread.com/","offers":{"@type":"Offer","price":"0","priceCurrency":"USD"},"publisher":{"@id":"https://www.introthread.com/#org"}}]}</script>
-<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Ccircle cx='12' cy='16' r='8' fill='%230b1122'/%3E%3Ccircle cx='20' cy='16' r='8' fill='%23ff6a3d' fill-opacity='.92'/%3E%3C/svg%3E">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 -8 48 48'%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0' y1='0' x2='1' y2='0'%3E%3Cstop offset='0' stop-color='%231f5eff'/%3E%3Cstop offset='1' stop-color='%23ff5a1f'/%3E%3C/linearGradient%3E%3C/defs%3E%3Cpath d='M9 22C22 36 26 -4 39 10' fill='none' stroke='url%28%23g%29' stroke-width='3.6' stroke-linecap='round'/%3E%3Ccircle cx='9' cy='22' r='6.5' fill='%231f5eff'/%3E%3Ccircle cx='39' cy='10' r='6.5' fill='%23ff5a1f'/%3E%3C/svg%3E">
 <script src="https://cdn.jsdelivr.net/npm/qrcode-generator@1.4.4/qrcode.min.js" integrity="sha384-lQXOAyZwHXE55JFyrOMB7nY2Wv+m5ZWNtJcHrd1rceRQXAYNLak8ukN5TjBTcIwz" crossorigin="anonymous"></script>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.118.0/dist/umd/supabase.js" integrity="sha384-TcHRA3zBbn+Lexh5n+Oil4guNPOS3rjNDpGRAN46u/s/mB2IZ50ceC6TYDU2yvgK" crossorigin="anonymous"></script>
 <script src="/config.js"></script>
@@ -3043,6 +3043,11 @@ html body .pc-m .pc-stage{max-width:min(320px,calc(100dvh - 380px))!important;mi
 .ip-bar{position:fixed;left:10px;right:10px;bottom:calc(78px + env(safe-area-inset-bottom,0px));z-index:9000;display:flex;align-items:center;gap:10px;background:#fff;border:1px solid #e3e7ef;border-radius:16px;padding:10px 10px 10px 12px;box-shadow:0 10px 30px rgba(15,18,24,.18);max-width:520px;margin:0 auto}
 .ip-bar img{border-radius:9px;flex:none}.ip-t{display:flex;flex-direction:column;min-width:0;flex:1;font-size:13px;line-height:1.35}.ip-t b{font-size:14px}.ip-t span{color:#4b5565}
 .ip-a{display:flex;align-items:center;gap:4px;flex:none}.ip-a .sm{min-height:36px;padding:0 14px}.ip-x{width:36px;height:36px;border:0;background:none;font-size:22px;color:#4b5565;cursor:pointer;border-radius:10px}
+
+/* v48 brand: thread logo (two dots joined by a thread) replaces the overlapping circles everywhere */
+.x-lm{display:inline-block!important;width:30px!important;height:20px!important;background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 48 32'%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0' y1='0' x2='1' y2='0'%3E%3Cstop offset='0' stop-color='%231f5eff'/%3E%3Cstop offset='1' stop-color='%23ff5a1f'/%3E%3C/linearGradient%3E%3C/defs%3E%3Cpath d='M9 22C22 36 26 -4 39 10' fill='none' stroke='url%28%23g%29' stroke-width='3.6' stroke-linecap='round'/%3E%3Ccircle cx='9' cy='22' r='6.5' fill='%231f5eff'/%3E%3Ccircle cx='39' cy='10' r='6.5' fill='%23ff5a1f'/%3E%3C/svg%3E") center/contain no-repeat!important;vertical-align:middle;flex:none}
+.x-lm i{display:none!important}
+.x-logo.dk .x-lm,.adm2-logo .x-lm,.x-card .x-lm,.dk .x-lm{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 48 32'%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0' y1='0' x2='1' y2='0'%3E%3Cstop offset='0' stop-color='%236ea0ff'/%3E%3Cstop offset='1' stop-color='%23ff5a1f'/%3E%3C/linearGradient%3E%3C/defs%3E%3Cpath d='M9 22C22 36 26 -4 39 10' fill='none' stroke='url%28%23g%29' stroke-width='3.6' stroke-linecap='round'/%3E%3Ccircle cx='9' cy='22' r='6.5' fill='%23ffffff'/%3E%3Ccircle cx='39' cy='10' r='6.5' fill='%23ff5a1f'/%3E%3C/svg%3E")!important}
 </style>
 </head>
 <body><a href="#root" class="x-skip">Skip to content</a>
@@ -3064,7 +3069,7 @@ const fmtDate=t=>new Date(t).toLocaleDateString('en-GB',{day:'numeric',month:'sh
 const slug=s=>String(s).toLowerCase().replace(/[^a-z0-9]+/g,'').slice(0,20)||'me';
 
 const IC={
- logo:'<svg width="18" height="18" viewBox="0 0 24 24" fill="none"><circle cx="6" cy="12" r="3" fill="#fff"/><circle cx="18" cy="12" r="3" fill="#ff6b3d"/><path d="M9 12c2-4 4-4 6 0" stroke="#fff" stroke-width="2" stroke-linecap="round"/><path d="M9 12c2 4 4 4 6 0" stroke="#6f8cff" stroke-width="2" stroke-linecap="round"/></svg>',
+ logo:'<svg width="18" height="18" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 32"><defs><linearGradient id="itlg" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#6ea0ff"/><stop offset="1" stop-color="#ff5a1f"/></linearGradient></defs><path d="M9 22C22 36 26 -4 39 10" fill="none" stroke="url(#itlg)" stroke-width="3.6" stroke-linecap="round"/><circle cx="9" cy="22" r="6.5" fill="#ffffff"/><circle cx="39" cy="10" r="6.5" fill="#ff5a1f"/></svg>',
  home:'<path d="M3 11l9-7 9 7v9a1 1 0 01-1 1h-5v-6H9v6H4a1 1 0 01-1-1z"/>',
  thread:'<circle cx="6" cy="12" r="2.5"/><circle cx="18" cy="12" r="2.5"/><path d="M8.5 12c2-4 5-4 7 0M8.5 12c2 4 5 4 7 0"/>',
  tap:'<rect x="7" y="2" width="10" height="20" rx="2.5"/><path d="M11 18h2"/><path d="M2 9c1.5-1.5 1.5-4.5 0-6M22 9c-1.5-1.5-1.5-4.5 0-6" transform="translate(0 6)"/>',
@@ -6914,7 +6919,7 @@ const _vScanEv2=vScan;vScan=function(){const u=me();if(!u)return _vScanEv2.apply
  <p class="ev2-tip">${n?`<b>${n} Thread${n>1?'s':''} today.</b> `:''}Tip: turn your brightness up for faster scanning.</p></main></div>`};
 
 /* ==== Invoice v2: professional international layout with the Introthread logo ==== */
-const invLogo=(h=30)=>`<svg class="iv-logo" height="${h}" viewBox="0 0 196 40" role="img" aria-label="Introthread"><circle cx="16" cy="20" r="12" fill="#0f1b3d"/><circle cx="32" cy="20" r="12" fill="#ff6a3d" fill-opacity=".95"/><text x="52" y="28" font-family="sans-serif" font-size="24" font-weight="600" fill="#0f1b3d" textLength="140" lengthAdjust="spacingAndGlyphs">intro<tspan fill="#1f5eff">thread</tspan></text></svg>`;
+const invLogo=(h=30)=>`<svg class="iv-logo" height="${h}" viewBox="0 0 196 40" role="img" aria-label="Introthread"><defs><linearGradient id="itiv" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#1f5eff"/><stop offset="1" stop-color="#ff5a1f"/></linearGradient></defs><path d="M8 27C19 39 23 5 34 15" fill="none" stroke="url(#itiv)" stroke-width="3.4" stroke-linecap="round"/><circle cx="8" cy="27" r="6" fill="#1f5eff"/><circle cx="34" cy="15" r="6" fill="#ff5a1f"/><text x="52" y="28" font-family="sans-serif" font-size="24" font-weight="600" fill="#0f1b3d" textLength="140" lengthAdjust="spacingAndGlyphs">intro<tspan fill="#1f5eff">thread</tspan></text></svg>`;
 bInvHTML=function(i){const b=bGet(),d=b.details||{},u=me()||{};const cur=i.currency||'USD';const paid=i.status==='paid',overdue=i.status==='open'&&Date.now()>i.due,voided=i.status!=='paid'&&i.status!=='open';
  const st=paid?['Paid','g']:voided?['Void','n']:overdue?['Overdue','r']:['Due','o'];const rate=(String(i.taxLabel||'').match(/([\d.]+)%/)||[])[1];
  const due=paid?0:i.total;const ctry=(typeof COUNTRIES!=='undefined'?(COUNTRIES.find(c=>c[0]===d.country)||[])[1]:'')||'';
