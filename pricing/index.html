@@ -2988,6 +2988,10 @@ html body .d-stat b em{color:#0b7a4b}html body .d-stat:nth-child(3) b em{color:#
 html body button[aria-label^="More options"]{min-width:31px!important;min-height:31px!important}
 html body .cd-clr{min-width:31px!important;min-height:31px!important}
 html body .cnt{background:#c2410c!important;color:#fff!important}
+
+/* v29 admin: closed mobile drawer hidden from keyboard and screen readers; status pill contrast */
+@media(max-width:1024px){html body .adm2:not(.open) .adm2-side{visibility:hidden;transition:transform .22s ease,visibility 0s linear .22s}html body .adm2.open .adm2-side{visibility:visible;transition:transform .22s ease}}
+html body .t-r{color:#b42318!important}
 </style>
 </head>
 <body><a href="#root" class="x-skip">Skip to content</a>
@@ -7010,8 +7014,9 @@ const _bGet26=bGet;bGet=function(u){const b=_bGet26.apply(this,arguments);try{u=
 /* v28 WCAG: accessible names match visible text; no aria-label on <label>; clickable non-buttons reachable by keyboard */
 function itA11y(){try{
  document.querySelectorAll('[role=link][aria-label^="Open Thread with"],a.ro-img[aria-label],a.ro-up[aria-label],a.ro-card[aria-label]').forEach(e=>e.removeAttribute('aria-label'));
+ document.querySelectorAll('#root button:not([aria-label])').forEach(b=>{if(!b.innerText.trim()&&b.textContent.trim())b.setAttribute('aria-label',b.textContent.trim().replace(/\s+/g,' ').slice(0,60))});
  document.querySelectorAll('label[aria-label]').forEach(l=>{const i=l.querySelector('input,select,textarea');if(i&&!i.getAttribute('aria-label'))i.setAttribute('aria-label',l.getAttribute('aria-label'));l.removeAttribute('aria-label')});
- document.querySelectorAll('#root [onclick]:not(a):not(button):not(input):not(select):not(textarea):not(label):not([tabindex])').forEach(e=>{if(e.closest('button,a'))return;e.setAttribute('tabindex','0');if(!e.getAttribute('role'))e.setAttribute('role','button')});
+ document.querySelectorAll('#root [onclick]:not(a):not(button):not(input):not(select):not(textarea):not(label):not([tabindex])').forEach(e=>{if(e.closest('button,a'))return;if(e.querySelector('button,a[href],input,select,textarea,[role=button],[role=link]'))return;e.setAttribute('tabindex','0');if(!e.getAttribute('role'))e.setAttribute('role','button')});
 }catch(e){}}
 document.addEventListener('keydown',e=>{const t=e.target;if((e.key==='Enter'||e.key===' ')&&t&&t.matches&&t.matches('[role=button][tabindex]:not(button),[role=link][tabindex]:not(a)')&&t.hasAttribute('onclick')){e.preventDefault();t.click()}});
 const _render28=render;render=function(){const r=_render28.apply(this,arguments);setTimeout(itA11y,0);return r};

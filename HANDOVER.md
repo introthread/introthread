@@ -259,3 +259,8 @@ Tap -> Thread -> one question, "What's next?". Answers stay sealed until both pe
 - Fixes: global `:focus-visible` ring (3px #3157ff); darker text for green/orange/purple/blue/pink chips, tags, rings, counters and danger text; avatars get a 30% dark overlay so white initials pass; "old way" lane on home no longer faded below contrast; target sizes at least 24px rendered (note the app shell is zoomed to 0.8 at desktop widths, so use 31px CSS); `itA11y()` removes aria-labels that hid visible text (2.5.3), moves aria-label off `<label>` to its input, and gives clickable divs tabindex/role with Enter/Space activation.
 - IMPORTANT for CSS additions: insert before the FIRST `</style>` (`s.index`). The last `</style>` in the file is inside the invoice print template string in JS.
 - Tests: `python3 /home/user/axetest.py 390|1366`, `python3 /home/user/axecc.py 390` (contrast detail), `python3 /home/user/kbtest.py` (keyboard).
+
+## Admin retest (22 Oct 2026, v29)
+- Users, Moderation, Rooms, Revenue, Privacy requests, Staff, Audit log: node tests all pass; at 390 and 1366px nothing wider than the screen, no cut-off buttons or headings, no script errors; axe-core 0 violations after fixes.
+- Fixes: closed mobile sidebar drawer is now `visibility:hidden` (it was reachable by Tab and screen readers while off-screen); red status pill `.t-r` darker for contrast; `itA11y()` no longer makes rows that contain buttons focusable (nested-interactive on Privacy and Audit rows) and names icon-only buttons on phones (Export CSV, Invite user) from their hidden label.
+- Test: `python3 /home/user/admcheck.py 390|1366 [axe]` (uses /home/user/mock.js).
