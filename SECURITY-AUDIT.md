@@ -2,7 +2,7 @@
 
 Date: 22 Oct 2026 (v37). Scope: the whole app (`index.html`), server functions (`api/`), database (`supabase/schema.sql`, migrations 002-015), hosting config (`vercel.json`), and third-party scripts.
 
-**Done (22 Oct 2026):** Agnes ran `supabase/migrations/015_security.sql`, turned on leaked-password protection and checked the sign-in rate limits in the Supabase dashboard (reported by the owner).
+**Status (22 Oct 2026):** Agnes ran `supabase/migrations/015_security.sql`, but a check showed visitors could still read private profile fields, so `016_security_fix.sql` re-applies it with a built-in self-check. She also turned on leaked-password protection and checked the sign-in rate limits in the Supabase dashboard (reported by the owner).
 
 ## Findings and fixes
 

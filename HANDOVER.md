@@ -341,3 +341,4 @@ Tap -> Thread -> one question, "What's next?". Answers stay sealed until both pe
   - the API mocks (roompaytest, paytest, synctest)
   - a guard unit check: a foreign origin gets 403, the 10th request in a minute gets 429
 - 22 Oct 2026: owner reports Agnes ran migration 015, turned on leaked-password protection and checked the sign-in limits. Not yet verified from Town (a direct database check was refused by policy); verify through the app.
+- 22 Oct 2026: Agnes's check `has_column_privilege('anon','public.profiles','prefs','select')` returned TRUE after 015, so the privacy fix was not in effect. Added `016_security_fix.sql`, which removes every SELECT path (table and column, PUBLIC/anon/authenticated), re-applies 015 and ends with a self-check table (all rows must say ok).
