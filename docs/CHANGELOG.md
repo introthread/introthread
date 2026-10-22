@@ -3,6 +3,11 @@
 Everything built so far, newest first. Full technical detail for each item is in `HANDOVER.md`. How Rooms, events, communities and the Room pass work: `docs/ROOMS.md`.
 
 ## 22 Oct 2026
+- **v49: Company logo on the card.**
+  - Upload it in My card > Basic information (JPG, PNG or WebP, max 5MB). It is resized to at most 480 x 160 and saved in `profiles.links.logo`.
+  - It shows on the card, the card preview and the public profile.
+  - Only PNG, JPEG or WebP data images are ever displayed; SVG and links are refused.
+  - Code: `js/company-logo.js`.
 - **v48: New logo everywhere.** The overlapping circles looked like a card-brand logo, so they were replaced by the thread mark: two dots, blue and orange, joined by a thread. Updated:
   - website and app top bars, phone bar, admin sidebar and QR centre (CSS `.x-lm`)
   - the built-in logo icon and the invoice logo
