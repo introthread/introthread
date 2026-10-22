@@ -36,7 +36,7 @@ Storage: table `rooms` (`owner_id, name, event_date, location, code`). Extra det
 - **QR code:** each Room page shows a QR for the join link. Put it on screens, badges and tables. In Admin > Rooms there is a QR modal with **Download PNG**.
 - **Event mode** (`/app/scan`): full-screen QR of your card for the event, with event tagging through `?at=`, keep-screen-awake, light/dark, share, NFC, wallpaper download.
 - **Joining:** the join page loads the Room from the database (`room_public`) and shows its name, date, type, access, organiser and how many people have joined. People sign in (or sign up), then press **Join Room**. After sign-in they are brought back to the same Room page. Joined Rooms appear under **Rooms you have joined** in the app and in the Tap form's "Where did you meet?" list.
-- **Private Rooms (enforced):** private Rooms hide the place, description and online link from people who are not members. Invited people (organiser adds their emails on the Room page) get in straight away when they sign in with that email. Anyone else can **Request to join**; the organiser sees them under **Waiting for you** and presses **Let in** or **Decline**. Checked in the database (`room_join`, `room_member_set`), not only in the app.
+- **Private Rooms (enforced):** private Rooms hide the place, description and online link from people who are not members. Invited people (organiser adds their emails on the Room page; each is emailed the Room link by `/api/room-invite` once Resend is set up) get in straight away when they sign in with that email. Anyone else can **Request to join**; the organiser sees them under **Waiting for you** and presses **Let in** or **Decline**. Checked in the database (`room_join`, `room_member_set`), not only in the app.
 - **Attendance limit (enforced):** joining and approving stop at the Room's limit, or 1,000 if no limit is set. Visitors see "This Room is full". Checked in the database with a lock, so two people cannot take the last place at the same time.
 
 ## 4. During and after
@@ -73,5 +73,4 @@ How payment works now (v36):
 3. Test once in Paystack test mode: buy a pass, create a second Room, join a private Room from another account, approve, and fill a Room with a limit of 2.
 
 ## 8. Not built (possible next steps)
-- Emailing invitations automatically. For now the organiser sends the Room link themselves.
 - Separate attendance for each repeat session of a community. All sessions share one Room and one member list.

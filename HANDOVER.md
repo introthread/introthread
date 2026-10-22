@@ -41,8 +41,8 @@ Last updated: 22 Oct 2026, 3:00 pm Nairobi (after v37 security hardening and mig
 7. Optional: give the GitHub connection "workflow" permission so agents can edit `.github/workflows`. Dependabot needs it too.
 8. Real-device checks: iPhone and Android, VoiceOver, QR scan of the back of the public card. Also check whether the darker chip and tag colours look too heavy.
 
-**Pending (code, not started):**
-1. Room invitations are not emailed (organisers send the link). This needs Resend.
+**Pending (code), being worked in this order:**
+1. DONE v38: Room invitations are emailed by `api/room-invite.js` once Resend is configured (mock test `/home/user/invtest2.js`).
 2. Community sessions share one Room and one member list; there is no per-session attendance.
 3. `prefs.billing` is still written by the browser for display. Move the Billing display to `subscriptions`, `payments` and `room_passes`, which only the server writes (SECURITY-AUDIT.md item 7).
 4. **Refactor plan** in ARCHITECTURE.md: split `index.html` into modules screen by screen, fold the `vNN` overrides into the functions they wrap, and replace `onclick` so the CSP can drop `unsafe-inline`. Do it one screen per commit, with tests after each.

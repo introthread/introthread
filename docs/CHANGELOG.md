@@ -3,6 +3,7 @@
 Everything built so far, newest first. Full technical detail for each item is in `HANDOVER.md`. How Rooms, events, communities and the Room pass work: `docs/ROOMS.md`.
 
 ## 22 Oct 2026
+- **v38 - Room invitations are emailed.** New `/api/room-invite` (organiser only, checked in the database; up to 50 emails per request; 10 requests a minute). Sends the Room link through Resend; until Resend is set up the invitations are still saved and the organiser is told to share the link.
 - **Migration 016:** re-applies the 015 profile privacy fix. 015 had not taken effect. The self-check showed all 8 rows ok. (cb5106b)
 - **Live Rooms test (Paystack test mode):** all passed. Signed-out visitors to a full Room now see "This Room is full". (f14b360)
 - **pay-sync:** Room pass payments never switch Pro on. (e769814)
