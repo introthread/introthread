@@ -316,3 +316,10 @@ Tap -> Thread -> one question, "What's next?". Answers stay sealed until both pe
     - the `rooms` and `room_members` policies use the `owns_room` and `is_room_member` helpers, which run with elevated rights, so the policies never call each other
     - the trigger only updates `room_passes` and never inserts into `rooms`
   - Paystack retries are safe: a payment reference creates only one pass, whether it comes through verify, the webhook or sync.
+- v36 live test (22 Oct 2026, after Agnes ran 014, Paystack test mode), all passed:
+  - The second Room was blocked until a pass was bought (KES 25,870 test checkout). The pass was then added and used.
+  - Request to join a private Room, then Let in: "1 of 2 joined".
+  - A Room with a limit of 2 filled with two accounts.
+  - Test Rooms left in place: QAP55 (private, limit 2) and QAS41.
+  - Fixed afterwards: signed-out visitors to a full Room now see "This Room is full" instead of "Sign in to join".
+  - Not tested live: a third signed-in person being turned away. The database function enforces this.

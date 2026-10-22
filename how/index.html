@@ -7079,7 +7079,8 @@ function rjBody(code,d){if(!d.found)return `<span class="chip blue">Room ${esc(c
  <p class="muted rj-m">${dt?esc(dt):''}${d.start?' &middot; '+esc(d.start)+(d.end?'-'+esc(d.end):''):''}${d.repeat?' &middot; '+raRep(d.repeat):''}${d.place?'<br>'+esc(d.place):''}${d.owner?'<br>Organised by '+esc(d.owner):''}</p>${d.desc?`<p class="rj-d">${esc(d.desc)}</p>`:''}
  <p class="rj-n">${d.members} ${d.members===1?'person has':'people have'} joined${d.cap<1000?' &middot; '+d.cap+' places':''}</p>`;
  let act;
- if(!me())act=`<button type="button" class="btn primary" onclick="rjSignIn('${esc(d.code)}')">Sign in to join</button><p class="small muted" style="margin-top:12px">New to Introthread? <a href="/signup" onclick="try{localStorage.setItem('it_join','${esc(d.code)}')}catch(e){}">Get your free card</a></p>`;
+ if(!me()&&d.full)act=`<p class="rj-no">This Room is full.</p><p class="small muted">Already a member? <a href="/login" onclick="try{localStorage.setItem('it_join','${esc(d.code)}')}catch(e){}">Sign in</a></p>`;
+ else if(!me())act=`<button type="button" class="btn primary" onclick="rjSignIn('${esc(d.code)}')">Sign in to join</button><p class="small muted" style="margin-top:12px">New to Introthread? <a href="/signup" onclick="try{localStorage.setItem('it_join','${esc(d.code)}')}catch(e){}">Get your free card</a></p>`;
  else if(d.is_owner||d.status==='member')act=`<p class="rj-ok">${d.is_owner?'This is your Room.':'You are in this Room.'}</p>${d.link?`<p><a href="${esc(d.link)}" target="_blank" rel="noopener">Join online</a></p>`:''}<button type="button" class="btn primary" onclick="rjOpen('${d.id}')">Open Room</button>`;
  else if(d.status==='pending')act=`<p class="rj-ok">Request sent. The organiser will let you in.</p>`;
  else if(d.full)act=`<p class="rj-no">This Room is full.</p>`;
