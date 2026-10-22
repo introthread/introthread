@@ -40,9 +40,9 @@ console.log('h1',T('#admbody h1'),'cards',[...w.document.querySelectorAll('.rm-c
 w.alFilter('cat','billing');await sl(150);console.log('billing rows',w.document.querySelectorAll('.al-t tbody tr').length,'clear',!!q('.al-clr'),JSON.stringify(calls.filter(c=>c[1]==='admin_audit2').slice(-1)[0][2]));
 w.alFilter('cat','all');await sl(100);w.alFilter('outcome','failed');await sl(150);console.log('failed rows',w.document.querySelectorAll('.al-t tbody tr').length);
 w.alFilter('q','zzz');await sl(150);console.log('empty',T('.pq-empty h2'));w.eval("ALX.q='';ALX.outcome='all'");await w.alLoad(true);await sl(100);
-w.alOpen(1);await sl(30);console.log('detail',T('.al-m h3'),'changes rows',w.document.querySelectorAll('.al-m .pl-diff tbody tr').length,'link',[...w.document.querySelectorAll('.al-ma .ad-btn')].map(x=>x.textContent.trim()).join('|'));w.closeModal();
+w.alOpen(1);await sl(30);console.log('detail',T('.al-m h3'),'changes rows',w.document.querySelectorAll('.al-m .pl-diff tbody tr').length,'link',[...w.document.querySelectorAll('.al-ma .ix-btn')].map(x=>x.textContent.trim()).join('|'));w.closeModal();
 w.alOpen(0);await sl(30);console.log('kv',w.document.querySelectorAll('.al-kv div').length);w.closeModal();
 w.alExport();await sl(30);q('#admreason').value='quarterly review';await w.admAskGo('');await sl(300);console.log('export log',JSON.stringify(calls.filter(c=>c[1]==='admin_log').map(c=>[c[2].act,c[2].details.count])));
-ALOK=false;w.eval('ALX.limited=false');await w.alLoad();await sl(200);console.log('fallback',w.eval('ALX.limited'),!!q('.ad-upd'),'rows',w.document.querySelectorAll('.al-t tbody tr').length,'cards',[...w.document.querySelectorAll('.rm-c b')].map(x=>x.textContent).join(','));
+ALOK=false;w.eval('ALX.limited=false');await w.alLoad();await sl(200);console.log('fallback',w.eval('ALX.limited'),!!q('.ix-upd'),'rows',w.document.querySelectorAll('.al-t tbody tr').length,'cards',[...w.document.querySelectorAll('.rm-c b')].map(x=>x.textContent).join(','));
 AUD.length=0;await w.alLoad();await sl(200);console.log('empty state',T('.pq-empty h2'));
 console.log('errs',JSON.stringify(errs));process.exit(0)})();

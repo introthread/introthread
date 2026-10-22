@@ -55,7 +55,7 @@ w.document.getElementById('pl_pro_active').checked=false;w.document.getElementBy
 await w.plHist();await sl(100);console.log('hist items',w.document.querySelectorAll('.pl-hl>li').length,T('.pl-hl').replace(/\s+/g,' ').slice(0,160));
 w.eval("PLX.histPlan='free'");w.plHistDraw();console.log('hist free',w.document.querySelectorAll('.pl-hl>li').length);w.closeModal();w.eval("PLX.histPlan='all'");
 set('pl_pro_price_gbp_month','11');let cf=0;w.confirm=()=>{cf++;return false};w.admGo('rooms');await sl(100);console.log('leave guard',cf,w.eval('ADM.tab'));w.plReset('pro');
-P2OK=false;w.eval('PLX.limited=false');await w.plLoad();await sl(200);console.log('fallback',w.eval('PLX.limited'),'upd',!!q('.ad-upd'),'no desc',!w.document.getElementById('pl_pro_description'),'cards',w.document.querySelectorAll('.pl-card').length);
+P2OK=false;w.eval('PLX.limited=false');await w.plLoad();await sl(200);console.log('fallback',w.eval('PLX.limited'),'upd',!!q('.ix-upd'),'no desc',!w.document.getElementById('pl_pro_description'),'cards',w.document.querySelectorAll('.pl-card').length);
 set('pl_pro_threads_per_month','');w.document.getElementById('pl_pro_unl').checked=false;set('pl_pro_price_usd_month','13');w.plSave('pro');await sl(30);
 if(q('#admreason')){q('#admreason').value='fb';await w.admAskGo('');await sl(200)}console.log('fb rpc',JSON.stringify(calls.filter(c=>c[1]==='admin_update_plan').map(c=>c[2])));
 await w.plHist();await sl(100);console.log('fb hist',w.document.querySelectorAll('.pl-hl>li').length,!!q('#plhb .adm-empty'));w.closeModal();

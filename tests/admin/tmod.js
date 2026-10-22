@@ -29,14 +29,14 @@ w.history.pushState(null,'','/admin');w.eval('render()');await sl(400);
 console.log('stage',w.eval('ADM.stage'),w.eval('ADM.err'),!!q('.adm-qr'),!!q('#admcode'));
 q('#admcode').value='123456';await w.admMfaVerify();await sl(300);
 console.log('ready',w.eval('ADM.stage'),w.document.querySelectorAll('.adm-nav button').length,'kpis',w.document.querySelectorAll('.adm-k').length,'bars',w.document.querySelectorAll('.adm-bars i').length,'alerts',w.document.querySelectorAll('.adm-al').length,'badge',(q('.adm-nav em')||{}).textContent);
-const B=()=>q('#admbody');console.log('dash kpis',w.document.querySelectorAll('.ad-k').length,'links',w.document.querySelectorAll('.ad-k.link').length,'ops',q('.ad-ops').className,q('.ad-ops h2').textContent,'items',w.document.querySelectorAll('.ad-opl li').length,'bars',w.document.querySelectorAll('#achp .ach-b i').length,'empty threads',!!q('#acht .ach-e'),'xlabels',[...w.document.querySelectorAll('#achp .ach-x span')].map(x=>x.textContent).join('|'),'confirmed',[...w.document.querySelectorAll('.ad-kv')].map(x=>x.textContent).join(','));
+const B=()=>q('#admbody');console.log('dash kpis',w.document.querySelectorAll('.ix-k').length,'links',w.document.querySelectorAll('.ix-k.link').length,'ops',q('.ix-ops').className,q('.ix-ops h2').textContent,'items',w.document.querySelectorAll('.ix-opl li').length,'bars',w.document.querySelectorAll('#achp .ach-b i').length,'empty threads',!!q('#acht .ach-e'),'xlabels',[...w.document.querySelectorAll('#achp .ach-x span')].map(x=>x.textContent).join('|'),'confirmed',[...w.document.querySelectorAll('.ix-kv')].map(x=>x.textContent).join(','));
 w.achShow(q('#achp'),29);console.log('tip',q('#achp .ach-tip').textContent);
-q('#admrange').value='7';q('#admrange').dispatchEvent(new w.Event('change'));await sl(200);console.log('7d bars',w.document.querySelectorAll('#achp .ach-b i').length,q('.ad-upd').textContent);
+q('#admrange').value='7';q('#admrange').dispatchEvent(new w.Event('change'));await sl(200);console.log('7d bars',w.document.querySelectorAll('#achp .ach-b i').length,q('.ix-upd').textContent);
 w.admCol();console.log('col',q('#adm2').classList.contains('col'));w.admDrawer(true);console.log('drawer',q('#adm2').classList.contains('open'),q('#admmenu').getAttribute('aria-expanded'));w.admDrawer(false);
-ZERO=true;await w.admDashLoad();await sl(100);console.log('zero ops',q('.ad-ops h2').textContent,'empty chart',!!q('#achp .ach-e'));ZERO=false;
-RANGEOK=false;await w.admDashLoad();await sl(100);console.log('fallback',w.eval('ADM_LIMITED'),q('.ad-upd').textContent.slice(0,80),q('#admrange option[value="7"]').disabled);
+ZERO=true;await w.admDashLoad();await sl(100);console.log('zero ops',q('.ix-ops h2').textContent,'empty chart',!!q('#achp .ach-e'));ZERO=false;
+RANGEOK=false;await w.admDashLoad();await sl(100);console.log('fallback',w.eval('ADM_LIMITED'),q('.ix-upd').textContent.slice(0,80),q('#admrange option[value="7"]').disabled);
 w.admGo('users');await sl(250);
-console.log('U cards',w.document.querySelectorAll('.au-c').length,[...w.document.querySelectorAll('.au-c b')].map(x=>x.textContent).join(','),'rows',w.document.querySelectorAll('.au-t tbody tr').length,'menu btns',w.document.querySelectorAll('.au-more').length,'export',!!q('.ad-btn.pri'));
+console.log('U cards',w.document.querySelectorAll('.au-c').length,[...w.document.querySelectorAll('.au-c b')].map(x=>x.textContent).join(','),'rows',w.document.querySelectorAll('.au-t tbody tr').length,'menu btns',w.document.querySelectorAll('.au-more').length,'export',!!q('.ix-btn.pri'));
 w.auFilter('st','pending');await sl(150);console.log('pending rows',w.document.querySelectorAll('.au-t tbody tr').length,'chips',w.document.querySelectorAll('.au-chips button').length);
 w.auFilter('st','');await sl(150);w.auSort('name');await sl(100);console.log('sort',w.eval('ADMU.sort+ADMU.dir'),q('.au-th.on').textContent);
 w.auPick('u1',true);console.log('bulk',!!q('.au-bulk'));w.eval('ADMU.sel.clear()');
@@ -55,7 +55,7 @@ console.log('moderate',JSON.stringify(calls.filter(c=>c[1]==='admin_moderate').m
 await w.mdTake('r2');await sl(100);console.log('take',calls.some(c=>c[1]==='admin_report_take'));
 w.mdFilter('st','all');await sl(150);console.log('all items',w.document.querySelectorAll('.md-i').length);
 w.mdGuide();await sl(20);console.log('guide h4',w.document.querySelectorAll('.md-guide h4').length);w.closeModal&&w.closeModal();
-M2OK=false;w.eval('ADMM.limited=false;ADMM.open=null');w.mdFilter('st','open');await sl(250);console.log('fallback',w.eval('ADMM.limited'),'items',w.document.querySelectorAll('.md-i').length,[...w.document.querySelectorAll('.md-c b')].map(x=>x.textContent).join(','),'upd',!!q('.ad-upd'));
+M2OK=false;w.eval('ADMM.limited=false;ADMM.open=null');w.mdFilter('st','open');await sl(250);console.log('fallback',w.eval('ADMM.limited'),'items',w.document.querySelectorAll('.md-i').length,[...w.document.querySelectorAll('.md-c b')].map(x=>x.textContent).join(','),'upd',!!q('.ix-upd'));
 await w.mdOpen('r1');await sl(150);console.log('fb panel',!!q('.md-ph'),'secs',w.document.querySelectorAll('.md-sec').length);
 w.mdDecide('r1','dismissed');await sl(30);q('#admreason').value='ok';await w.admAskGo('');await sl(200);console.log('fb resolve',JSON.stringify(calls.filter(c=>c[1]==='admin_resolve_report').map(c=>c[2])));
 for(const t of ['reports','rooms','revenue','plans','settings','privacy','staff','audit']){w.admGo(t);await sl(150);const b=q('#admbody');console.log(t,'|',b.querySelector('h1')&&b.querySelector('h1').textContent,b.textContent.includes('Could not load')?'LOADFAIL':'')}
