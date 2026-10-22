@@ -45,6 +45,18 @@ Storage: table `rooms` (`owner_id, name, event_date, location, code`). Extra det
 - Organisers can export results as CSV.
 - **People in this Room** (on the Room page): the organiser sees members (with Remove), join requests (Let in / Decline) and, for private Rooms, the invitation list (add or remove emails). Members see the other members (name, role, company, link to their card) and can **Leave this Room**. Functions: `room_members_list`, `room_invite`, `room_uninvite`, `room_leave`.
 
+### Sessions and attendance (v39, needs migration 017)
+- Repeating Rooms (communities and team meetings) show a **Sessions** card on the Room page:
+  - the last 8 sessions and the next one
+  - how many members attended each session
+- On the day of a session, members and the organiser can press **Check in to today's session**.
+- The organiser can open **Attendance** for any past or current session and tick who was there.
+- Session dates count from the Room's first date: every week, every 2 weeks, or monthly on the same day (the last day of the month when a month is shorter).
+- Database functions: `room_sessions`, `room_checkin`, `room_session_people`, `room_attendance_set`, `room_is_session`. Table: `room_checkins`. Rules:
+  - only members and the organiser can see sessions
+  - only the organiser can mark attendance
+  - check-ins only on real session dates
+
 ## 5. Admin > Rooms (staff)
 - Cards: total Rooms, total attendees, active Rooms, Room links used.
 - Filters: search, status (upcoming, live, past), **Type (Conferences and events, Communities, Team meetings)**, date.
@@ -73,4 +85,3 @@ How payment works now (v36):
 3. Test once in Paystack test mode: buy a pass, create a second Room, join a private Room from another account, approve, and fill a Room with a limit of 2.
 
 ## 8. Not built (possible next steps)
-- Separate attendance for each repeat session of a community. All sessions share one Room and one member list.

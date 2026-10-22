@@ -43,7 +43,7 @@ Last updated: 22 Oct 2026, 3:00 pm Nairobi (after v37 security hardening and mig
 
 **Pending (code), being worked in this order:**
 1. DONE v38: Room invitations are emailed by `api/room-invite.js` once Resend is configured (mock test `/home/user/invtest2.js`).
-2. Community sessions share one Room and one member list; there is no per-session attendance.
+2. DONE v39: attendance for each community session. **Agnes must run `supabase/migrations/017_room_sessions.sql`.** Until then the Sessions card stays hidden. Client prefix `ses`/`SESX`; the name `RS` was already taken. Test: `/home/user/looptest_ses.py ok`.
 3. `prefs.billing` is still written by the browser for display. Move the Billing display to `subscriptions`, `payments` and `room_passes`, which only the server writes (SECURITY-AUDIT.md item 7).
 4. **Refactor plan** in ARCHITECTURE.md: split `index.html` into modules screen by screen, fold the `vNN` overrides into the functions they wrap, and replace `onclick` so the CSP can drop `unsafe-inline`. Do it one screen per commit, with tests after each.
 5. Faster loading of the website pages.
