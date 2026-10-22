@@ -3,6 +3,10 @@
 Everything built so far, newest first. Full technical detail for each item is in `HANDOVER.md`. How Rooms, events, communities and the Room pass work: `docs/ROOMS.md`.
 
 ## 22 Oct 2026
+- **v52: Code split, step 4.**
+  - Every admin screen moved from `index.html` into its own readable file in `/js` (core, dashboard, users, moderation, rooms, revenue, plans, settings, privacy, staff, audit), plus `late-fixes.js`.
+  - The admin tests load the `/js` files.
+  - No change in behaviour.
 - **v51: Code split, step 3.**
   - Accessibility helpers moved to `js/a11y.js` and photo crop sizing to `js/photo-crop.js`, both formatted.
   - `tests/app/photo_crop.py` now loads the `/js` files.

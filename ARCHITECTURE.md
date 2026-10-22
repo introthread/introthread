@@ -86,6 +86,12 @@ This is several days of careful work and should be done screen by screen, never 
   The app's start-up (`boot`) now waits for `DOMContentLoaded`, so every file has run before the first screen is drawn. Before, it waited one microtask, which was only enough when all the code was inline.
 - **Step 2 (v50, 22 Oct 2026), done:** the server features and payments code (v25-v26d) moved to `js/payments.js`, loaded first of the `/js` files. Every `/js` file is now formatted with Prettier (`.prettierrc.json`) so it reads like normal code. Run `npx prettier --write "js/*.js"` after editing.
 - **Step 3 (v51, 22 Oct 2026), done:** the accessibility helper (v28) and the photo crop sizing (v32) moved to `js/a11y.js` and `js/photo-crop.js`. The main inline script now ends with the original app code, and every later feature lives in `/js` in load order: payments, a11y, photo-crop, rooms-access, admin-idle, room-sessions, billing-sync, first-visit, match-celebrate, install-prompt, company-logo.
+- **Step 4 (v52, 22 Oct 2026), done:**
+  - Each admin screen now has its own file: `js/admin-core.js`, `admin-dashboard.js`, `admin-users.js`, `admin-moderation.js`, `admin-rooms.js`, `admin-revenue.js`, `admin-plans.js`, `admin-settings.js`, `admin-privacy.js`, `admin-staff.js` and `admin-audit.js`.
+  - The three small fixes that came after them are in `late-fixes.js`, keeping their original order.
+  - All of these files are Prettier-formatted.
+  - The `index.html` script is now about 0.9 MB, down from 1.2 MB.
+  - The admin tests in `tests/admin` copy the `/js` files into the page before running.
 - **Next steps:**
   - Move the older blocks into `/js`, newest first, one file per feature: payments (v26), accessibility (v28), photo crop (v30-v34), then the admin screens.
   - Move CSS into `/css` files.

@@ -22,7 +22,7 @@ const chain=t=>{const p=Promise.resolve({data:tbl[t]||[],error:null});p.select=(
 const MOCK={rpc:async(fn,a)=>{calls.push(['rpc',fn,a]);try{return{data:R[fn]?R[fn](a):null,error:null}}catch(e){return{data:null,error:{message:e.message}}}},from:t=>chain(t),
  auth:{signInWithOtp:async o=>{calls.push(['otp',o]);return{error:null}},resetPasswordForEmail:async(e,o)=>{calls.push(['reset',e]);return{error:null}},getSession:async()=>({data:{session:{user:{id:'u1'}}}}),onAuthStateChange:()=>({data:{subscription:{unsubscribe(){}}}}),
   mfa:{listFactors:async()=>({data:{totp:[],all:[]},error:null}),enroll:async()=>({data:{id:'f1',totp:{qr_code:'data:image/svg+xml;utf8,<svg/>',secret:'ABC'}},error:null}),challengeAndVerify:async()=>{aal='aal2';return{error:null}},unenroll:async()=>({})}}};
-const html=fs.readFileSync('index.html','utf8').replace('const SB=(window.supabase','const SB=window.__SB?window.__SB:(window.supabase');
+const html=fs.readFileSync('index.html','utf8').replace(/<script src="\/js\/([\w-]+\.js)"><\/script>/g,(m,f)=>'<script>'+fs.readFileSync('js/'+f,'utf8')+'<\/script>').replace('const SB=(window.supabase','const SB=window.__SB?window.__SB:(window.supabase');
 const dom=new JSDOM(html,{runScripts:'dangerously',pretendToBeVisual:true,url:'http://localhost/',beforeParse(win){win.__SB=MOCK}});const w=dom.window;w.addEventListener('error',e=>errs.push(e.message));
 const q=s=>w.document.querySelector(s);
 (async()=>{await sl(400);
