@@ -7026,15 +7026,17 @@ document.addEventListener('keydown',e=>{const t=e.target;if((e.key==='Enter'||e.
 const _render28=render;render=function(){const r=_render28.apply(this,arguments);setTimeout(itA11y,0);return r};
 new MutationObserver(()=>{clearTimeout(window._a11yT);window._a11yT=setTimeout(itA11y,60)}).observe(document.documentElement,{childList:true,subtree:true});
 
-/* v31 photo crop: size the picture from the real window height in script, so Save photo fits whatever the browser zoom, display scaling or CSS cascade */
-function pcFit(){const m=document.querySelector('.pc-m');if(!m)return;const st=m.querySelector('.pc-stage'),acts=m.querySelector('.pc-acts');if(!st||!acts)return;
- ['position:sticky','bottom:0','z-index:2','background:#fff'].forEach(d=>{const [k,v]=d.split(':');acts.style.setProperty(k,v,'important')});
- st.style.setProperty('width','320px','important');st.style.setProperty('max-width','320px','important');
- const k=(st.getBoundingClientRect().height/(st.offsetHeight||1))||1; /* app zoom factor */
- const other=(m.scrollHeight-st.offsetHeight)*k; const avail=(window.innerHeight-40-other)/k;
- const size=Math.max(140,Math.min(320,Math.floor(avail)));
- st.style.setProperty('width',size+'px','important');st.style.setProperty('max-width',size+'px','important');st.style.setProperty('min-width','0','important')}
-const _pcOpen31=pcOpen;pcOpen=function(){const r=_pcOpen31.apply(this,arguments);try{pcFit();requestAnimationFrame(pcFit)}catch(e){}return r};
+/* v32 photo crop: measure, don't guess. Shrink the picture until Save photo/Cancel sit inside the window AND inside every box that could clip them; plus a Save button in the header that can never be pushed off */
+function pcFit(){const m=document.querySelector('.pc-m');if(!m)return;const st=m.querySelector('.pc-stage'),acts=m.querySelector('.pc-acts'),zm=m.querySelector('.pc-zoom');if(!st||!acts)return;
+ const set=v=>{[st,zm].forEach(e=>{if(!e)return;e.style.setProperty('width',v+'px','important');e.style.setProperty('max-width',v+'px','important');e.style.setProperty('min-width','0','important')})};
+ if(!m.querySelector('.pc-hsave')){const x=m.querySelector('.row.between .x');if(x){const b=document.createElement('button');b.type='button';b.className='ad-btn pri pc-hsave';b.textContent='Save';b.setAttribute('aria-label','Save photo');b.onclick=()=>pcUse();b.style.cssText='height:36px!important;padding:0 14px!important;margin-left:auto;margin-right:8px;flex:none';x.parentNode.insertBefore(b,x)}}
+ set(320);m.scrollTop=0;
+ const k=(st.getBoundingClientRect().width/(st.offsetWidth||1))||1;
+ for(let i=0,v=320;i<14;i++){const r=acts.getBoundingClientRect();let lim=window.innerHeight-8;
+  for(let p=acts.parentElement;p&&p!==document.body;p=p.parentElement){const c=getComputedStyle(p);if(/(auto|scroll|hidden|clip)/.test(c.overflowY)){lim=Math.min(lim,p.getBoundingClientRect().bottom-4)}}
+  if(r.bottom<=lim||v<=120)break;v=Math.max(120,Math.floor(v-(r.bottom-lim)/k-2));set(v)}
+ try{if(typeof pcDraw==='function')pcDraw()}catch(e){}}
+const _pcOpen31=pcOpen;pcOpen=function(){const r=_pcOpen31.apply(this,arguments);try{pcFit();requestAnimationFrame(pcFit);setTimeout(pcFit,250)}catch(e){}return r};
 window.addEventListener('resize',()=>{try{pcFit()}catch(e){}});
 </script>
 </body>

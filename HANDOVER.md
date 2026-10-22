@@ -273,3 +273,6 @@ Tap -> Thread -> one question, "What's next?". Answers stay sealed until both pe
 ## GitHub Actions: photo crop check (22 Oct 2026)
 - `.github/workflows/photo-crop.yml` runs `python tests/app/photo_crop.py` with Playwright (Chromium) on every push to `main`, on every pull request, and on demand (Actions tab > "Photo crop dialog check" > Run workflow). A red X on the commit means Save photo is cut off or covered at one of the 14 sizes; the log names the sizes.
 - Actions runs are separate from Vercel and do not use Vercel deployments.
+
+### Photo crop v32 (22 Oct 2026)
+`pcFit()` (end of the main script) measures the dialog after it opens: it shrinks the picture until Save photo/Cancel sit inside the window and inside every box that could clip them, and adds a "Save" button in the dialog header next to the close button that can never be pushed off. Refits on resize. Checked with `tests/app/photo_crop.py` (14 sizes) and with the dialog forcibly clipped three different ways.
