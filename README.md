@@ -42,3 +42,8 @@ The current state of the build, working rules, what has been done and what comes
 3. **AI networking assistant** - conversation summaries, next actions and contact enrichment.
 4. **Teams and events** - company profiles, team plans, event networking and analytics.
 5. **Integrations and enterprise** - CRM integrations, SSO and directory sync.
+
+## Documentation
+- `HANDOVER.md`: full technical handover (read before changing anything).
+- `docs/CHANGELOG.md`: everything built so far, newest first.
+- `docs/ROOMS.md`: how Rooms, events, communities and the Room pass work, plus open items.

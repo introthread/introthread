@@ -35,6 +35,7 @@ Last updated: 21 Oct 2026, 3:15 pm Nairobi (after admin redesign v43, Audit log)
 - Roles: owner, admin, moderator, support, finance. `admOk([...])` in the client; `assert_staff([...])` on the server decides.
 
 ## Where things are
+- Docs: `docs/CHANGELOG.md` (all changes, newest first), `docs/ROOMS.md` (Rooms, events, communities, Room pass, with known gaps). Keep both updated.
 - Live site: https://www.introthread.com (apex redirects to www). Vercel deploys automatically from `main` of `introthread/introthread` (preset "Other", static).
 - Owner: Agnes. All services (GitHub, Vercel, Supabase, domain) are registered to agneswamaria@gmail.com.
 - Supabase project: `zpcsmsqnesqftodnondn`. The public anon key is in `config.js` (safe to ship). Never commit service-role keys, passwords or other secrets.
