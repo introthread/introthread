@@ -55,8 +55,7 @@ Last updated: 22 Oct 2026, 3:00 pm Nairobi (after v37 security hardening and mig
    - Workflow file: `docs/deps-check.yml`. The owner must copy it to `.github/workflows/`.
    - Results on 22 Oct: qrcode-generator 1.4.4 -> 1.5.2 is available (same major). The hash is printed by the script. Test QR codes before switching.
    - tesseract.js 7 and qrcode-generator 2 are new major versions; not adopted.
-7. Ideas, built in this order: (1) DONE v44, guided first visit (`js/first-visit.js`, test `/home/user/fttest.py`). (2) DONE v45, weekly digest: `api/weekly-digest.js`, cron `0 6 * * 1` in `vercel.json` (the Hobby plan allows 2 crons; both are now used). It uses the existing Settings toggle `prefs.digest` (opt-in) and dedupes with `prefs.digestWeek`. Test: `/home/user/digesttest.js`. Still to build:
-   - match celebration screen
+7. Ideas, built in this order: (1) DONE v44, guided first visit (`js/first-visit.js`, test `/home/user/fttest.py`). (3) DONE v46, match celebration (`js/match-celebrate.js`, test `/home/user/mctest.py`). (2) DONE v45, weekly digest: `api/weekly-digest.js`, cron `0 6 * * 1` in `vercel.json` (the Hobby plan allows 2 crons; both are now used). It uses the existing Settings toggle `prefs.digest` (opt-in) and dedupes with `prefs.digestWeek`. Test: `/home/user/digesttest.js`. Still to build:
    - install-as-app prompt
    - instant page navigation
    - company logo on the card

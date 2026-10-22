@@ -3,6 +3,12 @@
 Everything built so far, newest first. Full technical detail for each item is in `HANDOVER.md`. How Rooms, events, communities and the Room pass work: `docs/ROOMS.md`.
 
 ## 22 Oct 2026
+- **v46: Match celebration.**
+  - When both people give the same answer to What's next?, the Thread page shows a short celebration once per Thread on each device.
+  - The wording depends on the answer: meet again, introduction, or stay in touch.
+  - It has a "Write the follow-up" button that jumps to the draft.
+  - Keyboard, Esc and tapping outside all close it, and it respects reduced motion.
+  - Code: `js/match-celebrate.js`.
 - **v45: Weekly digest.**
   - `api/weekly-digest.js` runs every Monday at 06:00 UTC (Vercel Cron).
   - It goes to people who turned on Settings > Weekly summary (off by default).

@@ -3025,6 +3025,19 @@ html body .pc-m .pc-stage{max-width:min(320px,calc(100dvh - 380px))!important;mi
 .ft-ic{display:inline-flex;width:44px;height:44px;border-radius:12px;background:#eef3ff;color:#1f5eff;align-items:center;justify-content:center;margin-top:12px}
 .ft-dots{display:flex;gap:6px;margin:16px 0}.ft-dots i{width:8px;height:8px;border-radius:50%;background:#d0d5dd}.ft-dots i.on{background:#1f5eff;width:20px;border-radius:4px}
 .ft-b{display:flex;justify-content:space-between;align-items:center;gap:10px}
+
+/* v46 Match celebration */
+.mc-back{position:fixed;inset:0;z-index:9998;background:rgba(15,18,24,.55);display:flex;align-items:center;justify-content:center;padding:16px}
+.mc-card{position:relative;overflow:hidden;background:#fff;border-radius:20px;max-width:400px;width:100%;padding:26px 22px 18px;text-align:center;box-shadow:0 20px 50px rgba(15,18,24,.25)}
+.mc-card h2{margin:6px 0 8px;font:600 22px var(--xss);letter-spacing:-.3px}.mc-card p{margin:0;color:#4b5565;line-height:1.55}.mc-k{color:#067647!important;font-weight:700;font-size:13px;text-transform:uppercase;letter-spacing:.06em}
+.mc-ic{display:inline-flex;width:56px;height:56px;border-radius:50%;background:#12b76a;align-items:center;justify-content:center;margin-bottom:8px;animation:mcPop .45s ease-out both}
+.mc-b{display:flex;justify-content:space-between;gap:10px;margin-top:18px}.mc-b .x-btn{flex:1}
+.mc-burst{position:absolute;left:50%;top:54px;width:0;height:0;pointer-events:none}.mc-burst i{position:absolute;width:7px;height:7px;border-radius:2px;background:#1f5eff;opacity:0;animation:mcFly .9s ease-out .1s forwards}
+.mc-burst i:nth-child(3n){background:#f79009}.mc-burst i:nth-child(3n+1){background:#12b76a}
+.mc-burst i:nth-child(1){--a:0deg}.mc-burst i:nth-child(2){--a:30deg}.mc-burst i:nth-child(3){--a:60deg}.mc-burst i:nth-child(4){--a:90deg}.mc-burst i:nth-child(5){--a:120deg}.mc-burst i:nth-child(6){--a:150deg}.mc-burst i:nth-child(7){--a:180deg}.mc-burst i:nth-child(8){--a:210deg}.mc-burst i:nth-child(9){--a:240deg}.mc-burst i:nth-child(10){--a:270deg}.mc-burst i:nth-child(11){--a:300deg}.mc-burst i:nth-child(12){--a:330deg}
+@keyframes mcFly{0%{opacity:1;transform:rotate(var(--a)) translateY(0)}100%{opacity:0;transform:rotate(var(--a)) translateY(-90px)}}
+@keyframes mcPop{0%{transform:scale(.4)}70%{transform:scale(1.08)}100%{transform:scale(1)}}
+@media (prefers-reduced-motion:reduce){.mc-ic,.mc-burst i{animation:none}.mc-burst{display:none}}
 </style>
 </head>
 <body><a href="#root" class="x-skip">Skip to content</a>
@@ -7075,5 +7088,6 @@ window.addEventListener('resize',()=>{try{pcFit()}catch(e){}});
 <script src="/js/room-sessions.js"></script>
 <script src="/js/billing-sync.js"></script>
 <script src="/js/first-visit.js"></script>
+<script src="/js/match-celebrate.js"></script>
 </body>
 </html>
