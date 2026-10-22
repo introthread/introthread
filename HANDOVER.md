@@ -249,3 +249,7 @@ Tap -> Thread -> one question, "What's next?". Answers stay sealed until both pe
 ## Deployments (22 Oct 2026)
 - Vercel Hobby allows about 100 deployments a day and every commit to `main` is one. On 21 Oct the limit was reached, so the last commits (Paystack receipts fix, Check for payments, Billing plan fix) were on GitHub but not deployed. Commit each change as ONE commit (index.html, api files and rebuilt pages together).
 - If commits pile up while limited, Vercel does not deploy them later on its own: push one new commit (or Vercel > Deployments > Create Deployment from `main`) once the limit clears.
+
+## Content Security Policy (22 Oct 2026)
+- Set in `vercel.json` headers. Allows: scripts from self, inline (the app is inline and uses onclick handlers), `wasm-unsafe-eval` (card scanner) and cdn.jsdelivr.net (qrcode-generator, supabase-js, jsQR, tesseract.js) plus eu-assets.i.posthog.com; connections to the Supabase project (https + wss), Nominatim, jsDelivr and tessdata (scanner data), PostHog EU; workers from blob:; images from https/data/blob; no frames, no plugins, framing only by self.
+- Adding a new CDN, API or embed? Add its origin to the right directive or it will be blocked. Test: `python3 /home/user/csptest.py` (injects the policy, opens every website and app page, loads the QR reader and scanner, reports violations).
