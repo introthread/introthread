@@ -7025,6 +7025,17 @@ function itA11y(){try{
 document.addEventListener('keydown',e=>{const t=e.target;if((e.key==='Enter'||e.key===' ')&&t&&t.matches&&t.matches('[role=button][tabindex]:not(button),[role=link][tabindex]:not(a)')&&t.hasAttribute('onclick')){e.preventDefault();t.click()}});
 const _render28=render;render=function(){const r=_render28.apply(this,arguments);setTimeout(itA11y,0);return r};
 new MutationObserver(()=>{clearTimeout(window._a11yT);window._a11yT=setTimeout(itA11y,60)}).observe(document.documentElement,{childList:true,subtree:true});
+
+/* v31 photo crop: size the picture from the real window height in script, so Save photo fits whatever the browser zoom, display scaling or CSS cascade */
+function pcFit(){const m=document.querySelector('.pc-m');if(!m)return;const st=m.querySelector('.pc-stage'),acts=m.querySelector('.pc-acts');if(!st||!acts)return;
+ ['position:sticky','bottom:0','z-index:2','background:#fff'].forEach(d=>{const [k,v]=d.split(':');acts.style.setProperty(k,v,'important')});
+ st.style.setProperty('width','320px','important');st.style.setProperty('max-width','320px','important');
+ const k=(st.getBoundingClientRect().height/(st.offsetHeight||1))||1; /* app zoom factor */
+ const other=(m.scrollHeight-st.offsetHeight)*k; const avail=(window.innerHeight-40-other)/k;
+ const size=Math.max(140,Math.min(320,Math.floor(avail)));
+ st.style.setProperty('width',size+'px','important');st.style.setProperty('max-width',size+'px','important');st.style.setProperty('min-width','0','important')}
+const _pcOpen31=pcOpen;pcOpen=function(){const r=_pcOpen31.apply(this,arguments);try{pcFit();requestAnimationFrame(pcFit)}catch(e){}return r};
+window.addEventListener('resize',()=>{try{pcFit()}catch(e){}});
 </script>
 </body>
 </html>
