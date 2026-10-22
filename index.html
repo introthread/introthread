@@ -4984,7 +4984,7 @@ function capQRResult(t){const o=parseContact(t);const it=String(t).match(/introt
 /* business card: on-device text recognition (Tesseract.js), then the same parser */
 function capCard(){const i=document.createElement('input');i.type='file';i.accept='image/*';i.setAttribute('capture','environment');i.onchange=()=>capCardRun(i.files&&i.files[0]);i.click()}
 async function capCardRun(f){if(!f)return;modal(`<div class="cap-m"><h3>Reading the business card</h3><div class="cap-prog"><i id="capbar"></i></div><p class="cap-st" id="capst">Preparing text recognition...</p></div>`);
- try{await capLoad('https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js',()=>window.Tesseract);
+ try{await capLoad('https://cdn.jsdelivr.net/npm/tesseract.js@5.1.1/dist/tesseract.min.js',()=>window.Tesseract);
   const r=await Tesseract.recognize(f,'eng',{logger:m=>{const s=$('#capst'),b=$('#capbar');if(s)s.textContent=m.status==='recognizing text'?'Reading text...':'Preparing text recognition...';if(b&&m.progress)b.style.width=Math.round(m.progress*100)+'%'}});
   const txt=(r.data&&r.data.text||'').trim();closeModal();if(!txt)return toast('No text found. Try a brighter, closer photo.');const o=parseContact(txt);o.source='business card';capPaste(txt,'Check what we read');setTimeout(()=>{const p=$('#cappv');if(p)p.innerHTML=capPreview(o)},50)}
  catch(e){closeModal();toast('Could not read the card. Check your connection and try again.')}}
@@ -5170,7 +5170,7 @@ capStrip=function(){const ct='contacts' in navigator&&'select' in (navigator.con
 const _vTap31=vTap;vTap=function(){let h=_vTap31();if(h.includes('id="tln"')&&!h.includes('id="capmore"')){h=h.replace(/(<label class="x-f t-li">[\s\S]*?<\/label>)/,'$1'+capMoreHTML())}return h};
 /* ---- business card flow ---- */
 let CAPW=null,CAPCARD=null;
-async function capWorker(){await capLoad('https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js',()=>window.Tesseract);
+async function capWorker(){await capLoad('https://cdn.jsdelivr.net/npm/tesseract.js@5.1.1/dist/tesseract.min.js',()=>window.Tesseract);
  if(!CAPW)CAPW=Tesseract.createWorker('eng',1,{logger:m=>{if(window._capLog)window._capLog(m)}}).then(async w=>{await w.setParameters({tessedit_pageseg_mode:'11',preserve_interword_spaces:'1'});return w}).catch(e=>{CAPW=null;throw e});return CAPW}
 capCard=function(side){const back=side==='back';
  modal(`<div class="cap-m cc"><div class="row between"><h3>${back?'Scan the back of the card':'Scan a business card'}</h3><button class="x" aria-label="Close" onclick="closeModal()">&times;</button></div>

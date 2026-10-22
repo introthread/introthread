@@ -50,7 +50,11 @@ Last updated: 22 Oct 2026, 3:00 pm Nairobi (after v37 security hardening and mig
    - Done: preconnect to jsDelivr and Supabase, lazy and async images, a cache header for `/img` in `vercel.json`, and `og.jpg` recompressed.
    - Not done: every website page is still a full copy of the 1.2 MB app (about 324 KB gzip). Recompressing the `uc-*.jpg` and `sarah.jpg` images saved nothing.
    - Next: build light marketing pages that load the app only on /login, /signup and /app. This depends on the code split (item 4).
-6. Monthly dependency review: when a pinned CDN version changes, update its URL and SRI hash together.
+6. DONE v43: monthly library check.
+   - Run `python3 scripts/check_deps.py` (needs internet).
+   - Workflow file: `docs/deps-check.yml`. The owner must copy it to `.github/workflows/`.
+   - Results on 22 Oct: qrcode-generator 1.4.4 -> 1.5.2 is available (same major). The hash is printed by the script. Test QR codes before switching.
+   - tesseract.js 7 and qrcode-generator 2 are new major versions; not adopted.
 7. Ideas offered but not built:
    - guided first visit
    - weekly digest

@@ -3,6 +3,11 @@
 Everything built so far, newest first. Full technical detail for each item is in `HANDOVER.md`. How Rooms, events, communities and the Room pass work: `docs/ROOMS.md`.
 
 ## 22 Oct 2026
+- **v43: Monthly library check.**
+  - `scripts/check_deps.py` lists every outside library, the safe updates in the same major version and any new major versions, and checks the integrity hashes.
+  - `tesseract.js` is pinned to 5.1.1, the version already in use.
+  - The first run passed. Available: qrcode-generator 1.5.2 (same major; 2.0.4 is a new major) and tesseract.js 7 (new major). Neither is applied yet.
+  - The GitHub Actions file is in `docs/deps-check.yml`, ready to copy to `.github/workflows`.
 - **v42: Faster website pages.**
   - The browser now opens its connections to the script CDN and Supabase early.
   - Images lower down the page load only when needed.
