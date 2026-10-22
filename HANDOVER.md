@@ -340,3 +340,4 @@ Tap -> Thread -> one question, "What's next?". Answers stay sealed until both pe
   - the app sweep at 390px
   - the API mocks (roompaytest, paytest, synctest)
   - a guard unit check: a foreign origin gets 403, the 10th request in a minute gets 429
+- 22 Oct 2026: owner reports Agnes ran migration 015, turned on leaked-password protection and checked the sign-in limits. Not yet verified from Town (a direct database check was refused by policy); verify through the app.

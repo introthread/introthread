@@ -2,7 +2,7 @@
 
 Date: 22 Oct 2026 (v37). Scope: the whole app (`index.html`), server functions (`api/`), database (`supabase/schema.sql`, migrations 002-015), hosting config (`vercel.json`), and third-party scripts.
 
-**Action needed:** Agnes must run `supabase/migrations/015_security.sql` in the Supabase SQL Editor. The app works before and after; the database fixes (S1-S3) only apply once it is run.
+**Done (22 Oct 2026):** Agnes ran `supabase/migrations/015_security.sql`, turned on leaked-password protection and checked the sign-in rate limits in the Supabase dashboard (reported by the owner).
 
 ## Findings and fixes
 
