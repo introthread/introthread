@@ -276,3 +276,4 @@ Tap -> Thread -> one question, "What's next?". Answers stay sealed until both pe
 
 ### Photo crop v32 (22 Oct 2026)
 `pcFit()` (end of the main script) measures the dialog after it opens: it shrinks the picture until Save photo/Cancel sit inside the window and inside every box that could clip them, and adds a "Save" button in the dialog header next to the close button that can never be pushed off. Refits on resize. Checked with `tests/app/photo_crop.py` (14 sizes) and with the dialog forcibly clipped three different ways.
+- v33: Vercel confirmed v32 live, yet the owner's browser showed no header Save, so the late script override was not running there. The header Save button and inline-styled Save photo/Cancel are now written straight into the `pcOpen` template, which calls `pcFit` itself. They no longer depend on any later override.
