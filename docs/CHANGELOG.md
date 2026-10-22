@@ -3,6 +3,12 @@
 Everything built so far, newest first. Full technical detail for each item is in `HANDOVER.md`. How Rooms, events, communities and the Room pass work: `docs/ROOMS.md`.
 
 ## 22 Oct 2026
+- **v42: Faster website pages.**
+  - The browser now opens its connections to the script CDN and Supabase early.
+  - Images lower down the page load only when needed.
+  - Images in `/img` are cached for a day (served stale for up to 7 days while refreshing).
+  - The social preview image is 20% smaller.
+  - The biggest remaining cost is the single page itself: 1.2 MB, about 324 KB compressed. Every website page still ships the whole app, and the code split (ARCHITECTURE.md) is the real fix.
 - **v41: Code split, step 1.**
   - Rooms access, admin idle sign-out, Sessions and Billing sync moved from `index.html` into `/js` files.
   - The app now starts once every file has loaded.
