@@ -84,6 +84,7 @@ This is several days of careful work and should be done screen by screen, never 
   4. `billing-sync.js`
 
   The app's start-up (`boot`) now waits for `DOMContentLoaded`, so every file has run before the first screen is drawn. Before, it waited one microtask, which was only enough when all the code was inline.
+- **Step 2 (v50, 22 Oct 2026), done:** the server features and payments code (v25-v26d) moved to `js/payments.js`, loaded first of the `/js` files. Every `/js` file is now formatted with Prettier (`.prettierrc.json`) so it reads like normal code. Run `npx prettier --write "js/*.js"` after editing.
 - **Next steps:**
   - Move the older blocks into `/js`, newest first, one file per feature: payments (v26), accessibility (v28), photo crop (v30-v34), then the admin screens.
   - Move CSS into `/css` files.

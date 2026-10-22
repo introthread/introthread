@@ -8,6 +8,8 @@
 3. **Build:** `rm -f _shot.html && python3 scripts/build_pages.py`. It must print `built 10`.
 4. **New code goes in `/js/<feature>.js`.** Add the `<script src>` after the existing ones at the end of `index.html`; the load order matters. The files share the main script's globals. Browser tests must serve `/js/*`; see the route helper in the sandbox tests.
 
+   Format `/js` files with Prettier using the repo's `.prettierrc.json`; it only changes layout, never behaviour.
+
    **Editing `index.html`:**
    - Add CSS before the FIRST `</style>` (`s.index`). The last `</style>` is inside an invoice template string.
    - Add JS before the last `</script>`.

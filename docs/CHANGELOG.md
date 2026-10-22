@@ -3,6 +3,10 @@
 Everything built so far, newest first. Full technical detail for each item is in `HANDOVER.md`. How Rooms, events, communities and the Room pass work: `docs/ROOMS.md`.
 
 ## 22 Oct 2026
+- **v50: Code split, step 2.**
+  - Server features and payments moved from `index.html` to `js/payments.js`.
+  - All `/js` files are formatted for readability with Prettier.
+  - No change in behaviour.
 - **v49: Company logo on the card.**
   - Upload it in My card > Basic information (JPG, PNG or WebP, max 5MB). It is resized to at most 480 x 160 and saved in `profiles.links.logo`.
   - It shows on the card, the card preview and the public profile.
