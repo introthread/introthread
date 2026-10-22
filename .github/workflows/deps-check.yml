@@ -1,0 +1,19 @@
+# Monthly check of the outside libraries Introthread loads (scripts/check_deps.py).
+# Copy this file to .github/workflows/deps-check.yml (the Town GitHub connection cannot write there).
+# Runs on the 1st of every month at 06:00 UTC and on demand (Actions > Library check > Run workflow).
+# A failed run (red X, GitHub emails you) means a library is not pinned or its integrity hash no longer matches.
+# Available updates are listed in the run log even when it passes.
+name: Library check
+on:
+  schedule:
+    - cron: '0 6 1 * *'
+  workflow_dispatch:
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: python3 scripts/check_deps.py
