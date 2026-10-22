@@ -3,6 +3,10 @@
 Everything built so far, newest first. Full technical detail for each item is in `HANDOVER.md`. How Rooms, events, communities and the Room pass work: `docs/ROOMS.md`.
 
 ## 22 Oct 2026
+- **v40: Billing shows server-only data.** Needs migration 018.
+  - The database keeps the payment server's plan, status, renewal date, card and paid receipts; the browser can no longer change them.
+  - Billing details and invoice requests still work.
+  - After any Billing save, the page reloads from the server.
 - **v39: Attendance for each community session.** Needs migration 017.
   - A Sessions card on repeating Rooms shows the last 8 sessions, the next session and attendance counts.
   - Members check in on the day.

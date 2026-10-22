@@ -7160,6 +7160,10 @@ async function sesMark(id,u,d,on){const {error}=await SB.rpc('room_attendance_se
 function sesPost(){const p=raPath().split('/').filter(Boolean);if(!(p[0]==='app'&&p[1]==='room'&&p[2]))return;const html=sesBox(p[2]),old=$('#sesb');
  if(old){if(html)old.outerHTML=html;else old.remove();return}if(!html)return;const a=$('#rab')||document.querySelector('.ra-box');if(a)a.insertAdjacentHTML('afterend',html);else{const st=document.querySelector('.ro-strip');(st&&st.parentNode||$('#root')).insertAdjacentHTML('beforeend',html)}}
 const _render39=render;render=function(){const r=_render39.apply(this,arguments);try{sesPost()}catch(e){console.error(e)}return r};
+
+/* v40 Billing: the database keeps the server's billing values (migration 018). After any Billing save on the live
+   site, reload plan and receipts from the server so the page always shows the stored truth. */
+const _bSave40=bSave;bSave=async function(){const r=await _bSave40.apply(this,arguments);try{if(cloud()&&typeof itProfReload==='function')await itProfReload()}catch(e){}return r};
 </script>
 </body>
 </html>
