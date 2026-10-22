@@ -306,3 +306,13 @@ Tap -> Thread -> one question, "What's next?". Answers stay sealed until both pe
   - `/home/user/rjtest.py`: every join page state
   - all 10 admin tests, the app sweep at 390 and 1366, photo_crop and the API mock
 - The database functions are written but not yet run against a real database. Test them in Supabase after running 014.
+- v36 loop check (22 Oct 2026):
+  - **Fixed:** `api/pay-sync.js` now sends Room pass payments (`metadata.kind = 'rooms'`) to `applyRoomPass`. Before the fix, "Check for payments" would have run them through `applyCharge` and switched Pro on.
+  - Render-loop test with a simulated Supabase (`/home/user/looptest.py ok|fail`), on the Room page, the Rooms list, the join page, the join button and the sign-in return to the Room:
+    - the page redraws only 1 to 3 times, then stays still
+    - each server function is called once
+    - nothing changes when 014 is missing
+  - The database rules can't loop:
+    - the `rooms` and `room_members` policies use the `owns_room` and `is_room_member` helpers, which run with elevated rights, so the policies never call each other
+    - the trigger only updates `room_passes` and never inserts into `rooms`
+  - Paystack retries are safe: a payment reference creates only one pass, whether it comes through verify, the webhook or sync.
