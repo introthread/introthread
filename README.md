@@ -44,6 +44,19 @@ The current state of the build, working rules, what has been done and what comes
 5. **Integrations and enterprise** - CRM integrations, SSO and directory sync.
 
 ## Documentation
-- `HANDOVER.md`: full technical handover (read before changing anything).
-- `docs/CHANGELOG.md`: everything built so far, newest first.
-- `docs/ROOMS.md`: how Rooms, events, communities and the Room pass work, plus open items.
+- `ARCHITECTURE-ESSENTIALS.md`: one-page overview (start here)
+- `AGENTS.md`: rules for anyone changing the code
+- `ARCHITECTURE.md`: how the app, API and database fit together, plus the refactor plan
+- `PRD.md`: what the product does and for whom
+- `SECURITY-AUDIT.md`: security findings, fixes and remaining actions
+- `HANDOVER.md`: full technical history and current state
+- `docs/ROOMS.md`: Rooms, events, communities and the Room pass
+- `docs/CHANGELOG.md`: every change, newest first
+
+## Security at a glance
+- Row-level security on every table, plus a private profile read (migration 015).
+- Rate limiting and same-site checks on every API function.
+- Pinned CDN scripts with integrity checks; strict security headers and HTTPS everywhere.
+- Passwords hashed by Supabase Auth (bcrypt); no secret keys in the code.
+- See SECURITY-AUDIT.md for details and the actions still needed in the Supabase dashboard.
+

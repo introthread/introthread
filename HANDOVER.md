@@ -323,3 +323,20 @@ Tap -> Thread -> one question, "What's next?". Answers stay sealed until both pe
   - Test Rooms left in place: QAP55 (private, limit 2) and QAS41.
   - Fixed afterwards: signed-out visitors to a full Room now see "This Room is full" instead of "Sign in to join".
   - Not tested live: a third signed-in person being turned away. The database function enforces this.
+
+## Security hardening v37 (22 Oct 2026)
+- **Agnes must run `supabase/migrations/015_security.sql`.** It adds:
+  - a private profile read through `my_profile()`, with column-level select on `profiles` for the public
+  - the `profiles_guard` trigger, so clients cannot change `plan`
+  - `profiles_len_chk` length and size limits
+- **App and API fallbacks:** if 015 is missing, the old direct reads are used.
+- **API:** every function calls `guard()` in `_lib/common.js` (origin allowlist + per-IP rate limit). Extra allowed origins can be added with the Vercel env var `ALLOWED_ORIGINS` (comma-separated).
+- **CDN scripts:** supabase-js is pinned to 2.118.0 (`dist/umd/supabase.js`) with SRI. qrcode-generator 1.4.4 has SRI. To update either, change the URL and the sha384 hash together.
+- **Full findings:** SECURITY-AUDIT.md. Refactor plan: ARCHITECTURE.md.
+- **Tests passed after v37:**
+  - all 10 admin tests
+  - photo_crop
+  - the Rooms tests (ratest, rjtest, looptest)
+  - the app sweep at 390px
+  - the API mocks (roompaytest, paytest, synctest)
+  - a guard unit check: a foreign origin gets 403, the 10th request in a minute gets 429

@@ -1,9 +1,10 @@
 // POST /api/notify  { thread_id }
 // Emails the person you met a link to confirm the Thread. Sent once per Thread, only by its owner.
-const { SITE, esc, first, place, send, readBody, isUuid, caller, sendEmail, layout } = require('./_lib/common');
+const { SITE, esc, first, place, send, readBody, isUuid, caller, sendEmail, layout, guard } = require('./_lib/common');
 const MARK = 'Confirm link emailed';
 
 module.exports = async (req, res) => {
+  if (!guard(req, res, { max: 20, sameSite: true })) return;
   if (req.method !== 'POST') return send(res, 405, { error: 'method' });
   const c = await caller(req);
   if (!c) return send(res, 401, { error: 'auth' });

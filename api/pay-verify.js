@@ -1,7 +1,8 @@
 // POST /api/pay-verify { reference } -> confirms a checkout right after Paystack sends the person back (the webhook also does this).
-const { send, readBody, caller } = require('./_lib/common');
+const { send, readBody, caller, guard } = require('./_lib/common');
 const { ps, svc, applyCharge, applyRoomPass, meta } = require('./_lib/pay');
 module.exports = async (req, res) => {
+  if (!guard(req, res, { max: 20, sameSite: true })) return;
   if (req.method !== 'POST') return send(res, 405, { error: 'method' });
   if (!process.env.PAYSTACK_SECRET_KEY || !process.env.SUPABASE_SERVICE_ROLE_KEY) return send(res, 503, { error: 'not_configured' });
   const c = await caller(req); if (!c) return send(res, 401, { error: 'auth' });

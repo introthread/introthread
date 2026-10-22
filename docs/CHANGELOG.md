@@ -3,6 +3,17 @@
 Everything built so far, newest first. Full technical detail for each item is in `HANDOVER.md`. How Rooms, events, communities and the Room pass work: `docs/ROOMS.md`.
 
 ## 22 Oct 2026
+- **v37: Security hardening.** Needs migration 015. Details in SECURITY-AUDIT.md.
+  - Private profile fields are hidden from the public.
+  - People can no longer upgrade themselves to Pro.
+  - Input limits on profile fields.
+  - API rate limiting and same-site checks.
+  - Pinned CDN scripts with integrity checks.
+  - XSS escapes in Admin > Settings, Staff and Billing.
+  - The "return to Room after sign-in" code is checked before use.
+  - Admin sessions sign out after 30 minutes idle.
+  - Extra security headers.
+  - New docs: AGENTS.md, ARCHITECTURE-ESSENTIALS.md, ARCHITECTURE.md, PRD.md, SECURITY-AUDIT.md.
 - **v36: Rooms access.** Needs migration 014.
   - **Room pass card payment:** Paystack, one-off. The pass is added automatically and the database enforces passes when Rooms are created. Staff can add a pass by hand after a bank transfer.
   - **Room types in the app:** Event, Community and Team meeting, with repeat sessions and the next session date.

@@ -1,8 +1,9 @@
 // POST /api/pay-init { interval: 'month' | 'year' } -> { url } of Paystack's secure checkout page (Pro).
 // POST /api/pay-init { kind: 'rooms' } -> { url } for a one-off Room pass (one extra Room).
-const { SITE, send, readBody, caller } = require('./_lib/common');
+const { SITE, send, readBody, caller, guard } = require('./_lib/common');
 const { PLAN, ROOM_PASS_KES, ps } = require('./_lib/pay');
 module.exports = async (req, res) => {
+  if (!guard(req, res, { max: 10, sameSite: true })) return;
   if (req.method !== 'POST') return send(res, 405, { error: 'method' });
   if (!process.env.PAYSTACK_SECRET_KEY) return send(res, 503, { error: 'not_configured' });
   const c = await caller(req); if (!c) return send(res, 401, { error: 'auth' });

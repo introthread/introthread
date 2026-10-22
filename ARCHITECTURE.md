@@ -1,0 +1,77 @@
+# Architecture
+
+## Overview
+```
+Browser (index.html SPA) --HTTPS--> Supabase (Auth, Postgres + RLS, RPC)
+        |                               ^
+        +--HTTPS--> Vercel functions (api/*) --service role--+
+                          |--> Paystack (payments)   |--> Resend (email)   |--> Anthropic/OpenAI (drafts)
+Paystack --webhook (HMAC)--> api/paystack-webhook
+Vercel Cron (06:00 UTC) --> api/cron-nudge
+```
+
+## Front end (`index.html`)
+- **Routing:** clean paths mapped to the hash router `RH()`.
+  - `/` and the marketing pages
+  - `/app/...`: the signed-in app, with Today, Tap, Threads, Rooms, Card, Profile, Settings and Event mode at `/app/scan`
+  - `/<handle>`: public card
+  - `/t/<token>`: guest Thread page
+  - `/r/<CODE>`: Room join page
+  - `/admin/<tab>`: staff area
+- **State:** the `DB` object, saved in localStorage in demo mode. In cloud mode it is loaded from Supabase by `loadCloud`. `MODE` is `'demo'` or `'cloud'`; use `cloud()` to check.
+- **Layering:** each feature version appends a JS block that wraps earlier functions, for example `render`, `vRoom` and `newRoom9`, and a CSS block. Global name prefixes, so names never clash:
+
+  | Prefix | Area |
+  |---|---|
+  | `au` | Users |
+  | `md` | Moderation |
+  | `rm` | admin Rooms |
+  | `rv` | Revenue |
+  | `pl` | Plans |
+  | `sg` | Settings |
+  | `pq` | Privacy |
+  | `sf` | Staff |
+  | `al` | Audit |
+  | `ra` / `rj` | Room access / join page |
+  | `b` | Billing |
+  | `it` | server features |
+
+- **Security helpers:**
+  - `esc()` escapes all HTML output.
+  - `itA11y()` handles accessibility.
+  - The admin idle sign-out is v37.
+
+## Server functions (`api/`)
+`_lib/common.js` holds the shared code:
+- `send` and `readBody` (20 KB cap)
+- `caller`, which checks the user's token with Supabase
+- `guard`, which does the origin check and rate limit
+- `sendEmail` and `layout`
+
+`_lib/pay.js` holds the Paystack helpers and `applyCharge` / `applyRoomPass`.
+
+| Function | Purpose |
+|---|---|
+| notify | email the confirm link |
+| ai-draft | AI follow-up |
+| status | which features are configured |
+| pay-init / pay-verify / pay-manage / pay-sync | Paystack |
+| paystack-webhook | Paystack events |
+| cron-nudge | daily reminders |
+
+Each returns 503 `not_configured` until its keys exist.
+
+## Database
+- Core tables: `profiles`, `threads`, `thread_events`, `rooms`.
+- Admin and billing tables: `staff`, `audit_log`, `reports`, `account_status`, `plans`, `subscriptions`, `payments`, `app_settings`, `contacts`, `privacy_requests`, `admin_notes`.
+- Rooms (014): `room_passes`, `room_members`, `room_invites`.
+- Every table has row-level security. Privileged work runs in `security definer` functions that check `auth.uid()` or `assert_staff()`.
+- Migrations are numbered and safe to re-run. 015 adds the security hardening.
+
+## Refactor plan (not done yet, on purpose)
+The single-file, layered design works and is fully tested, but it is hard to read. A safe refactor would:
+1. split it into `app/*.js` modules and `styles/*.css`, keeping the same global names;
+2. fold each `vNN` override into the function it wraps, one screen at a time, re-running the tests after each step;
+3. replace inline `onclick` with event listeners, so the CSP can drop `unsafe-inline`.
+
+This is several days of careful work and should be done screen by screen, never in one commit.

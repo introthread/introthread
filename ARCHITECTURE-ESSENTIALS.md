@@ -1,0 +1,26 @@
+# Architecture essentials (read this first)
+
+- **Product:** Introthread turns a real-life meeting into a Thread. Tap or scan a card, both people confirm, each answers one question ("What's next?"), and answers stay sealed until both reply.
+- **Front end:** one single-page app in `index.html` (HTML, CSS and JS inline, about 1.2 MB). `scripts/build_pages.py` copies it into 9 static marketing pages with their own SEO head. Always rebuild and commit `index.html` and all 9 pages together.
+- **Back end:**
+  - Supabase: Postgres with row-level security, Auth and RPC functions. Schema in `supabase/schema.sql`, changes in `supabase/migrations/NNN_*.sql`, which Agnes runs by hand.
+  - Vercel serverless functions in `api/`.
+- **Hosting:** Vercel deploys `main` automatically (Hobby plan, about 100 deploys a day, so make one commit per change). Headers and CSP are in `vercel.json`.
+- **Payments:** Paystack (KES, test mode) for Pro subscriptions and Room passes. The server writes `subscriptions`, `payments` and `room_passes`.
+- **Code style:** later versions override earlier functions by wrapping them (`const _f=f; f=function(){...}`), in blocks marked `/* vNN ... */`. New CSS goes before the FIRST `</style>`; new JS goes before the last `</script>`.
+- **Rules:**
+  - Real backend only; nothing faked.
+  - Sans-serif fonts only, no emojis.
+  - Test at 360-430px width.
+  - Never start a class name with `ad-`, because ad blockers hide it.
+  - Never commit secrets.
+- **Tests:**
+  - `tests/admin/*.js` (jsdom)
+  - `tests/app/photo_crop.py` (Playwright)
+  - the sandbox scripts listed in HANDOVER.md
+- **More detail:**
+  - ARCHITECTURE.md
+  - SECURITY-AUDIT.md
+  - HANDOVER.md (full history)
+  - docs/ROOMS.md
+  - docs/CHANGELOG.md

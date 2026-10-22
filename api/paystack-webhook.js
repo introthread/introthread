@@ -1,11 +1,12 @@
 // POST /api/paystack-webhook  (set this URL in Paystack > Settings > API Keys & Webhooks)
 // Verifies Paystack's signature, then keeps subscriptions, payments and the Pro plan in step.
 const crypto = require('crypto');
-const { send } = require('./_lib/common');
+const { send, guard } = require('./_lib/common');
 const { svc, applyCharge, applyRoomPass, setBilling, meta } = require('./_lib/pay');
 const raw = req => new Promise(r => { let d = ''; req.on('data', c => d += c); req.on('end', () => r(d)); req.on('error', () => r('')); });
 
 module.exports = async (req, res) => {
+  if (!guard(req, res, { max: 120, sameSite: false })) return;
   if (req.method !== 'POST') return send(res, 405, { error: 'method' });
   const key = process.env.PAYSTACK_SECRET_KEY;
   if (!key || !process.env.SUPABASE_SERVICE_ROLE_KEY) return send(res, 503, { error: 'not_configured' });

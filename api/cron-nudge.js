@@ -1,10 +1,11 @@
 // GET /api/cron-nudge  (run daily by Vercel Cron, see vercel.json)
 // Emails each person one reminder for Threads that are 48-72 hours old and still need a next step.
 // Needs Vercel env: CRON_SECRET, SUPABASE_SERVICE_ROLE_KEY, RESEND_API_KEY.
-const { SB_URL, SITE, esc, first, place, send, sendEmail, layout } = require('./_lib/common');
+const { SB_URL, SITE, esc, first, place, send, sendEmail, layout, guard } = require('./_lib/common');
 const MARK = 'Reminder emailed';
 
 module.exports = async (req, res) => {
+  if (!guard(req, res, { max: 5, sameSite: false })) return;
   const secret = process.env.CRON_SECRET, svc = process.env.SUPABASE_SERVICE_ROLE_KEY;
   if (!secret || String(req.headers.authorization || '') !== 'Bearer ' + secret) return send(res, 401, { error: 'auth' });
   if (!svc || !process.env.RESEND_API_KEY) return send(res, 503, { error: 'not_configured' });

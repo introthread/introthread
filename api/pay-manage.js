@@ -1,7 +1,8 @@
 // POST /api/pay-manage -> { url } Paystack page where the person updates their card or cancels.
-const { send, caller } = require('./_lib/common');
+const { send, caller, guard } = require('./_lib/common');
 const { ps } = require('./_lib/pay');
 module.exports = async (req, res) => {
+  if (!guard(req, res, { max: 10, sameSite: true })) return;
   if (req.method !== 'POST') return send(res, 405, { error: 'method' });
   if (!process.env.PAYSTACK_SECRET_KEY) return send(res, 503, { error: 'not_configured' });
   const c = await caller(req); if (!c) return send(res, 401, { error: 'auth' });

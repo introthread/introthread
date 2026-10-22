@@ -1,7 +1,7 @@
 // POST /api/ai-draft  { thread_id }
 // Writes a short follow-up from one Thread's context. Never sends anything.
 // Needs Vercel env: ANTHROPIC_API_KEY or OPENAI_API_KEY (optional AI_MODEL).
-const { place, send, readBody, isUuid, caller } = require('./_lib/common');
+const { place, send, readBody, isUuid, caller, guard } = require('./_lib/common');
 const LABEL = { meet: 'meet again', intro: 'introduce someone', keep: 'stay in touch', notnow: 'stay in touch' };
 
 async function complete(system, prompt) {
@@ -17,13 +17,15 @@ async function complete(system, prompt) {
 }
 
 module.exports = async (req, res) => {
+  if (!guard(req, res, { max: 10, sameSite: true })) return;
   if (req.method !== 'POST') return send(res, 405, { error: 'method' });
   if (!process.env.ANTHROPIC_API_KEY && !process.env.OPENAI_API_KEY) return send(res, 503, { error: 'not_configured' });
   const c = await caller(req);
   if (!c) return send(res, 401, { error: 'auth' });
   const { thread_id } = await readBody(req);
   if (!isUuid(thread_id)) return send(res, 400, { error: 'thread' });
-  const p = ((await c.db.get(`profiles?id=eq.${c.user.id}&select=name,role,company,handle,prefs`)) || [])[0] || {};
+  // Own full profile (prefs are private since migration 015); falls back to the older direct read.
+  const p = (await c.db.rpc('my_profile')) || ((await c.db.get(`profiles?id=eq.${c.user.id}&select=name,role,company,handle,prefs`)) || [])[0] || {};
   if ((p.prefs || {}).ai === false) return send(res, 403, { error: 'ai_off' });
   const t = ((await c.db.get(`threads?id=eq.${thread_id}&select=owner_id,other_name,other_role,other_company,where_met,note,mine,theirs,created_at`)) || [])[0];
   if (!t || t.owner_id !== c.user.id) return send(res, 404, { error: 'thread' });
