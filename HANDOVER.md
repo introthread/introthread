@@ -253,3 +253,9 @@ Tap -> Thread -> one question, "What's next?". Answers stay sealed until both pe
 ## Content Security Policy (22 Oct 2026)
 - Set in `vercel.json` headers. Allows: scripts from self, inline (the app is inline and uses onclick handlers), `wasm-unsafe-eval` (card scanner) and cdn.jsdelivr.net (qrcode-generator, supabase-js, jsQR, tesseract.js) plus eu-assets.i.posthog.com; connections to the Supabase project (https + wss), Nominatim, jsDelivr and tessdata (scanner data), PostHog EU; workers from blob:; images from https/data/blob; no frames, no plugins, framing only by self.
 - Adding a new CDN, API or embed? Add its origin to the right directive or it will be blocked. Test: `python3 /home/user/csptest.py` (injects the policy, opens every website and app page, loads the QR reader and scanner, reports violations).
+
+## Accessibility, WCAG 2.2 AA (22 Oct 2026, v28)
+- axe-core (wcag2a/aa, 21a/aa, 22aa) on all website pages, the public card and all app pages at 390 and 1366px: 0 violations after fixes. Keyboard pass (Tab through each page): every stop has a visible focus ring and a name.
+- Fixes: global `:focus-visible` ring (3px #3157ff); darker text for green/orange/purple/blue/pink chips, tags, rings, counters and danger text; avatars get a 30% dark overlay so white initials pass; "old way" lane on home no longer faded below contrast; target sizes at least 24px rendered (note the app shell is zoomed to 0.8 at desktop widths, so use 31px CSS); `itA11y()` removes aria-labels that hid visible text (2.5.3), moves aria-label off `<label>` to its input, and gives clickable divs tabindex/role with Enter/Space activation.
+- IMPORTANT for CSS additions: insert before the FIRST `</style>` (`s.index`). The last `</style>` in the file is inside the invoice print template string in JS.
+- Tests: `python3 /home/user/axetest.py 390|1366`, `python3 /home/user/axecc.py 390` (contrast detail), `python3 /home/user/kbtest.py` (keyboard).

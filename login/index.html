@@ -2958,6 +2958,36 @@ main .d7-bot .d-sh{flex-wrap:nowrap;gap:10px}main .d7-bot .d-sh b{white-space:no
 @media (max-width:400px){.x-nav-in{gap:10px}.x-nav-in .x-logo{font-size:17px}.x-nav-r:not(.it-in){gap:6px}.x-nav-r:not(.it-in)>a.x-btn{padding:0 10px!important;height:36px;font-size:13px}.x-burger{padding:4px}}
 @media (max-width:340px){.x-nav-r:not(.it-in)>a.x-btn{display:none!important}}
 .tp-add{min-width:160px}
+
+/* v28 WCAG 2.2 AA: visible focus, contrast-safe colours */
+:where(a,button,input,select,textarea,summary,[tabindex],[role=link],[role=button]):focus-visible{outline:3px solid #3157ff!important;outline-offset:2px!important}
+.x-av,.d-av,.avatar{background-image:linear-gradient(rgba(0,0,0,.3),rgba(0,0,0,.3))!important}
+.x-plan-tag,.mb-ti>em{background:#c2410c!important;color:#fff!important}
+.th-ring>b,.th-pri.g small,#ppst{color:#0b7a4b!important}.th-pri.n .th-ring>b{color:#5d6679!important}
+.hw-ok,.bl-chip,.cd-pill,.th-chip.g,.th-fud.g,.d-chip.g{color:#0a6b43!important}
+.o.th-chip,.th-fud.o,.th-chip.o{color:#a63a12!important}
+.ro-dt small,.ro-ud small{color:#b13c0f!important}
+.d-tags>i{filter:saturate(1.1) brightness(.62)!important}
+.x-flow-n{color:#7d89a6!important}
+.out{color:#5d6679!important}
+.mb-t>span:nth-child(2),.mb-tap>b{color:#475467!important}
+button[onclick^="stConfirm"] b,.td-del{color:#b42318!important}
+a[aria-label] > .g{background:#0b7a4b!important}
+.old .x-node{opacity:1!important}.old .x-nc em,.old .x-nc small,.old .x-nc b{color:#5b6270!important}
+
+/* v28b contrast follow-ups (higher specificity to win over later blocks) */
+html body .d-tags>i{color:#344054!important;filter:none!important}
+html body .old .x-lane-t .x-node .x-nc em,html body .old .x-lane-t .x-node .x-nc small,html body .old .x-lane-t .x-node .x-nc b{color:#5b6270!important;opacity:1!important}
+html body .old .x-lane-t .x-node,html body .old .x-lane-t .x-node .x-nc{opacity:1!important}
+html body .th-pri small{color:#a63a12!important}html body .th-pri.g small{color:#0b7a4b!important}html body .th-pri.n small{color:#5d6679!important}
+html body b>em{color:#0b7a4b}
+html body .ro-img>.g,html body a[aria-label]>.g{background:#0b7a4b!important;color:#fff!important}
+html body .d-stat b em{color:#0b7a4b}html body .d-stat:nth-child(3) b em{color:#b13c0f}
+
+/* v28c WCAG 2.5.8 target size + badge contrast */
+html body button[aria-label^="More options"]{min-width:31px!important;min-height:31px!important}
+html body .cd-clr{min-width:31px!important;min-height:31px!important}
+html body .cnt{background:#c2410c!important;color:#fff!important}
 </style>
 </head>
 <body><a href="#root" class="x-skip">Skip to content</a>
@@ -6976,6 +7006,16 @@ const _bInvBox26=bInvoicesBox;bInvoicesBox=function(b){const h=_bInvBox26.apply(
    Billing shows Pro even before the receipt details arrive. Demo accounts are unchanged. */
 const _bGet26=bGet;bGet=function(u){const b=_bGet26.apply(this,arguments);try{u=u||me();if(cloud()&&u&&String(u.plan||'').toLowerCase()==='pro'&&!(b.plan==='pro'&&['active','trialing','past_due'].includes(b.status))){b.plan='pro';b.status='active'}
  if(cloud()&&u&&String(u.plan||'').toLowerCase()!=='pro'&&b.plan==='pro'&&b.provider==='paystack'&&b.status==='canceled'){b.plan='free'}}catch(e){}return b};
+
+/* v28 WCAG: accessible names match visible text; no aria-label on <label>; clickable non-buttons reachable by keyboard */
+function itA11y(){try{
+ document.querySelectorAll('[role=link][aria-label^="Open Thread with"],a.ro-img[aria-label],a.ro-up[aria-label],a.ro-card[aria-label]').forEach(e=>e.removeAttribute('aria-label'));
+ document.querySelectorAll('label[aria-label]').forEach(l=>{const i=l.querySelector('input,select,textarea');if(i&&!i.getAttribute('aria-label'))i.setAttribute('aria-label',l.getAttribute('aria-label'));l.removeAttribute('aria-label')});
+ document.querySelectorAll('#root [onclick]:not(a):not(button):not(input):not(select):not(textarea):not(label):not([tabindex])').forEach(e=>{if(e.closest('button,a'))return;e.setAttribute('tabindex','0');if(!e.getAttribute('role'))e.setAttribute('role','button')});
+}catch(e){}}
+document.addEventListener('keydown',e=>{const t=e.target;if((e.key==='Enter'||e.key===' ')&&t&&t.matches&&t.matches('[role=button][tabindex]:not(button),[role=link][tabindex]:not(a)')&&t.hasAttribute('onclick')){e.preventDefault();t.click()}});
+const _render28=render;render=function(){const r=_render28.apply(this,arguments);setTimeout(itA11y,0);return r};
+new MutationObserver(()=>{clearTimeout(window._a11yT);window._a11yT=setTimeout(itA11y,60)}).observe(document.documentElement,{childList:true,subtree:true});
 </script>
 </body>
 </html>
