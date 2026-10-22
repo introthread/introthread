@@ -269,3 +269,7 @@ Tap -> Thread -> one question, "What's next?". Answers stay sealed until both pe
 - `python3 tests/app/photo_crop.py` (run from the repo root) opens the real crop dialog from Settings at 14 sizes (1920x1080 down to 320x568, including short laptop windows 1310x640, 1280x600, 1280x520 and small phones) and checks Save photo is fully visible: inside the screen, inside the scrolling dialog, and not covered (checked at its corners and centre), before and after zooming. Exits with code 1 and names the failing sizes otherwise.
 - Verified it catches the bug: with the sticky button bar removed and a taller picture, it fails on 1310x640, 1280x600, 1280x520, 1024x600 and the small phones.
 - Run it after any change to the photo dialog, modals or global CSS.
+
+## GitHub Actions: photo crop check (22 Oct 2026)
+- `.github/workflows/photo-crop.yml` runs `python tests/app/photo_crop.py` with Playwright (Chromium) on every push to `main`, on every pull request, and on demand (Actions tab > "Photo crop dialog check" > Run workflow). A red X on the commit means Save photo is cut off or covered at one of the 14 sizes; the log names the sizes.
+- Actions runs are separate from Vercel and do not use Vercel deployments.
