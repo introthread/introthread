@@ -7,7 +7,7 @@
   - Vercel serverless functions in `api/`.
 - **Hosting:** Vercel deploys `main` automatically (Hobby plan, about 100 deploys a day, so make one commit per change). Headers and CSP are in `vercel.json`.
 - **Payments:** Paystack (KES, test mode) for Pro subscriptions and Room passes. The server writes `subscriptions`, `payments` and `room_passes`.
-- **Code style:** later versions override earlier functions by wrapping them (`const _f=f; f=function(){...}`), in blocks marked `/* vNN ... */`. New CSS goes before the FIRST `</style>`; new JS goes before the last `</script>`.
+- **Code style:** later versions override earlier functions by wrapping them (`const _f=f; f=function(){...}`), in blocks marked `/* vNN ... */`. New CSS goes in `/css` (see AGENTS.md); new JS goes before the last `</script>`.
 - **Rules:**
   - Real backend only; nothing faked.
   - Sans-serif fonts only, no emojis.

@@ -11,7 +11,7 @@
    Format `/js` files with Prettier using the repo's `.prettierrc.json`; it only changes layout, never behaviour.
 
    **Editing `index.html`:**
-   - Add CSS before the FIRST `</style>` (`s.index`). The last `</style>` is inside an invoice template string.
+   - **CSS lives in `/css`** (since v55), loaded in this order: `base.css`, `app.css`, `admin.css`, `features.css`. Add new styles at the end of `css/features.css`, or in a new file linked after it. Do NOT search for `</style>` in `index.html` any more: the only one left is inside the invoice print template in JavaScript. Format with Prettier.
    - Add JS before the last `</script>`.
    - Wrap existing functions; do not rewrite them.
    - Use a new global prefix, and check that a name is unused before adding it.

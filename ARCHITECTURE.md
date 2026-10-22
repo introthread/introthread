@@ -94,6 +94,14 @@ This is several days of careful work and should be done screen by screen, never 
   - The admin tests in `tests/admin` copy the `/js` files into the page before running.
 - **Step 5 (v53, 22 Oct 2026), done:** the app features from v17 to v32 moved to `js/app-routing.js`, `billing.js`, `app-navigation.js`, `data-export.js`, `event-mode.js`, `capture.js` and `contacts-import.js`, all formatted. The inline script is now about 0.7 MB and holds only the original app plus the v4-v16 screen redesigns.
 - **Why the rest is not split yet:** v4-v16 declare 28 functions more than once (for example `vToday`, `vThreads`, `vCard`, `vRooms`). Inside one script the last declaration wins everywhere; split into files, earlier code would see older versions. Before moving that part, merge each duplicate into a single function, one screen per commit.
+- **Step 6 (v54, 22 Oct 2026), done: duplicates merged.**
+  - All 27 functions that were declared more than once now have one declaration, one screen per commit: Today, Threads, Tap and Card, Rooms, Settings and profile, website pages.
+  - The removed copies were dead code, because inside one script the last declaration always wins.
+  - Tool used: the acorn parser, top-level declarations only.
+- **Step 7 (v55, 22 Oct 2026), done: styles moved.**
+  - The 382 KB `<style>` block moved to `css/base.css`, `app.css`, `admin.css` and `features.css`, in the original order, and Prettier-formatted.
+  - Before-and-after screenshots of 14 page and size combinations matched, apart from normal animation noise.
+  - `index.html` is now about 0.29 MB.
 - **Next steps:**
   - Move the older blocks into `/js`, newest first, one file per feature: payments (v26), accessibility (v28), photo crop (v30-v34), then the admin screens.
   - Move CSS into `/css` files.

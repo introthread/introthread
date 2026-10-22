@@ -3,6 +3,8 @@
 Everything built so far, newest first. Full technical detail for each item is in `HANDOVER.md`. How Rooms, events, communities and the Room pass work: `docs/ROOMS.md`.
 
 ## 22 Oct 2026
+- **v55: Styles moved to `/css`.** Four formatted files (base, app, admin, features) in the original order. Nothing changes visually; screenshots before and after match.
+- **v54: Duplicate functions merged.** All 27 functions that were declared more than once now have a single version, one screen per commit (caebbb2, 63327db, 379eeba, 48646c7, 0955e6d, eaf6579). No change in behaviour.
 - **v53: Code split, step 5.**
   - Moved from `index.html` into readable `/js` files: signed-in routing and email codes, the billing engine, navigation, data export, event mode, smart capture, and contacts import.
   - No change in behaviour.
