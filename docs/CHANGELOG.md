@@ -3,6 +3,12 @@
 Everything built so far, newest first. Full technical detail for each item is in `HANDOVER.md`. How Rooms, events, communities and the Room pass work: `docs/ROOMS.md`.
 
 ## 22 Oct 2026
+- **v47: Install-as-app prompt.**
+  - A small bar on phones offers "Get the Introthread app" after 3 visits or the first Thread.
+  - Android and Chrome: one tap opens the browser's own install prompt.
+  - iPhone and iPad: shows Share > Add to Home Screen steps.
+  - It is hidden when the app is already installed, on desktop, and for 30 days after Not now.
+  - Code: `js/install-prompt.js`.
 - **v46: Match celebration.**
   - When both people give the same answer to What's next?, the Thread page shows a short celebration once per Thread on each device.
   - The wording depends on the answer: meet again, introduction, or stay in touch.

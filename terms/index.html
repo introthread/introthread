@@ -3038,6 +3038,11 @@ html body .pc-m .pc-stage{max-width:min(320px,calc(100dvh - 380px))!important;mi
 @keyframes mcFly{0%{opacity:1;transform:rotate(var(--a)) translateY(0)}100%{opacity:0;transform:rotate(var(--a)) translateY(-90px)}}
 @keyframes mcPop{0%{transform:scale(.4)}70%{transform:scale(1.08)}100%{transform:scale(1)}}
 @media (prefers-reduced-motion:reduce){.mc-ic,.mc-burst i{animation:none}.mc-burst{display:none}}
+
+/* v47 Install prompt */
+.ip-bar{position:fixed;left:10px;right:10px;bottom:calc(78px + env(safe-area-inset-bottom,0px));z-index:9000;display:flex;align-items:center;gap:10px;background:#fff;border:1px solid #e3e7ef;border-radius:16px;padding:10px 10px 10px 12px;box-shadow:0 10px 30px rgba(15,18,24,.18);max-width:520px;margin:0 auto}
+.ip-bar img{border-radius:9px;flex:none}.ip-t{display:flex;flex-direction:column;min-width:0;flex:1;font-size:13px;line-height:1.35}.ip-t b{font-size:14px}.ip-t span{color:#4b5565}
+.ip-a{display:flex;align-items:center;gap:4px;flex:none}.ip-a .sm{min-height:36px;padding:0 14px}.ip-x{width:36px;height:36px;border:0;background:none;font-size:22px;color:#4b5565;cursor:pointer;border-radius:10px}
 </style>
 </head>
 <body><a href="#root" class="x-skip">Skip to content</a>
@@ -7089,5 +7094,6 @@ window.addEventListener('resize',()=>{try{pcFit()}catch(e){}});
 <script src="/js/billing-sync.js"></script>
 <script src="/js/first-visit.js"></script>
 <script src="/js/match-celebrate.js"></script>
+<script src="/js/install-prompt.js"></script>
 </body>
 </html>
