@@ -3,6 +3,9 @@
 Everything built so far, newest first. Full technical detail for each item is in `HANDOVER.md`. How Rooms, events, communities and the Room pass work: `docs/ROOMS.md`.
 
 ## 22 Oct 2026
+- **v53: Code split, step 5.**
+  - Moved from `index.html` into readable `/js` files: signed-in routing and email codes, the billing engine, navigation, data export, event mode, smart capture, and contacts import.
+  - No change in behaviour.
 - **v52: Code split, step 4.**
   - Every admin screen moved from `index.html` into its own readable file in `/js` (core, dashboard, users, moderation, rooms, revenue, plans, settings, privacy, staff, audit), plus `late-fixes.js`.
   - The admin tests load the `/js` files.

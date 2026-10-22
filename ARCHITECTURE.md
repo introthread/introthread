@@ -92,6 +92,8 @@ This is several days of careful work and should be done screen by screen, never 
   - All of these files are Prettier-formatted.
   - The `index.html` script is now about 0.9 MB, down from 1.2 MB.
   - The admin tests in `tests/admin` copy the `/js` files into the page before running.
+- **Step 5 (v53, 22 Oct 2026), done:** the app features from v17 to v32 moved to `js/app-routing.js`, `billing.js`, `app-navigation.js`, `data-export.js`, `event-mode.js`, `capture.js` and `contacts-import.js`, all formatted. The inline script is now about 0.7 MB and holds only the original app plus the v4-v16 screen redesigns.
+- **Why the rest is not split yet:** v4-v16 declare 28 functions more than once (for example `vToday`, `vThreads`, `vCard`, `vRooms`). Inside one script the last declaration wins everywhere; split into files, earlier code would see older versions. Before moving that part, merge each duplicate into a single function, one screen per commit.
 - **Next steps:**
   - Move the older blocks into `/js`, newest first, one file per feature: payments (v26), accessibility (v28), photo crop (v30-v34), then the admin screens.
   - Move CSS into `/css` files.
