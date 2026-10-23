@@ -1,3 +1,4 @@
+/* v62j: inline handlers converted to data-on-* (see js/actions.js). */
 // Introthread - Guided first visit (v44): a short 4-step welcome for new signed-in users.
 // Shown once per account on this device, on the app pages, when the person has no Threads yet.
 // Reopen any time with itTour(). Loaded after billing-sync.js. Prefix ft / FT.
@@ -64,10 +65,10 @@ function ftRender() {
       }
     });
   }
-  el.innerHTML = `<div class="ft-card"><div class="row between"><span class="ft-n">Step ${FT.i + 1} of ${FT_STEPS.length}</span><button type="button" class="ft-skip" onclick="ftClose()">Skip</button></div>
+  el.innerHTML = `<div class="ft-card"><div class="row between"><span class="ft-n">Step ${FT.i + 1} of ${FT_STEPS.length}</span><button type="button" class="ft-skip" data-on-click="ftClose()">Skip</button></div>
  <span class="ft-ic" aria-hidden="true">${typeof sv === 'function' ? sv(s.ic, 22) : ''}</span><h2 id="ftt">${esc(s.t)}</h2><p>${esc(s.b)}</p>
  <div class="ft-dots" aria-hidden="true">${FT_STEPS.map((_, k) => `<i class="${k === FT.i ? 'on' : ''}"></i>`).join('')}</div>
- <div class="ft-b">${FT.i ? `<button type="button" class="t-how" onclick="ftStep(-1)">Back</button>` : '<span></span>'}${last ? `<button type="button" class="x-btn" onclick="ftClose('/app/card')">Set up my card</button>` : `<button type="button" class="x-btn" onclick="ftStep(1)">Next</button>`}</div></div>`;
+ <div class="ft-b">${FT.i ? `<button type="button" class="t-how" data-on-click="ftStep(-1)">Back</button>` : '<span></span>'}${last ? `<button type="button" class="x-btn" data-on-click="ftClose('/app/card')">Set up my card</button>` : `<button type="button" class="x-btn" data-on-click="ftStep(1)">Next</button>`}</div></div>`;
   const b = el.querySelector('.ft-b .x-btn');
   if (b) b.focus();
 }
