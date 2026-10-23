@@ -8,7 +8,7 @@
     "node": ">=20.19"
   },
   "scripts": {
-    "build": "python3 scripts/build_pages.py && python3 scripts/prerender.py",
+    "build:pages": "python3 scripts/build_pages.py && python3 scripts/prerender.py",
     "format": "prettier --write \"js/*.js\" \"css/*.css\"",
     "format:check": "prettier --check \"js/*.js\" \"css/*.css\"",
     "test": "npm run test:admin",

@@ -3,6 +3,7 @@
 Everything built so far, newest first. Full technical detail for each item is in `HANDOVER.md`. How Rooms, events, communities and the Room pass work: `docs/ROOMS.md`.
 
 ## 23 Oct 2026
+- **v74: Deploys fixed.** The `build` script added to `package.json` in v68 made Vercel run the page build (Python and Chromium) on every deploy, so v68 to v73 failed to deploy. It is renamed `build:pages`; Vercel serves the committed files again, as before v68.
 - **v73: Calendar booking from a match is Pro only**, as on the price card. "Add to calendar" on a Thread opens the Pro upgrade dialog for Free users. The "Book a meeting" link on your own card stays free.
 - **v72: Thread search is Pro only**, as on the price card. New `js/pro-gates.js` (loaded last) shows an upgrade card when a Free user searches Threads or uses the phone search sheet. Filters and topics stay free.
 - **v71: Every Room is paid.** `FREE_ROOMS = 0`, so creating any Room needs a Room pass ($199 per event), matching the price card. Rooms already created are kept. Migration 020 updates the database trigger; it must be run in Supabase.
