@@ -2118,6 +2118,7 @@ html {
   color: #475467 !important;
 }
 button[onclick^='stConfirm'] b,
+button[data-on-click^='stConfirm'] b,
 .td-del {
   color: #b42318 !important;
 }

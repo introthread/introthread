@@ -510,8 +510,8 @@ function shell(on, inner) {
  ${nav('#/app', 'home', 'Today', 'today')}${nav('#/app/threads', 'thread', 'Threads', 'threads', open)}${nav('#/app/rooms', 'room', 'Rooms', 'rooms')}
  <div class="navgroup">You</div>${nav('#/app/card', 'user', 'My card', 'card')}${nav('#/app/profile', 'globe', 'Public profile', 'pub')}${nav('#/app/settings', 'gear', 'Settings', 'settings')}
  <div style="margin-top:auto" class="card pad" ><div class="small" style="font-weight:850">Your Warmth</div><div class="small muted" style="margin:4px 0 10px">${myThreads().filter(t => t.confirmed).length} verified relationships</div>${warmBar(Math.min(5, 1 + Math.floor(myThreads().filter(t => t.resolvedAt).length / 2)))}</div>
- <div class="row" style="margin-top:14px;padding:8px">${av(u.name, 'sm')}<div style="flex:1;min-width:0"><b class="small" style="display:block">${esc(u.name)}</b><span class="tiny muted">${esc(u.plan)} plan</span></div><button class="x" title="Log out" onclick="logout()">${ic('out', 15)}</button></div></aside>
- <main class="main"><div class="topbar"><div class="search">${ic('search', 16)}<input placeholder="Search Threads, people, rooms, events..." oninput="Q=this.value" onkeydown="if(event.key==='Enter')go('#/app/threads')"></div><div class="t-tb"><button type="button" class="t-chip" onclick="copy('${profileUrl(u)}','Link copied')" title="Copy your link">${sv('globe', 16)}<span>introthread.com/${esc(u.handle)}</span>${sv('copy', 16)}</button><button type="button" class="t-bell" onclick="showNudges()" aria-label="Nudges">${sv('bell', 20)}${nudges().length ? '<i></i>' : ''}</button><button type="button" class="t-user" onclick="acctMenu()">${avatarC(u, 40)}<span><b>${esc(u.name)}</b><small>${esc(u.role || u.plan + ' plan')}</small></span>${sv('chevd', 16)}</button></div></div><div class="content">${inner}</div></main>
+ <div class="row" style="margin-top:14px;padding:8px">${av(u.name, 'sm')}<div style="flex:1;min-width:0"><b class="small" style="display:block">${esc(u.name)}</b><span class="tiny muted">${esc(u.plan)} plan</span></div><button class="x" title="Log out" data-on-click="logout()">${ic('out', 15)}</button></div></aside>
+ <main class="main"><div class="topbar"><div class="search">${ic('search', 16)}<input placeholder="Search Threads, people, rooms, events..." data-on-input="setQ(this.value)" data-on-keydown="searchKey(event)"></div><div class="t-tb"><button type="button" class="t-chip" data-on-click="copy('${profileUrl(u)}','Link copied')" title="Copy your link">${sv('globe', 16)}<span>introthread.com/${esc(u.handle)}</span>${sv('copy', 16)}</button><button type="button" class="t-bell" data-on-click="showNudges()" aria-label="Nudges">${sv('bell', 20)}${nudges().length ? '<i></i>' : ''}</button><button type="button" class="t-user" data-on-click="acctMenu()">${avatarC(u, 40)}<span><b>${esc(u.name)}</b><small>${esc(u.role || u.plan + ' plan')}</small></span>${sv('chevd', 16)}</button></div></div><div class="content">${inner}</div></main>
  <nav class="mobile-tab">${[
    ['#/app', 'home', 'Today', 'today'],
    ['#/app/threads', 'thread', 'Threads', 'threads'],
@@ -3364,7 +3364,7 @@ function stCount() {
 /* stSave: earlier version removed in the v54 merge (the later declaration below always won) */
 function stPw() {
   modal(
-    `<div><h2 style="margin:0 0 6px;font-size:22px">Change password</h2><p class="muted" style="margin:0 0 16px">Use at least 8 characters.</p><form class="x-form" style="margin:0" onsubmit="return stPwDo(event)"><label class="x-f"><span>New password</span><input id="pw1" type="password" minlength="8" required autocomplete="new-password"></label><label class="x-f"><span>Confirm new password</span><input id="pw2" type="password" minlength="8" required autocomplete="new-password"></label><div id="pwe" class="x-err"></div><div class="row" style="gap:10px;margin-top:6px"><button type="button" class="x-btn ghost" onclick="closeModal()">Cancel</button><button class="x-btn grow">Update password</button></div></form></div>`
+    `<div><h2 style="margin:0 0 6px;font-size:22px">Change password</h2><p class="muted" style="margin:0 0 16px">Use at least 8 characters.</p><form class="x-form" style="margin:0" data-on-submit="return stPwDo(event)"><label class="x-f"><span>New password</span><input id="pw1" type="password" minlength="8" required autocomplete="new-password"></label><label class="x-f"><span>Confirm new password</span><input id="pw2" type="password" minlength="8" required autocomplete="new-password"></label><div id="pwe" class="x-err"></div><div class="row" style="gap:10px;margin-top:6px"><button type="button" class="x-btn ghost" data-on-click="closeModal()">Cancel</button><button class="x-btn grow">Update password</button></div></form></div>`
   );
 }
 async function stPwDo(e) {
@@ -3419,7 +3419,7 @@ async function stReactivate() {
 const stCard = (ic, t, s, body, right, cls) =>
   `<section class="st-box ${cls || ''}"><div class="st-h"><span class="st-hic">${ic}</span><div><b>${t}</b><small>${s}</small></div>${right || ''}</div>${body}</section>`;
 const stTog = (k, l, d, on, fn) =>
-  `<label class="t-tog st-row"><input type="checkbox" ${on ? 'checked' : ''} onchange="${fn || `setPref('${k}',this.checked)`}"><span class="t-sw"></span><span><b>${l}</b><small>${d}</small></span></label>`;
+  `<label class="t-tog st-row"><input type="checkbox" ${on ? 'checked' : ''} data-on-change="${fn || `setPref('${k}',this.checked)`}"><span class="t-sw"></span><span><b>${l}</b><small>${d}</small></span></label>`;
 /* stPlan: earlier version removed in the v54 merge (the later declaration below always won) */
 /* stConnected: earlier version removed in the v54 merge (the later declaration below always won) */
 /* stDanger: earlier version removed in the v54 merge (the later declaration below always won) */
@@ -3445,7 +3445,7 @@ function stOther(u, t) {
           'Only Threads where both people opt in.',
           P.net !== false
         ) +
-        `<div class="st-row st-data"><div><b>Your data</b><small>Download everything we hold about you as a file.</small></div><button type="button" class="pf-btn" onclick="exportMine()">${sv('arrow', 16)} Export my data</button></div>`
+        `<div class="st-row st-data"><div><b>Your data</b><small>Download everything we hold about you as a file.</small></div><button type="button" class="pf-btn" data-on-click="exportMine()">${sv('arrow', 16)} Export my data</button></div>`
     );
   if (t === 'notifications')
     return stCard(
@@ -3474,7 +3474,7 @@ function stOther(u, t) {
         ]
           .map(
             ([n, d]) =>
-              `<div class="st-conn"><span class="st-ci">${sv('grid', 20)}</span><div><b>${n}</b><small>${d}</small></div><button type="button" onclick="toast('${n} is available on team plans. Email hello@introthread.com.')">Learn more</button></div>`
+              `<div class="st-conn"><span class="st-ci">${sv('grid', 20)}</span><div><b>${n}</b><small>${d}</small></div><button type="button" data-on-click="toast('${n} is available on team plans. Email hello@introthread.com.')">Learn more</button></div>`
           )
           .join('')
       )
@@ -3492,7 +3492,7 @@ function stOther(u, t) {
       sv('shield', 22),
       'Security',
       'Keep your account safe.',
-      `<div class="st-row st-data"><div><b>Password</b><small>Change the password you use to log in.</small></div><button type="button" class="pf-btn" onclick="stPw()">${sv('lock', 16)} Change password</button></div><div class="st-row st-data"><div><b>Sign out</b><small>Sign out of Introthread on this device.</small></div><button type="button" class="pf-btn" onclick="logout()">${sv('arrow', 16)} Sign out</button></div>`
+      `<div class="st-row st-data"><div><b>Password</b><small>Change the password you use to log in.</small></div><button type="button" class="pf-btn" data-on-click="stPw()">${sv('lock', 16)} Change password</button></div><div class="st-row st-data"><div><b>Sign out</b><small>Sign out of Introthread on this device.</small></div><button type="button" class="pf-btn" data-on-click="logout()">${sv('arrow', 16)} Sign out</button></div>`
     );
   if (t === 'billing')
     return `<div class="st-grid one">${stPlan(u)}${stCard(sv('brief', 22), 'Billing details', 'Invoices and payment method.', `<p class="st-p">Paid plans are billed in advance, monthly or annually. Prices exclude VAT and sales tax where applicable. For invoices or changes, email <a href="mailto:hello@introthread.com">hello@introthread.com</a>.</p>`)}</div>`;
@@ -5370,11 +5370,11 @@ function st12Topics() {
     ST12.topics
       .map(
         (x, i) =>
-          `<span class="pp-tp">${esc(x)}<button type="button" aria-label="Remove ${esc(x)}" onclick="ST12.topics.splice(${i},1);$('#sttp').innerHTML=st12Topics()">&times;</button></span>`
+          `<span class="pp-tp">${esc(x)}<button type="button" aria-label="Remove ${esc(x)}" data-on-click="st12TopicDel(${i})">&times;</button></span>`
       )
       .join('') +
     (ST12.topics.length < 10
-      ? `<label class="pp-tpa">${sv('close', 14, 'currentColor', 2.2).replace('<path d="M6 6l12 12M18 6 6 18"/>', '<path d="M12 5v14M5 12h14"/>')}<input id="stta" list="stsug" placeholder="Add topic" maxlength="24" onkeydown="if(event.key==='Enter'||event.key===','){event.preventDefault();st12TopicAdd(this.value);this.value=''}" onchange="if(this.value){st12TopicAdd(this.value);this.value=''}"><datalist id="stsug">${TOPICS.filter(
+      ? `<label class="pp-tpa">${sv('close', 14, 'currentColor', 2.2).replace('<path d="M6 6l12 12M18 6 6 18"/>', '<path d="M12 5v14M5 12h14"/>')}<input id="stta" list="stsug" placeholder="Add topic" maxlength="24" data-on-keydown="stTopicKey(event,this)" data-on-change="stTopicChange(this)"><datalist id="stsug">${TOPICS.filter(
           x => !ST12.topics.includes(x)
         )
           .map(x => `<option value="${esc(x)}">`)
@@ -5447,16 +5447,16 @@ function stNextBill(u) {
 function stManage() {
   const u = me();
   const pro = u.plan && u.plan !== 'Free';
-  modal(`<div><div class="row between"><h3 style="margin:0;font:600 20px var(--xss)">Manage subscription</h3><button class="x" aria-label="Close" onclick="closeModal()">&times;</button></div>
+  modal(`<div><div class="row between"><h3 style="margin:0;font:600 20px var(--xss)">Manage subscription</h3><button class="x" aria-label="Close" data-on-click="closeModal()">&times;</button></div>
  <div class="st12-mrow"><span>Plan</span><b>${pro ? esc(u.plan) + ' plan, ' + usd0(proM()) + ' / month' : 'Free plan'}</b></div>${pro ? `<div class="st12-mrow"><span>Next billing date</span><b>${stNextBill(u)}</b></div>` : ''}<div class="st12-mrow"><span>Billing email</span><b>${esc(u.email || '')}</b></div>
  <p class="fu-sub" style="margin-top:14px">${cloud() ? 'Online card payments are being set up. Until then, email <a href="mailto:hello@introthread.com">hello@introthread.com</a> for invoices, plan changes or cancellation.' : 'This is the demo account, so no real payment is taken.'}</p>
- <div class="fu-b">${pro && !cloud() ? `<button type="button" class="t-how" onclick="if(confirm('Cancel Pro and return to the Free plan?')){me().plan='Free';save();closeModal();toast('You are now on the Free plan');render()}">Cancel subscription</button>` : ''}${!pro ? `<button type="button" class="x-btn" onclick="closeModal();setPlan('Pro')">Upgrade to Pro</button>` : `<button type="button" class="x-btn" onclick="closeModal()">Done</button>`}</div></div>`);
+ <div class="fu-b">${pro && !cloud() ? `<button type="button" class="t-how" data-on-click="stCancelPro()">Cancel subscription</button>` : ''}${!pro ? `<button type="button" class="x-btn" data-on-click="closeModal();setPlan('Pro')">Upgrade to Pro</button>` : `<button type="button" class="x-btn" data-on-click="closeModal()">Done</button>`}</div></div>`);
 }
 function stPlan(u) {
   const pro = u.plan && u.plan !== 'Free';
   return `<section class="d-box st12-box"><div class="cd-bh"><span class="cd-bi o">${sv('spark', 20)}</span><div><b>Subscription plan</b><small>${pro ? `You&rsquo;re on the ${esc(u.plan)} plan. Thanks for supporting Introthread.` : 'You&rsquo;re on the Free plan. Upgrade when you&rsquo;re ready.'}</small></div></div>
  <div class="st12-plan"><div><b>Pro plan</b><div class="st12-price">${usd0(proM())}<small>/month</small></div>${pro ? '' : '<small class="st12-cur">Current plan: Free</small>'}</div><ul>${['AI follow-ups in your voice', 'Calendar booking from a match', 'NFC card support', 'Advanced analytics'].map(x => `<li><i>${sv('check', 10, '#fff', 3.2)}</i>${x}</li>`).join('')}</ul>${pro ? '<em class="st12-act">Active</em>' : ''}</div>
- <div class="st12-bill"><span>${pro ? 'Next billing date: ' + stNextBill(u) : 'Billed monthly. Cancel anytime.'}</span><button type="button" class="x-btn" onclick="stManage()">${pro ? 'Manage subscription' : 'Upgrade to Pro'} ${sv('arrow', 16)}</button></div></section>`;
+ <div class="st12-bill"><span>${pro ? 'Next billing date: ' + stNextBill(u) : 'Billed monthly. Cancel anytime.'}</span><button type="button" class="x-btn" data-on-click="stManage()">${pro ? 'Manage subscription' : 'Upgrade to Pro'} ${sv('arrow', 16)}</button></div></section>`;
 }
 function stMs() {
   return `<svg width="22" height="22" viewBox="0 0 24 24" aria-hidden="true"><rect x="2" y="2" width="9.5" height="9.5" fill="#f25022"/><rect x="12.5" y="2" width="9.5" height="9.5" fill="#7fba00"/><rect x="2" y="12.5" width="9.5" height="9.5" fill="#00a4ef"/><rect x="12.5" y="12.5" width="9.5" height="9.5" fill="#ffb900"/></svg>`;
@@ -5479,17 +5479,17 @@ function stConnected() {
   const row = (ic, cls, n, d, btn) =>
     `<div class="st12-conn"><span class="st12-ci ${cls}">${ic}</span><div><b>${n}</b><small>${d}</small></div>${btn}</div>`;
   return `<section class="d-box st12-box"><div class="cd-bh"><span class="cd-bi">${sv('link', 20)}</span><div><b>Connected accounts</b><small>Connect your accounts to make networking easier.</small></div></div>
- ${row(sv('li', 20), 'li', 'LinkedIn', 'Connect to import your profile and contacts.', `<button type="button" class="st12-cb" onclick="toast('LinkedIn connection is coming soon. It needs LinkedIn app approval first.')">Connect</button>`)}
- ${row(typeof oG === 'function' ? oG() : sv('globe', 20), 'g', 'Google', g ? 'Connected. Today&rsquo;s meetings show on your dashboard.' : 'Connect to add events and calendar.', g ? `<button type="button" class="st12-cb on" onclick="stGDisc()">Disconnect</button>` : `<button type="button" class="st12-cb" onclick="stGConnect()">Connect</button>`)}
- ${row(stMs(), 'ms', 'Microsoft', 'Connect your Outlook calendar.', `<button type="button" class="st12-cb" onclick="toast('Microsoft connection is coming soon. It needs a Microsoft app registration first.')">Connect</button>`)}
+ ${row(sv('li', 20), 'li', 'LinkedIn', 'Connect to import your profile and contacts.', `<button type="button" class="st12-cb" data-on-click="toast('LinkedIn connection is coming soon. It needs LinkedIn app approval first.')">Connect</button>`)}
+ ${row(typeof oG === 'function' ? oG() : sv('globe', 20), 'g', 'Google', g ? 'Connected. Today&rsquo;s meetings show on your dashboard.' : 'Connect to add events and calendar.', g ? `<button type="button" class="st12-cb on" data-on-click="stGDisc()">Disconnect</button>` : `<button type="button" class="st12-cb" data-on-click="stGConnect()">Connect</button>`)}
+ ${row(stMs(), 'ms', 'Microsoft', 'Connect your Outlook calendar.', `<button type="button" class="st12-cb" data-on-click="toast('Microsoft connection is coming soon. It needs a Microsoft app registration first.')">Connect</button>`)}
  <p class="st12-sec">${sv('lock', 13)} Connections use the provider&rsquo;s secure sign-in. Introthread never sees your password.</p></section>`;
 }
 function stConfirm(kind) {
   const u = me();
   const del = kind === 'delete';
   modal(`<div class="st12-cf"><span class="st12-cfi">${sv(del ? 'close' : 'lock', 24)}</span><h3>${del ? 'Delete your account permanently?' : 'Deactivate your account?'}</h3><p>${del ? 'This deletes your profile, your Rooms and your side of every Thread. It cannot be undone. Consider exporting your data first.' : 'Your profile will be hidden and you will stop receiving new introductions. You can reactivate any time from Settings.'}</p>
- ${del ? `<button type="button" class="t-how sm" onclick="exportMine()">${sv('arrow', 15)} Export my data first</button><label class="x-f" style="margin-top:14px"><span>Type <b>DELETE</b> to confirm</span><input id="stdel" autocomplete="off" oninput="$('#stgo').disabled=this.value.trim()!=='DELETE'"></label>` : ''}
- <div class="fu-b"><button type="button" class="t-how" onclick="closeModal()">Cancel</button><button type="button" class="st12-red" id="stgo" ${del ? 'disabled' : ''} onclick="stConfirmDo('${kind}')">${del ? 'Delete permanently' : 'Deactivate account'}</button></div></div>`);
+ ${del ? `<button type="button" class="t-how sm" data-on-click="exportMine()">${sv('arrow', 15)} Export my data first</button><label class="x-f" style="margin-top:14px"><span>Type <b>DELETE</b> to confirm</span><input id="stdel" autocomplete="off" data-on-input="stDelInput(this.value)"></label>` : ''}
+ <div class="fu-b"><button type="button" class="t-how" data-on-click="closeModal()">Cancel</button><button type="button" class="st12-red" id="stgo" ${del ? 'disabled' : ''} data-on-click="stConfirmDo('${kind}')">${del ? 'Delete permanently' : 'Deactivate account'}</button></div></div>`);
 }
 async function stConfirmDo(kind) {
   const c = window.confirm;
@@ -5505,8 +5505,8 @@ async function stConfirmDo(kind) {
 function stDanger(u) {
   const off = u.links && u.links.deactivated;
   return `<section class="d-box st12-box"><div class="cd-bh"><span class="cd-bi r">${sv('shield', 20)}</span><div><b>Danger zone</b><small>These actions are permanent. Please be careful.</small></div></div>
- ${off ? `<button type="button" class="st12-dz ok" onclick="stReactivate()"><span>${sv('sync', 20)}</span><div><b>Reactivate account</b><small>Make your profile public again.</small></div>${sv('chev', 18)}</button>` : `<button type="button" class="st12-dz" onclick="stConfirm('deactivate')"><span>${sv('lock', 20)}</span><div><b>Deactivate account</b><small>Hide your profile and stop receiving new introductions.</small></div>${sv('chev', 18)}</button>`}
- <button type="button" class="st12-dz" onclick="stConfirm('delete')"><span>${sv('close', 20)}</span><div><b>Delete account</b><small>Permanently delete your account and all data.</small></div>${sv('chev', 18)}</button></section>`;
+ ${off ? `<button type="button" class="st12-dz ok" data-on-click="stReactivate()"><span>${sv('sync', 20)}</span><div><b>Reactivate account</b><small>Make your profile public again.</small></div>${sv('chev', 18)}</button>` : `<button type="button" class="st12-dz" data-on-click="stConfirm('deactivate')"><span>${sv('lock', 20)}</span><div><b>Deactivate account</b><small>Hide your profile and stop receiving new introductions.</small></div>${sv('chev', 18)}</button>`}
+ <button type="button" class="st12-dz" data-on-click="stConfirm('delete')"><span>${sv('close', 20)}</span><div><b>Delete account</b><small>Permanently delete your account and all data.</small></div>${sv('chev', 18)}</button></section>`;
 }
 function stAccount(u) {
   if (!ST12 || ST12.uid !== u.id) st12Init();
@@ -5515,14 +5515,14 @@ function stAccount(u) {
   const cc = ph ? ph[1] : '+44',
     num = ph ? ph[2] : L.phone || '';
   return `<div class="st12-grid"><section class="d-box st12-form"><div class="cd-bh"><span class="cd-bi">${sv('user', 20)}</span><div><b>Profile information</b><small>Update your basic details and how you appear on Introthread.</small></div><a class="pp-ai" href="/${esc(u.handle)}" target="_blank" rel="noopener">${sv('eye', 16)} View public profile</a></div>
- <div class="st12-photo"><span class="cd-pav">${avatarC(u, 104)}<label class="cd-cam" aria-label="Upload photo">${sv('photo', 15)}<input type="file" hidden accept="image/jpeg,image/png,image/webp" onchange="pickPhoto(this,1)"></label></span><div><b>Profile photo</b><small>JPG, PNG or WebP (max 5MB)</small><div class="cd-pb"><label class="t-how sm">${sv('photo', 16)} ${u.photo ? 'Change photo' : 'Upload photo'}<input type="file" hidden accept="image/jpeg,image/png,image/webp" onchange="pickPhoto(this,1)"></label>${u.photo ? `<button type="button" class="cd-rm" onclick="removePhoto()">${sv('close', 15)} Remove</button>` : ''}</div></div></div>
+ <div class="st12-photo"><span class="cd-pav">${avatarC(u, 104)}<label class="cd-cam" aria-label="Upload photo">${sv('photo', 15)}<input type="file" hidden accept="image/jpeg,image/png,image/webp" data-on-change="pickPhoto(this,1)"></label></span><div><b>Profile photo</b><small>JPG, PNG or WebP (max 5MB)</small><div class="cd-pb"><label class="t-how sm">${sv('photo', 16)} ${u.photo ? 'Change photo' : 'Upload photo'}<input type="file" hidden accept="image/jpeg,image/png,image/webp" data-on-change="pickPhoto(this,1)"></label>${u.photo ? `<button type="button" class="cd-rm" data-on-click="removePhoto()">${sv('close', 15)} Remove</button>` : ''}</div></div></div>
  <div class="t-g2 pp-g"><label class="x-f"><span>Full name <i>*</i></span><input id="stn" value="${esc(u.name || '')}" required autocomplete="name" maxlength="80"></label><label class="x-f"><span>Email address <i>*</i></span><input id="ste" type="email" value="${esc(u.email || '')}" required autocomplete="email" maxlength="120"></label>
  <label class="x-f"><span>Job title</span><input id="str" value="${esc(u.role || '')}" maxlength="80"></label><label class="x-f"><span>Company</span><input id="stc" value="${esc(u.company || '')}" maxlength="80"></label>
- <label class="x-f"><span>Location</span><div class="cd-in">${sv('pin', 17)}<input id="stct" value="${esc(u.city || '')}" maxlength="80" placeholder="City, Country"><button type="button" class="cd-clr" aria-label="Clear location" onclick="$('#stct').value=''">&times;</button></div></label>
+ <label class="x-f"><span>Location</span><div class="cd-in">${sv('pin', 17)}<input id="stct" value="${esc(u.city || '')}" maxlength="80" placeholder="City, Country"><button type="button" class="cd-clr" aria-label="Clear location" data-on-click="stClearCt()">&times;</button></div></label>
  <label class="x-f"><span>Phone <em>(optional)</em></span><div class="st-phone"><select id="stcc" aria-label="Country code">${CC.map(([c, f, n]) => `<option value="${c}" ${c === cc ? 'selected' : ''} title="${n}">${f.toUpperCase()} ${c}</option>`).join('')}</select><input id="stp" type="tel" value="${esc(num)}" placeholder="7700 900123" autocomplete="tel-national" maxlength="20"></div></label></div>
- <label class="x-f"><span class="cd-bl">Bio <small><b id="stbc">${(u.bio || '').length}</b>/200</small></span><textarea id="stb" rows="3" maxlength="200" oninput="$('#stbc').textContent=this.value.length">${esc(u.bio || '')}</textarea></label>
+ <label class="x-f"><span class="cd-bl">Bio <small><b id="stbc">${(u.bio || '').length}</b>/200</small></span><textarea id="stb" rows="3" maxlength="200" data-on-input="stBioCount(this.value)">${esc(u.bio || '')}</textarea></label>
  <div class="x-f"><span>Topics <em>(up to 10)</em></span><div class="pp-tps2 st12-tps" id="sttp">${st12Topics()}</div></div>
- <div class="st12-foot"><button type="button" class="x-btn lg st12-save" onclick="stSave(this)">${sv('lock', 17)} Save changes</button></div></section>
+ <div class="st12-foot"><button type="button" class="x-btn lg st12-save" data-on-click="stSave(this)">${sv('lock', 17)} Save changes</button></div></section>
  <div class="st12-side">${stPlan(u)}${stConnected()}${stDanger(u)}</div></div>`;
 }
 function vSettings() {
@@ -5530,7 +5530,7 @@ function vSettings() {
   return shell(
     'settings',
     `<div class="t-head"><div><div class="t-eye">Settings</div><h1 class="t-h1">Account settings</h1><p class="t-sub">Manage your account, privacy, notifications, integrations and preferences.</p></div></div>
- <nav class="cd-tabs st12-tabs" role="tablist" aria-label="Settings sections">${ST_TABS.map(([k, l, i]) => `<button type="button" role="tab" aria-selected="${STAB === k}" class="${STAB === k ? 'on' : ''}" onclick="stTab('${k}')">${sv(i, 18)} ${l}</button>`).join('')}</nav>
+ <nav class="cd-tabs st12-tabs" role="tablist" aria-label="Settings sections">${ST_TABS.map(([k, l, i]) => `<button type="button" role="tab" aria-selected="${STAB === k}" class="${STAB === k ? 'on' : ''}" data-on-click="stTab('${k}')">${sv(i, 18)} ${l}</button>`).join('')}</nav>
  ${STAB === 'account' ? stAccount(u) : `<div class="st-one st12-one">${stOther(u, STAB)}</div>`}`
   );
 }
@@ -5944,17 +5944,17 @@ function acctMenu(btn, dir) {
   const pro = u.plan && u.plan !== 'Free';
   const pub = !(u.links && u.links.hidden);
   const it = (ic, l, act, o = {}) =>
-    `<button type="button" role="menuitem" class="am-it ${o.cls || ''}" onclick="${act}">${sv(ic, 18)}<span>${l}</span>${o.badge ? `<em class="${o.bc || ''}">${o.badge}</em>` : ''}${o.ext ? sv('arrow', 14) : ''}</button>`;
+    `<button type="button" role="menuitem" class="am-it ${o.cls || ''}" data-on-click="${act}">${sv(ic, 18)}<span>${l}</span>${o.badge ? `<em class="${o.bc || ''}">${o.badge}</em>` : ''}${o.ext ? sv('arrow', 14) : ''}</button>`;
   const m = document.createElement('div');
   m.id = 'acm';
   m.className = 'am';
   m.setAttribute('role', 'menu');
   m.setAttribute('aria-label', 'Account menu');
   m.innerHTML = `<div class="am-h">${avatarC(u, 48)}<div class="am-hi"><b>${esc(u.name || '')}</b><small>${esc(u.email || 'introthread.com/' + u.handle)}</small><span class="am-tags"><span class="am-plan ${pro ? 'pro' : ''}">${pro ? sv('spark', 11) + ' ' + esc(u.plan) : 'Free plan'}</span><span class="am-vis ${pub ? '' : 'off'}"><i></i>${pub ? 'Profile live' : 'Profile private'}</span></span></div></div>
- <div class="am-link"><span>introthread.com/${esc(u.handle)}</span><button type="button" role="menuitem" aria-label="Copy my link" onclick="copy('${profileUrl(u)}','Link copied')">${sv('copy', 15)}</button></div>
+ <div class="am-link"><span>introthread.com/${esc(u.handle)}</span><button type="button" role="menuitem" aria-label="Copy my link" data-on-click="copy('${profileUrl(u)}','Link copied')">${sv('copy', 15)}</button></div>
  <div class="am-g">${it('user', 'My card', "amGo('/app/card')")}${it('globe', 'Public profile', "amGo('/app/profile')")}${it('eye', 'View as visitor', `amClose();window.open('/${esc(u.handle)}','_blank','noopener')`, { ext: 1 })}</div>
  <div class="am-g">${it('gear', 'Account settings', "amGo('/app/settings','account')")}${it('shield', 'Privacy &amp; visibility', "amGo('/app/settings','privacy')")}${it('bell', 'Notifications', "amGo('/app/settings','notifications')")}${it('brief', 'Plan &amp; billing', "amGo('/app/settings','billing')", { badge: pro ? '' : 'Upgrade', bc: 'up' })}</div>
- <div class="am-g">${it('mail', 'Help &amp; support', "amClose();location.href='mailto:hello@introthread.com?subject=Introthread%20support'")}${it('play', 'How Introthread works', "amClose();go('/how')")}</div>
+ <div class="am-g">${it('mail', 'Help &amp; support', 'amHelp()')}${it('play', 'How Introthread works', "amClose();go('/how')")}</div>
  <div class="am-g">${it('out', 'Log out', 'amClose();logout()', { cls: 'am-out' })}</div>`;
   document.body.appendChild(m);
   btn.setAttribute('aria-expanded', 'true');
@@ -5991,11 +5991,11 @@ shell = function (on, inner) {
   const pro = u.plan && u.plan !== 'Free';
   h = h.replace(
     /<div class="row" style="margin-top:14px;padding:8px">[\s\S]*?<\/button><\/div><\/aside>/,
-    `<button type="button" class="sb-user" data-am aria-haspopup="menu" aria-expanded="false" onclick="acctMenu(this,'up')">${avatarC(u, 40)}<span class="sb-ui"><b>${esc(u.name || '')}</b><small>${pro ? esc(u.plan) + ' plan' : 'Free plan'}</small></span><span class="sb-chev">${sv('chevd', 16)}</span></button></aside>`
+    `<button type="button" class="sb-user" data-am aria-haspopup="menu" aria-expanded="false" data-on-click="acctMenu(this,'up')">${avatarC(u, 40)}<span class="sb-ui"><b>${esc(u.name || '')}</b><small>${pro ? esc(u.plan) + ' plan' : 'Free plan'}</small></span><span class="sb-chev">${sv('chevd', 16)}</span></button></aside>`
   );
   h = h.replace(
-    'class="t-user" onclick="acctMenu()"',
-    'class="t-user" data-am aria-haspopup="menu" aria-expanded="false" onclick="acctMenu(this,\'down\')"'
+    'class="t-user" data-on-click="acctMenu()"',
+    'class="t-user" data-am aria-haspopup="menu" aria-expanded="false" data-on-click="acctMenu(this,\'down\')"'
   );
   return h;
 };
@@ -6283,4 +6283,50 @@ function roReset() {
   RDAY = '';
   RF9 = 'upcoming';
   render();
+}
+
+/* v61: named handlers for Settings, the app shell search and the account menu (no inline JavaScript). */
+function setQ(v) {
+  Q = v;
+}
+function searchKey(e) {
+  if (e.key === 'Enter') go('#/app/threads');
+}
+function st12TopicDel(i) {
+  ST12.topics.splice(i, 1);
+  $('#sttp').innerHTML = st12Topics();
+}
+function stTopicKey(e, el) {
+  if (e.key === 'Enter' || e.key === ',') {
+    e.preventDefault();
+    st12TopicAdd(el.value);
+    el.value = '';
+  }
+}
+function stTopicChange(el) {
+  if (el.value) {
+    st12TopicAdd(el.value);
+    el.value = '';
+  }
+}
+function stCancelPro() {
+  if (!confirm('Cancel Pro and return to the Free plan?')) return;
+  me().plan = 'Free';
+  save();
+  closeModal();
+  toast('You are now on the Free plan');
+  render();
+}
+function stDelInput(v) {
+  $('#stgo').disabled = v.trim() !== 'DELETE';
+}
+function stClearCt() {
+  $('#stct').value = '';
+}
+function stBioCount(v) {
+  $('#stbc').textContent = v.length;
+}
+function amHelp() {
+  amClose();
+  location.href = 'mailto:hello@introthread.com?subject=Introthread%20support';
 }

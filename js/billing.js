@@ -1098,7 +1098,7 @@ acctMenu = function (btn, dir) {
   const m = document.getElementById('acm');
   if (!m) return;
   [...m.querySelectorAll('.am-it')].forEach(b => {
-    if (/Help/.test(b.textContent)) b.setAttribute('onclick', "amGo('/app/settings','help')");
+    if (/Help/.test(b.textContent)) b.setAttribute('data-on-click', "amGo('/app/settings','help')");
   });
 };
 const _render19 = render;
