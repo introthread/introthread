@@ -3,6 +3,7 @@
 Everything built so far, newest first. Full technical detail for each item is in `HANDOVER.md`. How Rooms, events, communities and the Room pass work: `docs/ROOMS.md`.
 
 ## 23 Oct 2026
+- **v82: No personal emails in the tests.** The admin tests use owner@example.com and member@example.com, and the integrations mock uses contact@example.com. All 10 admin tests pass. `supabase/migrations/002_contacts_admin.sql` still seeds the real owner address, because changing an already-run migration would change who becomes owner if it is run again.
 - **v81: Scan a paper card, front and centre.** Home page: a new "Got their paper card? Scan it in seconds." section with three steps, Get your free card, and Try it in the demo. App: "Scan a paper card" in Today's quick actions and on the Tap screen. Both open the existing on-device card reader.
 - **v80: Billing receipts come from the server's payment records.** New `js/billing-server.js`: on the live site, Settings > Billing lists receipts from the `payments` table and unused Room passes from `room_passes`, instead of the copy kept in the profile. A receipt only the browser wrote can no longer appear as paid. Invoices you requested yourself still show. The demo is unchanged.
 - **v79: Full sample Resolution Report on /rooms.** "See a sample report" used to scroll to the small card already in view, so it seemed to do nothing. It now jumps to a full, clearly labelled sample report: headline numbers, the path from room to follow-through, What's next? answers, outcomes, follow-up timing, top topics and what sponsors get.
@@ -183,7 +184,7 @@ Everything built so far, newest first. Full technical detail for each item is in
 - **Decisions (Agnes):**
   - prices in USD, GBP for UK visitors
   - Free plan is 5 new Threads a month
-  - admin owner is mosemqute@gmail.com
+  - admin owner is the admin owner account
 
 ## Earlier
 - Supabase wired into sign-up, login, cards, Threads and Rooms.
