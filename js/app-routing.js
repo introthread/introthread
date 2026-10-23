@@ -152,7 +152,7 @@ acctMenu = function (btn, dir) {
   if (help && !m.querySelector('[data-site]')) {
     help.insertAdjacentHTML(
       'beforeend',
-      `<button type="button" role="menuitem" class="am-it" data-site onclick="amClose();try{sessionStorage.setItem('${IT_SITE}','1')}catch(_){};go('/')">${sv('globe', 18)}<span>Introthread website</span></button>`
+      `<button type="button" role="menuitem" class="am-it" data-site data-on-click="amSiteHome('${IT_SITE}')">${sv('globe', 18)}<span>Introthread website</span></button>`
     );
   }
 };
@@ -188,10 +188,10 @@ function otpView(o) {
  <span class="otp-ic">${sv(signup ? 'mail' : 'shield', 26)}</span><h1 class="x-ftitle">${signup ? 'Confirm your email' : 'Enter your sign-in code'}</h1>
  <p class="x-fsub">${signup ? 'We&rsquo;ve sent a verification code to' : 'For extra security, we&rsquo;ve emailed a sign-in code to'} <b>${esc(otpMask(o.email))}</b>. Enter it below to ${signup ? 'finish creating your account' : 'continue'}.</p>
  ${o.msg ? `<div class="otp-note ok" role="status">${sv('check', 15)} ${o.msg}</div>` : ''}<div class="otp-note err" id="otperr" role="alert" ${o.err ? '' : 'hidden'}>${esc(o.err || '')}</div>
- <form class="x-form" onsubmit="return otpVerify(event)"><label class="x-f"><span>${signup ? 'Verification code' : 'Sign-in code'}</span><input id="otpin" class="otp-in" inputmode="numeric" autocomplete="one-time-code" pattern="[0-9]*" maxlength="10" placeholder="${'0'.repeat(OTP_LEN)}" aria-describedby="otphint" required oninput="this.value=this.value.replace(/\\D/g,'');if(this.value.length>=OTP_LEN&&!window._otpBusy)this.form.requestSubmit()"></label>
+ <form class="x-form" data-on-submit="return otpVerify(event)"><label class="x-f"><span>${signup ? 'Verification code' : 'Sign-in code'}</span><input id="otpin" class="otp-in" inputmode="numeric" autocomplete="one-time-code" pattern="[0-9]*" maxlength="10" placeholder="${'0'.repeat(OTP_LEN)}" aria-describedby="otphint" required data-on-input="otpInput(this)"></label>
  <button class="x-btn lg block" id="otpgo">${signup ? 'Verify &amp; create account' : 'Verify &amp; continue'} ${sv('arrow', 17)}</button></form>
- <button type="button" class="x-btn ghost lg block otp-res" id="otpres" onclick="otpResend()">Resend code</button>
- <p class="x-alt">${signup ? 'Wrong email?' : 'Not you?'} <a href="#" onclick="event.preventDefault();otpCancel()">${signup ? 'Start over' : 'Use a different account'}</a></p>
+ <button type="button" class="x-btn ghost lg block otp-res" id="otpres" data-on-click="otpResend()">Resend code</button>
+ <p class="x-alt">${signup ? 'Wrong email?' : 'Not you?'} <a href="#" data-on-click="event.preventDefault();otpCancel()">${signup ? 'Start over' : 'Use a different account'}</a></p>
  <p class="otp-sec">${sv('lock', 13)} Codes expire after a short time and can be used once.</p></div>`;
 }
 function otpShell(o) {
@@ -452,7 +452,7 @@ function itIdleCheck() {
     if (!_idleW) {
       _idleW = 1;
       modal(
-        `<div class="idle-m" id="idlem"><span class="otp-ic">${sv('lock', 24)}</span><h3>Are you still there?</h3><p>For your security, you will be signed out in <b id="idles">${Math.floor(left / 60)}:${String(left % 60).padStart(2, '0')}</b> because of inactivity.</p><div class="fu-b"><button type="button" class="t-how" onclick="itIdleOut()">Sign out now</button><button type="button" class="x-btn" onclick="itIdleMark(true);closeModal()">Stay signed in</button></div></div>`
+        `<div class="idle-m" id="idlem"><span class="otp-ic">${sv('lock', 24)}</span><h3>Are you still there?</h3><p>For your security, you will be signed out in <b id="idles">${Math.floor(left / 60)}:${String(left % 60).padStart(2, '0')}</b> because of inactivity.</p><div class="fu-b"><button type="button" class="t-how" data-on-click="itIdleOut()">Sign out now</button><button type="button" class="x-btn" data-on-click="itIdleMark(true);closeModal()">Stay signed in</button></div></div>`
       );
     } else {
       const s = $('#idles');
@@ -498,3 +498,16 @@ demoLogin = async function () {
   itIdleMark(true);
   return _demo18.apply(this, arguments);
 };
+
+/* v62: named handlers for sign-in codes and the site link (no inline JavaScript). */
+function amSiteHome(key) {
+  amClose();
+  try {
+    sessionStorage.setItem(key, '1');
+  } catch (_) {}
+  go('/');
+}
+function otpInput(el) {
+  el.value = el.value.replace(/\D/g, '');
+  if (el.value.length >= OTP_LEN && !window._otpBusy) el.form.requestSubmit();
+}
