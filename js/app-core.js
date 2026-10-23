@@ -871,14 +871,14 @@ function vGuest(id) {
   const f = o.name.split(' ')[0];
   let body;
   if (!t.confirmed)
-    body = `<h2 style="letter-spacing:-.8px;margin:0 0 6px">Did you meet ${esc(o.name)}?</h2><p class="muted">${esc(f)} started a Thread after meeting you at <b>${esc(t.where)}</b>. Confirm it to keep a shared record and decide what happens next.</p><div class="row" style="margin-top:18px"><button class="btn primary" style="flex:1" onclick="guestConfirm('${t.id}')">${ic('check', 16)} Yes, confirm</button><button class="btn secondary" onclick="toast('Thanks. ${esc(f)} will not be notified.')">Not me</button></div>`;
+    body = `<h2 style="letter-spacing:-.8px;margin:0 0 6px">Did you meet ${esc(o.name)}?</h2><p class="muted">${esc(f)} started a Thread after meeting you at <b>${esc(t.where)}</b>. Confirm it to keep a shared record and decide what happens next.</p><div class="row" style="margin-top:18px"><button class="btn primary" style="flex:1" data-on-click="guestConfirm('${t.id}')">${ic('check', 16)} Yes, confirm</button><button class="btn secondary" data-on-click="toast('Thanks. ${esc(f)} will not be notified.')">Not me</button></div>`;
   else if (!t.theirs)
     body = `<div class="eyebrow">Verified Thread &middot; ${esc(t.where)}</div><h2 style="letter-spacing:-.8px;margin:8px 0 6px">What's next with ${esc(f)}?</h2><p class="small muted">${ic('lock', 12)} Private until you both answer. A "Not now" is never shown.</p><div class="answer" style="margin-top:14px">${Object.entries(
       NEXT
     )
       .map(
         ([k, v]) =>
-          `<button class="ans" onclick="guestAnswer('${t.id}','${k}')">${ic(v.icon, 20, '#3157ff')}<b>${v.label}</b><span>${v.desc}</span></button>`
+          `<button class="ans" data-on-click="guestAnswer('${t.id}','${k}')">${ic(v.icon, 20, '#3157ff')}<b>${v.label}</b><span>${v.desc}</span></button>`
       )
       .join('')}</div>`;
   else
@@ -1629,14 +1629,14 @@ vGuest = function (tok) {
     f = o.name.split(' ')[0];
   let body;
   if (!g.confirmed)
-    body = `<h2 style="letter-spacing:-.8px;margin:0 0 6px">Did you meet ${esc(o.name)}?</h2><p class="muted">${esc(f)} started a Thread after meeting you at <b>${esc(g.where_met)}</b>. Confirm it to keep a shared record and decide what happens next.</p><div class="row" style="margin-top:18px"><button class="btn primary" style="flex:1" onclick="guestConfirm('${esc(tok)}')">${ic('check', 16)} Yes, confirm</button><button class="btn secondary" onclick="toast('Thanks. ${esc(f)} will not be notified.')">Not me</button></div>`;
+    body = `<h2 style="letter-spacing:-.8px;margin:0 0 6px">Did you meet ${esc(o.name)}?</h2><p class="muted">${esc(f)} started a Thread after meeting you at <b>${esc(g.where_met)}</b>. Confirm it to keep a shared record and decide what happens next.</p><div class="row" style="margin-top:18px"><button class="btn primary" style="flex:1" data-on-click="guestConfirm('${esc(tok)}')">${ic('check', 16)} Yes, confirm</button><button class="btn secondary" data-on-click="toast('Thanks. ${esc(f)} will not be notified.')">Not me</button></div>`;
   else if (!g.theirs)
     body = `<div class="eyebrow">Verified Thread &middot; ${esc(g.where_met)}</div><h2 style="letter-spacing:-.8px;margin:8px 0 6px">What's next with ${esc(f)}?</h2><p class="small muted">${ic('lock', 12)} Private until you both answer. A "Not now" is never shown.</p><div class="answer" style="margin-top:14px">${Object.entries(
       NEXT
     )
       .map(
         ([k, v]) =>
-          `<button class="ans" onclick="guestAnswer('${esc(tok)}','${k}')">${ic(v.icon, 20, '#3157ff')}<b>${v.label}</b><span>${v.desc}</span></button>`
+          `<button class="ans" data-on-click="guestAnswer('${esc(tok)}','${k}')">${ic(v.icon, 20, '#3157ff')}<b>${v.label}</b><span>${v.desc}</span></button>`
       )
       .join('')}</div>`;
   else {
@@ -2949,7 +2949,7 @@ function tapMode(m) {
 function tapQR() {
   const u = me();
   modal(
-    `<div class="center" style="padding:6px"><div class="x-eye" style="margin-bottom:6px">Scan to connect</div><h2 style="margin:0 0 4px;font-size:24px">${esc(u.name)}</h2><p class="muted" style="margin:0 0 18px">introthread.com/${esc(u.handle)}</p><div class="t-qrbig"><div id="qrBig"></div><span class="t-qrlogo"><span class="x-lm"><i></i><i></i></span></span></div><button class="x-btn block" style="margin-top:20px" onclick="closeModal()">Done</button></div>`
+    `<div class="center" style="padding:6px"><div class="x-eye" style="margin-bottom:6px">Scan to connect</div><h2 style="margin:0 0 4px;font-size:24px">${esc(u.name)}</h2><p class="muted" style="margin:0 0 18px">introthread.com/${esc(u.handle)}</p><div class="t-qrbig"><div id="qrBig"></div><span class="t-qrlogo"><span class="x-lm"><i></i><i></i></span></span></div><button class="x-btn block" style="margin-top:20px" data-on-click="closeModal()">Done</button></div>`
   );
   setTimeout(() => qr($('#qrBig'), profileUrl(u), 300), 20);
 }
@@ -2972,7 +2972,7 @@ async function tapNFC() {
 function tapMore() {
   const u = me();
   modal(
-    `<div><h2 style="margin:0 0 14px;font-size:20px">More options</h2><div class="t-more"><button onclick="closeModal();tapQR()">${sv('qr', 18)} Show full-screen QR code</button><button onclick="tapDownloadQR()">${sv('arrow', 18)} Download QR code (PNG)</button><a href="/${esc(u.handle)}" onclick="closeModal()">${sv('globe', 18)} View public profile</a><a href="/app/card" onclick="closeModal()">${sv('user', 18)} Edit my card</a></div></div>`
+    `<div><h2 style="margin:0 0 14px;font-size:20px">More options</h2><div class="t-more"><button data-on-click="closeModal();tapQR()">${sv('qr', 18)} Show full-screen QR code</button><button data-on-click="tapDownloadQR()">${sv('arrow', 18)} Download QR code (PNG)</button><a href="/${esc(u.handle)}" data-on-click="closeModal()">${sv('globe', 18)} View public profile</a><a href="/app/card" data-on-click="closeModal()">${sv('user', 18)} Edit my card</a></div></div>`
   );
 }
 function tapDownloadQR() {
@@ -3026,10 +3026,10 @@ function vTap() {
  <div class="t-card-id">${avatarC(u, 104)}<b>${esc(u.name)}</b>${u.role ? `<small>${esc(u.role)}</small>` : ''}${u.company ? `<small class="t-co">${esc(u.company)}</small>` : ''}</div>
  <div class="t-qr"><div id="qrTap"></div><span class="t-qrlogo"><span class="x-lm"><i></i><i></i></span></span></div>
  <div class="t-url">introthread.com/${esc(u.handle)}</div>${tapTags(u)}
- <div class="t-acts"><button type="button" onclick="copy('${profileUrl(u)}','Link copied')">${sv('link', 16)} Copy link</button><button type="button" onclick="shareNative()">${sv('send', 16)} Share</button><button type="button" onclick="toast('Apple and Google Wallet passes are coming soon.')">${sv('wallet', 16)} Add to Wallet</button><button type="button" aria-label="More options" onclick="tapMore()">&bull;&bull;&bull;</button></div>
+ <div class="t-acts"><button type="button" data-on-click="copy('${profileUrl(u)}','Link copied')">${sv('link', 16)} Copy link</button><button type="button" data-on-click="shareNative()">${sv('send', 16)} Share</button><button type="button" data-on-click="toast('Apple and Google Wallet passes are coming soon.')">${sv('wallet', 16)} Add to Wallet</button><button type="button" aria-label="More options" data-on-click="tapMore()">&bull;&bull;&bull;</button></div>
 </div>
-<form class="t-form" onsubmit="return newThread(event)" autocomplete="off">
- <div class="t-form-h"><div><h2>Add a new connection</h2><p>Create a Thread in seconds. We&rsquo;ll send them a link to confirm.</p></div><div class="x-seg t-seg"><button type="button" data-m="q" class="${TAPM === 'q' ? 'on' : ''}" onclick="tapMode('q')">Quick add</button><button type="button" data-m="f" class="${TAPM === 'f' ? 'on' : ''}" onclick="tapMode('f')">Full details</button></div></div>
+<form class="t-form" data-on-submit="return newThread(event)" autocomplete="off">
+ <div class="t-form-h"><div><h2>Add a new connection</h2><p>Create a Thread in seconds. We&rsquo;ll send them a link to confirm.</p></div><div class="x-seg t-seg"><button type="button" data-m="q" class="${TAPM === 'q' ? 'on' : ''}" data-on-click="tapMode('q')">Quick add</button><button type="button" data-m="f" class="${TAPM === 'f' ? 'on' : ''}" data-on-click="tapMode('f')">Full details</button></div></div>
  <div class="t-g2">
   <label class="x-f"><span>Name <i>*</i></span><input id="tn" required placeholder="Their name" autocomplete="off"></label>
   <label class="x-f"><span>Email or phone <i>*</i></span><input id="te" required autocomplete="off" placeholder="name@company.com or +44 7XXX XXX"></label>
@@ -3037,10 +3037,10 @@ function vTap() {
   <label class="x-f"><span>Company <em>(optional)</em></span><input id="tc" placeholder="e.g. Acme Technologies"></label>
   <div class="x-f"><span>Where did you meet?</span><input type="hidden" id="tw"><input type="hidden" id="tw2">
    <details class="t-where" id="twd"><summary id="twb">${sv('pin', 18)}<span>Select a location</span>${sv('chev', 16)}</summary><div class="t-where-m">
-    ${rooms.length ? `<small>Your Rooms</small>${rooms.map(r => `<button type="button" onclick="tapWhereSet('${r.id}','${esc(r.name).replace(/'/g, '&#39;')}')">${sv('users', 15)}${esc(r.name)}</button>`).join('')}` : ''}
-    <small>Quick picks</small>${['Conference', 'Coffee meeting', 'Client meeting', 'Networking event', 'Office'].map(p => `<button type="button" onclick="tapWhereSet('','${p}')">${sv('pin', 15)}${p}</button>`).join('')}
-    <div class="t-where-c"><input id="twc" placeholder="Somewhere else..." onkeydown="if(event.key==='Enter'){event.preventDefault();tapWhereCustom()}"><button type="button" onclick="tapWhereCustom()">Use</button></div></div></details></div>
-  <label class="x-f"><span>Add a note <em>(optional)</em></span><div class="t-note"><textarea id="tx" maxlength="200" rows="3" placeholder="What did you talk about?" oninput="tapNoteCount()"></textarea><small><b id="txc">0</b>/200</small></div></label>
+    ${rooms.length ? `<small>Your Rooms</small>${rooms.map(r => `<button type="button" data-on-click="tapWhereSet('${r.id}','${esc(r.name).replace(/'/g, '&#39;')}')">${sv('users', 15)}${esc(r.name)}</button>`).join('')}` : ''}
+    <small>Quick picks</small>${['Conference', 'Coffee meeting', 'Client meeting', 'Networking event', 'Office'].map(p => `<button type="button" data-on-click="tapWhereSet('','${p}')">${sv('pin', 15)}${p}</button>`).join('')}
+    <div class="t-where-c"><input id="twc" placeholder="Somewhere else..." data-on-keydown="tapWhereKey(event)"><button type="button" data-on-click="tapWhereCustom()">Use</button></div></div></details></div>
+  <label class="x-f"><span>Add a note <em>(optional)</em></span><div class="t-note"><textarea id="tx" maxlength="200" rows="3" placeholder="What did you talk about?" data-on-input="tapNoteCount()"></textarea><small><b id="txc">0</b>/200</small></div></label>
  </div>
 ${topicsField(TSEL)}
  <div class="t-g2" id="tfull" ${TAPM === 'f' ? '' : 'hidden'}><label class="x-f"><span>LinkedIn <em>(optional)</em></span><input id="tli" placeholder="linkedin.com/in/..."></label><label class="x-f"><span>Follow up in</span><select id="tfu"><option value="">No reminder</option><option>2 days</option><option selected>3 days</option><option>1 week</option><option>2 weeks</option></select></label></div>
@@ -3048,9 +3048,9 @@ ${topicsField(TSEL)}
  <button class="t-start">${sv('link', 20)} Start Thread ${sv('arrow', 18)}</button>
 </form></div>
 <div class="t-ways">
- <button type="button" class="t-way o" onclick="tapNFC()"><span class="t-way-ic">${sv('nfc', 24)}</span><span><b>Tap with an NFC card</b><small>Hold your NFC card or phone close to theirs to start a Thread.</small></span>${sv('chev', 18)}</button>
- <button type="button" class="t-way b" onclick="tapQR()"><span class="t-way-ic">${sv('qr', 24)}</span><span><b>Scan QR code</b><small>Let them scan your code to open your Introthread card.</small></span>${sv('chev', 18)}</button>
- <button type="button" class="t-way g" onclick="shareNative()"><span class="t-way-ic">${sv('send', 22)}</span><span><b>Share your link</b><small>Send your link via any channel: email, SMS, WhatsApp or social media.</small></span>${sv('chev', 18)}</button>
+ <button type="button" class="t-way o" data-on-click="tapNFC()"><span class="t-way-ic">${sv('nfc', 24)}</span><span><b>Tap with an NFC card</b><small>Hold your NFC card or phone close to theirs to start a Thread.</small></span>${sv('chev', 18)}</button>
+ <button type="button" class="t-way b" data-on-click="tapQR()"><span class="t-way-ic">${sv('qr', 24)}</span><span><b>Scan QR code</b><small>Let them scan your code to open your Introthread card.</small></span>${sv('chev', 18)}</button>
+ <button type="button" class="t-way g" data-on-click="shareNative()"><span class="t-way-ic">${sv('send', 22)}</span><span><b>Share your link</b><small>Send your link via any channel: email, SMS, WhatsApp or social media.</small></span>${sv('chev', 18)}</button>
 </div>
 <div class="t-tip"><span class="t-tip-ic">${sv('spark', 20)}</span><span><b>Pro tip: Add context after the event</b><small>Take quick notes while it&rsquo;s fresh. You can always update the Thread later with more details and next steps.</small></span><a href="/how">Learn more ${sv('chev', 15)}</a></div>
 ${tapInsights()}`
@@ -3090,7 +3090,7 @@ function tapInsights() {
   const act = T.slice(0, 5)
     .map(
       t =>
-        `<button type="button" class="t-act" onclick="go('/app/thread/${t.id}')">${av(t.other.name, 'sm')}<span class="t-act-m"><b>${esc(t.other.name)}</b><small>${esc([t.other.role, t.other.company].filter(Boolean).join(', ') || 'New connection')} &middot; ${esc(t.where || 'In person')}</small></span><span class="t-act-r">${stateChip(t)}<small>${ago(t.createdAt)}</small></span></button>`
+        `<button type="button" class="t-act" data-on-click="go('/app/thread/${t.id}')">${av(t.other.name, 'sm')}<span class="t-act-m"><b>${esc(t.other.name)}</b><small>${esc([t.other.role, t.other.company].filter(Boolean).join(', ') || 'New connection')} &middot; ${esc(t.where || 'In person')}</small></span><span class="t-act-r">${stateChip(t)}<small>${ago(t.createdAt)}</small></span></button>`
     )
     .join('');
   const st = (n, l, s) =>
@@ -6144,4 +6144,12 @@ function threadVcf(id) {
     where: t.where
   });
   toast('Contact file downloaded');
+}
+
+/* v61: named handlers for the Tap screen (no inline JavaScript). */
+function tapWhereKey(e) {
+  if (e.key === 'Enter') {
+    e.preventDefault();
+    tapWhereCustom();
+  }
 }
