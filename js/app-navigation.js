@@ -142,11 +142,11 @@ shell = function (on, inner) {
   const n = mbOpenCount();
   const tab = (href, ic, l, k, badge) =>
     `<a href="${href}" class="mb-t ${on === k ? 'on' : ''}" ${on === k ? 'aria-current="page"' : ''}><span class="mb-ti">${sv(ic, 22)}${badge ? `<em>${badge > 99 ? '99+' : badge}</em>` : ''}</span><span>${l}</span></a>`;
-  const bar = `<nav class="mobile-tab mb-bar" aria-label="Main">${tab('/app', 'home', 'Today', 'today')}${tab('/app/threads', 'thread', 'Threads', 'threads', n)}<a href="/app/tap" class="mb-tap ${on === 'tap' ? 'on' : ''}" aria-label="Tap to Thread"><span>${sv('nfc', 24)}</span><b>Tap</b></a>${tab('/app/rooms', 'cal', 'Rooms', 'rooms')}<button type="button" class="mb-t ${['card', 'pub', 'settings'].includes(on) ? 'on' : ''}" data-am aria-haspopup="menu" aria-expanded="false" onclick="acctMenu(this,'sheet')"><span class="mb-ti mb-av">${avatarC(u, 26)}</span><span>More</span></button></nav>`;
+  const bar = `<nav class="mobile-tab mb-bar" aria-label="Main">${tab('/app', 'home', 'Today', 'today')}${tab('/app/threads', 'thread', 'Threads', 'threads', n)}<a href="/app/tap" class="mb-tap ${on === 'tap' ? 'on' : ''}" aria-label="Tap to Thread"><span>${sv('nfc', 24)}</span><b>Tap</b></a>${tab('/app/rooms', 'cal', 'Rooms', 'rooms')}<button type="button" class="mb-t ${['card', 'pub', 'settings'].includes(on) ? 'on' : ''}" data-am aria-haspopup="menu" aria-expanded="false" data-on-click="acctMenu(this,'sheet')"><span class="mb-ti mb-av">${avatarC(u, 26)}</span><span>More</span></button></nav>`;
   h = h.replace(/<nav class="mobile-tab">[\s\S]*?<\/nav>/, bar);
   h = h.replace(
     '<div class="topbar">',
-    `<div class="topbar"><a href="/app" class="mb-logo" aria-label="Introthread dashboard"><span class="x-lm"><i></i><i></i></span><span>intro<b>thread</b></span></a><button type="button" class="mb-sbtn" aria-label="Search" onclick="mbSearch()">${ic('search', 20)}</button>`
+    `<div class="topbar"><a href="/app" class="mb-logo" aria-label="Introthread dashboard"><span class="x-lm"><i></i><i></i></span><span>intro<b>thread</b></span></a><button type="button" class="mb-sbtn" aria-label="Search" data-on-click="mbSearch()">${ic('search', 20)}</button>`
   );
   return h;
 };
@@ -173,7 +173,7 @@ acctMenu = function (btn, dir) {
   if (pages && !m.querySelector('[data-mbnav]'))
     pages.insertAdjacentHTML(
       'afterbegin',
-      `<button type="button" role="menuitem" class="am-it" data-mbnav onclick="amGo('/app/tap')">${sv('nfc', 18)}<span>Tap to Thread</span></button>`
+      `<button type="button" role="menuitem" class="am-it" data-mbnav data-on-click="amGo('/app/tap')">${sv('nfc', 18)}<span>Tap to Thread</span></button>`
     );
 };
 const _amClose21 = amClose;
@@ -190,7 +190,7 @@ function mbSearch() {
   d.className = 'mbs';
   d.setAttribute('role', 'dialog');
   d.setAttribute('aria-label', 'Search');
-  d.innerHTML = `<div class="mbs-h"><label class="mbs-in">${sv('search', 18)}<input id="mbsq" type="search" placeholder="Search people, companies, Rooms" autocomplete="off" enterkeyhint="search"></label><button type="button" class="mbs-x" onclick="mbSearchClose()">Cancel</button></div><div class="mbs-r" id="mbsr"></div>`;
+  d.innerHTML = `<div class="mbs-h"><label class="mbs-in">${sv('search', 18)}<input id="mbsq" type="search" placeholder="Search people, companies, Rooms" autocomplete="off" enterkeyhint="search"></label><button type="button" class="mbs-x" data-on-click="mbSearchClose()">Cancel</button></div><div class="mbs-r" id="mbsr"></div>`;
   document.body.appendChild(d);
   document.body.classList.add('mbs-open');
   const i = d.querySelector('input');
@@ -232,7 +232,7 @@ function mbSearchRun() {
     ]
       .map(
         ([h, ic, l]) =>
-          `<button type="button" class="mbs-i" onclick="mbSearchClose();go('${h}')">${sv(ic, 18)}<span>${l}</span>${sv('chev', 14)}</button>`
+          `<button type="button" class="mbs-i" data-on-click="mbSearchClose();go('${h}')">${sv(ic, 18)}<span>${l}</span>${sv('chev', 14)}</button>`
       )
       .join('')}`;
     return;
@@ -250,10 +250,10 @@ function mbSearchRun() {
     .slice(0, 4);
   r.innerHTML =
     (T.length
-      ? `<small class="mbs-l">People</small>${T.map(t => `<button type="button" class="mbs-i" onclick="mbSearchClose();go('/app/thread/${t.id}')">${xav(t.other.name, 34)}<span><b>${esc(t.other.name)}</b><small>${esc([t.other.role, t.other.company].filter(Boolean).join(', ') || t.where)}</small></span>${sv('chev', 14)}</button>`).join('')}`
+      ? `<small class="mbs-l">People</small>${T.map(t => `<button type="button" class="mbs-i" data-on-click="mbSearchClose();go('/app/thread/${t.id}')">${xav(t.other.name, 34)}<span><b>${esc(t.other.name)}</b><small>${esc([t.other.role, t.other.company].filter(Boolean).join(', ') || t.where)}</small></span>${sv('chev', 14)}</button>`).join('')}`
       : '') +
     (R.length
-      ? `<small class="mbs-l">Rooms</small>${R.map(x => `<button type="button" class="mbs-i" onclick="mbSearchClose();go('/app/room/${x.id}')">${sv('cal', 18)}<span><b>${esc(x.name)}</b><small>${esc(x.location || '')}</small></span>${sv('chev', 14)}</button>`).join('')}`
+      ? `<small class="mbs-l">Rooms</small>${R.map(x => `<button type="button" class="mbs-i" data-on-click="mbSearchClose();go('/app/room/${x.id}')">${sv('cal', 18)}<span><b>${esc(x.name)}</b><small>${esc(x.location || '')}</small></span>${sv('chev', 14)}</button>`).join('')}`
       : '') +
     (!T.length && !R.length ? `<p class="mbs-e">No results for &ldquo;${esc(q)}&rdquo;</p>` : '');
 }
