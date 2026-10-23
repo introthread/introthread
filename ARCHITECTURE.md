@@ -111,6 +111,11 @@ This is several days of careful work and should be done screen by screen, never 
   - Every script is `defer` (order kept), so the browser no longer stops drawing the page to download the Supabase and QR libraries in `<head>`.
   - `/js` and `/css` links carry a content hash (`?v=`) and are cached for a year. Repeat visits load them from the browser cache, and a file's hash changes only when that file changes.
   - Start-up (`boot()` in `app-core.js`) waits for `DOMContentLoaded` through a `DOM_READY` flag, because with deferred scripts `readyState` is already `interactive` before the last files have run.
+- **Step 10 (v58, 23 Oct 2026), done: pre-rendered website pages.**
+  - `scripts/prerender.py` loads `/`, `/how`, `/rooms`, `/networks`, `/pricing`, `/about`, `/privacy` and `/terms` in headless Chromium (logged out, no network). It saves the drawn `#root` between `<!--pre-->` markers, so the text shows before scripts run and search engines read it directly. The app redraws the same content on load.
+  - App, admin, card and room routes now use `app-shell.html` (an empty root) through the `vercel.json` catch-all, so they never flash the home page.
+  - Login and signup are not pre-rendered, because they change with sign-in options.
+  - Screenshots of each page with and without scripts match at 390px and 1366px. The only difference is the pulsing LIVE dot on /rooms.
 - **Next steps:**
   - Move the older blocks into `/js`, newest first, one file per feature: payments (v26), accessibility (v28), photo crop (v30-v34), then the admin screens.
   - Move CSS into `/css` files.

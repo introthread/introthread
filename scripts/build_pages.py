@@ -34,6 +34,8 @@ def block(path):
 <meta name="twitter:image" content="{SITE}/img/og.jpg">
 <!--/meta-->'''
 h=open('index.html').read()
+# --- v58: clear any pre-rendered website text; scripts/prerender.py fills it again.
+h=re.sub(r'<div id="root">.*?<!--/pre--></div>','<div id="root"></div>',h,flags=re.S)
 if '<!--meta-->' not in h:
     i=h.index('<title>');j=h.index('<meta name="theme-color"')
     h=h[:i]+block('/')+'\n'+h[j:]
@@ -55,6 +57,9 @@ h=re.sub(r'(<(?:script|link rel="stylesheet")[^>]*?\s)(src|href)="/((?:js|css)/[
 h=re.sub(r'<script (?!type=)(?![^>]*\bdefer\b)([^>]*)></script>',r'<script \1 defer></script>',h)
 # --- end v57
 open('index.html','w').write(h)
+# --- v58: app/admin/card routes get an empty shell (vercel.json catch-all), so they
+# never flash the home page text that prerender.py puts into index.html.
+open('app-shell.html','w').write(h)
 for p in META:
     if p=='/':continue
     os.makedirs(p[1:],exist_ok=True)
