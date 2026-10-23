@@ -3,6 +3,7 @@
 Everything built so far, newest first. Full technical detail for each item is in `HANDOVER.md`. How Rooms, events, communities and the Room pass work: `docs/ROOMS.md`.
 
 ## 23 Oct 2026
+- **v85: Code cleanup, step 3: Today screen split out.** The Today screen functions moved unchanged from `js/app-core.js` (now about 5,410 lines) to a new `js/today.js`, loaded right after `auth-pages.js`. The pre-rendered pages are identical before and after. No change in behaviour.
 - **v84: Code cleanup, step 2: sign-up and login split out.** The sign-up and login screen functions moved unchanged from `js/app-core.js` (now about 5,570 lines) to a new `js/auth-pages.js`, loaded right after `site-pages.js`. The pre-rendered pages are identical before and after. No change in behaviour.
 - **v83: Code cleanup, step 1: website pages split out.** The website page functions moved unchanged from `js/app-core.js` (now about 5,800 lines) to a new `js/site-pages.js`, loaded right after it. The pre-rendered pages are identical before and after. No change in behaviour.
 - **v82: No personal emails in the tests.** The admin tests use owner@example.com and member@example.com, and the integrations mock uses contact@example.com. All 10 admin tests pass. `supabase/migrations/002_contacts_admin.sql` still seeds the real owner address, because changing an already-run migration would change who becomes owner if it is run again.
