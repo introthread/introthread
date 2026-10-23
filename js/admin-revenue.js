@@ -98,7 +98,7 @@ async function rvLoad(keep) {
   } catch (e) {
     admBody(
       rvHead() +
-        `<div class="ix-card ix-fail" role="alert">${sv('alert', 22)}<div><b>Revenue could not load</b><p>${esc((e && e.message) || 'Unknown error')}</p></div><button type="button" class="ix-btn" onclick="rvLoad()">${sv('refresh', 16)} Try again</button></div>`
+        `<div class="ix-card ix-fail" role="alert">${sv('alert', 22)}<div><b>Revenue could not load</b><p>${esc((e && e.message) || 'Unknown error')}</p></div><button type="button" class="ix-btn" data-on-click="rvLoad()">${sv('refresh', 16)} Try again</button></div>`
     );
   }
 }
@@ -183,7 +183,7 @@ function rvHead() {
     s = d.stripe || {};
   const con = !!s.connected;
   return `<div class="ix-h"><div><h1>Revenue</h1><p>Subscriptions and income. Card payments run through Stripe once billing is connected.</p></div><div class="ix-hc rv-hc">
- ${RVX.data ? `<button type="button" class="rv-stripe ${con ? 'on' : 'off'}" onclick="rvBilling()" title="${con ? 'Stripe is sending payments to Introthread' : 'Stripe is not connected yet'}">${sv(con ? 'check' : 'alert', 16)} ${con ? 'Stripe connected' : 'Stripe not connected'}</button>` : ''}
+ ${RVX.data ? `<button type="button" class="rv-stripe ${con ? 'on' : 'off'}" data-on-click="rvBilling()" title="${con ? 'Stripe is sending payments to Introthread' : 'Stripe is not connected yet'}">${sv(con ? 'check' : 'alert', 16)} ${con ? 'Stripe connected' : 'Stripe not connected'}</button>` : ''}
  ${mdSel(
    'rvm',
    'Range',
@@ -197,7 +197,7 @@ function rvHead() {
    'rvRange(+this.value)',
    'cal'
  ).replace('<span class="md-sl">Range:</span>', '<span class="sr">Range</span>')}
- <button type="button" class="ix-btn" onclick="rvBilling()">${sv('gear', 17)} Manage billing</button></div></div>`;
+ <button type="button" class="ix-btn" data-on-click="rvBilling()">${sv('gear', 17)} Manage billing</button></div></div>`;
 }
 function rvRange(m) {
   RVX.months = m;
@@ -291,7 +291,7 @@ function rvChart(id, S, lines, fmtY, g) {
  ${ticks.map(t => `<line x1="${L}" x2="${W - R}" y1="${y(t)}" y2="${y(t)}" class="rv-gl"/><text x="${L - 8}" y="${y(t) + 4}" class="rv-yl" text-anchor="end">${fmtY(t)}</text>`).join('')}
  ${S.map((p, i) => `<line x1="${x(i)}" x2="${x(i)}" y1="${T}" y2="${H - B}" class="rv-gv"/>${i % step === 0 || i === n - 1 ? `<text x="${x(i)}" y="${H - 8}" class="rv-xl" text-anchor="middle">${rvLab(p.start, g)}</text>` : ''}`).join('')}
  ${lines.map(l => `<path d="${S.map((p, i) => (i ? 'L' : 'M') + x(i).toFixed(1) + ' ' + y(p[l.k]).toFixed(1)).join(' ')}" class="rv-ln" style="stroke:${l.c}${l.dash ? ';stroke-dasharray:4 4' : ''}"/>${S.map((p, i) => `<circle cx="${x(i).toFixed(1)}" cy="${y(p[l.k]).toFixed(1)}" r="3.5" class="rv-pt" style="stroke:${l.c}"/>`).join('')}`).join('')}
- ${S.map((p, i) => `<rect x="${(x(i) - (W - L - R) / (2 * Math.max(1, n - 1))).toFixed(1)}" y="${T}" width="${((W - L - R) / Math.max(1, n - 1)).toFixed(1)}" height="${H - T - B}" class="rv-hit" tabindex="0" onmouseenter="rvTip('${id}',${i})" onfocus="rvTip('${id}',${i})" onmouseleave="rvTipOff('${id}')" onblur="rvTipOff('${id}')"><title>${esc(rvLab(p.start, g))}: ${lines.map(l => l.l + ' ' + l.f(p[l.k])).join(', ')}</title></rect>`).join('')}
+ ${S.map((p, i) => `<rect x="${(x(i) - (W - L - R) / (2 * Math.max(1, n - 1))).toFixed(1)}" y="${T}" width="${((W - L - R) / Math.max(1, n - 1)).toFixed(1)}" height="${H - T - B}" class="rv-hit" tabindex="0" data-on-mouseenter="rvTip('${id}',${i})" data-on-focus="rvTip('${id}',${i})" data-on-mouseleave="rvTipOff('${id}')" data-on-blur="rvTipOff('${id}')"><title>${esc(rvLab(p.start, g))}: ${lines.map(l => l.l + ' ' + l.f(p[l.k])).join(', ')}</title></rect>`).join('')}
  </svg><div class="rv-tip" hidden></div>${allZero ? `<p class="rv-zero">No ${esc(lines[0].l.toLowerCase())} in this period yet.</p>` : ''}</div>
  <div class="rv-lg">${lines.map(l => `<span><i style="background:${l.c}"></i>${l.l}</span>`).join('')}</div>`;
 }
@@ -346,7 +346,7 @@ function rvSubs() {
     S = RVX.subs || { rows: [], total: 0 },
     R = S.rows || [];
   const tab = (k, l) =>
-    `<button type="button" role="tab" aria-selected="${RVX.subSt === k}" class="${RVX.subSt === k ? 'on' : ''}" onclick="RVX.subSt='${k}';RVX.subPage=0;rvLoad(true)">${l} <em>${isNum(c[k]) ? fmtN(c[k]) : 0}</em></button>`;
+    `<button type="button" role="tab" aria-selected="${RVX.subSt === k}" class="${RVX.subSt === k ? 'on' : ''}" data-on-click="rvSubSt('${k}')">${l} <em>${isNum(c[k]) ? fmtN(c[k]) : 0}</em></button>`;
   const pages = Math.max(1, Math.ceil((S.total || 0) / RVX.subPer));
   return `<section class="ix-card rv-sec rv-subs"><div class="rv-sh"><div><h2>Subscriptions</h2><p>Active and past subscriptions.</p></div><div class="rv-tabs" role="tablist" aria-label="Subscription status">${tab('active', 'Active')}${tab('past_due', 'Past due')}${tab('canceled', 'Cancelled')}${tab('all', 'All')}</div></div>
  <div class="rv-tw"><table class="au-t rv-t"><thead><tr><th scope="col">User</th><th scope="col">Plan</th><th scope="col">Status</th><th scope="col">Price</th><th scope="col">Started</th><th scope="col">${RVX.subSt === 'canceled' ? 'Ended' : 'Renews'}</th></tr></thead>
@@ -354,12 +354,12 @@ function rvSubs() {
    R.length
      ? R.map(
          s =>
-           `<tr><td><button type="button" class="au-u" onclick="mdToUser('${s.user_id}')"><span class="adm2-av sm" aria-hidden="true">${esc(initials(s.name || '?'))}</span><span class="au-ut"><b>${esc(s.name || 'Deleted account')}</b><small>${s.handle ? '@' + esc(s.handle) : esc(s.email || '')}</small></span></button></td><td>${esc(s.plan_name || s.plan_id)}</td><td>${rvSt(s.status)}</td><td>${rvMoney(s.price, s.currency)}<small>/ ${s.interval === 'year' ? 'yr' : 'mo'}</small></td><td>${fmtD(s.started_at || s.updated_at)}</td><td>${s.status === 'canceled' ? fmtD(s.canceled_at || s.updated_at) : s.current_period_end ? fmtD(s.current_period_end) : '<span class="ix-mu">Not set</span>'}</td></tr>`
+           `<tr><td><button type="button" class="au-u" data-on-click="mdToUser('${s.user_id}')"><span class="adm2-av sm" aria-hidden="true">${esc(initials(s.name || '?'))}</span><span class="au-ut"><b>${esc(s.name || 'Deleted account')}</b><small>${s.handle ? '@' + esc(s.handle) : esc(s.email || '')}</small></span></button></td><td>${esc(s.plan_name || s.plan_id)}</td><td>${rvSt(s.status)}</td><td>${rvMoney(s.price, s.currency)}<small>/ ${s.interval === 'year' ? 'yr' : 'mo'}</small></td><td>${fmtD(s.started_at || s.updated_at)}</td><td>${s.status === 'canceled' ? fmtD(s.canceled_at || s.updated_at) : s.current_period_end ? fmtD(s.current_period_end) : '<span class="ix-mu">Not set</span>'}</td></tr>`
        ).join('')
      : `<tr><td colspan="6"><div class="rv-empty"><span class="md-eic sm" aria-hidden="true">${sv('card', 22)}</span><b>${RVX.subSt === 'active' ? 'No paid subscriptions yet' : RVX.subSt === 'past_due' ? 'No payments are overdue' : RVX.subSt === 'canceled' ? 'No cancelled subscriptions' : 'No paid subscriptions yet'}</b><p>When users subscribe, they will appear here.</p></div></td></tr>`
  }</tbody></table></div>
- ${S.total > RVX.subPer ? `<div class="au-ft"><span>${fmtN(RVX.subPage * RVX.subPer + 1)}–${fmtN(Math.min(S.total, (RVX.subPage + 1) * RVX.subPer))} of ${fmtN(S.total)}</span><nav class="au-pn" aria-label="Subscription pages"><button type="button" aria-label="Previous page" ${RVX.subPage ? '' : 'disabled'} onclick="RVX.subPage--;rvLoad(true)">${sv('chev', 16)}</button><button type="button" aria-label="Next page" ${RVX.subPage + 1 < pages ? '' : 'disabled'} onclick="RVX.subPage++;rvLoad(true)">${sv('chev', 16)}</button></nav></div>` : ''}
- ${canFin() && S.total ? `<div class="rv-sf"><button type="button" class="au-inl" onclick="rvExport()">Export subscriptions CSV</button></div>` : ''}</section>`;
+ ${S.total > RVX.subPer ? `<div class="au-ft"><span>${fmtN(RVX.subPage * RVX.subPer + 1)}–${fmtN(Math.min(S.total, (RVX.subPage + 1) * RVX.subPer))} of ${fmtN(S.total)}</span><nav class="au-pn" aria-label="Subscription pages"><button type="button" aria-label="Previous page" ${RVX.subPage ? '' : 'disabled'} data-on-click="rvSubPg('prev')">${sv('chev', 16)}</button><button type="button" aria-label="Next page" ${RVX.subPage + 1 < pages ? '' : 'disabled'} data-on-click="rvSubPg('next')">${sv('chev', 16)}</button></nav></div>` : ''}
+ ${canFin() && S.total ? `<div class="rv-sf"><button type="button" class="au-inl" data-on-click="rvExport()">Export subscriptions CSV</button></div>` : ''}</section>`;
 }
 /* revenue by plan */
 function rvDonut() {
@@ -387,7 +387,7 @@ function rvDonut() {
 /* price list */
 function rvPrices() {
   const P = (RVX.data || {}).plans || [];
-  return `<section class="ix-card rv-sec"><div class="rv-sh"><div><h2>Price list</h2><p>Current plan prices and limits.</p></div>${admOk(['owner', 'finance']) ? `<button type="button" class="ix-btn" onclick="admGo('plans')">${sv('edit', 16)} Edit prices</button>` : ''}</div>
+  return `<section class="ix-card rv-sec"><div class="rv-sh"><div><h2>Price list</h2><p>Current plan prices and limits.</p></div>${admOk(['owner', 'finance']) ? `<button type="button" class="ix-btn" data-on-click="admGo('plans')">${sv('edit', 16)} Edit prices</button>` : ''}</div>
  <div class="rv-tw"><table class="au-t rv-t"><thead><tr><th scope="col">Plan</th><th scope="col">Price (USD)</th><th scope="col">Price (GBP)</th><th scope="col">New Threads</th><th scope="col">Stripe</th><th scope="col">Status</th></tr></thead><tbody>
  ${P.map(p => `<tr><td><b>${esc(p.name)}</b></td><td>${rvUsd(p.price_usd_month)} / mo${+p.price_usd_year ? `<small>${rvUsd(p.price_usd_year)} / yr</small>` : ''}</td><td>£${fmtN(+p.price_gbp_month || 0)} / mo${+p.price_gbp_year ? `<small>£${fmtN(+p.price_gbp_year)} / yr</small>` : ''}</td><td>${p.threads_per_month == null ? 'Unlimited' : fmtN(p.threads_per_month) + ' a month'}</td><td>${p.id === 'free' ? '<span class="ix-mu">Not needed</span>' : p.stripe_price_month || p.stripe_price_year ? '<span class="rv-st active">Linked</span>' : '<span class="rv-st past_due">Not linked</span>'}</td><td>${p.active ? '<span class="rv-st active">Active</span>' : '<span class="rv-st canceled">Hidden</span>'}</td></tr>`).join('')}</tbody></table></div></section>`;
 }
@@ -395,20 +395,20 @@ function rvPrices() {
 function rvPayRows(R) {
   return R.map(
     p =>
-      `<tr><td>${fmtD(p.created_at)}<small>${fmtT(p.created_at)}</small></td><td>${p.user_id && p.name ? `<button type="button" class="au-inl" onclick="closeModal&&closeModal();mdToUser('${p.user_id}')">${esc(p.name)}</button>` : esc(p.name || 'Deleted account')}</td><td>${esc(p.plan_name || p.plan_id || '')}</td><td class="num">${rvMoney(p.amount, p.currency)}</td><td>${{ succeeded: '<span class="rv-st active">Paid</span>', failed: '<span class="rv-st canceled bad">Failed</span>', refunded: '<span class="rv-st trialing">Refunded</span>', pending: '<span class="rv-st past_due">Pending</span>' }[p.status] || esc(p.status)}${p.failure_reason ? `<small>${esc(p.failure_reason)}</small>` : ''}</td></tr>`
+      `<tr><td>${fmtD(p.created_at)}<small>${fmtT(p.created_at)}</small></td><td>${p.user_id && p.name ? `<button type="button" class="au-inl" data-on-click="rvToUser('${p.user_id}')">${esc(p.name)}</button>` : esc(p.name || 'Deleted account')}</td><td>${esc(p.plan_name || p.plan_id || '')}</td><td class="num">${rvMoney(p.amount, p.currency)}</td><td>${{ succeeded: '<span class="rv-st active">Paid</span>', failed: '<span class="rv-st canceled bad">Failed</span>', refunded: '<span class="rv-st trialing">Refunded</span>', pending: '<span class="rv-st past_due">Pending</span>' }[p.status] || esc(p.status)}${p.failure_reason ? `<small>${esc(p.failure_reason)}</small>` : ''}</td></tr>`
   ).join('');
 }
 function rvPays() {
   const P = RVX.pays,
     R = (P && P.rows) || [];
-  return `<section class="ix-card rv-sec"><div class="rv-sh"><div><h2>Recent payments</h2><p>Latest successful and failed payments.</p></div>${P && P.total > R.length ? `<button type="button" class="ix-btn" onclick="rvAllPays()">View all ${sv('arrow', 15)}</button>` : ''}</div>
+  return `<section class="ix-card rv-sec"><div class="rv-sh"><div><h2>Recent payments</h2><p>Latest successful and failed payments.</p></div>${P && P.total > R.length ? `<button type="button" class="ix-btn" data-on-click="rvAllPays()">View all ${sv('arrow', 15)}</button>` : ''}</div>
  <div class="rv-tw"><table class="au-t rv-t"><thead><tr><th scope="col">Date</th><th scope="col">User</th><th scope="col">Plan</th><th scope="col">Amount</th><th scope="col">Status</th></tr></thead><tbody>
  ${R.length ? rvPayRows(R) : `<tr><td colspan="5"><div class="rv-empty"><span class="md-eic sm" aria-hidden="true">${sv('doc', 22)}</span><b>No payments yet</b><p>${P ? 'Payments will appear here once someone subscribes.' : 'Run database update 008 to record payments.'}</p></div></td></tr>`}</tbody></table></div></section>`;
 }
 async function rvAllPays(st) {
   st = st || 'all';
   modal(
-    `<div class="cap-m rv-allm"><div class="row between"><h3>All payments</h3><button class="x" aria-label="Close" onclick="closeModal()">&times;</button></div><div id="rvap">${admLoading()}</div></div>`
+    `<div class="cap-m rv-allm"><div class="row between"><h3>All payments</h3><button class="x" aria-label="Close" data-on-click="closeModal()">&times;</button></div><div id="rvap">${admLoading()}</div></div>`
   );
   try {
     const d = await arpc('admin_payments', { st, lim: 200, off: 0 });
@@ -422,7 +422,7 @@ async function rvAllPays(st) {
     ]
       .map(
         ([k, l]) =>
-          `<button type="button" role="tab" aria-selected="${st === k}" class="${st === k ? 'on' : ''}" onclick="rvAllPays('${k}')">${l}</button>`
+          `<button type="button" role="tab" aria-selected="${st === k}" class="${st === k ? 'on' : ''}" data-on-click="rvAllPays('${k}')">${l}</button>`
       )
       .join(
         ''
@@ -436,7 +436,7 @@ async function rvAllPays(st) {
 function rvBilling() {
   const s = (RVX.data || {}).stripe || {};
   const con = !!s.connected;
-  modal(`<div class="cap-m md-guide"><div class="row between"><h3>${con ? 'Manage billing' : 'Connect Stripe'}</h3><button class="x" aria-label="Close" onclick="closeModal()">&times;</button></div>
+  modal(`<div class="cap-m md-guide"><div class="row between"><h3>${con ? 'Manage billing' : 'Connect Stripe'}</h3><button class="x" aria-label="Close" data-on-click="closeModal()">&times;</button></div>
  ${
    con
      ? `<p class="fu-sub">Stripe holds card details, invoices, refunds and payouts. Open the Stripe dashboard to manage them.</p><a class="cap-btn" href="https://dashboard.stripe.com/" target="_blank" rel="noopener">${sv('ext', 16)} Open Stripe dashboard</a>`
@@ -495,9 +495,29 @@ function rvPage() {
   if (k.failed_30d)
     alerts.push(`${fmtN(k.failed_30d)} payment${k.failed_30d > 1 ? 's' : ''} failed in the last 30 days.`);
   return `<div id="rvwrap" class="rv">${rvHead()}${RVX.limited ? `<p class="ix-upd">Run database update 008 for charts, month-on-month change, payments and subscription start dates. Figures below are estimates from current plans.</p>` : ''}
- ${alerts.length ? `<div class="rv-alert" role="status">${sv('alert', 17)}<span>${alerts.join(' ')}</span><button type="button" class="au-inl" onclick="RVX.subSt='past_due';rvLoad(true)">Review</button></div>` : ''}
+ ${alerts.length ? `<div class="rv-alert" role="status">${sv('alert', 17)}<span>${alerts.join(' ')}</span><button type="button" class="au-inl" data-on-click="rvPastDue()">Review</button></div>` : ''}
  <div class="md-cs">${rvKpis()}</div>
  <div class="rv-g2"><section class="ix-card rv-sec"><div class="rv-sh"><h2>Revenue (USD)</h2>${d.series ? rvGranSel() : ''}</div>${rvChart('rvc1', d.series, RV_LINES.rev, v => '$' + (v >= 1000 ? Math.round(v / 100) / 10 + 'k' : Math.round(v)), d.gran)}</section>
  <section class="ix-card rv-sec"><div class="rv-sh"><h2>New paying users</h2>${d.series ? rvGranSel().replace('id="rvg"', 'id="rvg2"') : ''}</div>${rvChart('rvc2', d.series, RV_LINES.users, v => String(Math.round(v)), d.gran)}</section></div>
  <div class="rv-g2 wide">${rvSubs()}${rvDonut()}</div><div class="rv-g2">${rvPrices()}${rvPays()}</div></div>`;
+}
+
+/* v59: named handlers for the Revenue screen (no inline JavaScript). */
+function rvSubSt(k) {
+  RVX.subSt = k;
+  RVX.subPage = 0;
+  rvLoad(true);
+}
+function rvSubPg(d) {
+  if (d === 'prev') RVX.subPage--;
+  else RVX.subPage++;
+  rvLoad(true);
+}
+function rvToUser(id) {
+  if (typeof closeModal === 'function') closeModal();
+  mdToUser(id);
+}
+function rvPastDue() {
+  RVX.subSt = 'past_due';
+  rvLoad(true);
 }
