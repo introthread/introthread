@@ -2895,3 +2895,60 @@ html body .pc-m .pc-stage {
     font-size: 24px;
   }
 }
+
+/* v81: Scan a paper card band on the home page */
+.xsc-in {
+  display: grid;
+  grid-template-columns: 1.1fr 1fr;
+  gap: 48px;
+  align-items: center;
+}
+.xsc-b {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-top: 24px;
+}
+.xsc-steps {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 12px;
+}
+.xsc-steps li {
+  display: flex;
+  gap: 14px;
+  align-items: flex-start;
+  background: #fff;
+  border: 1px solid var(--xln);
+  border-radius: 16px;
+  padding: 16px 18px;
+}
+.xsc-steps li > span {
+  flex: none;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  background: var(--xb);
+  color: #fff;
+  font-weight: 700;
+  font-family: var(--xss);
+}
+.xsc-steps b {
+  display: block;
+  font-family: var(--xss);
+  color: var(--xink);
+}
+.xsc-steps small {
+  color: var(--xmu);
+  font-size: 14px;
+}
+@media (max-width: 860px) {
+  .xsc-in {
+    grid-template-columns: 1fr;
+    gap: 28px;
+  }
+}
