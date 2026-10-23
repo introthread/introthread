@@ -2094,8 +2094,6 @@ document.addEventListener('click', e => {
 /* acctMenu: earlier version removed in the v54 merge (the later declaration below always won) */
 
 /* ===== v5 Public profile workspace ===== */
-let PF = null,
-  PFT = 'qr';
 function linkKind(v) {
   v = (v || '').toLowerCase();
   return /linkedin\./.test(v)
@@ -2122,24 +2120,8 @@ vPublic = function (h) {
 };
 
 /* ===== v5 Account settings ===== */
-let STAB = 'account';
-const CC = [
-  ['+44', 'gb', 'United Kingdom'],
-  ['+1', 'us', 'United States'],
-  ['+254', 'ke', 'Kenya'],
-  ['+353', 'ie', 'Ireland'],
-  ['+49', 'de', 'Germany'],
-  ['+33', 'fr', 'France'],
-  ['+971', 'ae', 'UAE'],
-  ['+27', 'za', 'South Africa'],
-  ['+91', 'in', 'India']
-];
 const flag = c => String.fromCodePoint(...[...c.toUpperCase()].map(x => 127397 + x.charCodeAt()));
 /* stSave: earlier version removed in the v54 merge (the later declaration below always won) */
-const stCard = (ic, t, s, body, right, cls) =>
-  `<section class="st-box ${cls || ''}"><div class="st-h"><span class="st-hic">${ic}</span><div><b>${t}</b><small>${s}</small></div>${right || ''}</div>${body}</section>`;
-const stTog = (k, l, d, on, fn) =>
-  `<label class="t-tog st-row"><input type="checkbox" ${on ? 'checked' : ''} data-on-change="${fn || `setPref('${k}',this.checked)`}"><span class="t-sw"></span><span><b>${l}</b><small>${d}</small></span></label>`;
 /* stPlan: earlier version removed in the v54 merge (the later declaration below always won) */
 /* stConnected: earlier version removed in the v54 merge (the later declaration below always won) */
 /* stDanger: earlier version removed in the v54 merge (the later declaration below always won) */
@@ -2478,9 +2460,6 @@ saveCard = function (e) {
   return _saveCard10.call(this, e);
 };
 /* ===== v11 Public profile (design: Public Profile) ===== */
-let PTAB = 'info',
-  PP = null,
-  PPT = null;
 /* public page: apply profile SEO settings */
 const _vPub11 = vPublic;
 vPublic = function (hd) {
@@ -2513,16 +2492,6 @@ vPublic = function (hd) {
 };
 
 /* ===== v12 Account settings (design: Account Settings) ===== */
-let ST12 = null;
-const ST_TABS = [
-  ['account', 'Account', 'user'],
-  ['privacy', 'Privacy &amp; visibility', 'shield'],
-  ['notifications', 'Notifications', 'bell'],
-  ['integrations', 'Integrations', 'link'],
-  ['preferences', 'Preferences', 'grid'],
-  ['security', 'Security', 'lock'],
-  ['billing', 'Billing', 'brief']
-];
 
 /* ===== v14 Public card page (design: Tap to Thread Profile Card) ===== */
 function pcVcf(id) {

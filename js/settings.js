@@ -1,8 +1,43 @@
 // Introthread - Settings and profile screens (v91): the profile editor (pf*), the public profile page editor
 // (vProfile, pp*) and Settings (vSettings, st*, st12*). Moved out of js/app-core.js unchanged and in their original
 // order (code cleanup step 7). Nothing at the top level of app-core.js or earlier files uses them while loading.
-// Loads straight after rooms.js; shares app-core globals (STAB, ST12, ST_TABS, PP, stCard, stTog, ...). Later files
+// Loads straight after rooms.js; shares app-core globals; its own state is declared at the top of this file since v93. Later files
 // wrap some of these.
+
+/* v93: the Settings and profile screens' own state (PF, PFT, STAB, CC, stCard, stTog, PTAB, PP, PPT, ST12, ST_TABS),
+   moved unchanged from js/app-core.js. Nothing in the files loaded before this one uses them while loading;
+   tap-card.js (cdSave wrapper), app-navigation.js, billing.js and the admin files use them only at run time. */
+let PF = null,
+  PFT = 'qr';
+let STAB = 'account';
+const CC = [
+  ['+44', 'gb', 'United Kingdom'],
+  ['+1', 'us', 'United States'],
+  ['+254', 'ke', 'Kenya'],
+  ['+353', 'ie', 'Ireland'],
+  ['+49', 'de', 'Germany'],
+  ['+33', 'fr', 'France'],
+  ['+971', 'ae', 'UAE'],
+  ['+27', 'za', 'South Africa'],
+  ['+91', 'in', 'India']
+];
+const stCard = (ic, t, s, body, right, cls) =>
+  `<section class="st-box ${cls || ''}"><div class="st-h"><span class="st-hic">${ic}</span><div><b>${t}</b><small>${s}</small></div>${right || ''}</div>${body}</section>`;
+const stTog = (k, l, d, on, fn) =>
+  `<label class="t-tog st-row"><input type="checkbox" ${on ? 'checked' : ''} data-on-change="${fn || `setPref('${k}',this.checked)`}"><span class="t-sw"></span><span><b>${l}</b><small>${d}</small></span></label>`;
+let PTAB = 'info',
+  PP = null,
+  PPT = null;
+let ST12 = null;
+const ST_TABS = [
+  ['account', 'Account', 'user'],
+  ['privacy', 'Privacy &amp; visibility', 'shield'],
+  ['notifications', 'Notifications', 'bell'],
+  ['integrations', 'Integrations', 'link'],
+  ['preferences', 'Preferences', 'grid'],
+  ['security', 'Security', 'lock'],
+  ['billing', 'Billing', 'brief']
+];
 
 function pfInit() {
   const u = me();

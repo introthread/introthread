@@ -3,6 +3,7 @@
 Everything built so far, newest first. Full technical detail for each item is in `HANDOVER.md`. How Rooms, events, communities and the Room pass work: `docs/ROOMS.md`.
 
 ## 23 Oct 2026
+- **v93: Code cleanup: Settings and profile state moved.** `PF`, `PFT`, `STAB`, `CC`, `stCard`, `stTog`, `PTAB`, `PP`, `PPT`, `ST12` and `ST_TABS` moved unchanged from `js/app-core.js` to the top of `js/settings.js`. The pre-rendered pages are identical before and after. No change in behaviour.
 - **v92: Code cleanup: Tap and Card state moved.** `TAPM`, `CTAB`, `SHT`, `CD` and `cdHref` moved unchanged from `js/app-core.js` to the top of `js/tap-card.js`. The pre-rendered pages are identical before and after. No change in behaviour.
 - **v91: Code cleanup, step 7: Settings and profile split out.** The profile editor, public profile editor and Settings functions moved unchanged from `js/app-core.js` (now about 2,830 lines) to a new `js/settings.js`, loaded right after `rooms.js`. The pre-rendered pages are identical before and after. No change in behaviour.
 - **v90: Code cleanup, step 6: Rooms screens split out.** The Rooms list, calendar, Room page and create-a-Room functions moved unchanged from `js/app-core.js` (now about 3,670 lines) to a new `js/rooms.js`, loaded right after `tap-card.js`, together with the two small wrappers that have to run straight after `newRoom` and `vRoom`. The pre-rendered pages are identical before and after. No change in behaviour.
