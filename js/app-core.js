@@ -2357,6 +2357,58 @@ function vHow() {
     foot()
   );
 }
+/* v79: full sample Resolution Report on /rooms (sample data, clearly labelled). */
+function sampleReport() {
+  const kpi = [
+    ['600', 'Attendees'],
+    ['412', 'Verified Threads'],
+    ['68%', 'Answered What&rsquo;s next?'],
+    ['74%', 'Followed through']
+  ];
+  const funnel = [
+    ['Joined the Room', 512, 600],
+    ['Verified Threads', 412, 600],
+    ['Answered What&rsquo;s next?', 280, 600],
+    ['Followed through', 207, 600]
+  ];
+  const answers = [
+    ['Meet again', 46],
+    ['Introduce someone', 22],
+    ['Keep in touch', 24],
+    ['Not now', 8]
+  ];
+  const outcomes = [
+    ['131', 'Meetings booked'],
+    ['57', 'Introductions made'],
+    ['19', 'Kept in touch']
+  ];
+  const when = [
+    ['Same day', 62],
+    ['Days 2 to 7', 88],
+    ['Week 2', 34],
+    ['Weeks 3 and 4', 23]
+  ];
+  const topics = [
+    ['Fintech', 31],
+    ['Climate', 18],
+    ['AI tools', 17],
+    ['Hiring', 12]
+  ];
+  const max = Math.max(...when.map(w => w[1]));
+  const bar = (l, v, of, txt) =>
+    `<div class="xsr-bar"><div class="xsr-bar-l"><span>${l}</span><b>${txt}</b></div><i><s style="width:${Math.round((v / of) * 100)}%"></s></i></div>`;
+  return `<section class="x-sec" id="sample-report"><div class="x-wrap">${secHead('Sample report', 'What organisers get<br><em>after the event.</em>', 'Every Room ends with a Resolution Report: live during the event and updated for 30 days. Aggregate numbers only, never private notes.')}
+<div class="xsr"><div class="xsr-top"><div><small class="xsr-eye">Resolution report &middot; Sample data</small><b class="xsr-t">London Tech Week Founders Night</b><small class="xsr-m">One evening &middot; 600 attendees &middot; report covers 30 days after the event</small></div><span class="xsr-pill">Sample</span></div>
+<div class="xsr-kpi">${kpi.map(([n, l]) => `<div><b>${n}</b><small>${l}</small></div>`).join('')}</div>
+<div class="xsr-grid">
+<div class="xsr-card"><h3>From the room to a real next step</h3>${funnel.map(([l, v, of]) => bar(l, v, of, v.toLocaleString('en-GB'))).join('')}<p class="xsr-note">74% of the people who answered What&rsquo;s next? followed through.</p></div>
+<div class="xsr-card"><h3>What people wanted next</h3>${answers.map(([l, v]) => bar(l, v, 100, v + '%')).join('')}<p class="xsr-note">Answers stay sealed until both people reply. Organisers only see totals.</p></div>
+<div class="xsr-card"><h3>Outcomes</h3><div class="xsr-out">${outcomes.map(([n, l]) => `<div><b>${n}</b><small>${l}</small></div>`).join('')}</div><p class="xsr-note">Recorded when a Thread is resolved by both people.</p></div>
+<div class="xsr-card"><h3>When follow-ups happened</h3>${when.map(([l, v]) => bar(l, v, max, String(v))).join('')}<p class="xsr-note">Most follow-ups happen in the first week, which is why Introthread sends reminders.</p></div>
+<div class="xsr-card"><h3>Top topics</h3>${topics.map(([l, v]) => bar(l, v, 100, v + '% of Threads')).join('')}</div>
+<div class="xsr-card xsr-sp"><h3>For sponsors</h3><ul><li>Verified connections made at your event, not badge scans</li><li>Meetings and introductions that followed</li><li>CSV and PDF export, aggregate only</li></ul><a href="/signup" class="x-btn">Create a Room ${sv('arrow', 16)}</a></div>
+</div></div></div></section>`;
+}
 function vRoomsPage() {
   const st = [
     ['412', 'Verified Threads'],
@@ -2370,9 +2422,10 @@ function vRoomsPage() {
       'Thread Rooms for events &amp; communities',
       'Prove which connections <em>went somewhere.</em>',
       'Badge scans count footfall. Thread Rooms measure outcomes: verified connections, follow-ups, introductions and meetings, live during the event and for 30 days after.',
-      `<a href="/signup" class="x-btn lg">Create a Room ${sv('arrow', 17)}</a><a href="#report" class="x-btn ghost lg" data-on-click="scrollToId(event,'report')">See a sample report</a>`,
+      `<a href="/signup" class="x-btn lg">Create a Room ${sv('arrow', 17)}</a><a href="#sample-report" class="x-btn ghost lg" data-on-click="scrollToId(event,'sample-report')">See a sample report</a>`,
       `<div class="x-ph-glow"></div><div class="x-rep" id="report"><div class="x-rep-h"><span>Resolution report</span><em><i></i>Live</em></div><b class="x-rep-t">London Tech Week Founders Night</b><small class="x-rep-s">Sample report</small><div class="x-rep-g">${st.map(([n, l]) => `<div><b>${n}</b><small>${l}</small></div>`).join('')}</div><div class="x-rep-bar"><span>Resolution rate</span><b>74%</b><i><s style="width:74%"></s></i></div></div>`
     ) +
+    sampleReport() +
     `<section class="x-sec alt"><div class="x-wrap">${secHead('For organisers', 'Outcomes your sponsors<br><em>can see.</em>', 'One code for the whole room. Live numbers while it happens, a clean report when it ends.')}${feat3(
       [
         [

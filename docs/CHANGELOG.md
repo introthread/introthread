@@ -3,6 +3,7 @@
 Everything built so far, newest first. Full technical detail for each item is in `HANDOVER.md`. How Rooms, events, communities and the Room pass work: `docs/ROOMS.md`.
 
 ## 23 Oct 2026
+- **v79: Full sample Resolution Report on /rooms.** "See a sample report" used to scroll to the small card already in view, so it seemed to do nothing. It now jumps to a full, clearly labelled sample report: headline numbers, the path from room to follow-through, What's next? answers, outcomes, follow-up timing, top topics and what sponsors get.
 - **v78: Send on WhatsApp.** New `js/whatsapp.js`. Tap screen: "Send on WhatsApp" for your card link. Threads: send the confirm link on WhatsApp from the Thread menu, the follow-up dialog and the Thread page. Follow-up drafts: "Send on WhatsApp" next to Copy. WhatsApp opens with the text filled in, addressed to the person when their phone number is known.
 - **v76: One free event a month for up to 20 people.** Set an attendance limit of 20 or less and the Room is free once a calendar month; bigger or extra events still need a Room pass ($199). The create form says so, /pricing lists it under Rooms, and migration 021 enforces it in the database.
 - **v75: Sign-in and verification code emails lead with the code.** The code sits straight under the heading, the inbox preview starts with the code, and the explanation follows it, so the code is visible at once and mail apps such as Gmail can more easily offer Copy code. Paste the two templates into Supabase > Authentication > Email Templates to take effect.
