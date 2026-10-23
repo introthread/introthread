@@ -95,7 +95,7 @@ async function mdLoad(keep) {
   } catch (e) {
     admBody(
       mdHead() +
-        `<div class="ix-card ix-fail" role="alert">${sv('alert', 22)}<div><b>Reports could not load</b><p>${esc((e && e.message) || 'Unknown error')}</p></div><button type="button" class="ix-btn" onclick="mdLoad()">${sv('refresh', 16)} Try again</button></div>`
+        `<div class="ix-card ix-fail" role="alert">${sv('alert', 22)}<div><b>Reports could not load</b><p>${esc((e && e.message) || 'Unknown error')}</p></div><button type="button" class="ix-btn" data-on-click="mdLoad()">${sv('refresh', 16)} Try again</button></div>`
     );
   }
 }
@@ -151,14 +151,14 @@ function mdLocal(L) {
 }
 /* header + cards */
 function mdHead() {
-  return `<div class="ix-h"><div><h1>Moderation</h1><p>Review reports from people using Introthread. Aim to respond within 24 hours.</p></div><div class="ix-hc"><button type="button" class="ix-btn md-gl" onclick="mdGuide()">Moderation guidelines ${sv('ext', 16)}</button></div></div>`;
+  return `<div class="ix-h"><div><h1>Moderation</h1><p>Review reports from people using Introthread. Aim to respond within 24 hours.</p></div><div class="ix-hc"><button type="button" class="ix-btn md-gl" data-on-click="mdGuide()">Moderation guidelines ${sv('ext', 16)}</button></div></div>`;
 }
 const mdRange = () => (ADMM.days ? `in ${ADMM.days} days` : 'all time');
 function mdCounts() {
   const c = (ADMM.data && ADMM.data.counts) || {};
   const v = k => (isNum(c[k]) ? fmtN(c[k]) : dash);
   const card = (st, l, k, ic, tone, sub, flag) =>
-    `<button type="button" class="md-c${ADMM.st === st ? ' on' : ''}" onclick="mdFilter('st','${st}')" aria-pressed="${ADMM.st === st}"><span class="md-cl">${l}${flag || ''}</span><b>${v(k)}</b><small class="t-${tone}x">${sv(ic, 15)}<span>${sub}</span></small></button>`;
+    `<button type="button" class="md-c${ADMM.st === st ? ' on' : ''}" data-on-click="mdFilter('st','${st}')" aria-pressed="${ADMM.st === st}"><span class="md-cl">${l}${flag || ''}</span><b>${v(k)}</b><small class="t-${tone}x">${sv(ic, 15)}<span>${sub}</span></small></button>`;
   return (
     card(
       'open',
@@ -180,10 +180,10 @@ function mdPaintCounts() {
 }
 /* toolbar */
 function mdSel(id, lab, val, opts, fn, ic) {
-  return `<label class="md-sel">${ic ? sv(ic, 17) : ''}<span class="md-sl">${lab}:</span><select id="${id}" aria-label="${lab}" onchange="${fn}">${opts.map(([v, l]) => `<option value="${v}" ${String(val) === String(v) ? 'selected' : ''}>${l}</option>`).join('')}</select>${sv('chevd', 16)}</label>`;
+  return `<label class="md-sel">${ic ? sv(ic, 17) : ''}<span class="md-sl">${lab}:</span><select id="${id}" aria-label="${lab}" data-on-change="${fn}">${opts.map(([v, l]) => `<option value="${v}" ${String(val) === String(v) ? 'selected' : ''}>${l}</option>`).join('')}</select>${sv('chevd', 16)}</label>`;
 }
 function mdToolbar() {
-  return `<div class="md-tb"><label class="au-search md-q">${sv('search', 17)}<input id="mdq" type="search" placeholder="Search reports by user, reason, or content..." value="${esc(ADMM.q)}" oninput="mdSearch(this.value)" aria-label="Search reports"></label>
+  return `<div class="md-tb"><label class="au-search md-q">${sv('search', 17)}<input id="mdq" type="search" placeholder="Search reports by user, reason, or content..." value="${esc(ADMM.q)}" data-on-input="mdSearch(this.value)" aria-label="Search reports"></label>
  ${mdSel(
    'mdst',
    'Status',
@@ -265,7 +265,7 @@ function mdItem(r) {
   const t = r.target || {},
     op = r.status === 'open' || r.status === 'reviewing',
     late = op && Date.now() - Date.parse(r.created_at) > 864e5;
-  return `<li><button type="button" class="md-i${ADMM.open === r.id ? ' on' : ''}" data-id="${r.id}" onclick="mdOpen('${r.id}')" aria-current="${ADMM.open === r.id}"><span class="md-ii ${MODR[r.reason] || 'other'}" aria-hidden="true">${sv('flag', 16)}</span>
+  return `<li><button type="button" class="md-i${ADMM.open === r.id ? ' on' : ''}" data-id="${r.id}" data-on-click="mdOpen('${r.id}')" aria-current="${ADMM.open === r.id}"><span class="md-ii ${MODR[r.reason] || 'other'}" aria-hidden="true">${sv('flag', 16)}</span>
  <span class="md-it"><span class="md-ir">${mdSevP(r.severity || 'low')}<b>${esc(r.reason)}</b></span><span class="md-is">${mdType(r.target_type)}: ${esc(t.name || '(deleted)')}${t.handle ? ' · @' + esc(t.handle) : ''}</span>
  <span class="md-im">By ${esc((r.reporter || {}).name || 'a deleted account')} · <time datetime="${esc(r.created_at)}">${ago(r.created_at)}</time>${r.same > 1 ? ` · ${r.same} reports on this` : ''}</span></span>
  <span class="md-ie">${mdStP(r.status)}${late ? `<em class="md-late">Over 24h</em>` : ''}</span></button></li>`;
@@ -275,9 +275,9 @@ function mdList() {
     R = d.rows || [];
   const filt = ADMM.q || ADMM.typ !== 'all' || ADMM.sev !== 'all';
   if (!R.length)
-    return `<div class="md-empty"><span class="md-eic" aria-hidden="true">${sv('shield', 26)}</span><b>${filt ? 'No reports match these filters' : ADMM.st === 'open' ? 'No reports to review' : 'No reports here'}</b><p>${filt ? 'Try a different search, or clear the filters.' : 'Reports will appear here when someone uses the Report feature on a card or Thread.'}</p>${filt ? `<button type="button" class="ix-btn" onclick="ADMM.q='';ADMM.typ='all';ADMM.sev='all';ADMM.page=0;admBody(mdPage());mdLoad(true)">Clear filters</button>` : `<button type="button" class="ix-btn pri md-ref" onclick="mdLoad(true)">Refresh</button>`}</div>`;
+    return `<div class="md-empty"><span class="md-eic" aria-hidden="true">${sv('shield', 26)}</span><b>${filt ? 'No reports match these filters' : ADMM.st === 'open' ? 'No reports to review' : 'No reports here'}</b><p>${filt ? 'Try a different search, or clear the filters.' : 'Reports will appear here when someone uses the Report feature on a card or Thread.'}</p>${filt ? `<button type="button" class="ix-btn" data-on-click="mdClear()">Clear filters</button>` : `<button type="button" class="ix-btn pri md-ref" data-on-click="mdLoad(true)">Refresh</button>`}</div>`;
   const more = d.total > R.length;
-  return `<ul class="md-l">${R.map(mdItem).join('')}</ul>${more ? `<div class="md-more"><button type="button" class="ix-btn" onclick="ADMM.page++;mdLoad(true)">Show more (${fmtN(d.total - R.length)} left)</button></div>` : ''}`;
+  return `<ul class="md-l">${R.map(mdItem).join('')}</ul>${more ? `<div class="md-more"><button type="button" class="ix-btn" data-on-click="mdMore()">Show more (${fmtN(d.total - R.length)} left)</button></div>` : ''}`;
 }
 function mdListHead() {
   const d = ADMM.data || {};
@@ -314,7 +314,7 @@ function mdPage() {
   return `<div id="mdwrap" class="md${ADMM.open ? ' po' : ''}">${mdHead()}${ADMM.limited ? `<p class="ix-upd">Run database update 006 for severity, reporter and account history, and one-step decisions. Until then this page shows the newest 300 reports.</p>` : ''}
  <div class="md-cs" id="mdcounts">${mdCounts()}</div><div class="ix-card md-tbc" id="mdtbw">${mdToolbar()}</div>
  <div class="md-g"><section class="ix-card md-lc" aria-label="Reports"><div id="mdlh">${mdListHead()}</div><div id="mdlist">${mdList()}</div></section>
- <aside class="ix-card md-p" id="mdpanel" aria-label="Report details">${ADMM.open ? mdPanel() : mdIntro()}</aside></div><div class="md-scrim" onclick="mdClose()" aria-hidden="true"></div></div>`;
+ <aside class="ix-card md-p" id="mdpanel" aria-label="Report details">${ADMM.open ? mdPanel() : mdIntro()}</aside></div><div class="md-scrim" data-on-click="mdClose()" aria-hidden="true"></div></div>`;
 }
 function mdIntro() {
   const it = [
@@ -329,7 +329,7 @@ function mdIntro() {
  <h3 class="md-wy">What you'll see</h3><ul class="md-wl">${it.map(([ic, t, h, p]) => `<li><span class="md-wi t-${t}w" aria-hidden="true">${sv(ic, 22)}</span><div><b>${h}</b><p>${p}</p></div></li>`).join('')}</ul>${mdSafe()}`;
 }
 function mdSafe() {
-  return `<div class="md-safe"><span aria-hidden="true">${sv('shield', 22)}</span><div><b>Keep Introthread safe and professional</b><p>Review reports fairly, follow the moderation guidelines, and record your decisions to maintain a clear audit trail.</p></div><button type="button" class="ix-btn sm" onclick="mdGuide()">View guidelines ${sv('ext', 14)}</button></div>`;
+  return `<div class="md-safe"><span aria-hidden="true">${sv('shield', 22)}</span><div><b>Keep Introthread safe and professional</b><p>Review reports fairly, follow the moderation guidelines, and record your decisions to maintain a clear audit trail.</p></div><button type="button" class="ix-btn sm" data-on-click="mdGuide()">View guidelines ${sv('ext', 14)}</button></div>`;
 }
 /* detail */
 async function mdOpen(id) {
@@ -386,7 +386,7 @@ async function mdOpen(id) {
     }
   } catch (e) {
     if (p)
-      p.innerHTML = `<div class="md-pp"><p class="adm-err">${esc((e && e.message) || 'Could not load')}</p><button class="ix-btn sm" onclick="mdOpen('${id}')">Try again</button></div>`;
+      p.innerHTML = `<div class="md-pp"><p class="adm-err">${esc((e && e.message) || 'Could not load')}</p><button class="ix-btn sm" data-on-click="mdOpen('${id}')">Try again</button></div>`;
   }
 }
 function mdClose() {
@@ -525,7 +525,7 @@ function mdPanel() {
             : null
         ]) +
         (s.id
-          ? `<button type="button" class="au-inl" onclick="mdToUser('${s.id}')">Open in Users</button>`
+          ? `<button type="button" class="au-inl" data-on-click="mdToUser('${s.id}')">Open in Users</button>`
           : '')
       : `<p class="ix-mu">${d.lite && r.target_type !== 'profile' ? 'Run update 006 to see who is behind this ' + mdType(r.target_type).toLowerCase() + '.' : 'The account no longer exists.'}</p>`;
   const rep =
@@ -547,7 +547,7 @@ function mdPanel() {
   const ev =
     `<div class="md-quote"><span>What the reporter said</span><p>${r.details ? esc(r.details) : '<i>No extra details given.</i>'}</p></div>` +
     ((d.same || []).length
-      ? `<p class="md-sub">Other reports about the same ${mdType(r.target_type).toLowerCase()}</p><ul class="md-sm">${d.same.map(x => `<li><button type="button" class="au-inl" onclick="mdOpen('${x.id}')">${esc(x.reason)}</button><span>${fmtD(x.created_at)}</span>${mdStP(x.status)}</li>`).join('')}</ul>`
+      ? `<p class="md-sub">Other reports about the same ${mdType(r.target_type).toLowerCase()}</p><ul class="md-sm">${d.same.map(x => `<li><button type="button" class="au-inl" data-on-click="mdOpen('${x.id}')">${esc(x.reason)}</button><span>${fmtD(x.created_at)}</span>${mdStP(x.status)}</li>`).join('')}</ul>`
       : '');
   const hist =
     d.history === null
@@ -559,11 +559,11 @@ function mdPanel() {
         })();
   const acts =
     canMod() && op
-      ? `<div class="md-acts">${r.status === 'open' ? `<button type="button" class="ix-btn" onclick="mdTake('${id}')">${sv('eye', 16)} Take for review</button>` : ''}<button type="button" class="ix-btn" onclick="mdDecide('${id}','dismissed')">${sv('ban', 16)} Dismiss</button><button type="button" class="ix-btn pri" onclick="mdDecide('${id}','actioned')">${sv('shield', 16)} Take action</button></div>`
+      ? `<div class="md-acts">${r.status === 'open' ? `<button type="button" class="ix-btn" data-on-click="mdTake('${id}')">${sv('eye', 16)} Take for review</button>` : ''}<button type="button" class="ix-btn" data-on-click="mdDecide('${id}','dismissed')">${sv('ban', 16)} Dismiss</button><button type="button" class="ix-btn pri" data-on-click="mdDecide('${id}','actioned')">${sv('shield', 16)} Take action</button></div>`
       : !op
         ? `<p class="md-done">${sv('check', 16)} ${r.status === 'actioned' ? 'Actioned' : 'Dismissed'}${r.resolver ? ' by ' + esc(r.resolver) : ''}${r.resolved_at ? ' on ' + fmtD(r.resolved_at) : ''}${r.outcome && r.outcome !== 'none' ? ' · ' + esc(mdOut(r.outcome)) : ''}</p>`
         : `<p class="au-fine">Only owners, admins and moderators can decide on reports.</p>`;
-  return `<div class="md-pp"><div class="md-ph"><div><div class="md-ir">${mdSevP(rec.sev)}${mdStP(r.status)}${r.assigned ? `<span class="md-as">${sv('user', 13)} ${esc(r.assigned)}</span>` : ''}</div><h2>${esc(r.reason)}</h2><p>${mdType(r.target_type)} report · received ${fmtD(r.created_at)}, ${fmtT(r.created_at)} (${ago(r.created_at)})</p></div><button type="button" class="au-x md-x" onclick="mdClose()" aria-label="Close report">${sv('x2', 18)}</button></div>${acts}
+  return `<div class="md-pp"><div class="md-ph"><div><div class="md-ir">${mdSevP(rec.sev)}${mdStP(r.status)}${r.assigned ? `<span class="md-as">${sv('user', 13)} ${esc(r.assigned)}</span>` : ''}</div><h2>${esc(r.reason)}</h2><p>${mdType(r.target_type)} report · received ${fmtD(r.created_at)}, ${fmtT(r.created_at)} (${ago(r.created_at)})</p></div><button type="button" class="au-x md-x" data-on-click="mdClose()" aria-label="Close report">${sv('x2', 18)}</button></div>${acts}
  <div class="md-secs">${sec('doc', 'b', 'Reported content', content)}${sec('user', 'o', 'Reported user', subj)}${sec('user', 'p', 'Reporter details', rep)}
  ${sec('bulb', 'b', 'Recommended action', `<ul class="md-rec">${rec.steps.map(x => `<li>${esc(x)}</li>`).join('')}</ul>`)}${sec('img', 'g', 'Context and evidence', ev)}${sec('clock', 'm', 'Moderation history', hist)}</div>${mdSafe()}</div>`;
 }
@@ -690,7 +690,7 @@ admAskGo = async function () {
 };
 /* guidelines */
 function mdGuide() {
-  modal(`<div class="cap-m md-guide"><div class="row between"><h3>Moderation guidelines</h3><button class="x" aria-label="Close" onclick="closeModal()">&times;</button></div>
+  modal(`<div class="cap-m md-guide"><div class="row between"><h3>Moderation guidelines</h3><button class="x" aria-label="Close" data-on-click="closeModal()">&times;</button></div>
  <p class="fu-sub">Introthread is for real professional relationships. Act quickly, fairly and in proportion.</p>
  <h4>1. Respond within 24 hours</h4><p>Work oldest first, but take high severity reports first. Use "Take for review" so two people do not work on the same report.</p>
  <h4>2. What breaks the rules</h4><ul><li>Spam, scams, sales blasts, or asking for money.</li><li>Fake profiles, or pretending to be another person or company.</li><li>Harassment, threats, hate, or unwanted sexual content.</li><li>Inappropriate photos, bios or links.</li><li>Sharing someone's private details without consent.</li></ul>
@@ -698,5 +698,19 @@ function mdGuide() {
  <h4>4. Privacy</h4><p>Look only at what you need. Private notes and "What's next?" answers are never shown, and must never be asked for. Do not share report details outside the team, and never tell the reported person who reported them.</p>
  <h4>5. Write a clear reason</h4><p>Every decision needs a short reason, for example "Fake profile copying a real recruiter, suspended until verified". It is saved in the audit log with your name.</p>
  <h4>6. Conflicts and staff</h4><p>Do not review reports about yourself or someone you know personally. Reports about staff go to the owner.</p>
- <button class="cap-btn" onclick="closeModal()">Got it</button></div>`);
+ <button class="cap-btn" data-on-click="closeModal()">Got it</button></div>`);
+}
+
+/* v59: named handlers for the Moderation screen (no inline JavaScript). */
+function mdClear() {
+  ADMM.q = '';
+  ADMM.typ = 'all';
+  ADMM.sev = 'all';
+  ADMM.page = 0;
+  admBody(mdPage());
+  mdLoad(true);
+}
+function mdMore() {
+  ADMM.page++;
+  mdLoad(true);
 }
