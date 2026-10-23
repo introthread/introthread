@@ -63,7 +63,7 @@ const FEATURES = {
 };
 const TRIAL_DAYS = 14,
   GRACE_DAYS = 7,
-  FREE_ROOMS = 1;
+  FREE_ROOMS = 0; /* v71: every Room is paid ($199 per event), matching the published price card */
 const TAX = {
   GB: ['VAT', 20],
   IE: ['VAT', 23],
@@ -325,7 +325,7 @@ function bUsageBox(u, b) {
   const bar = (l, v, max, txt) =>
     `<div class="bl-us"><div><span>${l}</span><b>${txt}</b></div><i><s style="width:${max ? Math.min(100, (v / max) * 100) : 100}%"></s></i></div>`;
   return `<section class="d-box"><div class="cd-bh"><span class="cd-bi">${sv('chart', 20)}</span><div><b>Usage and access</b><small>What you can use on your current plan.</small></div></div>
- ${bar('Threads', myThreads().length, 0, myThreads().length + ' &middot; unlimited')}${bar('Rooms', R, allow, R + ' of ' + allow + ' available')}<p class="bl-fine">${FREE_ROOMS} Room is included. Each extra Room needs a Room pass. Unused passes: <b>${b.roomCredits || 0}</b>.</p>
+ ${bar('Threads', myThreads().length, 0, myThreads().length + ' &middot; unlimited')}${bar('Rooms', R, allow, R + ' of ' + allow + ' available')}<p class="bl-fine">Each Room needs a Room pass ($199 per event). Unused passes: <b>${b.roomCredits || 0}</b>.</p>
  <ul class="bl-feat">${Object.entries(FEATURES)
    .map(
      ([k, l]) =>
@@ -518,7 +518,7 @@ async function bBuyPro(interval, mode) {
 }
 function bRoomPass() {
   modal(
-    `<div class="bl-co"><div class="row between"><h3>Buy a Room pass</h3><button class="x" aria-label="Close" data-on-click="closeModal()">&times;</button></div><p class="fu-sub">One extra Room for an event or community, with QR badges and a live Resolution Report.</p>${bCheckoutBody('rooms')}${bPayForm('bBuyRoom()', 'Pay ' + money(199 + bTax(bGet(), 199).amount))}</div>`
+    `<div class="bl-co"><div class="row between"><h3>Buy a Room pass</h3><button class="x" aria-label="Close" data-on-click="closeModal()">&times;</button></div><p class="fu-sub">One Room for an event or community, with QR badges and a live Resolution Report.</p>${bCheckoutBody('rooms')}${bPayForm('bBuyRoom()', 'Pay ' + money(199 + bTax(bGet(), 199).amount))}</div>`
   );
 }
 async function bBuyRoom(mode) {
@@ -766,7 +766,7 @@ vThreads = function () {
     `<button type="button" class="th-filter" data-on-click="bExportThreads()" title="Export Threads to CSV">${has('export') ? sv('arrow', 16).replace('M5 12h14M13 6l6 6-6 6', 'M12 5v14M6 13l6 6 6-6') : sv('lock', 15)} Export</button><button type="button" class="th-filter`
   );
 };
-/* Rooms: 1 included, each extra Room uses a Room pass */
+/* Rooms: each Room uses a Room pass (FREE_ROOMS included, 0 since v71) */
 function bRoomAllowed() {
   return myRooms().length < FREE_ROOMS || (bGet().roomCredits || 0) > 0;
 }
@@ -774,7 +774,7 @@ const _newRoomModal19 = newRoomModal;
 newRoomModal = function () {
   if (!bRoomAllowed()) {
     return modal(
-      `<div class="bl-co"><span class="otp-ic">${sv('cal', 24)}</span><h3>You&rsquo;ve used your included Room</h3><p class="fu-sub">Every account includes ${FREE_ROOMS} Room. Buy a Room pass for each extra event or community.</p><div class="fu-b"><button type="button" class="t-how" data-on-click="closeModal()">Not now</button><button type="button" class="x-btn" data-on-click="closeModal();bRoomPass()">Buy a Room pass, $199</button></div></div>`
+      `<div class="bl-co"><span class="otp-ic">${sv('cal', 24)}</span><h3>Create a Room with a Room pass</h3><p class="fu-sub">Each Room is $199 per event: Room code, QR and badges, a live Resolution Report and up to 1,000 attendees.</p><div class="fu-b"><button type="button" class="t-how" data-on-click="closeModal()">Not now</button><button type="button" class="x-btn" data-on-click="closeModal();bRoomPass()">Buy a Room pass, $199</button></div></div>`
     );
   }
   return _newRoomModal19.apply(this, arguments);
@@ -960,7 +960,7 @@ const HELP = [
   [
     'Rooms',
     'How many Rooms can I create?',
-    'Every account includes 1 Room. Each extra Room needs a Room pass ($199 per event).'
+    'Each Room needs a Room pass ($199 per event). Rooms you already created stay yours.'
   ],
   [
     'Account',

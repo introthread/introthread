@@ -33,7 +33,7 @@ The page footer reads (since v69): "UK prices shown in GBP: Pro £9/month, Rooms
   - The yearly toggle shows $10 a month billed yearly ($120 a year).
   - Cancelling keeps Pro until the end of the paid period. Nothing is deleted.
 - **Rooms:**
-  - Every account currently gets **1 Room included** (`FREE_ROOMS = 1` in billing.js). Each extra Room needs a Room pass at $199 per event (`bRoomPass()`), charged through Paystack (`/api/pay-init { kind: 'rooms' }`).
+  - Since v71 no Room is included (`FREE_ROOMS = 0` in billing.js, migration 020). Every Room needs a Room pass at $199 per event (`bRoomPass()`), charged through Paystack (`/api/pay-init { kind: 'rooms' }`).
   - Room size is capped at 1,000 attendees in the create-room form.
   - The Resolution Report and the sponsor export come with the Room.
 - **Networks:**
@@ -45,7 +45,7 @@ The page footer reads (since v69): "UK prices shown in GBP: Pro £9/month, Rooms
 **Open pricing decisions (ask the owner; don't guess)**
 1. **GBP at checkout: RESOLVED in v69 (footer wording).** Paystack charges in KES, so the footer now reads "UK prices shown in GBP: Pro £9/month, Rooms £149/event. Cards are charged the equivalent in Kenyan shillings." Adding Stripe for real GBP charges remains an option later; it needs a Stripe account and keys from the owner.
 2. **Yearly Pro: RESOLVED in v70 (toggle removed).** The published card shows monthly only, so the Monthly/Annual switch is gone from /pricing, the Billing plans box and both Upgrade dialogs. New subscriptions are monthly. The yearly code paths (`proY()`, `PAYSTACK_PLAN_YEAR`, the switch-interval action) stay so any existing yearly subscriber keeps working. The £90 placeholder in the `GBP` map is unused.
-3. **1 free Room per account** is not listed under Free on the price card. Either add "1 Room included" to Free, or set `FREE_ROOMS = 0`.
+3. **Free Room: RESOLVED in v71 (FREE_ROOMS = 0).** The card lists no free Room, so every new Room needs a Room pass ($199 per event). Rooms already created are kept. `supabase/migrations/020_paid_rooms.sql` makes the database trigger require a pass for the first Room too; **the owner must run it**. Until then the app blocks the first free Room, but the database would still allow it.
 4. **Thread search** is listed as Pro, but search works on Free today, because it isn't gated. Gate it with `has('search')`, or keep it open and change the card.
 5. **"Calendar booking from a match"** is in the `booking` feature list, but there is no `has('booking')` check. Confirm whether it should be Pro-only.
 6. **Paystack plan amounts** for Pro in KES need checking against $12 (monthly) and $120 (yearly).
