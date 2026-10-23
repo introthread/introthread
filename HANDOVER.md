@@ -2,6 +2,54 @@
 
 Last updated: 22 Oct 2026, 3:00 pm Nairobi (after v37 security hardening and migration 016). Read this section first, then ARCHITECTURE-ESSENTIALS.md and AGENTS.md. Update this file and docs/CHANGELOG.md with every change.
 
+## STATUS SUMMARY: 23 Oct 2026, after v64 (read this first)
+
+### Done (all on `main`, tested, deployed by Vercel)
+- **Code clean-up**
+  - v54: the duplicate functions are merged.
+  - v55: styles are in `/css`, in 4 files.
+  - v56: all app code is in `/js`, and `index.html` is about 6 KB of structure.
+- **Speed**
+  - v57: scripts load with `defer`, and `/js` and `/css` carry `?v=` hash tags with a 1-year cache.
+  - v58: the 8 website pages are pre-rendered (text is in the page source), and app, admin and card routes use `app-shell.html`.
+- **Security: strict script policy is ON**
+  - v59 to v62: all 747 inline handlers are converted to `data-on-*`, which `js/actions.js` runs without eval.
+  - v63: `'unsafe-inline'` was removed from `script-src`. A test with the policy enforced over the website, the demo app and admin found 0 violations.
+- **Demo account**
+  - v60: fresh data on every start. Delete, deactivate, reactivate and change password are blocked. It keeps the Pro plan, never reaches the server or admin, and payments are simulated.
+  - v64: each browser tab keeps its own demo copy.
+  - Tested: 5 browsers at once stay independent, and 2 tabs in one browser stay separate.
+- **Tests passing on v64**
+  - all 10 admin tests
+  - the sweeps at 390 and 1366 for app and site
+  - axe
+  - the strict-policy check
+  - the demo tests
+  - photo crop
+  - payments
+
+### Waiting on Agnes (she owns GitHub, Vercel, Supabase and the domain)
+1. Turn on the Google, Microsoft and LinkedIn sign-in providers in Supabase.
+2. Set up Resend for sign-in emails and add its key in Vercel.
+3. Run database migration 012 in Supabase.
+4. Send the company's legal details for the invoice.
+5. Optional: grant workflow permission to the GitHub connection, so the photo-crop check can run in GitHub Actions.
+
+### Needs a person (the assistant's tools cannot do these)
+- **Live console check after each deploy:**
+  1. Hard refresh with Ctrl+Shift+R and open the console with F12.
+  2. Visit the website pages, `/app` (demo) and `/admin`, at phone and laptop width.
+  3. Look for red "Content Security Policy" errors, especially from PostHog and the jsdelivr libraries.
+  4. View the page source to confirm the `<!--pre-->` text is there.
+- **Real devices:** iPhone and Android, including VoiceOver, plus scanning the QR code on the back of the public card.
+- **Deploys:** confirm each Vercel deploy succeeds. The Hobby plan allows about 100 deploys a day, so commit each change once.
+
+### If you continue the work
+- Build: `python3 scripts/build_pages.py && python3 scripts/prerender.py`. Afterwards, check that each `?v=` tag in `index.html` equals the first 10 characters of `sha1sum js/<file>`.
+- Commit one step at a time, never in parallel.
+- Use `data-on-*` handlers only. Complex logic becomes a named function.
+- Any new account-level action must be added to the `demoGuard` list in `js/demo-mode.js`.
+
 ## START HERE: state on 23 Oct 2026 (after v60)
 
 ### Code layout
