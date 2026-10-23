@@ -243,5 +243,5 @@
     });
     return bad;
   }
-  window.ACT = { check, parse };
+  window.ACT = { check, parse, run };
 })();

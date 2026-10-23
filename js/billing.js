@@ -310,7 +310,7 @@ function bPlanCard(b) {
     line = `Pro stays active until <b>${bDate(b.cancelAt)}</b>, then you move to Free.`;
   else if (pro) line = `Renews on <b>${bDate(b.periodEnd)}</b> for ${money(price)} per ${b.interval}.`;
   return `<section class="d-box bl-cur"><div class="bl-curh"><div><small>Current plan</small><b>${pro ? 'Pro' : 'Free'} ${bStatusChip(b)}</b><p>${line}</p></div><div class="bl-price">${money(price)}<small>/${pro ? b.interval : 'month'}</small></div></div>
- <div class="bl-curb">${pro ? `${b.status === 'past_due' && open ? `<button type="button" class="x-btn" onclick="bPayModal('${open.id}')">Pay ${money(open.total, open.currency || 'USD')} now</button>` : ''}${b.cancelAt ? `<button type="button" class="x-btn" onclick="bResume()">Resume Pro</button>` : `<button type="button" class="t-how" onclick="bSwitchInterval()">Switch to ${b.interval === 'month' ? 'yearly (save 17%)' : 'monthly'}</button><button type="button" class="t-how bl-danger" onclick="bCancel()">Cancel subscription</button>`}` : `<button type="button" class="x-btn" onclick="bUpgrade()">${sv('spark', 16)} Upgrade to Pro</button>`}</div></section>`;
+ <div class="bl-curb">${pro ? `${b.status === 'past_due' && open ? `<button type="button" class="x-btn" data-on-click="bPayModal('${open.id}')">Pay ${money(open.total, open.currency || 'USD')} now</button>` : ''}${b.cancelAt ? `<button type="button" class="x-btn" data-on-click="bResume()">Resume Pro</button>` : `<button type="button" class="t-how" data-on-click="bSwitchInterval()">Switch to ${b.interval === 'month' ? 'yearly (save 17%)' : 'monthly'}</button><button type="button" class="t-how bl-danger" data-on-click="bCancel()">Cancel subscription</button>`}` : `<button type="button" class="x-btn" data-on-click="bUpgrade()">${sv('spark', 16)} Upgrade to Pro</button>`}</div></section>`;
 }
 function bCompare(b) {
   const pro = b.plan === 'pro' && ['active', 'trialing', 'past_due'].includes(b.status);
@@ -323,12 +323,12 @@ function bCompare(b) {
   ]
     .map(
       ([k, l]) =>
-        `<button type="button" class="${BINT === k ? 'on' : ''}" onclick="BINT='${k}';window._keepScroll=true;render()">${l}</button>`
+        `<button type="button" class="${BINT === k ? 'on' : ''}" data-on-click="bInt('${k}')">${l}</button>`
     )
     .join('')}</div></div>
- <div class="bl-plans">${col(P.free, '$0', '/forever', pro ? `<button type="button" class="t-how block" onclick="bCancel()">${b.cancelAt ? 'Moving to Free' : 'Downgrade'}</button>` : '<button type="button" class="t-how block" disabled>Current plan</button>')}
- ${col(P.pro, money(BINT === 'month' ? proM() : Math.round((proY() / 12) * 100) / 100), BINT === 'month' ? '/month' : '/month, billed ' + money(proY()) + ' yearly', pro ? `<button type="button" class="t-how block" disabled>Current plan</button>` : `<button type="button" class="x-btn block" onclick="bUpgrade('${BINT}')">${b.trialUsed ? 'Upgrade to Pro' : 'Start ' + TRIAL_DAYS + '-day free trial'}</button>`)}
- ${col(P.rooms, '$199', '/event', `<button type="button" class="t-how block" onclick="bRoomPass()">Buy a Room pass</button>`)}
+ <div class="bl-plans">${col(P.free, '$0', '/forever', pro ? `<button type="button" class="t-how block" data-on-click="bCancel()">${b.cancelAt ? 'Moving to Free' : 'Downgrade'}</button>` : '<button type="button" class="t-how block" disabled>Current plan</button>')}
+ ${col(P.pro, money(BINT === 'month' ? proM() : Math.round((proY() / 12) * 100) / 100), BINT === 'month' ? '/month' : '/month, billed ' + money(proY()) + ' yearly', pro ? `<button type="button" class="t-how block" disabled>Current plan</button>` : `<button type="button" class="x-btn block" data-on-click="bUpgrade('${BINT}')">${b.trialUsed ? 'Upgrade to Pro' : 'Start ' + TRIAL_DAYS + '-day free trial'}</button>`)}
+ ${col(P.rooms, '$199', '/event', `<button type="button" class="t-how block" data-on-click="bRoomPass()">Buy a Room pass</button>`)}
  ${col(P.networks, 'Custom', '/annual', `<a class="t-how block" href="mailto:hello@introthread.com?subject=Introthread%20Networks">Talk to sales</a>`)}</div></section>`;
 }
 function bUsageBox(u, b) {
@@ -342,7 +342,7 @@ function bUsageBox(u, b) {
  <ul class="bl-feat">${Object.entries(FEATURES)
    .map(
      ([k, l]) =>
-       `<li class="${pro ? 'ok' : ''}">${pro ? sv('check', 13, '#fff', 3) : sv('lock', 12)}<span>${l}</span>${pro ? '' : `<button type="button" onclick="bUpgrade()">Unlock</button>`}</li>`
+       `<li class="${pro ? 'ok' : ''}">${pro ? sv('check', 13, '#fff', 3) : sv('lock', 12)}<span>${l}</span>${pro ? '' : `<button type="button" data-on-click="bUpgrade()">Unlock</button>`}</li>`
    )
    .join('')}</ul></section>`;
 }
@@ -362,14 +362,14 @@ function bInvoicesBox(b) {
  ]
    .map(
      ([k, l]) =>
-       `<button type="button" class="${BINVF === k ? 'on' : ''}" onclick="BINVF='${k}';window._keepScroll=true;render()">${l} (${cnt(k)})</button>`
+       `<button type="button" class="${BINVF === k ? 'on' : ''}" data-on-click="bInvF('${k}')">${l} (${cnt(k)})</button>`
    )
    .join('')}</nav>
- ${L.length ? `<div class="bl-table" role="table"><div class="bl-tr bl-th" role="row"><span>Invoice</span><span>Date</span><span>Description</span><span>Amount</span><span>Status</span><span></span></div>${L.map(i => `<div class="bl-tr" role="row"><span><b>${i.number}</b></span><span>${bDate(i.date)}</span><span>${esc(i.desc)}</span><span>${money(i.total, i.currency || 'USD')}</span><span>${bInvStatus(i)}</span><span class="bl-ta"><button type="button" onclick="bInvView('${i.id}')">View</button>${i.status === 'open' ? `<button type="button" class="pay" onclick="bPayModal('${i.id}')">Pay</button>` : ''}<button type="button" aria-label="Download ${i.number}" onclick="bInvPrint('${i.id}')">${sv('arrow', 14).replace('M5 12h14M13 6l6 6-6 6', 'M12 5v14M6 13l6 6 6-6')}</button></span></div>`).join('')}</div>` : `<div class="d-empty">${sv('brief', 22)}<div><b>No invoices ${BINVF === 'all' ? 'yet' : 'here'}</b><small>Invoices appear here when you upgrade or buy a Room pass.</small></div></div>`}</section>`;
+ ${L.length ? `<div class="bl-table" role="table"><div class="bl-tr bl-th" role="row"><span>Invoice</span><span>Date</span><span>Description</span><span>Amount</span><span>Status</span><span></span></div>${L.map(i => `<div class="bl-tr" role="row"><span><b>${i.number}</b></span><span>${bDate(i.date)}</span><span>${esc(i.desc)}</span><span>${money(i.total, i.currency || 'USD')}</span><span>${bInvStatus(i)}</span><span class="bl-ta"><button type="button" data-on-click="bInvView('${i.id}')">View</button>${i.status === 'open' ? `<button type="button" class="pay" data-on-click="bPayModal('${i.id}')">Pay</button>` : ''}<button type="button" aria-label="Download ${i.number}" data-on-click="bInvPrint('${i.id}')">${sv('arrow', 14).replace('M5 12h14M13 6l6 6-6 6', 'M12 5v14M6 13l6 6 6-6')}</button></span></div>`).join('')}</div>` : `<div class="d-empty">${sv('brief', 22)}<div><b>No invoices ${BINVF === 'all' ? 'yet' : 'here'}</b><small>Invoices appear here when you upgrade or buy a Room pass.</small></div></div>`}</section>`;
 }
 function bMethodBox(b) {
   return `<section class="d-box"><div class="cd-bh"><span class="cd-bi">${sv('wallet', 20)}</span><div><b>Payment method</b><small>${cloud() ? 'Card payments open soon. Invoices can be paid by bank transfer meanwhile.' : 'Demo account: cards are simulated, nothing is charged.'}</small></div></div>
- ${b.card ? `<div class="bl-card"><span class="bl-brand">${esc(b.card.brand)}</span><div><b>&bull;&bull;&bull;&bull; ${esc(b.card.last4)}</b><small>Expires ${esc(b.card.exp)}</small></div>${cloud() ? '' : `<button type="button" class="t-how sm" onclick="bCardModal()">Update</button><button type="button" class="t-how sm bl-danger" onclick="bCardRemove()">Remove</button>`}</div>` : `<p class="bl-fine" style="margin:0 0 10px">No card on file.</p>${cloud() ? '' : `<button type="button" class="t-how sm" onclick="bCardModal()">${sv('wallet', 15)} Add card</button>`}`}</section>`;
+ ${b.card ? `<div class="bl-card"><span class="bl-brand">${esc(b.card.brand)}</span><div><b>&bull;&bull;&bull;&bull; ${esc(b.card.last4)}</b><small>Expires ${esc(b.card.exp)}</small></div>${cloud() ? '' : `<button type="button" class="t-how sm" data-on-click="bCardModal()">Update</button><button type="button" class="t-how sm bl-danger" data-on-click="bCardRemove()">Remove</button>`}</div>` : `<p class="bl-fine" style="margin:0 0 10px">No card on file.</p>${cloud() ? '' : `<button type="button" class="t-how sm" data-on-click="bCardModal()">${sv('wallet', 15)} Add card</button>`}`}</section>`;
 }
 function bDetailsBox(b) {
   const d = b.details || {},
@@ -377,7 +377,7 @@ function bDetailsBox(b) {
   const f = (id, l, v, o = '') =>
     `<label class="x-f"><span>${l}</span><input id="${id}" value="${esc(v || '')}" ${o}></label>`;
   return `<section class="d-box"><div class="cd-bh"><span class="cd-bi">${sv('building', 20)}</span><div><b>Billing details</b><small>Shown on your invoices. Tax is added based on your country.</small></div></div>
- <form class="bl-df" onsubmit="return bDetailsSave(event)"><div class="t-g2">${f('bdn', 'Name or company', d.name || u.name, 'required maxlength="80"')}${f('bde', 'Billing email', d.email || u.email, 'type="email" required maxlength="120"')}${f('bdc', 'Company (optional)', d.company, 'maxlength="80"')}${f('bdv', 'VAT or tax ID (optional)', d.vat, 'maxlength="30"')}${f('bda', 'Address (optional)', d.address, 'maxlength="160"')}<label class="x-f"><span>Country</span><select id="bdk" class="th-sort" style="width:100%">${COUNTRIES.map(([c, n]) => `<option value="${c}" ${(d.country || 'US') === c ? 'selected' : ''}>${n}</option>`).join('')}</select></label></div><div class="fu-b" style="margin-top:12px"><button class="x-btn">Save billing details</button></div></form></section>`;
+ <form class="bl-df" data-on-submit="return bDetailsSave(event)"><div class="t-g2">${f('bdn', 'Name or company', d.name || u.name, 'required maxlength="80"')}${f('bde', 'Billing email', d.email || u.email, 'type="email" required maxlength="120"')}${f('bdc', 'Company (optional)', d.company, 'maxlength="80"')}${f('bdv', 'VAT or tax ID (optional)', d.vat, 'maxlength="30"')}${f('bda', 'Address (optional)', d.address, 'maxlength="160"')}<label class="x-f"><span>Country</span><select id="bdk" class="th-sort" style="width:100%">${COUNTRIES.map(([c, n]) => `<option value="${c}" ${(d.country || 'US') === c ? 'selected' : ''}>${n}</option>`).join('')}</select></label></div><div class="fu-b" style="margin-top:12px"><button class="x-btn">Save billing details</button></div></form></section>`;
 }
 async function bDetailsSave(e) {
   e.preventDefault();
@@ -417,26 +417,26 @@ function bUpgrade(interval) {
   const b = bGet();
   if (planOf() === 'pro' && b.status !== 'past_due') return toast('You already have Pro');
   const trial = !b.trialUsed;
-  modal(`<div class="bl-co"><div class="row between"><h3>Upgrade to Pro</h3><button class="x" aria-label="Close" onclick="closeModal()">&times;</button></div>
+  modal(`<div class="bl-co"><div class="row between"><h3>Upgrade to Pro</h3><button class="x" aria-label="Close" data-on-click="closeModal()">&times;</button></div>
  <div class="x-seg bl-int" style="margin:12px 0">${[
    ['month', 'Monthly ' + money(proM())],
    ['year', 'Yearly ' + money(proY())]
  ]
    .map(
      ([k, l]) =>
-       `<button type="button" class="${interval === k ? 'on' : ''}" onclick="closeModal();bUpgrade('${k}')">${l}</button>`
+       `<button type="button" class="${interval === k ? 'on' : ''}" data-on-click="closeModal();bUpgrade('${k}')">${l}</button>`
    )
    .join('')}</div>
  ${bCheckoutBody('pro', interval)}<ul class="bl-incl">${PLANS.pro.features
    .slice(1)
    .map(f => `<li>${sv('check', 13, 'currentColor', 2.6)}${f}</li>`)
    .join('')}</ul>
- ${trial ? `<button type="button" class="x-btn lg block" onclick="bStartTrial('${interval}')">Start ${TRIAL_DAYS}-day free trial</button><p class="bl-fine c">No card needed to start. Your first invoice appears in Billing.</p>` : bPayForm(`bBuyPro('${interval}')`, 'Pay and upgrade')}</div>`);
+ ${trial ? `<button type="button" class="x-btn lg block" data-on-click="bStartTrial('${interval}')">Start ${TRIAL_DAYS}-day free trial</button><p class="bl-fine c">No card needed to start. Your first invoice appears in Billing.</p>` : bPayForm(`bBuyPro('${interval}')`, 'Pay and upgrade')}</div>`);
 }
 function bPayForm(action, label) {
   if (cloud())
-    return `<button type="button" class="x-btn lg block" onclick="${action.replace(/\)$/, ",'invoice')")}">Request invoice</button><p class="bl-fine c">Card payments open soon. We&rsquo;ll create a pending invoice you can pay by bank transfer; Pro starts once it is paid.</p>`;
-  return `<form class="bl-pay" onsubmit="event.preventDefault();if(bCardValid())${action}"><label class="x-f"><span>Card number</span><input id="bcn" inputmode="numeric" autocomplete="cc-number" placeholder="4242 4242 4242 4242" maxlength="23" oninput="this.value=this.value.replace(/[^\\d]/g,'').replace(/(\\d{4})(?=\\d)/g,'$1 ')" required></label><div class="t-g2"><label class="x-f"><span>Expiry</span><input id="bce" placeholder="MM/YY" autocomplete="cc-exp" maxlength="5" oninput="this.value=this.value.replace(/[^\\d]/g,'').replace(/^(\\d{2})(\\d)/,'$1/$2')" required></label><label class="x-f"><span>CVC</span><input id="bcc" inputmode="numeric" autocomplete="cc-csc" maxlength="4" placeholder="123" required></label></div><div class="otp-note err" id="bcerr" hidden></div><button class="x-btn lg block">${label}</button><p class="bl-fine c">${sv('lock', 12)} Demo account: this card is simulated and nothing is charged.</p></form>`;
+    return `<button type="button" class="x-btn lg block" data-on-click="${action.replace(/\)$/, ",'invoice')")}">Request invoice</button><p class="bl-fine c">Card payments open soon. We&rsquo;ll create a pending invoice you can pay by bank transfer; Pro starts once it is paid.</p>`;
+  return `<form class="bl-pay" data-on-submit="bCardSubmit(event,this)" data-act="${action}"><label class="x-f"><span>Card number</span><input id="bcn" inputmode="numeric" autocomplete="cc-number" placeholder="4242 4242 4242 4242" maxlength="23" data-on-input="bFmtCard(this)" required></label><div class="t-g2"><label class="x-f"><span>Expiry</span><input id="bce" placeholder="MM/YY" autocomplete="cc-exp" maxlength="5" data-on-input="bFmtExp(this)" required></label><label class="x-f"><span>CVC</span><input id="bcc" inputmode="numeric" autocomplete="cc-csc" maxlength="4" placeholder="123" required></label></div><div class="otp-note err" id="bcerr" hidden></div><button class="x-btn lg block">${label}</button><p class="bl-fine c">${sv('lock', 12)} Demo account: this card is simulated and nothing is charged.</p></form>`;
 }
 function luhn(n) {
   let s = 0,
@@ -540,7 +540,7 @@ async function bBuyPro(interval, mode) {
 }
 function bRoomPass() {
   modal(
-    `<div class="bl-co"><div class="row between"><h3>Buy a Room pass</h3><button class="x" aria-label="Close" onclick="closeModal()">&times;</button></div><p class="fu-sub">One extra Room for an event or community, with QR badges and a live Resolution Report.</p>${bCheckoutBody('rooms')}${bPayForm('bBuyRoom()', 'Pay ' + money(199 + bTax(bGet(), 199).amount))}</div>`
+    `<div class="bl-co"><div class="row between"><h3>Buy a Room pass</h3><button class="x" aria-label="Close" data-on-click="closeModal()">&times;</button></div><p class="fu-sub">One extra Room for an event or community, with QR badges and a live Resolution Report.</p>${bCheckoutBody('rooms')}${bPayForm('bBuyRoom()', 'Pay ' + money(199 + bTax(bGet(), 199).amount))}</div>`
   );
 }
 async function bBuyRoom(mode) {
@@ -572,12 +572,12 @@ function bPayModal(id) {
   if (!i) return;
   if (cloud()) {
     modal(
-      `<div class="bl-co"><div class="row between"><h3>Pay invoice ${i.number}</h3><button class="x" aria-label="Close" onclick="closeModal()">&times;</button></div><div class="bl-sum"><div class="tot"><span>Amount due</span><b>${money(i.total, i.currency || 'USD')}</b></div></div><p class="fu-sub">Online card payment is being set up. To pay now, email <a href="mailto:billing@introthread.com?subject=${encodeURIComponent('Invoice ' + i.number)}">billing@introthread.com</a> with your invoice number and we will send bank transfer details. Your plan updates as soon as payment is received.</p><div class="fu-b"><button type="button" class="t-how" onclick="bInvPrint('${i.id}')">Download invoice</button><button type="button" class="x-btn" onclick="closeModal()">Done</button></div></div>`
+      `<div class="bl-co"><div class="row between"><h3>Pay invoice ${i.number}</h3><button class="x" aria-label="Close" data-on-click="closeModal()">&times;</button></div><div class="bl-sum"><div class="tot"><span>Amount due</span><b>${money(i.total, i.currency || 'USD')}</b></div></div><p class="fu-sub">Online card payment is being set up. To pay now, email <a href="mailto:billing@introthread.com?subject=${encodeURIComponent('Invoice ' + i.number)}">billing@introthread.com</a> with your invoice number and we will send bank transfer details. Your plan updates as soon as payment is received.</p><div class="fu-b"><button type="button" class="t-how" data-on-click="bInvPrint('${i.id}')">Download invoice</button><button type="button" class="x-btn" data-on-click="closeModal()">Done</button></div></div>`
     );
     return;
   }
   modal(
-    `<div class="bl-co"><div class="row between"><h3>Pay invoice ${i.number}</h3><button class="x" aria-label="Close" onclick="closeModal()">&times;</button></div><div class="bl-sum"><div><span>${esc(i.desc)}</span><b>${money(i.subtotal, i.currency || 'USD')}</b></div>${i.tax ? `<div><span>${i.taxLabel}</span><b>${money(i.tax, i.currency || 'USD')}</b></div>` : ''}<div class="tot"><span>Amount due</span><b>${money(i.total, i.currency || 'USD')}</b></div></div>${b.card ? `<button type="button" class="x-btn lg block" onclick="window._card=null;bPayInv('${i.id}')">Pay with ${esc(b.card.brand)} &bull;&bull;&bull;&bull; ${esc(b.card.last4)}</button><p class="bl-fine c">or use a different card below</p>` : ''}${bPayForm(`bPayInv('${i.id}')`, 'Pay ' + money(i.total, i.currency || 'USD'))}</div>`
+    `<div class="bl-co"><div class="row between"><h3>Pay invoice ${i.number}</h3><button class="x" aria-label="Close" data-on-click="closeModal()">&times;</button></div><div class="bl-sum"><div><span>${esc(i.desc)}</span><b>${money(i.subtotal, i.currency || 'USD')}</b></div>${i.tax ? `<div><span>${i.taxLabel}</span><b>${money(i.tax, i.currency || 'USD')}</b></div>` : ''}<div class="tot"><span>Amount due</span><b>${money(i.total, i.currency || 'USD')}</b></div></div>${b.card ? `<button type="button" class="x-btn lg block" data-on-click="bPayInvNew('${i.id}')">Pay with ${esc(b.card.brand)} &bull;&bull;&bull;&bull; ${esc(b.card.last4)}</button><p class="bl-fine c">or use a different card below</p>` : ''}${bPayForm(`bPayInv('${i.id}')`, 'Pay ' + money(i.total, i.currency || 'USD'))}</div>`
   );
 }
 async function bPayInv(id) {
@@ -659,7 +659,7 @@ async function bSwitchInterval() {
 }
 function bCardModal() {
   modal(
-    `<div class="bl-co"><div class="row between"><h3>${bGet().card ? 'Update card' : 'Add card'}</h3><button class="x" aria-label="Close" onclick="closeModal()">&times;</button></div>${bPayForm('bCardSave()', 'Save card')}</div>`
+    `<div class="bl-co"><div class="row between"><h3>${bGet().card ? 'Update card' : 'Add card'}</h3><button class="x" aria-label="Close" data-on-click="closeModal()">&times;</button></div>${bPayForm('bCardSave()', 'Save card')}</div>`
   );
 }
 async function bCardSave() {
@@ -687,7 +687,7 @@ function bInvView(id) {
   const i = bGet().invoices.find(x => x.id === id);
   if (!i) return;
   modal(
-    `<div>${bInvHTML(i)}<div class="fu-b">${i.status === 'open' ? `<button type="button" class="x-btn" onclick="bPayModal('${i.id}')">Pay ${money(i.total, i.currency || 'USD')}</button>` : ''}<button type="button" class="t-how" onclick="bInvPrint('${i.id}')">Download PDF</button><button type="button" class="t-how" onclick="closeModal()">Close</button></div></div>`
+    `<div>${bInvHTML(i)}<div class="fu-b">${i.status === 'open' ? `<button type="button" class="x-btn" data-on-click="bPayModal('${i.id}')">Pay ${money(i.total, i.currency || 'USD')}</button>` : ''}<button type="button" class="t-how" data-on-click="bInvPrint('${i.id}')">Download PDF</button><button type="button" class="t-how" data-on-click="closeModal()">Close</button></div></div>`
   );
 }
 function bInvPrint(id) {
@@ -706,11 +706,11 @@ function bInvPrint(id) {
 /* ---------- Pro feature gates ---------- */
 function bLocked(f) {
   modal(
-    `<div class="bl-co"><span class="otp-ic">${sv('lock', 24)}</span><h3>${FEATURES[f] || 'This feature'} is a Pro feature</h3><p class="fu-sub">Upgrade to Pro to unlock ${(FEATURES[f] || 'it').toLowerCase()}, plus AI follow-up drafts, NFC writing, Thread export and advanced analytics.</p><div class="fu-b"><button type="button" class="t-how" onclick="closeModal()">Not now</button><button type="button" class="x-btn" onclick="closeModal();bUpgrade()">${sv('spark', 15)} ${bGet().trialUsed ? 'Upgrade to Pro' : 'Start free trial'}</button></div></div>`
+    `<div class="bl-co"><span class="otp-ic">${sv('lock', 24)}</span><h3>${FEATURES[f] || 'This feature'} is a Pro feature</h3><p class="fu-sub">Upgrade to Pro to unlock ${(FEATURES[f] || 'it').toLowerCase()}, plus AI follow-up drafts, NFC writing, Thread export and advanced analytics.</p><div class="fu-b"><button type="button" class="t-how" data-on-click="closeModal()">Not now</button><button type="button" class="x-btn" data-on-click="closeModal();bUpgrade()">${sv('spark', 15)} ${bGet().trialUsed ? 'Upgrade to Pro' : 'Start free trial'}</button></div></div>`
   );
 }
 const bLockCard = (f, txt) =>
-  `<div class="bl-lockcard"><span>${sv('lock', 18)}</span><div><b>${FEATURES[f]} is part of Pro</b><small>${txt}</small></div><button type="button" class="x-btn sm" onclick="bUpgrade()">Unlock</button></div>`;
+  `<div class="bl-lockcard"><span>${sv('lock', 18)}</span><div><b>${FEATURES[f]} is part of Pro</b><small>${txt}</small></div><button type="button" class="x-btn sm" data-on-click="bUpgrade()">Unlock</button></div>`;
 const _tapNFC19 = tapNFC;
 tapNFC = function () {
   if (!has('nfc')) return bLocked('nfc');
@@ -723,7 +723,7 @@ tapInsights = function () {
   let n = 0;
   return h.replace(/<section class="t-panel">/g, m =>
     ++n === 2
-      ? `<section class="t-panel bl-locked"><div class="bl-ov"><span>${sv('lock', 18)}</span><b>Sharing analytics is part of Pro</b><button type="button" class="x-btn sm" onclick="bUpgrade()">Unlock</button></div>`
+      ? `<section class="t-panel bl-locked"><div class="bl-ov"><span>${sv('lock', 18)}</span><b>Sharing analytics is part of Pro</b><button type="button" class="x-btn sm" data-on-click="bUpgrade()">Unlock</button></div>`
       : m
   );
 };
@@ -785,7 +785,7 @@ const _vThreads19 = vThreads;
 vThreads = function () {
   return _vThreads19().replace(
     '<button type="button" class="th-filter',
-    `<button type="button" class="th-filter" onclick="bExportThreads()" title="Export Threads to CSV">${has('export') ? sv('arrow', 16).replace('M5 12h14M13 6l6 6-6 6', 'M12 5v14M6 13l6 6 6-6') : sv('lock', 15)} Export</button><button type="button" class="th-filter`
+    `<button type="button" class="th-filter" data-on-click="bExportThreads()" title="Export Threads to CSV">${has('export') ? sv('arrow', 16).replace('M5 12h14M13 6l6 6-6 6', 'M12 5v14M6 13l6 6 6-6') : sv('lock', 15)} Export</button><button type="button" class="th-filter`
   );
 };
 /* Rooms: 1 included, each extra Room uses a Room pass */
@@ -796,7 +796,7 @@ const _newRoomModal19 = newRoomModal;
 newRoomModal = function () {
   if (!bRoomAllowed()) {
     return modal(
-      `<div class="bl-co"><span class="otp-ic">${sv('cal', 24)}</span><h3>You&rsquo;ve used your included Room</h3><p class="fu-sub">Every account includes ${FREE_ROOMS} Room. Buy a Room pass for each extra event or community.</p><div class="fu-b"><button type="button" class="t-how" onclick="closeModal()">Not now</button><button type="button" class="x-btn" onclick="closeModal();bRoomPass()">Buy a Room pass, $199</button></div></div>`
+      `<div class="bl-co"><span class="otp-ic">${sv('cal', 24)}</span><h3>You&rsquo;ve used your included Room</h3><p class="fu-sub">Every account includes ${FREE_ROOMS} Room. Buy a Room pass for each extra event or community.</p><div class="fu-b"><button type="button" class="t-how" data-on-click="closeModal()">Not now</button><button type="button" class="x-btn" data-on-click="closeModal();bRoomPass()">Buy a Room pass, $199</button></div></div>`
     );
   }
   return _newRoomModal19.apply(this, arguments);
@@ -840,7 +840,7 @@ async function lSet(k, v, msg) {
   }
 }
 const bTog = (on, l, d, fn) =>
-  `<label class="t-tog bl-row"><input type="checkbox" ${on ? 'checked' : ''} onchange="${fn}"><span class="t-sw"></span><span><b>${l}</b><small>${d}</small></span></label>`;
+  `<label class="t-tog bl-row"><input type="checkbox" ${on ? 'checked' : ''} data-on-change="${fn}"><span class="t-sw"></span><span><b>${l}</b><small>${d}</small></span></label>`;
 const bSec = (ic, t, s, body) =>
   `<section class="d-box bl-sec"><div class="cd-bh"><span class="cd-bi">${sv(ic, 20)}</span><div><b>${t}</b><small>${s}</small></div></div>${body}</section>`;
 function bPrivacy(u) {
@@ -862,7 +862,7 @@ function bPrivacy(u) {
         'Allow Google and Bing to list your public profile.',
         "lSet('noindex',!this.checked,this.checked?'Search engines can list your profile':'Search engines asked not to list your profile')"
       ) +
-      `<a class="bl-link" href="/app/profile" onclick="PTAB='look'">${sv('palette', 16)} Choose which details visitors see ${sv('chev', 14)}</a>`
+      `<a class="bl-link" href="/app/profile" data-on-click="setPTab('look')">${sv('palette', 16)} Choose which details visitors see ${sv('chev', 14)}</a>`
   )}
  ${bSec(
    'link',
@@ -893,7 +893,7 @@ function bPrivacy(u) {
        "setPref('net',this.checked)"
      )
  )}
- ${bSec('shield', 'Your data', 'Download or delete what Introthread holds about you.', `<div class="bl-data"><div><b>Export everything</b><small>Your profile, Threads and Rooms as a JSON file.</small></div><button type="button" class="t-how sm" onclick="exportMine()">Download JSON</button></div><div class="bl-data"><div><b>Export Threads as CSV</b><small>Open in Excel or Google Sheets.${has('export') ? '' : ' Pro feature.'}</small></div><button type="button" class="t-how sm" onclick="bExportThreads()">${has('export') ? 'Download CSV' : sv('lock', 13) + ' Unlock'}</button></div><div class="bl-data"><div><b>Delete your account</b><small>Permanently remove your account and data.</small></div><button type="button" class="t-how sm bl-danger" onclick="stConfirm('delete')">Delete account</button></div>`)}</div>`;
+ ${bSec('shield', 'Your data', 'Download or delete what Introthread holds about you.', `<div class="bl-data"><div><b>Export everything</b><small>Your profile, Threads and Rooms as a JSON file.</small></div><button type="button" class="t-how sm" data-on-click="exportMine()">Download JSON</button></div><div class="bl-data"><div><b>Export Threads as CSV</b><small>Open in Excel or Google Sheets.${has('export') ? '' : ' Pro feature.'}</small></div><button type="button" class="t-how sm" data-on-click="bExportThreads()">${has('export') ? 'Download CSV' : sv('lock', 13) + ' Unlock'}</button></div><div class="bl-data"><div><b>Delete your account</b><small>Permanently remove your account and data.</small></div><button type="button" class="t-how sm bl-danger" data-on-click="stConfirm('delete')">Delete account</button></div>`)}</div>`;
 }
 const _pcVcf19 = pcVcf;
 pcVcf = function (id) {
@@ -938,7 +938,7 @@ function bNotifs(u) {
     bTog(def ? P[k] !== false : P[k] === true, l, d, `setPref('${k}',this.checked)`);
   return `<div class="bl-stack"><div class="bl-info">${sv('mail', 16)}<span>Email notifications are saved now and start sending once your email service is connected. In-app notifications work today.</span></div>
  ${bSec('mail', 'Email', 'What we email you about.', t('emailConfirm', 'When someone confirms a Thread', 'So you know the relationship is verified.') + t('emailMatch', 'When you match on &ldquo;What&rsquo;s next?&rdquo;', 'Both of you chose the same next step.') + t('nudge', '48-hour reminder', 'A gentle nudge before a Thread fades.') + t('digest', 'Weekly summary', 'A short Monday recap of open Threads.', false) + t('product', 'Product news', 'New features, at most once a month.', false))}
- ${bSec('bell', 'In the app', 'The bell in the top bar.', t('inappNudge', 'Show nudges in the bell', 'Threads that need your answer or follow-up.') + `<div class="bl-data"><div><b>Preview</b><small>See what is waiting for you right now.</small></div><button type="button" class="t-how sm" onclick="showNudges()">Open notifications</button></div>`)}</div>`;
+ ${bSec('bell', 'In the app', 'The bell in the top bar.', t('inappNudge', 'Show nudges in the bell', 'Threads that need your answer or follow-up.') + `<div class="bl-data"><div><b>Preview</b><small>See what is waiting for you right now.</small></div><button type="button" class="t-how sm" data-on-click="showNudges()">Open notifications</button></div>`)}</div>`;
 }
 const _nudges19 = nudges;
 nudges = function () {
@@ -1027,8 +1027,8 @@ function bHelpList() {
 }
 function bHelp(u) {
   const R = ((u.prefs || {}).support || []).slice(0, 5);
-  return `<div class="bl-stack">${bSec('search', 'Help center', 'Answers to common questions.', `<label class="ro-s bl-hs">${sv('search', 16)}<input placeholder="Search help, e.g. invoices, Rooms, privacy" value="${esc(HQ)}" oninput="HQ=this.value;$('#bhl').innerHTML=bHelpList()" aria-label="Search help"></label><div id="bhl" class="bl-faqs">${bHelpList()}</div>`)}
- ${bSec('mail', 'Contact support', 'We reply within one business day.', `<form class="bl-df" onsubmit="return bSupport(event)"><div class="t-g2"><label class="x-f"><span>Topic</span><select id="bst" class="th-sort" style="width:100%">${['Account and login', 'Billing and invoices', 'Threads', 'Rooms', 'Privacy', 'Report a problem', 'Something else'].map(x => `<option>${x}</option>`).join('')}</select></label><label class="x-f"><span>Subject</span><input id="bss" required maxlength="100" placeholder="Short summary"></label></div><label class="x-f"><span>Message</span><textarea id="bsm" rows="4" required maxlength="2000" placeholder="Tell us what happened and what you expected"></textarea></label><label class="t-tog"><input type="checkbox" id="bsd" checked><span class="t-sw"></span><span><b>Include technical details</b><small>Browser and page, to help us fix problems faster.</small></span></label><div class="fu-b"><button class="x-btn">Send to support</button></div></form>`)}
+  return `<div class="bl-stack">${bSec('search', 'Help center', 'Answers to common questions.', `<label class="ro-s bl-hs">${sv('search', 16)}<input placeholder="Search help, e.g. invoices, Rooms, privacy" value="${esc(HQ)}" data-on-input="bHelpSearch(this.value)" aria-label="Search help"></label><div id="bhl" class="bl-faqs">${bHelpList()}</div>`)}
+ ${bSec('mail', 'Contact support', 'We reply within one business day.', `<form class="bl-df" data-on-submit="return bSupport(event)"><div class="t-g2"><label class="x-f"><span>Topic</span><select id="bst" class="th-sort" style="width:100%">${['Account and login', 'Billing and invoices', 'Threads', 'Rooms', 'Privacy', 'Report a problem', 'Something else'].map(x => `<option>${x}</option>`).join('')}</select></label><label class="x-f"><span>Subject</span><input id="bss" required maxlength="100" placeholder="Short summary"></label></div><label class="x-f"><span>Message</span><textarea id="bsm" rows="4" required maxlength="2000" placeholder="Tell us what happened and what you expected"></textarea></label><label class="t-tog"><input type="checkbox" id="bsd" checked><span class="t-sw"></span><span><b>Include technical details</b><small>Browser and page, to help us fix problems faster.</small></span></label><div class="fu-b"><button class="x-btn">Send to support</button></div></form>`)}
  ${R.length ? bSec('brief', 'Your requests', 'Messages you have sent to support.', R.map(r => `<div class="bl-data"><div><b>${esc(r.subject)}</b><small>${r.id} &middot; ${esc(r.topic)} &middot; ${bDate(r.at)}</small></div><span class="bl-chip o">Open</span></div>`).join('')) : ''}
  ${bSec('globe', 'More resources', '', `<div class="bl-res"><a href="/how">${sv('play', 15)} How Introthread works</a><a href="/privacy">${sv('shield', 15)} Privacy &amp; consent</a><a href="/terms">${sv('brief', 15)} Terms of Service</a><a href="mailto:hello@introthread.com">${sv('mail', 15)} hello@introthread.com</a></div>`)}</div>`;
 }
@@ -1087,7 +1087,7 @@ stPlan = function (u) {
    .slice(b.plan === 'pro' ? 1 : 0, b.plan === 'pro' ? 6 : 5)
    .map(x => `<li><i>${sv('check', 10, '#fff', 3.2)}</i>${x}</li>`)
    .join('')}</ul></div>
- <div class="st12-bill"><span>${b.plan !== 'pro' ? 'Upgrade for AI drafts, NFC and analytics.' : b.status === 'trialing' ? 'Trial ends ' + bDate(b.trialEnd) : b.cancelAt ? 'Ends ' + bDate(b.cancelAt) : b.status === 'past_due' ? 'Payment overdue' : 'Next billing date: ' + bDate(b.periodEnd)}</span><button type="button" class="x-btn" onclick="stTab('billing')">${pro ? 'Manage subscription' : 'Upgrade to Pro'} ${sv('arrow', 16)}</button></div></section>`;
+ <div class="st12-bill"><span>${b.plan !== 'pro' ? 'Upgrade for AI drafts, NFC and analytics.' : b.status === 'trialing' ? 'Trial ends ' + bDate(b.trialEnd) : b.cancelAt ? 'Ends ' + bDate(b.cancelAt) : b.status === 'past_due' ? 'Payment overdue' : 'Next billing date: ' + bDate(b.periodEnd)}</span><button type="button" class="x-btn" data-on-click="stTab('billing')">${pro ? 'Manage subscription' : 'Upgrade to Pro'} ${sv('arrow', 16)}</button></div></section>`;
 };
 setPlan = function () {
   bUpgrade();
@@ -1112,3 +1112,38 @@ render = function () {
   }
   return _render19();
 };
+
+/* v61: named handlers for billing (no inline JavaScript). */
+function bInt(k) {
+  BINT = k;
+  window._keepScroll = true;
+  render();
+}
+function bInvF(k) {
+  BINVF = k;
+  window._keepScroll = true;
+  render();
+}
+/* The card form keeps its action (e.g. "bUpgrade('m')") in data-act and runs it
+   through actions.js once the card details are valid. */
+function bCardSubmit(e, form) {
+  e.preventDefault();
+  if (bCardValid()) ACT.run(form.dataset.act, form, e);
+}
+function bFmtCard(el) {
+  el.value = el.value.replace(/[^\d]/g, '').replace(/(\d{4})(?=\d)/g, '$1 ');
+}
+function bFmtExp(el) {
+  el.value = el.value.replace(/[^\d]/g, '').replace(/^(\d{2})(\d)/, '$1/$2');
+}
+function bPayInvNew(id) {
+  window._card = null;
+  bPayInv(id);
+}
+function setPTab(k) {
+  PTAB = k;
+}
+function bHelpSearch(v) {
+  HQ = v;
+  $('#bhl').innerHTML = bHelpList();
+}

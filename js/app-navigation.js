@@ -122,7 +122,10 @@ render = function () {
 /* privacy link opens the right Public profile tab */
 const _bPrivacy21 = bPrivacy;
 bPrivacy = function (u) {
-  return _bPrivacy21(u).replace(`href="/app/profile" onclick="PTAB='look'"`, 'href="/app/profile?tab=look"');
+  return _bPrivacy21(u).replace(
+    `href="/app/profile" data-on-click="setPTab('look')"`,
+    'href="/app/profile?tab=look"'
+  );
 };
 
 /* ===== v21 Mobile and tablet navigation (screens under 1024px) ===== */
