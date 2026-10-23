@@ -494,7 +494,7 @@ function su3() {
   save();
   SU = { step: 1 };
   modal(
-    `<div class="center"><div style="width:64px;height:64px;border-radius:50%;background:#e8f8f0;display:grid;place-items:center;margin:auto">${ic('check', 30, '#12a065', 3)}</div><h2 style="letter-spacing:-.8px">Your card is live</h2><p class="muted">introthread.com/${esc(u.handle)}</p><p class="small muted">Want to see how Threads work with sample data first?</p><div class="row" style="justify-content:center;margin-top:18px"><button class="btn secondary" onclick="closeModal();go('#/app/tap')">Start sharing</button><button class="btn primary" onclick="seed(me());save();closeModal();render();toast('Sample Threads added')">Add sample Threads</button></div></div>`
+    `<div class="center"><div style="width:64px;height:64px;border-radius:50%;background:#e8f8f0;display:grid;place-items:center;margin:auto">${ic('check', 30, '#12a065', 3)}</div><h2 style="letter-spacing:-.8px">Your card is live</h2><p class="muted">introthread.com/${esc(u.handle)}</p><p class="small muted">Want to see how Threads work with sample data first?</p><div class="row" style="justify-content:center;margin-top:18px"><button class="btn secondary" data-on-click="closeModal();go('#/app/tap')">Start sharing</button><button class="btn primary" data-on-click="suSample()">Add sample Threads</button></div></div>`
   );
   go('#/app');
 }
@@ -1319,7 +1319,7 @@ su3 = async function () {
       save();
       go('#/app');
       modal(
-        `<div class="center"><div style="width:64px;height:64px;border-radius:50%;background:#e8f8f0;display:grid;place-items:center;margin:auto">${ic('check', 30, '#12a065', 3)}</div><h2 style="letter-spacing:-.8px">Your card is live</h2><p class="muted">introthread.com/${esc(prof.handle)}</p><button class="btn primary" onclick="closeModal();go('#/app/tap')">Start sharing</button></div>`
+        `<div class="center"><div style="width:64px;height:64px;border-radius:50%;background:#e8f8f0;display:grid;place-items:center;margin:auto">${ic('check', 30, '#12a065', 3)}</div><h2 style="letter-spacing:-.8px">Your card is live</h2><p class="muted">introthread.com/${esc(prof.handle)}</p><button class="btn primary" data-on-click="closeModal();go('#/app/tap')">Start sharing</button></div>`
       );
     }
   } else {
@@ -1821,7 +1821,7 @@ const logo = dark =>
   `<a href="#/" class="x-logo ${dark ? 'dk' : ''}" aria-label="Introthread home"><span class="x-lm"><i></i><i></i></span><span>intro<b>thread</b></span></a>`;
 function mnav(on) {
   return `<header class="x-nav"><div class="x-wrap x-nav-in">${logo()}<nav class="x-links" aria-label="Main"><a href="#/how" class="${on === 'how' ? 'on' : ''}">How it works</a><a href="#/rooms" class="${on === 'rooms' ? 'on' : ''}">Events &amp; communities</a><a href="#/networks" class="${on === 'networks' ? 'on' : ''}">For teams</a><a href="#/pricing" class="${on === 'pricing' ? 'on' : ''}">Pricing</a><div class="x-dd"><button type="button">Resources ${sv('chevd', 14)}</button><div class="x-dd-m"><a href="#/about">About Introthread</a><a href="#/privacy">Privacy &amp; consent</a><a href="#/how">How Threads work</a></div></div>${me() ? '' : '<a href="#/login" class="x-mlogin">Log in</a>'}</nav>
-<div class="x-nav-r">${me() ? `<a class="x-btn sm" href="#/app">Open app ${sv('arrow', 15)}</a>` : `<a href="#/login" class="x-login">Log in</a><a href="#/signup" class="x-btn sm">Get your card ${sv('arrow', 15)}</a>`}<button class="x-burger" onclick="document.body.classList.toggle('x-open')" aria-label="Menu">${sv('menu2', 22)}</button></div></div></header>`;
+<div class="x-nav-r">${me() ? `<a class="x-btn sm" href="#/app">Open app ${sv('arrow', 15)}</a>` : `<a href="#/login" class="x-login">Log in</a><a href="#/signup" class="x-btn sm">Get your card ${sv('arrow', 15)}</a>`}<button class="x-burger" data-on-click="document.body.classList.toggle('x-open')" aria-label="Menu">${sv('menu2', 22)}</button></div></div></header>`;
 }
 function foot() {
   return `<footer class="x-foot"><div class="x-wrap"><div class="x-foot-g"><div>${logo()}<p>Every handshake, followed through.</p></div>
@@ -2091,15 +2091,15 @@ function vSignup() {
     })
     .join('')}</div>`;
   const seg = lg =>
-    `<div class="x-seg ${lg ? 'lg' : ''}"><button type="button" data-v="c" class="${SU.pv !== 'p' ? 'on' : ''}" onclick="setPv('c')">${lg ? 'Card view' : 'Card'}</button><button type="button" data-v="p" class="${SU.pv === 'p' ? 'on' : ''}" onclick="setPv('p')">${lg ? 'Profile view' : 'Profile'}</button></div>`;
+    `<div class="x-seg ${lg ? 'lg' : ''}"><button type="button" data-v="c" class="${SU.pv !== 'p' ? 'on' : ''}" data-on-click="setPv('c')">${lg ? 'Card view' : 'Card'}</button><button type="button" data-v="p" class="${SU.pv === 'p' ? 'on' : ''}" data-on-click="setPv('p')">${lg ? 'Profile view' : 'Profile'}</button></div>`;
   let body, mw;
   if (s === 1) {
     mw = 520;
     body = `<h1 class="x-ftitle">Create your account</h1><p class="x-fsub">Free forever for individuals. No card required.</p>
- <div class="x-oauth"><button type="button" class="x-obtn" onclick="oauth('Google')">${oG()} Continue with Google</button><button type="button" class="x-obtn" onclick="oauth('Microsoft')">${oM()} Continue with Microsoft</button></div><div class="x-or">or use your email</div>
- <form onsubmit="return su1(event)" class="x-form" novalidate2><label class="x-f"><span>Full name</span><input id="sn" required autocomplete="name" value="${esc(SU.name || '')}" placeholder="Alex Morgan"></label>
+ <div class="x-oauth"><button type="button" class="x-obtn" data-on-click="oauth('Google')">${oG()} Continue with Google</button><button type="button" class="x-obtn" data-on-click="oauth('Microsoft')">${oM()} Continue with Microsoft</button></div><div class="x-or">or use your email</div>
+ <form data-on-submit="return su1(event)" class="x-form" novalidate2><label class="x-f"><span>Full name</span><input id="sn" required autocomplete="name" value="${esc(SU.name || '')}" placeholder="Alex Morgan"></label>
  <label class="x-f"><span>Work email</span><input id="se" type="email" required autocomplete="email" value="${esc(SU.email || '')}" placeholder="alex@company.com"></label>
- <div class="x-f"><span>Password</span><div class="x-pw"><input id="sp" type="password" required minlength="8" autocomplete="new-password" placeholder="At least 8 characters" aria-label="Password"><button type="button" aria-label="Show password" onclick="const i=$('#sp');i.type=i.type==='password'?'text':'password'">${sv('eye', 19)}</button></div></div>
+ <div class="x-f"><span>Password</span><div class="x-pw"><input id="sp" type="password" required minlength="8" autocomplete="new-password" placeholder="At least 8 characters" aria-label="Password"><button type="button" aria-label="Show password" data-on-click="pwToggle('sp')">${sv('eye', 19)}</button></div></div>
  <div id="serr" class="x-err" role="alert"></div><button class="x-btn lg block" style="margin-top:6px">Continue ${sv('arrow', 17)}</button>
  <p class="x-legal">By creating an account you agree to our <a href="/terms" target="_blank" rel="noopener">Terms of Service</a><br>and <a href="/privacy#policy" target="_blank" rel="noopener">Privacy Policy</a>.</p></form><p class="x-alt">Already have an account? <a href="#/login">Log in</a></p>`;
   }
@@ -2112,13 +2112,13 @@ function vSignup() {
         .slice(0, 20);
     SU.handle = h;
     body = `<h1 class="x-ftitle">Your professional identity</h1><p class="x-fsub">This is what people see when you share your card. Keep it short, you can always update it later.</p>
- <div class="x-s2" style="margin-top:30px"><form onsubmit="return su2(event)" class="x-form" style="margin-top:0" oninput="liveP()">
+ <div class="x-s2" style="margin-top:30px"><form data-on-submit="return su2(event)" class="x-form" style="margin-top:0" data-on-input="liveP()">
  ${SU.pwRaw ? '' : `<label class="x-f"><span>Full name <i>*</i></span><div class="x-in">${sv('user', 18)}<input id="sn2" required autocomplete="name" value="${esc(SU.name || '')}"></div></label>`}<div class="x-g2"><label class="x-f"><span>Job title <i>*</i></span><div class="x-in">${sv('brief', 18)}<input id="sr" required placeholder="Founder" value="${esc(SU.role || '')}"></div></label><label class="x-f"><span>Company <i>*</i></span><div class="x-in">${sv('building', 18)}<input id="sc" required placeholder="Company name" value="${esc(SU.company || '')}"></div></label></div>
  <label class="x-f"><span>City <i>*</i></span><div class="x-in">${sv('pin', 18)}<input id="sct" required placeholder="London, UK" autocomplete="address-level2" value="${esc(SU.city || '')}"></div></label>
- <label class="x-f"><span>Your Introthread link <i>*</i></span><div class="x-link"><span>introthread.com/</span><input id="sh" required maxlength="20" autocapitalize="none" spellcheck="false" value="${esc(h)}" oninput="chkH()"><i id="shok"></i></div><small class="x-hint" id="shh">Use lowercase letters and numbers.</small></label>
+ <label class="x-f"><span>Your Introthread link <i>*</i></span><div class="x-link"><span>introthread.com/</span><input id="sh" required maxlength="20" autocapitalize="none" spellcheck="false" value="${esc(h)}" data-on-input="chkH()"><i id="shok"></i></div><small class="x-hint" id="shh">Use lowercase letters and numbers.</small></label>
  <label class="x-f"><span>One-line bio <i>*</i></span><textarea id="sb" rows="3" maxlength="160" required placeholder="What you do and who you help">${esc(SU.bio || '')}</textarea><small class="x-count"><b id="sbc" style="font-weight:500">${(SU.bio || '').length}</b>/160</small></label>
  <div class="x-f"><span>Add a profile photo <em style="font-style:normal;font-weight:500;color:var(--xmu)">(optional)</em></span><div class="x-up" id="xup">${upBox()}</div></div>
- <div class="x-actions"><button type="button" class="x-btn ghost lg" onclick="liveP();SU.step=1;render()">Back</button><button class="x-btn lg grow">Continue ${sv('arrow', 17)}</button></div></form>
+ <div class="x-actions"><button type="button" class="x-btn ghost lg" data-on-click="suStep(1,true)">Back</button><button class="x-btn lg grow">Continue ${sv('arrow', 17)}</button></div></form>
  <aside class="x-prev"><div class="x-prev-h"><b>Live preview</b>${seg()}</div><div id="lp">${prevHTML()}</div></aside></div>`;
   }
   if (s === 3) {
@@ -2135,18 +2135,18 @@ function vSignup() {
  ]
    .map(
      ([k, l]) =>
-       `<button type="button" class="${cat === k ? 'on' : ''}" onclick="SU.cat='${k}';window._keepScroll=true;render()">${l}</button>`
+       `<button type="button" class="${cat === k ? 'on' : ''}" data-on-click="suCat('${k}')">${l}</button>`
    )
    .join('')}</div>
  <div class="x-styles">${Object.entries(THEMES)
    .filter(([k, t]) => cat === 'all' || t.c.includes(cat))
    .map(
      ([k, t]) =>
-       `<button type="button" class="x-sty ${SU.theme === k ? 'on' : ''}" aria-pressed="${SU.theme === k}" onclick="pickTheme('${k}')"><span class="x-sw" style="background:${t.bg}">${SU.theme === k ? `<i>${sv('check', 14, '#fff', 3)}</i>` : ''}</span><b>${t.n}</b><small>${t.d}</small></button>`
+       `<button type="button" class="x-sty ${SU.theme === k ? 'on' : ''}" aria-pressed="${SU.theme === k}" data-on-click="pickTheme('${k}')"><span class="x-sw" style="background:${t.bg}">${SU.theme === k ? `<i>${sv('check', 14, '#fff', 3)}</i>` : ''}</span><b>${t.n}</b><small>${t.d}</small></button>`
    )
    .join('')}</div></div>
  <div id="lp">${prevHTML()}</div></div>
- <div class="x-actions" style="margin-top:34px"><button type="button" class="x-btn ghost lg" onclick="SU.step=2;render()">Back</button><button type="button" id="su3b" class="x-btn lg grow" onclick="doSu3(this)">Create my card ${sv('arrow', 17)}</button></div><p class="x-legal">You can always change your card style later in your settings.</p>`;
+ <div class="x-actions" style="margin-top:34px"><button type="button" class="x-btn ghost lg" data-on-click="suStep(2)">Back</button><button type="button" id="su3b" class="x-btn lg grow" data-on-click="doSu3(this)">Create my card ${sv('arrow', 17)}</button></div><p class="x-legal">You can always change your card style later in your settings.</p>`;
   }
   const sw = { 1: '47%', 2: '40%', 3: '35%' }[s];
   return `<div class="x-auth" style="--sw:${sw}">${authSide(s)}<main class="x-main"><div class="x-mi" style="--mw:${mw}px">${st}${body}</div></main></div>`;
@@ -2228,11 +2228,11 @@ function vLogin() {
   document.body.classList.remove('x-open');
   return `<div class="x-auth" style="--sw:47%">${authSide(0)}<main class="x-main"><div class="x-mi" style="--mw:460px">
 <div class="x-eye" style="margin-bottom:10px">Welcome back</div><h1 class="x-ftitle">Log in to Introthread</h1><p class="x-fsub">Pick up every Thread where you left it.</p>
-<div class="x-oauth"><button type="button" class="x-obtn" onclick="oauth('Google')">${oG()} Continue with Google</button><button type="button" class="x-obtn" onclick="oauth('Microsoft')">${oM()} Continue with Microsoft</button></div><div class="x-or">or use your email</div>
-<form onsubmit="return doLogin(event)" class="x-form"><label class="x-f"><span>Work email</span><input id="le" type="email" required autocomplete="email" placeholder="you@company.com"></label>
-<div class="x-f"><span>Password <button type="button" class="x-forgot" onclick="forgotPw()">Forgot password?</button></span><div class="x-pw"><input id="lp" type="password" required autocomplete="current-password" placeholder="Your password" aria-label="Password"><button type="button" aria-label="Show password" onclick="const i=$('#lp');i.type=i.type==='password'?'text':'password'">${sv('eye', 19)}</button></div></div>
+<div class="x-oauth"><button type="button" class="x-obtn" data-on-click="oauth('Google')">${oG()} Continue with Google</button><button type="button" class="x-obtn" data-on-click="oauth('Microsoft')">${oM()} Continue with Microsoft</button></div><div class="x-or">or use your email</div>
+<form data-on-submit="return doLogin(event)" class="x-form"><label class="x-f"><span>Work email</span><input id="le" type="email" required autocomplete="email" placeholder="you@company.com"></label>
+<div class="x-f"><span>Password <button type="button" class="x-forgot" data-on-click="forgotPw()">Forgot password?</button></span><div class="x-pw"><input id="lp" type="password" required autocomplete="current-password" placeholder="Your password" aria-label="Password"><button type="button" aria-label="Show password" data-on-click="pwToggle('lp')">${sv('eye', 19)}</button></div></div>
 <div id="lerr" class="x-err" role="alert"></div><button class="x-btn lg block" style="margin-top:4px">Log in ${sv('arrow', 17)}</button></form>
-<button type="button" class="x-demo" onclick="demoLogin()">${sv('spark', 16)} Explore the live demo account</button>
+<button type="button" class="x-demo" data-on-click="demoLogin()">${sv('spark', 16)} Explore the live demo account</button>
 <p class="x-alt" style="margin-top:8px">New here? <a href="#/signup">Create your free card</a></p></div></main></div>`;
 }
 
@@ -2370,7 +2370,7 @@ function vRoomsPage() {
       'Thread Rooms for events &amp; communities',
       'Prove which connections <em>went somewhere.</em>',
       'Badge scans count footfall. Thread Rooms measure outcomes: verified connections, follow-ups, introductions and meetings, live during the event and for 30 days after.',
-      `<a href="/signup" class="x-btn lg">Create a Room ${sv('arrow', 17)}</a><a href="#report" class="x-btn ghost lg" onclick="event.preventDefault();document.getElementById('report').scrollIntoView({behavior:'smooth'})">See a sample report</a>`,
+      `<a href="/signup" class="x-btn lg">Create a Room ${sv('arrow', 17)}</a><a href="#report" class="x-btn ghost lg" data-on-click="scrollToId(event,'report')">See a sample report</a>`,
       `<div class="x-ph-glow"></div><div class="x-rep" id="report"><div class="x-rep-h"><span>Resolution report</span><em><i></i>Live</em></div><b class="x-rep-t">London Tech Week Founders Night</b><small class="x-rep-s">Sample report</small><div class="x-rep-g">${st.map(([n, l]) => `<div><b>${n}</b><small>${l}</small></div>`).join('')}</div><div class="x-rep-bar"><span>Resolution rate</span><b>74%</b><i><s style="width:74%"></s></i></div></div>`
     ) +
     `<section class="x-sec alt"><div class="x-wrap">${secHead('For organisers', 'Outcomes your sponsors<br><em>can see.</em>', 'One code for the whole room. Live numbers while it happens, a clean report when it ends.')}${feat3(
@@ -2503,7 +2503,7 @@ function vPricing() {
   ];
   return (
     mnav('pricing') +
-    `<section class="x-ph c"><div class="x-wrap"><div class="x-eye">Pricing</div><h1 class="x-h1 x-ph-h">Start free. <em>Pay when it pays off.</em></h1><p class="x-lead" style="margin:0 auto">We never charge per tap or per scan. Sharing should be free.</p><div class="x-seg lg" style="margin-top:28px"><button class="${billing === 'm' ? 'on' : ''}" onclick="billing='m';window._keepScroll=true;render()">Monthly</button><button class="${billing === 'y' ? 'on' : ''}" onclick="billing='y';window._keepScroll=true;render()">Annual &middot; 2 months free</button></div></div></section>
+    `<section class="x-ph c"><div class="x-wrap"><div class="x-eye">Pricing</div><h1 class="x-h1 x-ph-h">Start free. <em>Pay when it pays off.</em></h1><p class="x-lead" style="margin:0 auto">We never charge per tap or per scan. Sharing should be free.</p><div class="x-seg lg" style="margin-top:28px"><button class="${billing === 'm' ? 'on' : ''}" data-on-click="setBilling('m')">Monthly</button><button class="${billing === 'y' ? 'on' : ''}" data-on-click="setBilling('y')">Annual &middot; 2 months free</button></div></div></section>
  <section class="x-sec" style="padding-top:0"><div class="x-wrap"><div class="x-plans">${plans.map(([n, a, per, who, f, c, href, hot]) => `<div class="x-plan ${hot}">${hot ? '<span class="x-plan-tag">Most popular</span>' : ''}<b class="x-plan-n">${n}</b><small class="x-plan-w">${who}</small><div class="x-plan-a">${a}<small>${per}</small></div><a href="${href}" class="x-btn ${hot ? '' : 'ghost'} block">${c}</a><ul>${f.map(x => `<li>${sv('check', 16, 'currentColor', 2.4)}${x}</li>`).join('')}</ul></div>`).join('')}</div><p class="x-plan-note">UK prices in GBP at checkout: Pro &pound;9/month, Rooms &pound;149/event. Prices exclude VAT and sales tax where applicable.</p></div></section><section class="x-sec alt" id="your-data"><div class="x-wrap"><div class="x-head2"><div><div class="x-eye">Your data is always yours</div><h2 class="x-h2">Stop paying, <em class="ink">keep everything.</em></h2></div><p class="x-sub">Your relationships belong to you, not to a subscription. Here is exactly what happens if you stop paying.</p></div><div class="x-own">${[
    [
      'shield',
@@ -2579,7 +2579,7 @@ function vAbout() {
     ) +
     `<section class="x-sec alt"><div class="x-wrap x-story"><div><div class="x-eye">Our story</div><h2 class="x-h2">Fixing relationship data<br><em>at the source.</em></h2></div><div><p>Introthread was built by people who spent years keeping network data accurate for one of the world&rsquo;s largest networks of networks. We saw where relationship data breaks: it is guessed from email traffic, scraped from profiles and never confirmed by the people involved.</p><p>So we started at the source, the moment two people meet. A Thread both people confirm, one honest question about what happens next, and a gentle nudge so it actually does.</p></div></div></section>
  <section class="x-sec"><div class="x-wrap x-contact"><div><div class="x-eye">Get in touch</div><h2 class="x-h2">Let&rsquo;s <em>talk.</em></h2><p class="x-sub" style="margin-top:16px">Partnerships, Rooms, Networks or investment. We reply within one business day.</p><a class="x-mailto" href="mailto:hello@introthread.com">${sv('mail', 18)} hello@introthread.com</a><p class="x-sub" style="margin-top:14px;font-size:14px">London &middot; New York</p></div>
- <form class="x-cform x-form" onsubmit="event.preventDefault();if(!$('#ce').value.includes('@'))return toast('Add a valid email');location.href='mailto:hello@introthread.com?subject='+encodeURIComponent('Introthread enquiry from '+$('#cn').value)+'&body='+encodeURIComponent($('#cm').value+'\\n\\n'+$('#cn').value+' <'+$('#ce').value+'>');toast('Opening your email app to send this.')"><div class="x-g2"><label class="x-f"><span>Name</span><input id="cn" required autocomplete="name"></label><label class="x-f"><span>Work email</span><input id="ce" type="email" required autocomplete="email"></label></div><label class="x-f"><span>How can we help?</span><textarea id="cm" rows="5" required placeholder="Partnerships, Rooms, Networks, investment"></textarea></label><button class="x-btn lg">Send message ${sv('arrow', 17)}</button></form></div></section>` +
+ <form class="x-cform x-form" data-on-submit="contactSend(event)"><div class="x-g2"><label class="x-f"><span>Name</span><input id="cn" required autocomplete="name"></label><label class="x-f"><span>Work email</span><input id="ce" type="email" required autocomplete="email"></label></div><label class="x-f"><span>How can we help?</span><textarea id="cm" rows="5" required placeholder="Partnerships, Rooms, Networks, investment"></textarea></label><button class="x-btn lg">Send message ${sv('arrow', 17)}</button></form></div></section>` +
     foot()
   );
 }
@@ -2620,7 +2620,7 @@ function vPrivacy() {
           `<div class="x-f3-i"><span class="x-f3-ic">${sv(ic, 21)}</span><h3>${t}</h3><p>${s}</p></div>`
       )
       .join('')}</div>
- <div class="x-reg"><span class="x-f3-ic" style="background:var(--xink)">${sv('shield', 21)}</span><div><b>Regulation</b><p>Designed for UK GDPR, the Data Protection Act 2018 and applicable US state privacy laws. Export and deletion are built in. Questions about your data: <a href="mailto:privacy@introthread.com">privacy@introthread.com</a></p></div></div></div></section><section class="x-sec" id="policy"><div class="x-wrap">${secHead('Privacy policy', 'The detail,<br><em>in plain English.</em>', 'Last updated 21 October 2026')}<div class="x-legal-w"><nav class="x-toc" aria-label="Policy sections">${POLICY.map(([id, t], i) => `<a href="#${id}" onclick="event.preventDefault();document.getElementById('${id}').scrollIntoView({behavior:'smooth'})">${i + 1}. ${t}</a>`).join('')}</nav><article class="x-legal-a">${POLICY.map(([id, t, b], i) => `<section id="${id}"><h2>${i + 1}. ${t}</h2>${b}</section>`).join('')}</article></div></div></section>` +
+ <div class="x-reg"><span class="x-f3-ic" style="background:var(--xink)">${sv('shield', 21)}</span><div><b>Regulation</b><p>Designed for UK GDPR, the Data Protection Act 2018 and applicable US state privacy laws. Export and deletion are built in. Questions about your data: <a href="mailto:privacy@introthread.com">privacy@introthread.com</a></p></div></div></div></section><section class="x-sec" id="policy"><div class="x-wrap">${secHead('Privacy policy', 'The detail,<br><em>in plain English.</em>', 'Last updated 21 October 2026')}<div class="x-legal-w"><nav class="x-toc" aria-label="Policy sections">${POLICY.map(([id, t], i) => `<a href="#${id}" data-on-click="scrollToId(event,'${id}')">${i + 1}. ${t}</a>`).join('')}</nav><article class="x-legal-a">${POLICY.map(([id, t, b], i) => `<section id="${id}"><h2>${i + 1}. ${t}</h2>${b}</section>`).join('')}</article></div></div></section>` +
     foot()
   );
 }
@@ -2796,7 +2796,7 @@ function vNotFound(h) {
 function legalDoc(eye, title, updated, sections) {
   return (
     mnav() +
-    `<section class="x-ph c" style="padding-bottom:36px"><div class="x-wrap"><div class="x-eye">${eye}</div><h1 class="x-h1 x-ph-h">${title}</h1><p class="x-lead" style="margin:0 auto">Last updated ${updated}</p></div></section><section class="x-sec" style="padding-top:20px"><div class="x-wrap x-legal-w"><nav class="x-toc" aria-label="On this page">${sections.map(([id, t], i) => `<a href="#${id}" onclick="event.preventDefault();document.getElementById('${id}').scrollIntoView({behavior:'smooth'})">${i + 1}. ${t}</a>`).join('')}</nav><article class="x-legal-a">${sections.map(([id, t, b], i) => `<section id="${id}"><h2>${i + 1}. ${t}</h2>${b}</section>`).join('')}</article></div></section>` +
+    `<section class="x-ph c" style="padding-bottom:36px"><div class="x-wrap"><div class="x-eye">${eye}</div><h1 class="x-h1 x-ph-h">${title}</h1><p class="x-lead" style="margin:0 auto">Last updated ${updated}</p></div></section><section class="x-sec" style="padding-top:20px"><div class="x-wrap x-legal-w"><nav class="x-toc" aria-label="On this page">${sections.map(([id, t], i) => `<a href="#${id}" data-on-click="scrollToId(event,'${id}')">${i + 1}. ${t}</a>`).join('')}</nav><article class="x-legal-a">${sections.map(([id, t, b], i) => `<section id="${id}"><h2>${i + 1}. ${t}</h2>${b}</section>`).join('')}</article></div></section>` +
     foot()
   );
 }
@@ -5999,3 +5999,46 @@ shell = function (on, inner) {
   );
   return h;
 };
+
+/* v61: named handlers for the website pages, signup and login (no inline JavaScript). */
+function suSample() {
+  seed(me());
+  save();
+  closeModal();
+  render();
+  toast('Sample Threads added');
+}
+function pwToggle(id) {
+  const i = $('#' + id);
+  if (i) i.type = i.type === 'password' ? 'text' : 'password';
+}
+function suStep(n, live) {
+  if (live) liveP();
+  SU.step = n;
+  render();
+}
+function suCat(k) {
+  SU.cat = k;
+  window._keepScroll = true;
+  render();
+}
+function scrollToId(e, id) {
+  e.preventDefault();
+  const el = document.getElementById(id);
+  if (el) el.scrollIntoView({ behavior: 'smooth' });
+}
+function setBilling(v) {
+  billing = v;
+  window._keepScroll = true;
+  render();
+}
+function contactSend(e) {
+  e.preventDefault();
+  if (!$('#ce').value.includes('@')) return toast('Add a valid email');
+  location.href =
+    'mailto:hello@introthread.com?subject=' +
+    encodeURIComponent('Introthread enquiry from ' + $('#cn').value) +
+    '&body=' +
+    encodeURIComponent($('#cm').value + '\n\n' + $('#cn').value + ' <' + $('#ce').value + '>');
+  toast('Opening your email app to send this.');
+}
