@@ -3,6 +3,7 @@
 Everything built so far, newest first. Full technical detail for each item is in `HANDOVER.md`. How Rooms, events, communities and the Room pass work: `docs/ROOMS.md`.
 
 ## 23 Oct 2026
+- **v88: Code cleanup, step 5: Tap and Card screens split out.** The Tap screen and My card editor functions moved unchanged from `js/app-core.js` (now about 4,340 lines) to a new `js/tap-card.js`, loaded right after `threads.js`, together with the small `cdSave` wrapper that has to run straight after `cdSave`. The pre-rendered pages are identical before and after. No change in behaviour.
 - **v87: Code cleanup: Today helpers moved.** The Today screen's helpers (`dChip`, `dWarm`, `dRing`, `dSecHead`, `dPromo`, `DRANGE`, `D_OUT`) moved unchanged from `js/app-core.js` (now about 4,860 lines) to the top of `js/today.js`. The pre-rendered pages are identical before and after. No change in behaviour.
 - **v86: Code cleanup, step 4: Threads screens split out.** The Threads list, Thread page and topics functions moved unchanged from `js/app-core.js` (now about 4,910 lines) to a new `js/threads.js`, loaded right after `today.js`. The pre-rendered pages are identical before and after. No change in behaviour.
 - **v85: Code cleanup, step 3: Today screen split out.** The Today screen functions moved unchanged from `js/app-core.js` (now about 5,410 lines) to a new `js/today.js`, loaded right after `auth-pages.js`. The pre-rendered pages are identical before and after. No change in behaviour.
