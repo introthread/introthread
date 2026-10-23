@@ -1,17 +1,27 @@
 <!doctype html>
-<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="color-scheme" content="light only"><title>Your Introthread sign-in code</title></head>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="color-scheme" content="light only">
+<title>Your Introthread sign-in code</title>
+</head>
 <body style="margin:0;padding:0;background:#f4f6fb;-webkit-text-size-adjust:100%">
-<div style="display:none;max-height:0;overflow:hidden;mso-hide:all">Your sign-in code is {{ .Token }}</div>
-<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="background:#f4f6fb"><tr><td align="center" style="padding:36px 12px 44px">
+<div style="display:none;max-height:0;overflow:hidden;mso-hide:all">{{ .Token }} is your Introthread sign-in code. It expires soon and can be used once.</div>
+<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="background:#f4f6fb">
+<tr><td align="center" style="padding:36px 12px 44px">
 <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="max-width:520px">
 <tr><td align="center" style="padding:0 0 22px;font-family:ui-sans-serif,sans-serif;font-size:26px;font-weight:400;color:#0b1224">intro<span style="color:#1f5eff">thread</span></td></tr>
-<tr><td style="background:#ffffff;border:1px solid #e3e8f1;border-radius:16px;padding:36px 36px 30px;font-family:ui-sans-serif,sans-serif;color:#0b1224">
-<div style="font-size:11px;letter-spacing:2px;text-transform:uppercase;color:#1f5eff;font-weight:400">Sign-in code</div>
-<h1 style="margin:10px 0 10px;font-size:26px;line-height:32px;font-weight:400">Your sign-in code</h1>
-<p style="margin:0 0 24px;font-size:15px;line-height:23px;color:#475467">Someone, hopefully you, just entered the password for {{ .Email }}. Enter this code to finish signing in.</p>
-<div style="font-size:12px;color:#667085;margin-bottom:8px">Sign-in code</div>
-<div style="background:#f3f6ff;border:1px solid #c9d6f5;border-radius:12px;padding:18px 0;text-align:center;font-family:ui-monospace,monospace;font-size:34px;letter-spacing:10px;color:#0b1224">{{ .Token }}</div>
-<p style="margin:20px 0 0;font-size:13px;line-height:20px;color:#667085">This code expires soon and can be used once. Never share it with anyone, including people who say they work for Introthread.</p>
+<tr><td style="background:#ffffff;border:1px solid #e3e8f1;border-radius:16px;padding:32px 36px 30px;font-family:ui-sans-serif,sans-serif;color:#0b1224">
+<div style="font-size:11px;letter-spacing:2px;text-transform:uppercase;color:#1f5eff;font-weight:400">Sign in</div>
+<h1 style="margin:10px 0 16px;font-size:24px;line-height:30px;font-weight:400">Your sign-in code</h1>
+<div style="background:#f3f6ff;border:1px solid #c9d6f5;border-radius:12px;padding:18px 0;text-align:center;font-family:ui-monospace,monospace;font-size:34px;letter-spacing:8px;color:#0b1224">{{ .Token }}</div>
+<p style="margin:20px 0 0;font-size:15px;line-height:23px;color:#475467">Enter this code to finish signing in to {{ .Email }}. Someone, hopefully you, just entered the password for this account.</p>
+<p style="margin:16px 0 0;font-size:13px;line-height:20px;color:#667085">This code expires soon and can be used once. Never share it with anyone, including people who say they work for Introthread.</p>
 </td></tr>
 <tr><td align="center" style="padding:20px 10px 0;font-family:ui-sans-serif,sans-serif;font-size:12px;line-height:18px;color:#98a2b3">If this wasn't you, change your password in Settings, Security.<br>Introthread &middot; London &middot; New York</td></tr>
-</table></td></tr></table></body></html>
+</table>
+</td></tr>
+</table>
+</body>
+</html>

@@ -3,6 +3,7 @@
 Everything built so far, newest first. Full technical detail for each item is in `HANDOVER.md`. How Rooms, events, communities and the Room pass work: `docs/ROOMS.md`.
 
 ## 23 Oct 2026
+- **v75: Sign-in and verification code emails lead with the code.** The code sits straight under the heading, the inbox preview starts with the code, and the explanation follows it, so the code is visible at once and mail apps such as Gmail can more easily offer Copy code. Paste the two templates into Supabase > Authentication > Email Templates to take effect.
 - **v74: Deploys fixed.** The `build` script added to `package.json` in v68 made Vercel run the page build (Python and Chromium) on every deploy, so v68 to v73 failed to deploy. It is renamed `build:pages`; Vercel serves the committed files again, as before v68.
 - **v73: Calendar booking from a match is Pro only**, as on the price card. "Add to calendar" on a Thread opens the Pro upgrade dialog for Free users. The "Book a meeting" link on your own card stays free.
 - **v72: Thread search is Pro only**, as on the price card. New `js/pro-gates.js` (loaded last) shows an upgrade card when a Free user searches Threads or uses the phone search sheet. Filters and topics stay free.
