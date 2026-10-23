@@ -2,8 +2,27 @@
 // creating a Room (newRoom, newRoomModal, newRoom9), Room codes (vRoomCode), stats and the demo Rooms. Moved out of
 // js/app-core.js unchanged and in their original order (code cleanup step 6). Two load-time wrappers moved with
 // them so they still run right after the functions they wrap: the v4 newRoom replacement and the v9 vRoom wrapper.
-// Loads straight after tap-card.js; shares app-core globals (RIMG, RIMG9, rYmd, rFmt, ...). Later files wrap
+// Loads straight after tap-card.js; shares app-core globals; its own values are declared at the top of this file since v94. Later files wrap
 // newRoomModal, newRoom9 and vRoom.
+
+/* v94: the Rooms screens' own values (fmtDate, RIMG, RF9, RQ9, RDAY, RCAL, RLIM9, RFF, RNT, RIMG9, rYmd, ymdL, rFmt),
+   moved unchanged from js/app-core.js. Nothing in the files loaded before this one uses them while loading; today.js,
+   threads.js, app-navigation.js, event-mode.js and rooms-access.js use some of them only at run time. */
+const fmtDate = t =>
+  new Date(t).toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' });
+const RIMG = ['uc-conferences', 'uc-communities', 'uc-teams', 'uc-professionals'];
+let RF9 = 'all',
+  RQ9 = '',
+  RDAY = '',
+  RCAL = null,
+  RLIM9 = 6,
+  RFF = { fmt: '', priv: '', topic: '' },
+  RNT = [];
+const RIMG9 = ['uc-conferences', 'uc-communities', 'uc-professionals', 'uc-teams'];
+const rYmd = r => new Date(r.date).toISOString().slice(0, 10);
+const ymdL = d =>
+  `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
+const rFmt = (r, o) => new Date(r.date).toLocaleDateString('en-GB', Object.assign({ timeZone: 'UTC' }, o));
 
 function roomStats(r) {
   const T = DB.threads.filter(t => t.roomId === r.id);

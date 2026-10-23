@@ -32,8 +32,6 @@ const ago = t => {
   if (d < DAY) return Math.round(d / HR) + 'h ago';
   return Math.round(d / DAY) + 'd ago';
 };
-const fmtDate = t =>
-  new Date(t).toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' });
 const slug = s =>
   String(s)
     .toLowerCase()
@@ -2139,7 +2137,6 @@ const xav = (n, s = 44) =>
 let RF = 'all',
   RQ = '',
   RS = 'recent';
-const RIMG = ['uc-conferences', 'uc-communities', 'uc-teams', 'uc-professionals'];
 /* vRooms: earlier version removed in the v54 merge (the later declaration below always won) */
 
 /* ===== Topic tags on Threads ===== */
@@ -2417,14 +2414,6 @@ render = function () {
 /* ===== v8 Threads screen (design: Relationship Thread) ===== */
 
 /* ===== v9 Rooms: events and communities ===== */
-let RF9 = 'all',
-  RQ9 = '',
-  RDAY = '',
-  RCAL = null,
-  RLIM9 = 6,
-  RFF = { fmt: '', priv: '', topic: '' },
-  RNT = [];
-const RIMG9 = ['uc-conferences', 'uc-communities', 'uc-professionals', 'uc-teams'];
 const _render9 = render;
 render = function () {
   try {
@@ -2432,10 +2421,6 @@ render = function () {
   } catch (_) {}
   return _render9.apply(this, arguments);
 };
-const rYmd = r => new Date(r.date).toISOString().slice(0, 10);
-const ymdL = d =>
-  `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
-const rFmt = (r, o) => new Date(r.date).toLocaleDateString('en-GB', Object.assign({ timeZone: 'UTC' }, o));
 function r12(t) {
   if (!t) return '';
   const [h, m] = t.split(':').map(Number);
