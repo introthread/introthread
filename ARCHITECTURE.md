@@ -137,9 +137,45 @@ Each step was done one screen or file per commit, with the full test list re-run
 - **Step 25 (v95, 23 Oct 2026), done: unused variables removed.** `RF`, `RQ`, `RS` and `TF` were declared in `js/app-core.js` but never read anywhere in the app, the tests or the scripts, so they were removed. The pre-rendered pages are identical before and after.
 - **Step 26 (v96, 23 Oct 2026), done: leftover screen handlers moved.** 13 small named handlers moved unchanged from `js/app-core.js` to the end of their screen files: `setDRange` to `today.js`; `copyThreadLink`, `copyDraft`, `draftMail` and `resolveAsk` to `threads.js`; `suSample`, `pwToggle`, `suStep`, `suCat` and `suPhotoClear` to `auth-pages.js`; `scrollToId`, `setBilling` and `contactSend` to `site-pages.js`. Nothing at the top level of `app-core.js` or the files loaded before each target uses them while loading. `setQ`, `searchKey` and `amHelp` stay with the app shell and account menu (plan step 7). `app-core.js` is down to about 2,710 lines. The pre-rendered pages are identical before and after.
 - **Next steps (next):**
-  - Fold the remaining `vNN` wrappers (`const _f=f; f=function(){...}`) into the functions they wrap, one screen per commit, and merge `js/late-fixes.js` into the files it patches.
-  - Keep splitting `js/app-core.js` (about 2,830 lines): move the remaining per-screen state next to its screen, then review what is left (data loading, routing, shared helpers).
-  - Split `css/app.css` (about 12,800 lines) the same way, and remove unused rules.
-  - Move the billing display off `profiles.prefs.billing` onto the server-written `subscriptions`, `payments` and `room_passes` tables (SECURITY-AUDIT.md, item 6).
+
+### What is left in `js/app-core.js` (about 2,710 lines, after v96)
+
+| Group | What's in it | Rough size |
+|---|---|---|
+| Shared helpers | `$`, `esc`, `uid`, `ago`, `initials`, `av`, `xav`, icon sets (`IC`/`ic`, `SV`/`sv`), `threadState`, `pulse`, `ring`, `warmth`, `colorFor`, `linkKind`, `flag` | ~250 |
+| Local data and demo | `KEY`, `DB`, `load`, `save`, `me`, `myThreads`, `myRooms`, `findThread`, the demo `seed`, `demoStage`, `demoLogin` | ~250 |
+| UI basics | `toast`, `modal`, `closeModal`, `copy`, `qr`, `RH`, `go` | ~50 |
+| Supabase layer | `CFG`, `SB`, `MODE`, `cloud`, `SITE`, `mapProfile`, `mapThread`, `mapRoom`, `loadCloud`, `upd`, `addEvent`, `clearCloud`, `refreshOwned`, `setTheme`, `setPref`, `setPlan` | ~200 |
+| Sign-in and sign-up flow | `doLogin`, `oauth`, `su1`-`su3`, `logout` and their later Supabase versions | ~330 |
+| Thread actions | `draftFor`, `answer`, `sendFollow`, `resolve`, `saveNote`, `delThread`, `newThread` (4 versions), `saveCard` (3), `simTap`, exports, `delAccount`, nudges | ~450 |
+| Public card and guest pages | `vPublic` (5 layered versions), `vcard`, `pcVcf`, `PUB`, `GUEST`, `guestThread`, `vGuest`, `guestConfirm`, `guestAnswer` | ~300 |
+| Routing, shell and start-up | `render` (base plus 6 wrappers), `shell`, route listeners, `boot`, `DOM_READY`, account menu (`am*`, `acctMenu`), `setQ`, `searchKey` | ~350 |
+| Google Calendar | `GSCOPE`, the calendar `oauth` version, `gTok`, `gTokSave`, `GCAL`, `gcalLoad`, `gcalPanel`, sign-in callback handling | ~100 |
+| Website content | `PAGE_META`, `setMeta`, `feat3`, `secHead`, `POLICY`, `TERMS`, `fitZ` | ~240 |
+| Topics and tags | `TOPICS`, `TSEL`, `tagsOf`, `normTags`, `tagChips`, `topicsField`, `saveTags` | ~60 |
+| Photo upload | `upBox`, `shrinkImg`, `pickPhoto`, `removePhoto`, `applyPhoto` and its sign-up wrapper | ~100 |
+
+**Main risk: layered functions.** Several functions are replaced in layers while the page loads (`const _f = f; f = function () {...}` or a plain `f = function () {...}`): `render` (7 versions), `vPublic` (5), `newThread` (4), `saveCard` (3), `oauth`, `doLogin`, `su1`-`su3`, `answer`, `resolve` and others. A move must take a function together with every replacement, in the original order, and the new file must load before anything else captures it (as was done for `cdSave` in v88 and for `newRoom` and `vRoom` in v90). Before each move, check the top level of `app-core.js` and every file loaded before the target for load-time use, and confirm the pre-rendered pages are identical.
+
+### Plan, one commit each, safest first
+
+1. ~~Remove the unused variables `RF`, `RQ`, `RS` and `TF`.~~ Done in v95.
+2. ~~Move the leftover screen handlers to their screen files.~~ Done in v96.
+3. Move the website content (`PAGE_META`, `setMeta`, `feat3`, `secHead`, `POLICY`, `TERMS`) to `site-pages.js`. The pre-rendered pages make this easy to check.
+4. Move the public card and guest pages to a new `public-pages.js`: `vPublic` with all 5 versions in order, `vcard`, `pcVcf`, `PUB`, `GUEST` and the guest functions.
+5. Move Google Calendar to a new `google-calendar.js`, keeping its `oauth` version after the earlier sign-in versions.
+6. Move photo upload next to `photo-crop.js`, with its sign-up wrapper.
+7. Move the account menu (`am*`, `acctMenu`, its listeners, `setQ`, `searchKey`, `amHelp`) to `app-navigation.js` or its own file.
+8. Move the Supabase layer in two commits: (a) data (`CFG`, `SB`, `MODE`, the `map*` functions, `loadCloud`, `upd`, `addEvent`); (b) the Supabase versions of sign-in and the Thread actions. Riskiest move: much of it runs during load, so the new file must load straight after `app-core.js`.
+9. Move the demo data (`seed`, `demoStage`) to a demo file, after checking nothing uses `seed` during load.
+10. Merge the layered functions (`render`, `newThread`, `vPublic`, `saveCard`) into single versions, one function per commit. Unlike the moves, this rewrites code, so it needs before-and-after screenshots of every screen.
+
+After steps 3 to 9, `app-core.js` would hold only the shared helpers, icons, local data, UI basics and routing and start-up, roughly 900 to 1,000 lines; it could then be renamed to something like `core.js`.
+
+### Other next steps
+
+- Fold the remaining `vNN` wrappers in the other files into the functions they wrap, and merge `js/late-fixes.js` into the files it patches.
+- Split `css/app.css` (about 12,800 lines) the same way, and remove unused rules.
+- Billing display: receipts and Room passes moved to server records in v80; plan, status and card still come from `prefs.billing` (guarded by migration 018).
 
   Run the full test list (`npm test`, plus the browser checks in HANDOVER.md) after each step.
