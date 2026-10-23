@@ -818,9 +818,9 @@ function vPublic(h) {
   if (!u) return vNotFound(h);
   const L = u.links || {};
   return `<div class="pub"><div class="pubcard"><div class="center" style="margin-bottom:22px">${logo()}</div>${bizCard(u)}
- <div class="card pad-lg" style="margin-top:18px">${u.bio ? `<p style="margin:0 0 16px;line-height:1.6">${esc(u.bio)}</p>` : ''}<div class="stack" style="gap:8px">${L.linkedin ? `<a class="btn secondary block" href="https://${esc(L.linkedin.replace(/^https?:\/\//, ''))}" target="_blank" rel="noopener">${ic('link', 16)} LinkedIn</a>` : ''}${L.website ? `<a class="btn secondary block" href="https://${esc(L.website.replace(/^https?:\/\//, ''))}" target="_blank" rel="noopener">${ic('globe', 16)} Website</a>` : ''}${L.calendar ? `<a class="btn secondary block" href="https://${esc(L.calendar.replace(/^https?:\/\//, ''))}" target="_blank" rel="noopener">${ic('calendar', 16)} Book a meeting</a>` : ''}<button class="btn secondary block" onclick="vcard('${u.id}')">${ic('user', 16)} Save contact</button></div></div>
+ <div class="card pad-lg" style="margin-top:18px">${u.bio ? `<p style="margin:0 0 16px;line-height:1.6">${esc(u.bio)}</p>` : ''}<div class="stack" style="gap:8px">${L.linkedin ? `<a class="btn secondary block" href="https://${esc(L.linkedin.replace(/^https?:\/\//, ''))}" target="_blank" rel="noopener">${ic('link', 16)} LinkedIn</a>` : ''}${L.website ? `<a class="btn secondary block" href="https://${esc(L.website.replace(/^https?:\/\//, ''))}" target="_blank" rel="noopener">${ic('globe', 16)} Website</a>` : ''}${L.calendar ? `<a class="btn secondary block" href="https://${esc(L.calendar.replace(/^https?:\/\//, ''))}" target="_blank" rel="noopener">${ic('calendar', 16)} Book a meeting</a>` : ''}<button class="btn secondary block" data-on-click="vcard('${u.id}')">${ic('user', 16)} Save contact</button></div></div>
  <div class="card pad-lg" style="margin-top:18px;border:2px solid var(--brand)"><div class="eyebrow">Just met ${esc(u.name.split(' ')[0])}?</div><h3 style="margin:6px 0 4px;letter-spacing:-.5px">Start a Thread</h3><p class="small muted" style="margin:0 0 14px">You'll both get a shared record of where you met, and one question: what's next? No app needed.</p>
- <form onsubmit="return guestThread(event,'${u.id}')" class="stack"><input id="gn" required placeholder="Your name"><input id="ge" type="email" required placeholder="Your email"><div class="grid g2"><input id="gr" placeholder="Your title"><input id="gc" placeholder="Company"></div><input id="gw" placeholder="Where did you meet?"><button class="btn primary block lg">${ic('thread', 16)} Start a Thread</button></form><p class="tiny muted center" style="margin:12px 0 0">${ic('lock', 11)} We only share your details with ${esc(u.name.split(' ')[0])}.</p></div>
+ <form data-on-submit="return guestThread(event,'${u.id}')" class="stack"><input id="gn" required placeholder="Your name"><input id="ge" type="email" required placeholder="Your email"><div class="grid g2"><input id="gr" placeholder="Your title"><input id="gc" placeholder="Company"></div><input id="gw" placeholder="Where did you meet?"><button class="btn primary block lg">${ic('thread', 16)} Start a Thread</button></form><p class="tiny muted center" style="margin:12px 0 0">${ic('lock', 11)} We only share your details with ${esc(u.name.split(' ')[0])}.</p></div>
  <p class="center small muted" style="margin-top:22px">Want your own card? <a href="#/signup" style="color:var(--brand);font-weight:800">Create one free</a></p></div></div>`;
 }
 function vcard(id) {
@@ -2683,7 +2683,7 @@ function setMeta() {
 /* profile photo */
 function upBox() {
   const has = !!SU.photo;
-  return `<label class="x-up-in">${has ? `<img src="${SU.photo}" alt="">` : `<span class="x-up-ph">${sv('user', 26)}</span>`}<span class="x-up-t"><b>${has ? 'Change photo' : 'Upload a photo'}</b><small>JPG, PNG or WebP (max 5MB)</small></span><input type="file" accept="image/jpeg,image/png,image/webp" onchange="pickPhoto(this)"></label>${has ? `<button type="button" class="x-up-rm" onclick="SU.photo=null;$('#xup').innerHTML=upBox();liveP()">Remove</button>` : ''}`;
+  return `<label class="x-up-in">${has ? `<img src="${SU.photo}" alt="">` : `<span class="x-up-ph">${sv('user', 26)}</span>`}<span class="x-up-t"><b>${has ? 'Change photo' : 'Upload a photo'}</b><small>JPG, PNG or WebP (max 5MB)</small></span><input type="file" accept="image/jpeg,image/png,image/webp" data-on-change="pickPhoto(this)"></label>${has ? `<button type="button" class="x-up-rm" data-on-click="suPhotoClear()">Remove</button>` : ''}`;
 }
 function shrinkImg(file) {
   return new Promise((res, rej) => {
@@ -2754,7 +2754,7 @@ async function removePhoto() {
   }
 }
 function photoRow(u) {
-  return `<div class="x-prow">${avatarC(u, 64)}<div><b>Profile photo</b><small>Shown on your card and public profile.</small><div class="x-prow-b"><label class="x-btn sm ghost">${u.photo ? 'Change photo' : 'Upload photo'}<input type="file" hidden accept="image/jpeg,image/png,image/webp" onchange="pickPhoto(this,1)"></label>${u.photo ? '<button type="button" class="x-btn sm ghost" onclick="removePhoto()">Remove</button>' : ''}</div></div></div>`;
+  return `<div class="x-prow">${avatarC(u, 64)}<div><b>Profile photo</b><small>Shown on your card and public profile.</small><div class="x-prow-b"><label class="x-btn sm ghost">${u.photo ? 'Change photo' : 'Upload photo'}<input type="file" hidden accept="image/jpeg,image/png,image/webp" data-on-change="pickPhoto(this,1)"></label>${u.photo ? '<button type="button" class="x-btn sm ghost" data-on-click="removePhoto()">Remove</button>' : ''}</div></div></div>`;
 }
 let _phBusy = false;
 async function applyPhoto() {
@@ -3239,7 +3239,7 @@ function pfLinks() {
   return PF.links
     .map(
       (v, i) =>
-        `<div class="pf-link"><span class="pf-lic ${linkKind(v) === 'li' ? 'li' : ''}">${sv(linkKind(v), 18)}</span><input value="${esc(v)}" placeholder="linkedin.com/in/you, website or calendar link" oninput="pfSync()"><button type="button" aria-label="Remove link" onclick="pfSync();PF.links.splice(${i},1);if(!PF.links.length)PF.links.push('');$('#pflinks').innerHTML=pfLinks();pfSync()">${sv('close', 15)}</button></div>`
+        `<div class="pf-link"><span class="pf-lic ${linkKind(v) === 'li' ? 'li' : ''}">${sv(linkKind(v), 18)}</span><input value="${esc(v)}" placeholder="linkedin.com/in/you, website or calendar link" data-on-input="pfSync()"><button type="button" aria-label="Remove link" data-on-click="pfLinkDel(${i})">${sv('close', 15)}</button></div>`
     )
     .join('');
 }
@@ -3316,12 +3316,12 @@ function pfShareBody() {
   const u = me(),
     url = profileUrl(u),
     short = 'introthread.com/' + u.handle;
-  const field = `<div class="pf-url"><span>${esc(short)}</span><button type="button" aria-label="Copy link" onclick="copy('${url}','Link copied')">${sv('copy', 18)}</button></div>`;
+  const field = `<div class="pf-url"><span>${esc(short)}</span><button type="button" aria-label="Copy link" data-on-click="copy('${url}','Link copied')">${sv('copy', 18)}</button></div>`;
   if (PFT === 'link')
-    return `<div class="pf-sb1">${field}<div class="pf-shares"><button type="button" onclick="shareNative()">${sv('send', 16)} Share</button><a href="mailto:?subject=${encodeURIComponent('My Introthread card')}&body=${encodeURIComponent(url)}">${sv('mail', 16)} Email</a><a target="_blank" rel="noopener" href="https://wa.me/?text=${encodeURIComponent(url)}">${sv('send', 16)} WhatsApp</a><a target="_blank" rel="noopener" href="https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(url)}">${sv('li', 16)} LinkedIn</a></div><p class="pf-fine">Add it to your email signature and social bios.</p></div>`;
+    return `<div class="pf-sb1">${field}<div class="pf-shares"><button type="button" data-on-click="shareNative()">${sv('send', 16)} Share</button><a href="mailto:?subject=${encodeURIComponent('My Introthread card')}&body=${encodeURIComponent(url)}">${sv('mail', 16)} Email</a><a target="_blank" rel="noopener" href="https://wa.me/?text=${encodeURIComponent(url)}">${sv('send', 16)} WhatsApp</a><a target="_blank" rel="noopener" href="https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(url)}">${sv('li', 16)} LinkedIn</a></div><p class="pf-fine">Add it to your email signature and social bios.</p></div>`;
   if (PFT === 'nfc')
-    return `<div class="pf-sb1"><div class="pf-nfc"><span>${sv('nfc', 26)}</span><div><b>Link an NFC card or sticker</b><small>On Android Chrome, tap the button and hold the card to your phone. It will open ${esc(short)}.</small></div></div><button type="button" class="pf-dl" onclick="tapNFC()">${sv('nfc', 18)} Write to NFC card</button><p class="pf-fine">On iPhone, use the QR code or your link.</p></div>`;
-  return `<div class="pf-qrw"><div class="pf-qr"><div id="qrPf"></div><span class="t-qrlogo" style="width:30px;height:30px"><span class="x-lm"><i></i><i></i></span></span></div><div class="pf-qrr">${field}<button type="button" class="pf-dl" onclick="tapDownloadQR()">${sv('arrow', 18)} Download QR code</button><p class="pf-fine">Print it once. It always points to your latest card.</p></div></div>`;
+    return `<div class="pf-sb1"><div class="pf-nfc"><span>${sv('nfc', 26)}</span><div><b>Link an NFC card or sticker</b><small>On Android Chrome, tap the button and hold the card to your phone. It will open ${esc(short)}.</small></div></div><button type="button" class="pf-dl" data-on-click="tapNFC()">${sv('nfc', 18)} Write to NFC card</button><p class="pf-fine">On iPhone, use the QR code or your link.</p></div>`;
+  return `<div class="pf-qrw"><div class="pf-qr"><div id="qrPf"></div><span class="t-qrlogo" style="width:30px;height:30px"><span class="x-lm"><i></i><i></i></span></span></div><div class="pf-qrr">${field}<button type="button" class="pf-dl" data-on-click="tapDownloadQR()">${sv('arrow', 18)} Download QR code</button><p class="pf-fine">Print it once. It always points to your latest card.</p></div></div>`;
 }
 /* vProfile: earlier version removed in the v54 merge (the later declaration below always won) */
 /* hidden profiles: visitors see a private notice */
@@ -4731,7 +4731,7 @@ function cdCard(u) {
   return `<div class="cd-card ${t.light ? 'lt' : ''}" style="background:${t.bg};color:${t.fg};--sub:${t.sub}"><div class="cd-top"><span class="x-logo ${t.light ? '' : 'dk'}"><span class="x-lm"><i></i><i></i></span><span>intro<b>thread</b></span></span>${sv('nfc', 22)}</div>
  <div class="cd-id"><span class="cd-ring">${avatarC(u, 112)}</span><b>${esc(u.name || 'Your name')}${u.email || u._c ? `<span class="d-ver" title="Verified account">${sv('check', 10, '#fff', 3.2)}</span>` : ''}</b><small>${esc(u.role || 'Your job title')}</small>${u.company ? `<small>${esc(u.company)}</small>` : ''}</div>
  <div class="cd-ics">${ic.map(([k, h, l]) => (h ? `<a href="${esc(h)}" target="_blank" rel="noopener" aria-label="${l}" title="${l}">${sv(k, 17)}</a>` : `<span class="off" title="Add your ${l} in Links &amp; social">${sv(k, 17)}</span>`)).join('')}</div>
- <button type="button" class="cd-save" onclick="cdVcf()">${sv('user', 17)} Save Contact</button>
+ <button type="button" class="cd-save" data-on-click="cdVcf()">${sv('user', 17)} Save Contact</button>
  <div class="cd-rows">${u.city ? `<div>${sv('pin', 16)}<span>${esc(u.city)}</span></div>` : ''}${site ? `<div>${sv('globe', 16)}<span>${esc(site)}</span></div>` : ''}${u.bio ? `<div>${sv('brief', 16)}<span>${esc(u.bio)}</span></div>` : ''}${L.open ? `<div>${sv('spark', 16)}<span>Open to opportunities</span></div>` : ''}${!u.city && !site && !u.bio ? `<div><span class="cd-ph">Add your location, website and bio to complete your card.</span></div>` : ''}</div>
  ${(L.tags || []).length ? `<div class="t-tags cd-tags">${L.tags.map((x, k) => `<span class="${['b', 'v', 'g'][k]}">${esc(x)}</span>`).join('')}</div>` : ''}</div>`;
 }
@@ -4748,7 +4748,7 @@ function cdIn(k, v) {
   cdLive();
 }
 function cdF(id, k, l, o = {}) {
-  return `<label class="x-f"><span>${l}${o.req ? ' <i>*</i>' : o.opt ? ' <em>(optional)</em>' : ''}</span>${o.icon ? `<div class="cd-in">${sv(o.icon, 17)}` : ''}<input id="${id}" value="${esc(CD[k] || '')}" ${o.req ? 'required' : ''} maxlength="${o.max || 80}" placeholder="${o.ph || ''}" ${o.type ? `type="${o.type}"` : ''} autocomplete="${o.ac || 'off'}" oninput="cdIn('${k}',this.value)">${o.clear ? `<button type="button" class="cd-clr" aria-label="Clear ${l}" onclick="$('#${id}').value='';cdIn('${k}','')">&times;</button>` : ''}${o.icon ? '</div>' : ''}</label>`;
+  return `<label class="x-f"><span>${l}${o.req ? ' <i>*</i>' : o.opt ? ' <em>(optional)</em>' : ''}</span>${o.icon ? `<div class="cd-in">${sv(o.icon, 17)}` : ''}<input id="${id}" value="${esc(CD[k] || '')}" ${o.req ? 'required' : ''} maxlength="${o.max || 80}" placeholder="${o.ph || ''}" ${o.type ? `type="${o.type}"` : ''} autocomplete="${o.ac || 'off'}" data-on-input="cdIn('${k}',this.value)">${o.clear ? `<button type="button" class="cd-clr" aria-label="Clear ${l}" data-on-click="cdClear('${id}','${k}')">&times;</button>` : ''}${o.icon ? '</div>' : ''}</label>`;
 }
 function cdBioSuggest() {
   const r = CD.role || 'professional',
@@ -4760,7 +4760,7 @@ function cdBioSuggest() {
     `${r} focused on ${tp}. Always happy to meet people building something meaningful.`
   ].map(s => s.slice(0, 160));
   modal(
-    `<div><div class="row between"><h3 style="margin:0;font:600 19px var(--xss)">Improve your bio</h3><button class="x" aria-label="Close" onclick="closeModal()">&times;</button></div><p class="fu-sub" style="margin-top:6px">Suggestions based on your title, company and topics. Pick one, then edit it to sound like you.</p><div class="cd-sug">${opts.map((s, i) => `<button type="button" onclick="CD.bio=this.dataset.v;closeModal();const b=$('#cdb');if(b)b.value=CD.bio;cdLive()" data-v="${esc(s)}">${esc(s)}</button>`).join('')}</div></div>`
+    `<div><div class="row between"><h3 style="margin:0;font:600 19px var(--xss)">Improve your bio</h3><button class="x" aria-label="Close" data-on-click="closeModal()">&times;</button></div><p class="fu-sub" style="margin-top:6px">Suggestions based on your title, company and topics. Pick one, then edit it to sound like you.</p><div class="cd-sug">${opts.map((s, i) => `<button type="button" data-on-click="cdBioPick(this)" data-v="${esc(s)}">${esc(s)}</button>`).join('')}</div></div>`
   );
 }
 async function cdSave(e) {
@@ -4913,13 +4913,13 @@ function cdShare(u) {
   ]
     .map(
       ([k, l]) =>
-        `<button type="button" role="tab" aria-selected="${SHT === k}" class="${SHT === k ? 'on' : ''}" onclick="SHT='${k}';window._keepScroll=true;render()">${l}</button>`
+        `<button type="button" role="tab" aria-selected="${SHT === k}" class="${SHT === k ? 'on' : ''}" data-on-click="cdShTab('${k}')">${l}</button>`
     )
     .join('')}</div>`;
-  const urlRow = `<div class="cd-url"><input value="${esc(short)}" readonly aria-label="Your card link"><button type="button" class="x-btn" aria-label="Copy link" onclick="copy('${url}','Link copied')">${sv('copy', 18)}</button></div>`;
+  const urlRow = `<div class="cd-url"><input value="${esc(short)}" readonly aria-label="Your card link"><button type="button" class="x-btn" aria-label="Copy link" data-on-click="copy('${url}','Link copied')">${sv('copy', 18)}</button></div>`;
   const body =
     SHT === 'qr'
-      ? `<div class="cd-qr"><div id="qrCard9"></div><span class="t-qrlogo"><span class="x-lm"><i></i><i></i></span></span></div>${urlRow}<button type="button" class="t-start cd-dl" onclick="tapDownloadQR()">${sv('arrow', 18).replace('M5 12h14M13 6l6 6-6 6', 'M12 5v14M6 13l6 6 6-6')} Download QR code</button><p class="cd-cap">Print it, add to your email signature or use it at events.</p>`
+      ? `<div class="cd-qr"><div id="qrCard9"></div><span class="t-qrlogo"><span class="x-lm"><i></i><i></i></span></span></div>${urlRow}<button type="button" class="t-start cd-dl" data-on-click="tapDownloadQR()">${sv('arrow', 18).replace('M5 12h14M13 6l6 6-6 6', 'M12 5v14M6 13l6 6 6-6')} Download QR code</button><p class="cd-cap">Print it, add to your email signature or use it at events.</p>`
       : SHT === 'link'
         ? `${urlRow}<div class="cd-sh">${[
             ['WhatsApp', `https://wa.me/?text=${encodeURIComponent('My Introthread card: ' + url)}`],
@@ -4933,8 +4933,8 @@ function cdShare(u) {
             .map(([l, h]) => `<a href="${h}" target="_blank" rel="noopener">${l}</a>`)
             .join(
               ''
-            )}</div><button type="button" class="t-start cd-dl" onclick="shareNative()">${sv('send', 18)} Share my card</button><p class="cd-cap">Your link always shows your latest card, even on printed QR codes.</p>`
-        : `<div class="cd-nfc"><span>${sv('nfc', 30)}</span><p>Write your link to any NFC card or sticker. A tap on their phone opens your card, no app needed.</p></div><button type="button" class="t-start cd-dl" onclick="tapNFC()">${sv('nfc', 18)} Write to an NFC card</button><p class="cd-cap">Works in Chrome on Android. On iPhone, use your QR code or link.</p>`;
+            )}</div><button type="button" class="t-start cd-dl" data-on-click="shareNative()">${sv('send', 18)} Share my card</button><p class="cd-cap">Your link always shows your latest card, even on printed QR codes.</p>`
+        : `<div class="cd-nfc"><span>${sv('nfc', 30)}</span><p>Write your link to any NFC card or sticker. A tap on their phone opens your card, no app needed.</p></div><button type="button" class="t-start cd-dl" data-on-click="tapNFC()">${sv('nfc', 18)} Write to an NFC card</button><p class="cd-cap">Works in Chrome on Android. On iPhone, use your QR code or link.</p>`;
   return `<section class="d-box cd-share"><div class="cd-bh"><span class="cd-bi">${sv('hub', 20)}</span><div><b>Share your card</b><small>Meet people instantly, no app needed.</small></div></div>${tabs}${body}</section>`;
 }
 function vCard() {
@@ -4951,24 +4951,24 @@ function vCard() {
   ];
   let form = '';
   if (CTAB === 'basic')
-    form = `<div class="cd-photo"><span class="cd-pav">${avatarC(u, 112)}<label class="cd-cam" aria-label="Upload photo">${sv('photo', 16)}<input type="file" hidden accept="image/jpeg,image/png,image/webp" onchange="pickPhoto(this,1)"></label></span><div><b>Profile photo</b><small>JPG, PNG or WebP (max 5MB)</small><div class="cd-pb"><label class="t-how sm">${sv('photo', 16)} ${u.photo ? 'Change photo' : 'Upload photo'}<input type="file" hidden accept="image/jpeg,image/png,image/webp" onchange="pickPhoto(this,1)"></label>${u.photo ? `<button type="button" class="cd-rm" onclick="removePhoto()">${sv('close', 15)} Remove</button>` : ''}</div></div></div>
+    form = `<div class="cd-photo"><span class="cd-pav">${avatarC(u, 112)}<label class="cd-cam" aria-label="Upload photo">${sv('photo', 16)}<input type="file" hidden accept="image/jpeg,image/png,image/webp" data-on-change="pickPhoto(this,1)"></label></span><div><b>Profile photo</b><small>JPG, PNG or WebP (max 5MB)</small><div class="cd-pb"><label class="t-how sm">${sv('photo', 16)} ${u.photo ? 'Change photo' : 'Upload photo'}<input type="file" hidden accept="image/jpeg,image/png,image/webp" data-on-change="pickPhoto(this,1)"></label>${u.photo ? `<button type="button" class="cd-rm" data-on-click="removePhoto()">${sv('close', 15)} Remove</button>` : ''}</div></div></div>
   <div class="t-g2">${cdF('cdn', 'name', 'Full name', { req: 1, ac: 'name' })}${cdF('cdr', 'role', 'Job title', { req: 1, ph: 'e.g. Marketing Director' })}${cdF('cdc', 'company', 'Company', { ph: 'e.g. Acme Technologies' })}${cdF('cdl', 'city', 'Location', { icon: 'pin', clear: 1, ph: 'City, Country' })}</div>
-  <label class="x-f"><span class="cd-bl">Bio <small id="cdbcw"><b id="cdbc">${(CD.bio || '').length}</b>/160</small></span><textarea id="cdb" maxlength="160" rows="3" placeholder="What you do and who you help" oninput="cdIn('bio',this.value)">${esc(CD.bio)}</textarea></label>`;
+  <label class="x-f"><span class="cd-bl">Bio <small id="cdbcw"><b id="cdbc">${(CD.bio || '').length}</b>/160</small></span><textarea id="cdb" maxlength="160" rows="3" placeholder="What you do and who you help" data-on-input="cdIn('bio',this.value)">${esc(CD.bio)}</textarea></label>`;
   else if (CTAB === 'links')
     form = `<p class="cd-help">These links power the icons on your card. Leave any blank to hide it.</p><div class="t-g2">${cdF('cli', 'linkedin', 'LinkedIn', { icon: 'li', opt: 1, ph: 'linkedin.com/in/you', max: 200 })}${cdF('cx', 'x', 'X (Twitter)', { icon: 'x', opt: 1, ph: '@handle or x.com/you', max: 200 })}${cdF('cw', 'website', 'Website', { icon: 'globe', opt: 1, ph: 'yourcompany.com', max: 200 })}${cdF('ck', 'calendar', 'Booking link', { icon: 'cal', opt: 1, ph: 'cal.com/you or calendly.com/you', max: 200 })}${cdF('ce', 'email', 'Contact email', { icon: 'mail', opt: 1, ph: 'name@company.com', type: 'email', max: 120 })}${cdF('cp', 'phone', 'Phone', { icon: 'phone', opt: 1, ph: '+44 7700 900000', type: 'tel', max: 30 })}</div><p class="cd-help">Your email and phone are only added to the contact file people save. They are not shown as text on your public card.</p>`;
   else if (CTAB === 'style')
     form = `<div class="cd-styles">${Object.entries(THEMES)
       .map(
         ([k, v]) =>
-          `<button type="button" class="cd-sty ${u.theme === k ? 'on' : ''}" aria-pressed="${u.theme === k}" onclick="cdTheme('${k}')"><span style="background:${v.bg}">${u.theme === k ? `<i>${sv('check', 12, '#fff', 3.2)}</i>` : ''}</span><b>${v.n}</b><small>${esc(v.d || '')}</small></button>`
+          `<button type="button" class="cd-sty ${u.theme === k ? 'on' : ''}" aria-pressed="${u.theme === k}" data-on-click="cdTheme('${k}')"><span style="background:${v.bg}">${u.theme === k ? `<i>${sv('check', 12, '#fff', 3.2)}</i>` : ''}</span><b>${v.n}</b><small>${esc(v.d || '')}</small></button>`
       )
       .join('')}</div>
-  <div class="x-f cd-tp"><span>Card topics <em>(up to 3, shown on your card)</em></span><div class="tp-wrap">${[...new Set([...TOPICS, ...CD.tags])].map(x => `<button type="button" class="tp ${CD.tags.includes(x) ? 'on' : ''}" aria-pressed="${CD.tags.includes(x)}" data-v="${esc(x)}" onclick="cdTagT(this.dataset.v)">${esc(x)}</button>`).join('')}</div></div>
-  <label class="t-tog"><input type="checkbox" ${CD.open ? 'checked' : ''} onchange="cdIn('open',this.checked)"><span class="t-sw"></span><span><b>Open to opportunities</b><small>Show a badge on your card.</small></span></label>`;
+  <div class="x-f cd-tp"><span>Card topics <em>(up to 3, shown on your card)</em></span><div class="tp-wrap">${[...new Set([...TOPICS, ...CD.tags])].map(x => `<button type="button" class="tp ${CD.tags.includes(x) ? 'on' : ''}" aria-pressed="${CD.tags.includes(x)}" data-v="${esc(x)}" data-on-click="cdTagT(this.dataset.v)">${esc(x)}</button>`).join('')}</div></div>
+  <label class="t-tog"><input type="checkbox" ${CD.open ? 'checked' : ''} data-on-change="cdIn('open',this.checked)"><span class="t-sw"></span><span><b>Open to opportunities</b><small>Show a badge on your card.</small></span></label>`;
   else if (CTAB === 'share')
-    form = `<div class="cd-qrbig"><div class="cd-qr lg"><div id="qrCard10"></div><span class="t-qrlogo"><span class="x-lm"><i></i><i></i></span></span></div><div><b>Your dynamic QR code</b><p>Print it once. It always opens your latest card, so you never need to reprint after changes.</p><div class="cd-pb"><button type="button" class="x-btn" onclick="tapDownloadQR()">Download PNG</button><button type="button" class="t-how" onclick="tapQR()">${sv('qr', 16)} Full screen</button><button type="button" class="t-how" onclick="cdPrint()">Print card</button></div></div></div>`;
+    form = `<div class="cd-qrbig"><div class="cd-qr lg"><div id="qrCard10"></div><span class="t-qrlogo"><span class="x-lm"><i></i><i></i></span></span></div><div><b>Your dynamic QR code</b><p>Print it once. It always opens your latest card, so you never need to reprint after changes.</p><div class="cd-pb"><button type="button" class="x-btn" data-on-click="tapDownloadQR()">Download PNG</button><button type="button" class="t-how" data-on-click="tapQR()">${sv('qr', 16)} Full screen</button><button type="button" class="t-how" data-on-click="cdPrint()">Print card</button></div></div></div>`;
   else
-    form = `<div class="cd-adv"><div><b>Your Introthread link</b><small>introthread.com/${esc(u.handle)}</small><a class="t-how sm" href="/app/settings">Change in Settings</a></div><div><b>Contact file</b><small>Download your card as a contact (vCard) to share by email or AirDrop.</small><button type="button" class="t-how sm" onclick="cdVcf()">Download .vcf</button></div><div><b>Public profile</b><small>Choose what appears on your full public profile page.</small><a class="t-how sm" href="/app/profile">Edit public profile</a></div><div><b>Visibility</b><small>${pub ? 'Anyone with your link or QR code can view your card.' : 'Only you can see your card right now.'}</small><button type="button" class="t-how sm" onclick="cdVis(${!pub})">${pub ? 'Make private' : 'Make public'}</button></div></div>`;
+    form = `<div class="cd-adv"><div><b>Your Introthread link</b><small>introthread.com/${esc(u.handle)}</small><a class="t-how sm" href="/app/settings">Change in Settings</a></div><div><b>Contact file</b><small>Download your card as a contact (vCard) to share by email or AirDrop.</small><button type="button" class="t-how sm" data-on-click="cdVcf()">Download .vcf</button></div><div><b>Public profile</b><small>Choose what appears on your full public profile page.</small><a class="t-how sm" href="/app/profile">Edit public profile</a></div><div><b>Visibility</b><small>${pub ? 'Anyone with your link or QR code can view your card.' : 'Only you can see your card right now.'}</small><button type="button" class="t-how sm" data-on-click="cdVis(${!pub})">${pub ? 'Make private' : 'Make public'}</button></div></div>`;
   const showSave = ['basic', 'links', 'style'].includes(CTAB);
   setTimeout(() => {
     const a = $('#qrCard9');
@@ -4980,20 +4980,20 @@ function vCard() {
     'card',
     `<div class="t-head"><div><div class="t-eye">My card</div><h1 class="t-h1">Your professional identity</h1><p class="t-sub">Create and customise your Introthread card. Share it via QR code, link or NFC. Changes update instantly.</p></div><a href="/${esc(u.handle)}" class="t-how" target="_blank" rel="noopener">${sv('eye', 18)} View public profile</a></div>
  <div class="cd-grid">
- <div class="cd-left"><nav class="cd-tabs" role="tablist" aria-label="Card sections">${tabs.map(([k, l]) => `<button type="button" role="tab" aria-selected="${CTAB === k}" class="${CTAB === k ? 'on' : ''}" onclick="CTAB='${k}';window._keepScroll=true;render()">${l}</button>`).join('')}</nav>
- <div class="cd-top2"><form class="d-box cd-form" onsubmit="return cdSave(event)" autocomplete="off" novalidate>${form}${showSave ? `<div class="cd-fb">${CTAB === 'basic' ? `<button type="button" class="t-how" onclick="cdBioSuggest()">${sv('spark', 16)} Improve my bio</button>` : '<span></span>'}<button class="x-btn lg cd-sv" id="cdsave">${sv('lock', 17)} Save changes</button></div>` : ''}</form>
+ <div class="cd-left"><nav class="cd-tabs" role="tablist" aria-label="Card sections">${tabs.map(([k, l]) => `<button type="button" role="tab" aria-selected="${CTAB === k}" class="${CTAB === k ? 'on' : ''}" data-on-click="cdTab('${k}')">${l}</button>`).join('')}</nav>
+ <div class="cd-top2"><form class="d-box cd-form" data-on-submit="return cdSave(event)" autocomplete="off" novalidate>${form}${showSave ? `<div class="cd-fb">${CTAB === 'basic' ? `<button type="button" class="t-how" data-on-click="cdBioSuggest()">${sv('spark', 16)} Improve my bio</button>` : '<span></span>'}<button class="x-btn lg cd-sv" id="cdsave">${sv('lock', 17)} Save changes</button></div>` : ''}</form>
  <div class="cd-pv" id="cdprev">${cdCard(cu)}</div></div></div>
  <div class="cd-right">${cdShare(u)}
- <section class="d-box cd-vis"><div class="cd-bh"><span class="cd-bi">${sv('globe', 20)}</span><div><b>Card visibility</b><small>Allow anyone with your link or QR code to view your card.</small></div><span class="cd-pill ${pub ? '' : 'off'}">${pub ? 'Public' : 'Private'}</span></div><label class="t-tog cd-vt"><input type="checkbox" ${pub ? 'checked' : ''} onchange="cdVis(this.checked)" aria-label="Card is public"><span class="t-sw"></span><span><b>${pub ? 'Visible to anyone with your link' : 'Hidden from visitors'}</b></span></label><a class="cd-visit" href="/${esc(u.handle)}" target="_blank" rel="noopener">View as visitor ${sv('arrow', 14)}</a><small class="cd-lock">${sv('lock', 14)} Control what information is visible on your <a href="/app/profile">public profile</a>.</small></section></div>
+ <section class="d-box cd-vis"><div class="cd-bh"><span class="cd-bi">${sv('globe', 20)}</span><div><b>Card visibility</b><small>Allow anyone with your link or QR code to view your card.</small></div><span class="cd-pill ${pub ? '' : 'off'}">${pub ? 'Public' : 'Private'}</span></div><label class="t-tog cd-vt"><input type="checkbox" ${pub ? 'checked' : ''} data-on-change="cdVis(this.checked)" aria-label="Card is public"><span class="t-sw"></span><span><b>${pub ? 'Visible to anyone with your link' : 'Hidden from visitors'}</b></span></label><a class="cd-visit" href="/${esc(u.handle)}" target="_blank" rel="noopener">View as visitor ${sv('arrow', 14)}</a><small class="cd-lock">${sv('lock', 14)} Control what information is visible on your <a href="/app/profile">public profile</a>.</small></section></div>
  <section class="d-box cd-stb"><div class="cd-bh"><span class="cd-bi">${sv('palette', 20)}</span><div><b>Card style</b><small>Choose a style for your Introthread card.</small></div></div><div class="cd-sw">${Object.entries(
    THEMES
  )
    .map(
      ([k, v]) =>
-       `<button type="button" class="${u.theme === k ? 'on' : ''}" aria-pressed="${u.theme === k}" aria-label="${v.n} style" onclick="cdTheme('${k}')"><span style="background:${v.bg}">${u.theme === k ? `<i>${sv('check', 11, '#fff', 3.2)}</i>` : ''}</span><small>${v.n}</small></button>`
+       `<button type="button" class="${u.theme === k ? 'on' : ''}" aria-pressed="${u.theme === k}" aria-label="${v.n} style" data-on-click="cdTheme('${k}')"><span style="background:${v.bg}">${u.theme === k ? `<i>${sv('check', 11, '#fff', 3.2)}</i>` : ''}</span><small>${v.n}</small></button>`
    )
    .join('')}</div></section>
- <section class="d-box cd-qab"><div class="cd-bh"><span class="cd-bi">${sv('spark', 20)}</span><div><b>Quick actions</b><small>Common actions for your card.</small></div></div><div class="cd-qa"><button type="button" onclick="shareNative()">${sv('send', 18)} Share my card</button><button type="button" onclick="cdPrint()">${sv('brief', 18)} Print card</button><button type="button" onclick="toast('Apple Wallet passes are coming soon.')">${sv('wallet', 18)} Add to Apple Wallet</button><button type="button" onclick="toast('Google Wallet passes are coming soon.')">${sv('wallet', 18)} Add to Google Wallet</button></div></section>
+ <section class="d-box cd-qab"><div class="cd-bh"><span class="cd-bi">${sv('spark', 20)}</span><div><b>Quick actions</b><small>Common actions for your card.</small></div></div><div class="cd-qa"><button type="button" data-on-click="shareNative()">${sv('send', 18)} Share my card</button><button type="button" data-on-click="cdPrint()">${sv('brief', 18)} Print card</button><button type="button" data-on-click="toast('Apple Wallet passes are coming soon.')">${sv('wallet', 18)} Add to Apple Wallet</button><button type="button" data-on-click="toast('Google Wallet passes are coming soon.')">${sv('wallet', 18)} Add to Google Wallet</button></div></section>
  ${cdTips()}
  </div>`
   );
@@ -5081,7 +5081,7 @@ function ppCard(u) {
       ? `<div class="ok"><i>${sv('check', 10, '#fff', 3.2)}</i><span>Open to<b>Networking</b></span></div>`
       : ''
   ].filter(Boolean);
-  return `<div class="pp-card ${t.light ? 'lt' : ''}" style="background:${t.bg};color:${t.fg};--sub:${t.sub}"><div class="pp-top"><span class="x-logo ${t.light ? '' : 'dk'}"><span class="x-lm"><i></i><i></i></span><span>intro<b>thread</b></span></span><button type="button" class="pp-sh" onclick="shareNative()">${sv('hub', 17)} Share</button></div>
+  return `<div class="pp-card ${t.light ? 'lt' : ''}" style="background:${t.bg};color:${t.fg};--sub:${t.sub}"><div class="pp-top"><span class="x-logo ${t.light ? '' : 'dk'}"><span class="x-lm"><i></i><i></i></span><span>intro<b>thread</b></span></span><button type="button" class="pp-sh" data-on-click="shareNative()">${sv('hub', 17)} Share</button></div>
  <div class="pp-id"><span class="pp-ring">${avatarC(u, 140)}<i title="Verified account">${sv('check', 13, '#fff', 3.2)}</i></span><h2>${esc(u.name || 'Your name')}</h2><p class="pp-role">${esc(u.role || 'Your job title')}${u.company ? ` <span>&bull;</span> ${esc(u.company)}` : ''}</p>${L.headline ? `<p class="pp-hl">${esc(L.headline)}</p>` : ''}${S.bio !== false && u.bio ? `<p class="pp-bio">${esc(u.bio)}</p>` : ''}</div>
  <div class="pp-ics">${ic.map(([k, h, l]) => (h ? `<a href="${esc(h)}" target="_blank" rel="noopener" aria-label="${l}" title="${l}">${sv(k, 19)}</a>` : `<span class="off" title="Add your ${l} in Links &amp; social">${sv(k, 19)}</span>`)).join('')}</div>
  <div class="pp-info">${facts.length ? `<div class="pp-facts">${facts.join('')}</div>` : ''}${
@@ -5097,7 +5097,7 @@ function ppCard(u) {
          )}${tp.length > 5 ? `<i class="more" title="${esc(tp.slice(5).join(', '))}">+${tp.length - 5}</i>` : ''}</div>`
      : ''
  }${!facts.length && !(S.topics !== false && tp.length) ? `<div class="pp-empty">Add your location, company and topics to complete your profile.</div>` : ''}</div>
- <button type="button" class="pp-save" onclick="ppVcf()">${sv('user', 18)} Save Contact</button></div>`;
+ <button type="button" class="pp-save" data-on-click="ppVcf()">${sv('user', 18)} Save Contact</button></div>`;
 }
 function ppVcf() {
   const u = ppUser(),
@@ -5188,7 +5188,7 @@ async function ppSave() {
   ppStatus('Saved');
 }
 function ppF(id, k, l, o = {}) {
-  return `<label class="x-f"><span>${l}${o.req ? ' <i>*</i>' : o.opt ? ' <em>(optional)</em>' : ''}</span>${o.icon ? `<div class="cd-in">${sv(o.icon, 17)}` : ''}<input id="${id}" value="${esc(PP[k] || '')}" maxlength="${o.max || 80}" placeholder="${o.ph || ''}" ${o.type ? `type="${o.type}"` : ''} autocomplete="off" oninput="ppSet('${k}',this.value)">${o.clear ? `<button type="button" class="cd-clr" aria-label="Clear ${l}" onclick="$('#${id}').value='';ppSet('${k}','')">&times;</button>` : ''}${o.icon ? '</div>' : ''}</label>`;
+  return `<label class="x-f"><span>${l}${o.req ? ' <i>*</i>' : o.opt ? ' <em>(optional)</em>' : ''}</span>${o.icon ? `<div class="cd-in">${sv(o.icon, 17)}` : ''}<input id="${id}" value="${esc(PP[k] || '')}" maxlength="${o.max || 80}" placeholder="${o.ph || ''}" ${o.type ? `type="${o.type}"` : ''} autocomplete="off" data-on-input="ppSet('${k}',this.value)">${o.clear ? `<button type="button" class="cd-clr" aria-label="Clear ${l}" data-on-click="ppClear('${id}','${k}')">&times;</button>` : ''}${o.icon ? '</div>' : ''}</label>`;
 }
 function ppTopicRm(i) {
   PP.topics.splice(i, 1);
@@ -5217,11 +5217,11 @@ function ppTopics() {
     PP.topics
       .map(
         (x, i) =>
-          `<span class="pp-tp">${esc(x)}<button type="button" aria-label="Remove ${esc(x)}" onclick="ppTopicRm(${i})">&times;</button></span>`
+          `<span class="pp-tp">${esc(x)}<button type="button" aria-label="Remove ${esc(x)}" data-on-click="ppTopicRm(${i})">&times;</button></span>`
       )
       .join('') +
     (PP.topics.length < 10
-      ? `<label class="pp-tpa">${sv('close', 14, 'currentColor', 2.2).replace('<path d="M6 6l12 12M18 6 6 18"/>', '<path d="M12 5v14M5 12h14"/>')}<input id="ppta" list="ppsug" placeholder="Add topic" maxlength="24" onkeydown="if(event.key==='Enter'||event.key===','){event.preventDefault();ppTopicAdd(this.value);this.value=''}" onchange="if(this.value){ppTopicAdd(this.value);this.value=''}"><datalist id="ppsug">${sug.map(x => `<option value="${esc(x)}">`).join('')}</datalist></label>`
+      ? `<label class="pp-tpa">${sv('close', 14, 'currentColor', 2.2).replace('<path d="M6 6l12 12M18 6 6 18"/>', '<path d="M12 5v14M5 12h14"/>')}<input id="ppta" list="ppsug" placeholder="Add topic" maxlength="24" data-on-keydown="ppTopicKey(event,this)" data-on-change="ppTopicChange(this)"><datalist id="ppsug">${sug.map(x => `<option value="${esc(x)}">`).join('')}</datalist></label>`
       : '')
   );
 }
@@ -5240,9 +5240,9 @@ function ppAI() {
     `I work at the intersection of ${area.toLowerCase()}. ${r}${c ? ', ' + c : ''}. Happy to meet people building something meaningful.`,
     `${r} focused on ${area.toLowerCase()}. I enjoy turning introductions into real partnerships.`
   ].map(s => s.slice(0, 200));
-  modal(`<div><div class="row between"><h3 style="margin:0;font:600 19px var(--xss)">Suggest a headline and bio</h3><button class="x" aria-label="Close" onclick="closeModal()">&times;</button></div><p class="fu-sub" style="margin-top:6px">Built from your title, company and topics. Pick one of each, then edit it to sound like you.</p>
- <b class="pp-sl">Headline</b><div class="cd-sug">${hl.map(s => `<button type="button" data-v="${esc(s)}" onclick="PP.headline=this.dataset.v;const i=$('#pph');if(i)i.value=PP.headline;ppLive();ppQueue();this.parentNode.querySelectorAll('button').forEach(b=>b.classList.toggle('on',b===this))">${esc(s)}</button>`).join('')}</div>
- <b class="pp-sl">Bio</b><div class="cd-sug">${bio.map(s => `<button type="button" data-v="${esc(s)}" onclick="PP.bio=this.dataset.v;const i=$('#ppb');if(i)i.value=PP.bio;ppLive();ppQueue();this.parentNode.querySelectorAll('button').forEach(b=>b.classList.toggle('on',b===this))">${esc(s)}</button>`).join('')}</div><div class="fu-b"><button type="button" class="x-btn" onclick="closeModal()">Done</button></div></div>`);
+  modal(`<div><div class="row between"><h3 style="margin:0;font:600 19px var(--xss)">Suggest a headline and bio</h3><button class="x" aria-label="Close" data-on-click="closeModal()">&times;</button></div><p class="fu-sub" style="margin-top:6px">Built from your title, company and topics. Pick one of each, then edit it to sound like you.</p>
+ <b class="pp-sl">Headline</b><div class="cd-sug">${hl.map(s => `<button type="button" data-v="${esc(s)}" data-on-click="ppPick(this,'headline','pph')">${esc(s)}</button>`).join('')}</div>
+ <b class="pp-sl">Bio</b><div class="cd-sug">${bio.map(s => `<button type="button" data-v="${esc(s)}" data-on-click="ppPick(this,'bio','ppb')">${esc(s)}</button>`).join('')}</div><div class="fu-b"><button type="button" class="x-btn" data-on-click="closeModal()">Done</button></div></div>`);
 }
 function ppSnippet() {
   const u = ppUser();
@@ -5272,10 +5272,10 @@ function vProfile() {
   ];
   let body = '';
   if (PTAB === 'info')
-    body = `<section class="pp-sec"><div class="cd-bh"><span class="cd-bi">${sv('user', 20)}</span><div><b>Basic information</b><small>Edit your public profile. Changes appear instantly.</small></div><button type="button" class="pp-ai" onclick="ppAI()">${sv('spark', 16)} Suggest with AI</button></div>
+    body = `<section class="pp-sec"><div class="cd-bh"><span class="cd-bi">${sv('user', 20)}</span><div><b>Basic information</b><small>Edit your public profile. Changes appear instantly.</small></div><button type="button" class="pp-ai" data-on-click="ppAI()">${sv('spark', 16)} Suggest with AI</button></div>
   <div class="t-g2 pp-g">${ppF('ppn', 'name', 'Full name', { req: 1 })}${ppF('ppr', 'role', 'Job title', { req: 1, ph: 'e.g. Marketing Director' })}${ppF('ppc', 'company', 'Company', { ph: 'e.g. Acme Technologies' })}${ppF('pph', 'headline', 'Headline', { ph: 'e.g. B2B Growth, Partnerships & Technology', max: 80 })}
-  <div class="pp-col">${ppF('ppl', 'city', 'Location', { icon: 'pin', clear: 1, ph: 'City, Country' })}<label class="t-tog pp-open"><input type="checkbox" ${PP.open ? 'checked' : ''} onchange="ppSet('open',this.checked)"><span class="t-sw"></span><span><b>Open to networking</b><small>Show this on your profile.</small></span></label></div>
-  <label class="x-f"><span>Bio</span><div class="pp-ta"><textarea id="ppb" maxlength="200" rows="4" placeholder="What you do, who you help and who you want to meet" oninput="ppSet('bio',this.value)">${esc(PP.bio)}</textarea><small><b id="ppbc">${PP.bio.length}</b>/200</small></div></label></div></section>
+  <div class="pp-col">${ppF('ppl', 'city', 'Location', { icon: 'pin', clear: 1, ph: 'City, Country' })}<label class="t-tog pp-open"><input type="checkbox" ${PP.open ? 'checked' : ''} data-on-change="ppSet('open',this.checked)"><span class="t-sw"></span><span><b>Open to networking</b><small>Show this on your profile.</small></span></label></div>
+  <label class="x-f"><span>Bio</span><div class="pp-ta"><textarea id="ppb" maxlength="200" rows="4" placeholder="What you do, who you help and who you want to meet" data-on-input="ppSet('bio',this.value)">${esc(PP.bio)}</textarea><small><b id="ppbc">${PP.bio.length}</b>/200</small></div></label></div></section>
   <section class="pp-sec"><div class="cd-bh"><span class="cd-bi">${sv('palette', 20)}</span><div><b>Topics &amp; interests <em>(up to 10)</em></b><small>Help people understand what you&rsquo;re interested in.</small></div></div><div class="pp-tps2" id="pptp">${ppTopics()}</div></section>`;
   else if (PTAB === 'links')
     body = `<section class="pp-sec"><div class="cd-bh"><span class="cd-bi">${sv('link', 20)}</span><div><b>Links &amp; social</b><small>These power the icon buttons on your profile. Leave any blank to hide it.</small></div></div><div class="t-g2 pp-g">${ppF('pli', 'linkedin', 'LinkedIn', { icon: 'li', opt: 1, ph: 'linkedin.com/in/you', max: 200 })}${ppF('plx', 'x', 'X (Twitter)', { icon: 'x', opt: 1, ph: '@handle or x.com/you', max: 200 })}${ppF('plw', 'website', 'Website', { icon: 'globe', opt: 1, ph: 'yourcompany.com', max: 200 })}${ppF('plk', 'calendar', 'Booking link', { icon: 'cal', opt: 1, ph: 'cal.com/you', max: 200 })}${ppF('ple', 'email', 'Contact email', { icon: 'mail', opt: 1, ph: 'name@company.com', type: 'email', max: 120 })}${ppF('plp', 'phone', 'Phone', { icon: 'phone', opt: 1, ph: '+44 7700 900000', type: 'tel', max: 30 })}</div><p class="cd-help">Email and phone go only into the contact file people save. They are never shown as text on your profile.</p></section>`;
@@ -5285,7 +5285,7 @@ function vProfile() {
     )
       .map(
         ([k, v]) =>
-          `<button type="button" class="cd-sty ${u.theme === k ? 'on' : ''}" aria-pressed="${u.theme === k}" onclick="ppTheme('${k}')"><span style="background:${v.bg}">${u.theme === k ? `<i>${sv('check', 12, '#fff', 3.2)}</i>` : ''}</span><b>${v.n}</b><small>${esc(v.d || '')}</small></button>`
+          `<button type="button" class="cd-sty ${u.theme === k ? 'on' : ''}" aria-pressed="${u.theme === k}" data-on-click="ppTheme('${k}')"><span style="background:${v.bg}">${u.theme === k ? `<i>${sv('check', 12, '#fff', 3.2)}</i>` : ''}</span><b>${v.n}</b><small>${esc(v.d || '')}</small></button>`
       )
       .join('')}</div></section>
   <section class="pp-sec"><div class="cd-bh"><span class="cd-bi">${sv('eye', 20)}</span><div><b>What visitors see</b><small>Choose which details appear on your public profile.</small></div></div><div class="pp-shw">${[
@@ -5296,21 +5296,21 @@ function vProfile() {
   ]
     .map(
       ([k, l]) =>
-        `<label class="t-tog"><input type="checkbox" ${PP.show[k] !== false ? 'checked' : ''} onchange="ppShow('${k}',this.checked)"><span class="t-sw"></span><span><b>${l}</b></span></label>`
+        `<label class="t-tog"><input type="checkbox" ${PP.show[k] !== false ? 'checked' : ''} data-on-change="ppShow('${k}',this.checked)"><span class="t-sw"></span><span><b>${l}</b></span></label>`
     )
     .join('')}</div></section>`;
   else
     body = `<section class="pp-sec"><div class="cd-bh"><span class="cd-bi">${sv('search', 20)}</span><div><b>Search preview</b><small>How your profile can appear in Google and when shared.</small></div></div><div class="pp-gs" id="ppgs">${ppSnippet()}</div>
-  <label class="x-f" style="margin-top:14px"><span class="cd-bl">Search description <small><b id="ppdc">${PP.seoDesc.length}</b>/160</small></span><textarea id="ppd" maxlength="160" rows="3" placeholder="Leave blank to use your bio" oninput="ppSet('seoDesc',this.value)">${esc(PP.seoDesc)}</textarea></label>
-  <label class="t-tog" style="margin-top:12px"><input type="checkbox" ${PP.noindex ? '' : 'checked'} onchange="ppSet('noindex',!this.checked)"><span class="t-sw"></span><span><b>Allow search engines to show my profile</b><small>Turn off to ask Google and Bing not to index your page.</small></span></label></section>`;
+  <label class="x-f" style="margin-top:14px"><span class="cd-bl">Search description <small><b id="ppdc">${PP.seoDesc.length}</b>/160</small></span><textarea id="ppd" maxlength="160" rows="3" placeholder="Leave blank to use your bio" data-on-input="ppSet('seoDesc',this.value)">${esc(PP.seoDesc)}</textarea></label>
+  <label class="t-tog" style="margin-top:12px"><input type="checkbox" ${PP.noindex ? '' : 'checked'} data-on-change="ppSet('noindex',!this.checked)"><span class="t-sw"></span><span><b>Allow search engines to show my profile</b><small>Turn off to ask Google and Bing not to index your page.</small></span></label></section>`;
   return shell(
     'pub',
     `<div class="t-head"><div><div class="t-eye">Public profile</div><h1 class="t-h1">Your professional profile</h1><p class="t-sub">This is what people see when you share your Introthread link or QR code.</p></div><a href="/${esc(u.handle)}" class="t-how" target="_blank" rel="noopener">${sv('eye', 18)} View as visitor</a></div>
  <div class="pp-grid"><div class="pp-pv" id="ppprev">${ppCard(ppUser())}</div>
- <div class="pp-ed"><div class="pp-tabbar"><nav class="cd-tabs pp-tabs" role="tablist" aria-label="Profile sections">${tabs.map(([k, l]) => `<button type="button" role="tab" aria-selected="${PTAB === k}" class="${PTAB === k ? 'on' : ''}" onclick="PTAB='${k}';window._keepScroll=true;render()">${l}</button>`).join('')}</nav><span class="pp-st ok" id="ppst" role="status" aria-live="polite">All changes saved</span></div><div class="d-box pp-box">${body}</div></div></div>
- <div class="pp-bot"><section class="d-box"><div class="cd-bh"><span class="cd-bi">${sv('link', 20)}</span><div><b>Profile link</b><small>Your unique Introthread link.</small></div></div><div class="cd-url"><input value="${esc(short)}" readonly aria-label="Your profile link"><button type="button" class="x-btn pp-copy" onclick="copy('${url}','Link copied')">${sv('copy', 17)} Copy link</button></div></section>
- <section class="d-box"><div class="cd-bh"><span class="cd-bi">${sv('hub', 20)}</span><div><b>Share options</b><small>Choose how people can find and connect with you.</small></div></div><div class="pp-so"><button type="button" class="on" onclick="tapQR()">${sv('qr', 19)} QR code</button><button type="button" onclick="shareNative()">${sv('link', 19)} Link</button><button type="button" onclick="tapNFC()">${sv('nfc', 19)} NFC card</button></div></section>
- <section class="d-box"><div class="cd-bh"><span class="cd-bi">${sv('eye', 20)}</span><div><b>Profile visibility</b><small>Control who can view your public profile.</small></div></div><label class="t-tog"><input type="checkbox" ${pub ? 'checked' : ''} onchange="cdVis(this.checked)" aria-label="Public profile"><span class="t-sw"></span><span><b>${pub ? 'Public profile' : 'Private profile'}</b><small>${pub ? 'Allow anyone with your link or QR code to view your profile.' : 'Only you can see your profile right now.'}</small></span></label></section></div>`
+ <div class="pp-ed"><div class="pp-tabbar"><nav class="cd-tabs pp-tabs" role="tablist" aria-label="Profile sections">${tabs.map(([k, l]) => `<button type="button" role="tab" aria-selected="${PTAB === k}" class="${PTAB === k ? 'on' : ''}" data-on-click="ppTab('${k}')">${l}</button>`).join('')}</nav><span class="pp-st ok" id="ppst" role="status" aria-live="polite">All changes saved</span></div><div class="d-box pp-box">${body}</div></div></div>
+ <div class="pp-bot"><section class="d-box"><div class="cd-bh"><span class="cd-bi">${sv('link', 20)}</span><div><b>Profile link</b><small>Your unique Introthread link.</small></div></div><div class="cd-url"><input value="${esc(short)}" readonly aria-label="Your profile link"><button type="button" class="x-btn pp-copy" data-on-click="copy('${url}','Link copied')">${sv('copy', 17)} Copy link</button></div></section>
+ <section class="d-box"><div class="cd-bh"><span class="cd-bi">${sv('hub', 20)}</span><div><b>Share options</b><small>Choose how people can find and connect with you.</small></div></div><div class="pp-so"><button type="button" class="on" data-on-click="tapQR()">${sv('qr', 19)} QR code</button><button type="button" data-on-click="shareNative()">${sv('link', 19)} Link</button><button type="button" data-on-click="tapNFC()">${sv('nfc', 19)} NFC card</button></div></section>
+ <section class="d-box"><div class="cd-bh"><span class="cd-bi">${sv('eye', 20)}</span><div><b>Profile visibility</b><small>Control who can view your public profile.</small></div></div><label class="t-tog"><input type="checkbox" ${pub ? 'checked' : ''} data-on-change="cdVis(this.checked)" aria-label="Public profile"><span class="t-sw"></span><span><b>${pub ? 'Public profile' : 'Private profile'}</b><small>${pub ? 'Allow anyone with your link or QR code to view your profile.' : 'Only you can see your profile right now.'}</small></span></label></section></div>`
   );
 }
 /* public page: apply profile SEO settings */
@@ -5600,7 +5600,7 @@ vPublic = function (hd) {
       'user',
       'Save contact',
       'Add to your contacts',
-      `href="#" onclick="event.preventDefault();pcVcf('${u.id}')"`
+      `href="#" data-on-click="event.preventDefault();pcVcf('${u.id}')"`
     ]
   ]
     .filter(Boolean)
@@ -5621,12 +5621,12 @@ vPublic = function (hd) {
   <div class="pc-top"><span class="x-logo ${t.light ? '' : 'dk'}"><span class="x-lm"><i></i><i></i></span><span>intro<b>thread</b></span></span><span class="pc-tr">${sv('nfc', 22)}<span class="pc-ver"><i>${sv('check', 9, '#fff', 3.4)}</i>Verified</span></span></div>
   <div class="pc-id"><span class="pc-ring">${avatarC(u, 128)}<i>${sv('check', 12, '#fff', 3.2)}</i></span><h1>${esc(u.name)}</h1><p>${esc(u.role || '')}${u.company && S.co !== false ? `${u.role ? ' <span>&bull;</span> ' : ''}${esc(u.company)}` : ''}</p>${L.headline ? `<p class="pc-hl">${esc(L.headline)}</p>` : ''}</div>
   ${ic.length ? `<div class="pc-ics">${ic.map(([k, hr, l]) => `<a href="${esc(hr)}" ${k === 'mail' ? '' : 'target="_blank" rel="noopener"'} aria-label="${l}" title="${l}">${sv(k, 19)}</a>`).join('')}</div>` : ''}
-  <button type="button" class="pc-save" onclick="pcVcf('${u.id}')">${sv('user', 19)} Save Contact</button>
+  <button type="button" class="pc-save" data-on-click="pcVcf('${u.id}')">${sv('user', 19)} Save Contact</button>
   ${rows.length ? `<div class="pc-rows">${rows.join('')}</div>` : ''}
  </article>
  <section class="pc-box"><div class="pc-bh"><span class="pc-bi">${sv('spark', 20)}</span><div><b>Quick actions</b><small>Connect and take the next step.</small></div></div><div class="pc-qa">${qa.map(([k, l, d, attr]) => `<a class="pc-q" ${attr}><span class="pc-qi">${sv(k, 22)}</span><span><b>${l}</b><small>${d}</small></span>${sv('chev', 16)}</a>`).join('')}</div></section>
  <section class="pc-box pc-start" id="start"><div class="pc-bh"><span class="pc-bi">${sv('send', 20)}</span><div><div class="pc-eye">Just met ${f}?</div><h2>Start a Thread</h2><small>You&rsquo;ll both get a shared record of where you met, and one question: what&rsquo;s next? No app needed.</small></div></div>
-  <form class="pc-form" onsubmit="return guestThread(event,'${u.id}')"><div class="pc-g2">${fi('gn', 'user', 'Your name', 'required maxlength="80" autocomplete="name" aria-label="Your name"')}${fi('ge', 'mail', 'Your email', 'required type="email" maxlength="120" autocomplete="email" aria-label="Your email"')}${fi('gr', 'brief', 'Your title (optional)', 'maxlength="80" autocomplete="organization-title" aria-label="Your title"')}${fi('gc', 'building', 'Company (optional)', 'maxlength="80" autocomplete="organization" aria-label="Company"')}</div>${fi('gw', 'pin', 'Where did you meet?', 'maxlength="120" aria-label="Where did you meet?"')}
+  <form class="pc-form" data-on-submit="return guestThread(event,'${u.id}')"><div class="pc-g2">${fi('gn', 'user', 'Your name', 'required maxlength="80" autocomplete="name" aria-label="Your name"')}${fi('ge', 'mail', 'Your email', 'required type="email" maxlength="120" autocomplete="email" aria-label="Your email"')}${fi('gr', 'brief', 'Your title (optional)', 'maxlength="80" autocomplete="organization-title" aria-label="Your title"')}${fi('gc', 'building', 'Company (optional)', 'maxlength="80" autocomplete="organization" aria-label="Company"')}</div>${fi('gw', 'pin', 'Where did you meet?', 'maxlength="120" aria-label="Where did you meet?"')}
   <button class="pc-go">${sv('send', 19)} Start a Thread</button><p class="pc-priv">${sv('lock', 14)} We only share your details with ${f}.</p></form></section>
  <p class="pc-own2"><span></span>Want your own card? <a href="/signup">Create one free ${sv('arrow', 15)}</a><span></span></p>
  </div></div>`;
@@ -6152,4 +6152,66 @@ function tapWhereKey(e) {
     e.preventDefault();
     tapWhereCustom();
   }
+}
+
+/* v61: named handlers for My card and Profile (no inline JavaScript). */
+function suPhotoClear() {
+  SU.photo = null;
+  $('#xup').innerHTML = upBox();
+  liveP();
+}
+function pfLinkDel(i) {
+  pfSync();
+  PF.links.splice(i, 1);
+  if (!PF.links.length) PF.links.push('');
+  $('#pflinks').innerHTML = pfLinks();
+  pfSync();
+}
+function cdClear(id, k) {
+  $('#' + id).value = '';
+  cdIn(k, '');
+}
+function cdBioPick(el) {
+  CD.bio = el.dataset.v;
+  closeModal();
+  const b = $('#cdb');
+  if (b) b.value = CD.bio;
+  cdLive();
+}
+function cdShTab(k) {
+  SHT = k;
+  keepRender();
+}
+function cdTab(k) {
+  CTAB = k;
+  keepRender();
+}
+function ppClear(id, k) {
+  $('#' + id).value = '';
+  ppSet(k, '');
+}
+function ppTopicKey(e, el) {
+  if (e.key === 'Enter' || e.key === ',') {
+    e.preventDefault();
+    ppTopicAdd(el.value);
+    el.value = '';
+  }
+}
+function ppTopicChange(el) {
+  if (el.value) {
+    ppTopicAdd(el.value);
+    el.value = '';
+  }
+}
+function ppPick(el, key, inputId) {
+  PP[key] = el.dataset.v;
+  const i = $('#' + inputId);
+  if (i) i.value = PP[key];
+  ppLive();
+  ppQueue();
+  el.parentNode.querySelectorAll('button').forEach(b => b.classList.toggle('on', b === el));
+}
+function ppTab(k) {
+  PTAB = k;
+  keepRender();
 }
