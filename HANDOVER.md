@@ -38,19 +38,21 @@ Last updated: 22 Oct 2026, 3:00 pm Nairobi (after v37 security hardening and mig
 
   Anything else (assignments, `if`, arrow functions) must become a named function in the same file, under a `/* v59: named handlers ... */` block.
 - **Tool:** `node scripts/convert_handlers.js js/<file>.js` lists what it can convert and what it cannot. Add `--apply` to rename the simple ones, then hand-write the rest. In the browser, `ACT.check(document)` lists any `data-on-*` that would fail.
-- **Done (one commit each):** v59a Dashboard plus `actions.js`, then Users, Moderation, Rooms, Revenue, Plans, Settings, Privacy, Staff, and Audit (v59b-v59j).
-- **Left (about 520 handlers):**
+- **Done (one commit each):**
+  - v59a-v59j: Dashboard plus `actions.js`, then Users, Moderation, Rooms, Revenue, Plans, Settings, Privacy, Staff, Audit.
+  - v61a-v61g: `app-core.js` screen by screen: website pages, Today, Threads, Tap, Card/Profile, Rooms, Settings plus app shell and account menu. `app-core.js` is now at 0.
+  - v61h: `admin-core.js` is now at 0.
+  - v61i: `billing.js` is now at 0. The card form keeps its action in `data-act` and runs it with `ACT.run`.
+  - `convert_handlers.js --only=fnA,fnB` converts inside the named top-level functions only.
+- **Left (130 handlers, as of 23 Oct 2026 after v61i):**
 
   | Handlers | File |
   |---|---|
-  | 270 | `app-core.js` (split it by screen: website pages, Today, Threads, Tap, Card, Rooms, Settings) |
-  | 66 | `admin-core.js` (admin shell and modals) |
-  | 51 | `billing.js` |
   | 37 | `capture.js` |
   | 25 | `contacts-import.js` |
   | 15 | `rooms-access.js` |
   | 8 | `event-mode.js` |
-  | 8 | `app-navigation.js` |
+  | 7 | `app-navigation.js` |
   | 7 | `payments.js` |
   | 7 | `app-routing.js` |
   | 5 | `data-export.js` |
@@ -58,15 +60,20 @@ Last updated: 22 Oct 2026, 3:00 pm Nairobi (after v37 security hardening and mig
   | 4 | `first-visit.js` |
   | 3 | `room-sessions.js` |
   | 2 each | `match-celebrate.js`, `install-prompt.js`, `company-logo.js` |
-  | 2 | `index.html` (skip link and modal backdrop) |
-- **Watch out:** some code matches handler text, so when you convert the target, update the matcher in the same commit:
-  - `app-navigation.js` replaces `href="/app/profile" onclick="PTAB='look'"`.
-  - `billing.js` does `setAttribute('onclick', "amGo(...)")`.
-  - `rooms-access.js` selects `[onclick*="rMenu("]` and `[onclick*="delRoom"]`.
-  - `admin-audit.js` has a regex for `onclick="showNudges()"`.
-  - `app-core.js` (end) and `late-fixes.js` replace `onclick="acctMenu()"`.
-  - `admin-core.js` and `admin-dashboard.js` already read both `data-on-click` and `onclick`.
-  - The `a11y.js` selector already handles both.
+  | 1 | `index.html` (modal backdrop) |
+  | 1 | `admin-audit.js` (the showNudges regex, which matches both forms; leave it) |
+  | 1 | `actions.js` (a comment) |
+
+  Recount with: `grep -o ' on[a-z]\+=\\\?["'"'"']' js/*.js index.html | sort | uniq -c`
+- **Watch out:** CSS and JS can target handler text, so update them in the same commit.
+  - Already handled:
+    - `rooms-access.js` selectors
+    - the `admin-audit` showNudges regex
+    - the shell account-button replace
+    - billing's Help-button `setAttribute` and `app-navigation`'s profile-link replace
+    - the `a11y.js` selector
+    - the `features.css` danger-button rule (`button[data-on-click^='stConfirm']`)
+  - Before each commit, grep `css/` and `js/` for `[onclick` and `onclick=` inside strings.
 - **Last step,** once the count is 0:
   1. Remove `'unsafe-inline'` from `script-src` in `vercel.json`. The JSON-LD block is data, so it is not affected.
   2. Test everything.
