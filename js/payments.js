@@ -92,7 +92,7 @@ function itConsentAsk() {
   d.setAttribute('role', 'region');
   d.setAttribute('aria-label', 'Analytics choice');
   d.innerHTML =
-    '<p>Can we count how people use Introthread, so we can improve it? No ads, no selling data. <a href="/privacy#cookies">Privacy</a></p><div><button type="button" class="n" onclick="itConsentSet(\'no\')">No thanks</button><button type="button" class="y" onclick="itConsentSet(\'yes\')">Allow</button></div>';
+    '<p>Can we count how people use Introthread, so we can improve it? No ads, no selling data. <a href="/privacy#cookies">Privacy</a></p><div><button type="button" class="n" data-on-click="itConsentSet(\'no\')">No thanks</button><button type="button" class="y" data-on-click="itConsentSet(\'yes\')">Allow</button></div>';
   document.body.appendChild(d);
 }
 /* Thread invitation email + funnel events */
@@ -156,7 +156,7 @@ function itAiBtn() {
     if (!s || !s.ai || !document.body.contains(d) || d.parentNode.querySelector('.it-ai')) return;
     d.insertAdjacentHTML(
       'afterend',
-      '<div class="it-ai"><button type="button" class="btn secondary sm" onclick="itAiRewrite(this)">Rewrite with AI</button><small>Uses this Thread only. Never sent without you.</small></div>'
+      '<div class="it-ai"><button type="button" class="btn secondary sm" data-on-click="itAiRewrite(this)">Rewrite with AI</button><small>Uses this Thread only. Never sent without you.</small></div>'
     );
   });
 }
@@ -206,21 +206,21 @@ bUpgrade = function (interval) {
   if (!(cloud() && IT_SV.pay)) return _bUp26.apply(this, arguments);
   interval = interval || BINT;
   if (isPro()) return toast('You already have Pro');
-  modal(`<div class="bl-co"><div class="row between"><h3>Upgrade to Pro</h3><button class="x" aria-label="Close" onclick="closeModal()">&times;</button></div>
+  modal(`<div class="bl-co"><div class="row between"><h3>Upgrade to Pro</h3><button class="x" aria-label="Close" data-on-click="closeModal()">&times;</button></div>
  <div class="x-seg bl-int" style="margin:12px 0">${[
    ['month', 'Monthly ' + money(proM())],
    ['year', 'Yearly ' + money(proY())]
  ]
    .map(
      ([k, l]) =>
-       `<button type="button" class="${interval === k ? 'on' : ''}" onclick="closeModal();bUpgrade('${k}')">${l}</button>`
+       `<button type="button" class="${interval === k ? 'on' : ''}" data-on-click="closeModal();bUpgrade('${k}')">${l}</button>`
    )
    .join('')}</div>
  <ul class="bl-incl">${PLANS.pro.features
    .slice(1)
    .map(f => `<li>${sv('check', 13, 'currentColor', 2.6)}${f}</li>`)
    .join('')}</ul>
- <button type="button" class="x-btn lg block" onclick="itPay('${interval}',this)">Continue to secure payment</button>
+ <button type="button" class="x-btn lg block" data-on-click="itPay('${interval}',this)">Continue to secure payment</button>
  <p class="bl-fine c">${sv('lock', 12)} Card payment on Paystack's secure page. Charged in Kenyan shillings; your bank converts it. Renews ${interval === 'year' ? 'yearly' : 'monthly'} until you cancel.</p></div>`);
 };
 const _stMan26 = stManage;
@@ -355,7 +355,7 @@ bInvoicesBox = function (b) {
   if (!(cloud() && IT_SV.pay)) return h;
   return (
     h +
-    '<div class="it-ai" style="margin-top:12px"><button type="button" class="btn secondary sm" onclick="itPayCheck(this)">Check for payments</button><small>Paid but no receipt? This checks Paystack again.</small></div>'
+    '<div class="it-ai" style="margin-top:12px"><button type="button" class="btn secondary sm" data-on-click="itPayCheck(this)">Check for payments</button><small>Paid but no receipt? This checks Paystack again.</small></div>'
   );
 };
 
