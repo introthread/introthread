@@ -113,7 +113,7 @@ function admGo(t) {
 function vAdmin() {
   const s = ADM.stage;
   const gate = (ic, t, b, btn) =>
-    `<div class="adm-gate"><div class="adm-gc"><a class="x-logo dk" href="/" onclick="go('/');return false"><span class="x-lm"><i></i><i></i></span><span>intro<b>thread</b></span></a><span class="adm-tag">Admin</span><div class="adm-gi">${sv(ic, 24)}</div><h1>${t}</h1><p>${b}</p>${btn || ''}</div></div>`;
+    `<div class="adm-gate"><div class="adm-gc"><a class="x-logo dk" href="/" data-on-click="go('/');return false"><span class="x-lm"><i></i><i></i></span><span>intro<b>thread</b></span></a><span class="adm-tag">Admin</span><div class="adm-gi">${sv(ic, 24)}</div><h1>${t}</h1><p>${b}</p>${btn || ''}</div></div>`;
   if (s === 'load' || s === 'checking') return gate('shield', 'Checking access', 'One moment.');
   if (s === 'nosb')
     return gate(
@@ -126,14 +126,14 @@ function vAdmin() {
       'lock',
       'Sign in to continue',
       'The admin area is only for Introthread staff. Sign in with your staff account.',
-      `<button class="cap-btn" onclick="sessionStorage.setItem('it_after','/admin');go('/login')">Sign in</button>`
+      `<button class="cap-btn" data-on-click="sessionStorage.setItem('it_after','/admin');go('/login')">Sign in</button>`
     );
   if (s === 'denied')
     return gate(
       'shield',
       'No admin access',
       'This account is not on the staff list. Ask an owner to add you.',
-      `<button class="cap-btn2" onclick="go('/app')">Back to the app</button>`
+      `<button class="cap-btn2" data-on-click="go('/app')">Back to the app</button>`
     );
   if (s === 'error')
     return gate(
@@ -143,7 +143,7 @@ function vAdmin() {
         (/function|does not exist|schema cache/i.test(ADM.err)
           ? '<br><br>The admin database update (migration 003) has not been run yet.'
           : ''),
-      `<button class="cap-btn" onclick="ADM.stage='load';admPaint();admBoot()">Try again</button>`
+      `<button class="cap-btn" data-on-click="admRetry()">Try again</button>`
     );
   if (s === 'mfa')
     return gate(
@@ -152,13 +152,13 @@ function vAdmin() {
       ADM.mfa && ADM.mfa.enroll
         ? 'Admin access needs a second step. Scan this code with Google Authenticator, Microsoft Authenticator or 1Password, then enter the 6-digit code.'
         : 'Enter the 6-digit code from your authenticator app.',
-      `<div id="admmfa">${ADM.mfa && ADM.mfa.enroll ? `<div class="adm-qr"><img src="${ADM.mfa.enroll.qr}" alt="QR code for your authenticator app"><small>Or enter this key: <code>${esc(ADM.mfa.enroll.secret)}</code></small></div>` : ''}<input id="admcode" class="adm-code" inputmode="numeric" autocomplete="one-time-code" maxlength="6" placeholder="123456" oninput="if(this.value.replace(/\\D/g,'').length===6)admMfaVerify()"><button class="cap-btn" onclick="admMfaVerify()">Verify</button><p class="adm-err" id="admmfaerr"></p></div>`
+      `<div id="admmfa">${ADM.mfa && ADM.mfa.enroll ? `<div class="adm-qr"><img src="${ADM.mfa.enroll.qr}" alt="QR code for your authenticator app"><small>Or enter this key: <code>${esc(ADM.mfa.enroll.secret)}</code></small></div>` : ''}<input id="admcode" class="adm-code" inputmode="numeric" autocomplete="one-time-code" maxlength="6" placeholder="123456" data-on-input="admMfaIn(this.value)"><button class="cap-btn" data-on-click="admMfaVerify()">Verify</button><p class="adm-err" id="admmfaerr"></p></div>`
     );
   const tabs = ADM_TABS.filter(t => admOk(t[3]));
-  return `<div class="adm"><aside class="adm-side"><div class="adm-brand"><a class="x-logo dk" href="/" onclick="go('/');return false"><span class="x-lm"><i></i><i></i></span><span>intro<b>thread</b></span></a><span class="adm-tag">Admin</span></div>
- <nav class="adm-nav">${tabs.map(([k, l, ic]) => `<button class="${ADM.tab === k ? 'on' : ''}" onclick="admGo('${k}')">${sv(ic, 17)}<span>${l}</span></button>`).join('')}</nav>
- <div class="adm-who"><span class="ct-av sm">${esc(initials((me() || {}).name || 'A'))}</span><div><b>${esc((me() || {}).name || 'Staff')}</b><small>${esc(ADM.me.role)}</small></div><button class="ct-dots" title="Back to app" aria-label="Back to app" onclick="go('/app')">${sv('arrow', 15)}</button></div></aside>
- <main class="adm-main"><div class="adm-mtabs">${tabs.map(([k, l]) => `<button class="${ADM.tab === k ? 'on' : ''}" onclick="admGo('${k}')">${l}</button>`).join('')}</div><div id="admbody">${admLoading()}</div></main></div>`;
+  return `<div class="adm"><aside class="adm-side"><div class="adm-brand"><a class="x-logo dk" href="/" data-on-click="go('/');return false"><span class="x-lm"><i></i><i></i></span><span>intro<b>thread</b></span></a><span class="adm-tag">Admin</span></div>
+ <nav class="adm-nav">${tabs.map(([k, l, ic]) => `<button class="${ADM.tab === k ? 'on' : ''}" data-on-click="admGo('${k}')">${sv(ic, 17)}<span>${l}</span></button>`).join('')}</nav>
+ <div class="adm-who"><span class="ct-av sm">${esc(initials((me() || {}).name || 'A'))}</span><div><b>${esc((me() || {}).name || 'Staff')}</b><small>${esc(ADM.me.role)}</small></div><button class="ct-dots" title="Back to app" aria-label="Back to app" data-on-click="go('/app')">${sv('arrow', 15)}</button></div></aside>
+ <main class="adm-main"><div class="adm-mtabs">${tabs.map(([k, l]) => `<button class="${ADM.tab === k ? 'on' : ''}" data-on-click="admGo('${k}')">${l}</button>`).join('')}</div><div id="admbody">${admLoading()}</div></main></div>`;
 }
 const admLoading = () => `<div class="adm-load"><i></i><i></i><i></i></div>`;
 function admBody(h) {
@@ -213,7 +213,7 @@ async function admLoadTab() {
     }
   } catch (e) {
     admBody(
-      `<div class="adm-empty">${sv('shield', 22)}<b>Could not load this page</b><p>${esc((e && e.message) || 'Error')}</p><button class="cap-btn2" onclick="admLoadTab()">Try again</button></div>`
+      `<div class="adm-empty">${sv('shield', 22)}<b>Could not load this page</b><p>${esc((e && e.message) || 'Error')}</p><button class="cap-btn2" data-on-click="admLoadTab()">Try again</button></div>`
     );
   }
 }
@@ -285,10 +285,10 @@ async function admMfaVerify() {
 /* ---- reason / confirm dialog (every action is recorded) ---- */
 function admAsk(o) {
   window._admAskCb = o.run;
-  modal(`<div class="cap-m"><div class="row between"><h3>${o.title}</h3><button class="x" aria-label="Close" onclick="closeModal()">&times;</button></div>${o.body ? `<p class="fu-sub">${o.body}</p>` : ''}
+  modal(`<div class="cap-m"><div class="row between"><h3>${o.title}</h3><button class="x" aria-label="Close" data-on-click="closeModal()">&times;</button></div>${o.body ? `<p class="fu-sub">${o.body}</p>` : ''}
  ${o.extra || ''}<label class="x-f"><span>Reason <i>*</i></span><textarea id="admreason" rows="3" maxlength="500" placeholder="Recorded in the audit log"></textarea></label>
  ${o.typed ? `<label class="x-f"><span>Type <b>${o.typed}</b> to confirm</span><input id="admtyped" autocomplete="off"></label>` : ''}<p class="adm-err" id="admaskerr"></p>
- <button class="cap-btn${o.danger ? ' bad' : ''}" id="admaskgo" onclick="admAskGo('${o.typed || ''}')">${o.cta || 'Confirm'}</button></div>`);
+ <button class="cap-btn${o.danger ? ' bad' : ''}" id="admaskgo" data-on-click="admAskGo('${o.typed || ''}')">${o.cta || 'Confirm'}</button></div>`);
 }
 async function admAskGo(typed) {
   const r = (($('#admreason') || {}).value || '').trim(),
@@ -342,11 +342,11 @@ function admDash(d) {
     admHead(
       'Dashboard',
       'How Introthread is doing right now.',
-      `<button class="cap-btn2 adm-sm" onclick="admLoadTab()">${sv('sync', 15)} Refresh</button>`
+      `<button class="cap-btn2 adm-sm" data-on-click="admLoadTab()">${sv('sync', 15)} Refresh</button>`
     ) +
     `<div class="adm-kg">${admKpi('People', fmtN(d.users), `+${fmtN(d.users_7d)} this week`)}${admKpi('Active (30 days)', fmtN(d.active_30d), `${fmtN(d.active_7d)} this week · ${pct(d.active_30d, d.users)} of people`)}${admKpi('Threads', fmtN(d.threads), `+${fmtN(d.threads_30d)} in 30 days`)}${admKpi('Confirmed', pct(d.confirmed, d.threads), `${fmtN(d.confirmed)} by both sides`)}
  ${admKpi('Both answered', pct(d.both_answered, d.threads), `${fmtN(d.both_answered)} "What's next?" pairs`)}${admKpi('Paying', fmtN(d.paying), `${pct(d.paying, d.users)} of people`)}${admKpi('Monthly revenue', '$' + fmtN(Math.round(d.mrr_usd)), 'Estimated, USD')}${admKpi('Contacts imported', fmtN(d.contacts))}</div>
- <div class="adm-alerts">${d.reports_open ? `<button class="adm-al warn" onclick="admGo('reports')">${sv('shield', 16)}<b>${d.reports_open} open report${d.reports_open > 1 ? 's' : ''}</b><span>Review</span></button>` : ''}${d.privacy_overdue ? `<button class="adm-al bad" onclick="admGo('privacy')">${sv('lock', 16)}<b>${d.privacy_overdue} privacy request${d.privacy_overdue > 1 ? 's' : ''} overdue</b><span>30-day legal limit</span></button>` : d.privacy_open ? `<button class="adm-al warn" onclick="admGo('privacy')">${sv('lock', 16)}<b>${d.privacy_open} privacy request${d.privacy_open > 1 ? 's' : ''} open</b><span>Due within 30 days</span></button>` : ''}${d.suspended ? `<button class="adm-al" onclick="admGo('users')">${sv('user', 16)}<b>${d.suspended} suspended or banned</b></button>` : ''}${!d.reports_open && !d.privacy_open ? `<div class="adm-al ok">${sv('check', 16)}<b>Nothing needs attention</b></div>` : ''}</div>
+ <div class="adm-alerts">${d.reports_open ? `<button class="adm-al warn" data-on-click="admGo('reports')">${sv('shield', 16)}<b>${d.reports_open} open report${d.reports_open > 1 ? 's' : ''}</b><span>Review</span></button>` : ''}${d.privacy_overdue ? `<button class="adm-al bad" data-on-click="admGo('privacy')">${sv('lock', 16)}<b>${d.privacy_overdue} privacy request${d.privacy_overdue > 1 ? 's' : ''} overdue</b><span>30-day legal limit</span></button>` : d.privacy_open ? `<button class="adm-al warn" data-on-click="admGo('privacy')">${sv('lock', 16)}<b>${d.privacy_open} privacy request${d.privacy_open > 1 ? 's' : ''} open</b><span>Due within 30 days</span></button>` : ''}${d.suspended ? `<button class="adm-al" data-on-click="admGo('users')">${sv('user', 16)}<b>${d.suspended} suspended or banned</b></button>` : ''}${!d.reports_open && !d.privacy_open ? `<div class="adm-al ok">${sv('check', 16)}<b>Nothing needs attention</b></div>` : ''}</div>
  <div class="adm-g2"><div class="adm-card"><h3>New people <small>${fmtN(sum(d.signups_by_day))} in 30 days</small></h3>${admBars(d.signups_by_day || [], 'Sign-ups per day')}</div><div class="adm-card"><h3>New Threads <small>${fmtN(sum(d.threads_by_day))} in 30 days</small></h3>${admBars(d.threads_by_day || [], 'Threads per day')}</div></div>
  <div class="adm-g2"><div class="adm-card"><h3>Where people are</h3>${(d.cities || []).map(c => `<div class="adm-row"><span>${esc(c.c)}</span><b>${fmtN(c.n)}</b></div>`).join('') || '<p class="adm-mu">No data yet</p>'}</div><div class="adm-card"><h3>Plans</h3>${admRowsPlans(d)}</div></div>`
   );
@@ -377,12 +377,12 @@ function admUsers(d) {
     admHead(
       'Users',
       `${fmtN(d.total)} ${ADM.q ? 'matching' : 'people'}`,
-      `<button class="cap-btn2 adm-sm" onclick="admUsersCsv()">${sv('arrow', 15)} Export CSV</button>`
+      `<button class="cap-btn2 adm-sm" data-on-click="admUsersCsv()">${sv('arrow', 15)} Export CSV</button>`
     ) +
-    `<label class="ct-s adm-search">${sv('search', 16)}<input id="admq" placeholder="Search name, handle or email, then press Enter" value="${esc(ADM.q)}" onkeydown="if(event.key==='Enter'){ADM.q=this.value.trim();ADM.page=0;admLoadTab()}" aria-label="Search users"></label>
+    `<label class="ct-s adm-search">${sv('search', 16)}<input id="admq" placeholder="Search name, handle or email, then press Enter" value="${esc(ADM.q)}" data-on-keydown="admSearchKey(event,this)" aria-label="Search users"></label>
  <div class="adm-t"><div class="adm-tr adm-th"><span>Person</span><span>Plan</span><span>Status</span><span>Threads</span><span>Joined</span><span>Last sign-in</span></div>
- ${d.rows.map(u => `<button class="adm-tr" onclick="admUser('${u.id}')"><span class="adm-p"><span class="ct-av sm">${esc(initials(u.name))}</span><span><b>${esc(u.name)}${u.staff ? ` <em class="adm-pill">${esc(u.staff)}</em>` : ''}</b><small>${esc(u.email || '')} · @${esc(u.handle)}</small></span></span><span>${esc(u.plan)}</span><span>${admStatus(u.status)}${u.reports ? ` <em class="adm-pill bad">${u.reports} report${u.reports > 1 ? 's' : ''}</em>` : ''}</span><span>${fmtN(u.threads)}</span><span>${fmtD(u.created_at)}</span><span>${fmtD(u.last_sign_in_at)}</span></button>`).join('') || '<p class="adm-mu adm-pad">No one found.</p>'}</div>
- ${pages > 1 ? `<div class="adm-pg"><button class="cap-btn2 adm-sm" ${ADM.page ? '' : 'disabled'} onclick="ADM.page--;admLoadTab()">Previous</button><span>Page ${ADM.page + 1} of ${pages}</span><button class="cap-btn2 adm-sm" ${ADM.page + 1 < pages ? '' : 'disabled'} onclick="ADM.page++;admLoadTab()">Next</button></div>` : ''}`
+ ${d.rows.map(u => `<button class="adm-tr" data-on-click="admUser('${u.id}')"><span class="adm-p"><span class="ct-av sm">${esc(initials(u.name))}</span><span><b>${esc(u.name)}${u.staff ? ` <em class="adm-pill">${esc(u.staff)}</em>` : ''}</b><small>${esc(u.email || '')} · @${esc(u.handle)}</small></span></span><span>${esc(u.plan)}</span><span>${admStatus(u.status)}${u.reports ? ` <em class="adm-pill bad">${u.reports} report${u.reports > 1 ? 's' : ''}</em>` : ''}</span><span>${fmtN(u.threads)}</span><span>${fmtD(u.created_at)}</span><span>${fmtD(u.last_sign_in_at)}</span></button>`).join('') || '<p class="adm-mu adm-pad">No one found.</p>'}</div>
+ ${pages > 1 ? `<div class="adm-pg"><button class="cap-btn2 adm-sm" ${ADM.page ? '' : 'disabled'} data-on-click="admPg('prev')">Previous</button><span>Page ${ADM.page + 1} of ${pages}</span><button class="cap-btn2 adm-sm" ${ADM.page + 1 < pages ? '' : 'disabled'} data-on-click="admPg('next')">Next</button></div>` : ''}`
   );
 }
 function admUsersCsv() {
@@ -410,16 +410,16 @@ async function admUser(id) {
       c = u.counts || {};
     const can = r => admOk(r);
     const J = x => esc(JSON.stringify(x));
-    modal(`<div class="cap-m adm-u"><div class="row between"><div class="adm-p"><span class="ct-av">${esc(initials(p.name))}</span><span><h3>${esc(p.name)}</h3><small>${esc(u.email || '')} · @${esc(p.handle)}</small></span></div><button class="x" aria-label="Close" onclick="closeModal()">&times;</button></div>
+    modal(`<div class="cap-m adm-u"><div class="row between"><div class="adm-p"><span class="ct-av">${esc(initials(p.name))}</span><span><h3>${esc(p.name)}</h3><small>${esc(u.email || '')} · @${esc(p.handle)}</small></span></div><button class="x" aria-label="Close" data-on-click="closeModal()">&times;</button></div>
  <div class="adm-chips">${admStatus(u.status)}<span class="adm-pill">${esc(u.plan)}</span>${u.confirmed_email ? '<span class="adm-pill ok">Email confirmed</span>' : '<span class="adm-pill warn">Email not confirmed</span>'}${(u.providers || []).map(x => `<span class="adm-pill">${esc(x)}</span>`).join('')}</div>
  ${u.status_reason ? `<p class="adm-note">Reason: ${esc(u.status_reason)}</p>` : ''}
  <div class="adm-kg sm">${admKpi('Threads', fmtN(c.threads))}${admKpi('Confirmed', fmtN(c.confirmed))}${admKpi('Contacts', fmtN(c.contacts))}${admKpi('Rooms', fmtN(c.rooms))}</div>
  <div class="adm-dl"><div><span>Role</span><b>${esc([p.role, p.company].filter(Boolean).join(', ') || '-')}</b></div><div><span>City</span><b>${esc(p.city || '-')}</b></div><div><span>Joined</span><b>${fmtD(u.created_at)}</b></div><div><span>Last sign-in</span><b>${fmtDT(u.last_sign_in_at)}</b></div></div>
  <div class="adm-acts"><a class="cap-btn2" href="/${esc(p.handle)}" target="_blank" rel="noopener">${sv('eye', 16)} View public card</a>
- ${can(['owner', 'admin', 'finance']) ? `<button class="cap-btn2" onclick="admPlanAsk(${J(id)},${J(u.plan)})">${sv('brief', 16)} Change plan</button>` : ''}
- ${can(['owner', 'admin', 'moderator']) ? (u.status === 'active' ? `<button class="cap-btn2 warn" onclick="admStatusAsk(${J(id)},'suspended')">${sv('lock', 16)} Suspend</button><button class="cap-btn2 bad" onclick="admStatusAsk(${J(id)},'banned')">${sv('x', 16)} Ban</button>` : `<button class="cap-btn2" onclick="admStatusAsk(${J(id)},'active')">${sv('check', 16)} Reactivate</button>`) : ''}
- ${can(['owner', 'admin', 'support']) ? `<button class="cap-btn2" onclick="admExportAsk(${J(id)},${J(p.handle)})">${sv('arrow', 16)} Export their data</button>` : ''}
- ${can(['owner', 'admin']) ? `<button class="cap-btn2 bad" onclick="admDeleteAsk(${J(id)},${J(p.handle)})">${sv('x', 16)} Delete account</button>` : ''}</div>
+ ${can(['owner', 'admin', 'finance']) ? `<button class="cap-btn2" data-on-click="admPlanAsk(${J(id)},${J(u.plan)})">${sv('brief', 16)} Change plan</button>` : ''}
+ ${can(['owner', 'admin', 'moderator']) ? (u.status === 'active' ? `<button class="cap-btn2 warn" data-on-click="admStatusAsk(${J(id)},'suspended')">${sv('lock', 16)} Suspend</button><button class="cap-btn2 bad" data-on-click="admStatusAsk(${J(id)},'banned')">${sv('x', 16)} Ban</button>` : `<button class="cap-btn2" data-on-click="admStatusAsk(${J(id)},'active')">${sv('check', 16)} Reactivate</button>`) : ''}
+ ${can(['owner', 'admin', 'support']) ? `<button class="cap-btn2" data-on-click="admExportAsk(${J(id)},${J(p.handle)})">${sv('arrow', 16)} Export their data</button>` : ''}
+ ${can(['owner', 'admin']) ? `<button class="cap-btn2 bad" data-on-click="admDeleteAsk(${J(id)},${J(p.handle)})">${sv('x', 16)} Delete account</button>` : ''}</div>
  ${(u.reports || []).length ? `<h4 class="adm-h4">Reports about this person</h4>${u.reports.map(r => `<div class="adm-li"><b>${esc(r.reason)}</b><small>${esc(r.status)} · ${fmtD(r.created_at)}</small>${r.details ? `<p>${esc(r.details)}</p>` : ''}</div>`).join('')}` : ''}
  ${(u.audit || []).length ? `<h4 class="adm-h4">Staff actions</h4>${u.audit.map(a => `<div class="adm-li"><b>${esc(a.action)}</b><small>${fmtDT(a.created_at)}</small><p>${esc(a.reason || '')}</p></div>`).join('')}` : ''}</div>`);
   } catch (e) {
@@ -480,14 +480,14 @@ function admReports(L) {
   ];
   return (
     admHead('Moderation', 'Reports from people using Introthread. Aim to review within 24 hours.') +
-    `<div class="ct-chips adm-f">${f.map(([k, l]) => `<button class="${ADM.rf === k ? 'on' : ''}" onclick="ADM.rf='${k}';admLoadTab()">${l}</button>`).join('')}</div>` +
+    `<div class="ct-chips adm-f">${f.map(([k, l]) => `<button class="${ADM.rf === k ? 'on' : ''}" data-on-click="admRf('${k}')">${l}</button>`).join('')}</div>` +
     (L.length
       ? L.map(r => {
           const t = r.target || {};
           const open = r.status === 'open' || r.status === 'reviewing';
           return `<div class="adm-card adm-rep"><div class="adm-rh"><span class="adm-pill ${r.status === 'open' ? 'warn' : r.status === 'actioned' ? 'bad' : ''}">${esc(r.status)}</span><b>${esc(r.reason)}</b><small>${fmtDT(r.created_at)}</small></div>
  <p>${esc(r.details || 'No details given.')}</p><div class="adm-dl"><div><span>Reported</span><b>${esc(r.target_type)}: ${esc(t.name || '(deleted)')}${t.handle ? ' · @' + esc(t.handle) : ''}</b></div><div><span>By</span><b>${esc((r.reporter || {}).name || 'Unknown')}</b></div></div>
- ${admOk(['owner', 'admin', 'moderator']) && open ? `<div class="adm-acts row">${r.target_type === 'profile' ? `<button class="cap-btn2 adm-sm" onclick="admUser('${esc(r.target_id)}')">${sv('user', 15)} Open person</button>` : ''}${r.status === 'open' ? `<button class="cap-btn2 adm-sm" onclick="admRep('${r.id}','reviewing')">Mark reviewing</button>` : ''}<button class="cap-btn2 adm-sm" onclick="admRep('${r.id}','dismissed')">Dismiss</button><button class="cap-btn adm-sm" onclick="admRep('${r.id}','actioned')">Action taken</button></div>` : ''}</div>`;
+ ${admOk(['owner', 'admin', 'moderator']) && open ? `<div class="adm-acts row">${r.target_type === 'profile' ? `<button class="cap-btn2 adm-sm" data-on-click="admUser('${esc(r.target_id)}')">${sv('user', 15)} Open person</button>` : ''}${r.status === 'open' ? `<button class="cap-btn2 adm-sm" data-on-click="admRep('${r.id}','reviewing')">Mark reviewing</button>` : ''}<button class="cap-btn2 adm-sm" data-on-click="admRep('${r.id}','dismissed')">Dismiss</button><button class="cap-btn adm-sm" data-on-click="admRep('${r.id}','actioned')">Action taken</button></div>` : ''}</div>`;
         }).join('')
       : `<div class="adm-empty">${sv('check', 22)}<b>No reports here</b><p>Reports appear when someone uses Report on a card or Thread.</p></div>`)
   );
@@ -518,7 +518,7 @@ function admRooms(L) {
   return (
     admHead('Rooms', `${L.length} event${L.length === 1 ? '' : 's'}`) +
     (L.length
-      ? `<div class="adm-t"><div class="adm-tr adm-th c5"><span>Room</span><span>Date</span><span>Organiser</span><span>Threads</span><span></span></div>${L.map(m => `<div class="adm-tr c5"><span><b>${esc(m.name)}</b><small>${esc(m.location || '')} · code ${esc(m.code)}</small></span><span>${fmtD(m.event_date)}</span><span>${esc((m.owner || {}).name || '-')}</span><span>${fmtN(m.threads)} · ${fmtN(m.people)} people</span><span>${admOk(['owner', 'admin', 'moderator']) ? `<button class="cap-btn2 adm-sm bad" onclick="admRoomDel('${m.id}')">Delete</button>` : ''}</span></div>`).join('')}</div>`
+      ? `<div class="adm-t"><div class="adm-tr adm-th c5"><span>Room</span><span>Date</span><span>Organiser</span><span>Threads</span><span></span></div>${L.map(m => `<div class="adm-tr c5"><span><b>${esc(m.name)}</b><small>${esc(m.location || '')} · code ${esc(m.code)}</small></span><span>${fmtD(m.event_date)}</span><span>${esc((m.owner || {}).name || '-')}</span><span>${fmtN(m.threads)} · ${fmtN(m.people)} people</span><span>${admOk(['owner', 'admin', 'moderator']) ? `<button class="cap-btn2 adm-sm bad" data-on-click="admRoomDel('${m.id}')">Delete</button>` : ''}</span></div>`).join('')}</div>`
       : `<div class="adm-empty">${sv('cal', 22)}<b>No Rooms yet</b></div>`)
   );
 }
@@ -549,7 +549,7 @@ function admPlans(P) {
     P.map(
       p => `<div class="adm-card"><h3>${esc(p.name)} <small>${p.active ? 'Active' : 'Hidden'}</small></h3>
  <div class="adm-fg">${fi(p, 'name', 'Name', 'type="text"')}${fi(p, 'price_usd_month', 'US$ a month')}${fi(p, 'price_usd_year', 'US$ a year')}${fi(p, 'price_gbp_month', '£ a month (UK)')}${fi(p, 'price_gbp_year', '£ a year (UK)')}${fi(p, 'threads_per_month', 'New Threads a month', 'type="number" min="0" step="1"')}</div>
- ${ed ? `<button class="cap-btn adm-sm" onclick="admPlanSave('${p.id}')">Save ${esc(p.name)}</button>` : ''}</div>`
+ ${ed ? `<button class="cap-btn adm-sm" data-on-click="admPlanSave('${p.id}')">Save ${esc(p.name)}</button>` : ''}</div>`
     ).join('')
   );
 }
@@ -599,10 +599,10 @@ function admSettings() {
     admHead('Settings', 'Switches that change the live app for everyone. Each change asks for a reason.') +
     `<div class="adm-card"><h3>Announcement banner</h3><p class="adm-mu">Shown at the top of the app until each person closes it.</p><label class="x-f"><span>Message</span><input id="anntext" maxlength="160" value="${esc(a.text || '')}" placeholder="e.g. New: import your LinkedIn connections"></label>
  <div class="adm-fg"><label class="x-f"><span>Style</span><select id="anntone"><option value="info" ${a.tone !== 'warn' ? 'selected' : ''}>Information</option><option value="warn" ${a.tone === 'warn' ? 'selected' : ''}>Warning</option></select></label><label class="adm-sw"><input type="checkbox" id="annon" ${a.on ? 'checked' : ''}><span></span>Show banner</label></div>
- <button class="cap-btn adm-sm" onclick="admSet('announcement',{on:$('#annon').checked,text:$('#anntext').value.trim(),tone:$('#anntone').value})">Save announcement</button></div>
- <div class="adm-card"><h3>Maintenance mode</h3><p class="adm-mu">Pauses the app for everyone except staff. Public cards stay visible.</p><label class="adm-sw"><input type="checkbox" ${APPSET.maintenance === true ? 'checked' : ''} onchange="admSet('maintenance',this.checked);this.checked=!this.checked"><span></span>${APPSET.maintenance === true ? 'On' : 'Off'}</label></div>
- <div class="adm-card"><h3>Features</h3>${FL.map(([k, l]) => `<div class="adm-row"><span>${l}</span><label class="adm-sw"><input type="checkbox" ${f[k] !== false ? 'checked' : ''} onchange="admSetFeat('${k}',this.checked);this.checked=!this.checked"><span></span></label></div>`).join('')}</div>
- <div class="adm-card"><h3>Security</h3><div class="adm-row"><span>Require two-step verification for staff</span><label class="adm-sw"><input type="checkbox" ${APPSET.admin_require_mfa !== false ? 'checked' : ''} ${ADM.me.role === 'owner' ? '' : 'disabled'} onchange="admSet('admin_require_mfa',this.checked);this.checked=!this.checked"><span></span></label></div><p class="adm-mu">Recommended on. Only owners can change this.</p></div>`
+ <button class="cap-btn adm-sm" data-on-click="admAnnSave()">Save announcement</button></div>
+ <div class="adm-card"><h3>Maintenance mode</h3><p class="adm-mu">Pauses the app for everyone except staff. Public cards stay visible.</p><label class="adm-sw"><input type="checkbox" ${APPSET.maintenance === true ? 'checked' : ''} data-on-change="admMaintSw(this)"><span></span>${APPSET.maintenance === true ? 'On' : 'Off'}</label></div>
+ <div class="adm-card"><h3>Features</h3>${FL.map(([k, l]) => `<div class="adm-row"><span>${l}</span><label class="adm-sw"><input type="checkbox" ${f[k] !== false ? 'checked' : ''} data-on-change="admFeatSw('${k}',this)"><span></span></label></div>`).join('')}</div>
+ <div class="adm-card"><h3>Security</h3><div class="adm-row"><span>Require two-step verification for staff</span><label class="adm-sw"><input type="checkbox" ${APPSET.admin_require_mfa !== false ? 'checked' : ''} ${ADM.me.role === 'owner' ? '' : 'disabled'} data-on-change="admMfaSw(this)"><span></span></label></div><p class="adm-mu">Recommended on. Only owners can change this.</p></div>`
   );
 }
 function admSetFeat(k, on) {
@@ -632,7 +632,7 @@ function admPrivacy(L) {
           const J = x => esc(JSON.stringify(x));
           return `<div class="adm-card adm-rep"><div class="adm-rh"><span class="adm-pill ${r.status === 'done' ? 'ok' : late ? 'bad' : 'warn'}">${esc(r.status.replace('_', ' '))}</span><b>${{ export: 'Copy of data', delete: 'Delete account', correct: 'Correct data' }[r.kind] || esc(r.kind)}</b><small>${late ? 'Overdue' : open ? left + ' days left' : 'Closed'}</small></div>
  <div class="adm-dl"><div><span>Person</span><b>${esc(r.name || '-')} · ${esc(r.account_email || r.email || '')}</b></div><div><span>Received</span><b>${fmtD(r.created_at)}</b></div><div><span>Due</span><b>${fmtD(r.due_at)}</b></div></div>
- ${open ? `<div class="adm-acts row">${r.status === 'open' ? `<button class="cap-btn2 adm-sm" onclick="admPriv('${r.id}','in_progress')">Start</button>` : ''}${r.user_id && r.kind === 'export' ? `<button class="cap-btn2 adm-sm" onclick="admExportAsk(${J(r.user_id)},${J(r.handle || 'user')})">${sv('arrow', 15)} Export data</button>` : ''}${r.user_id && r.kind === 'delete' && admOk(['owner', 'admin']) ? `<button class="cap-btn2 adm-sm bad" onclick="admDeleteAsk(${J(r.user_id)},${J(r.handle || 'user')})">Delete account</button>` : ''}<button class="cap-btn adm-sm" onclick="admPriv('${r.id}','done')">Mark done</button><button class="cap-btn2 adm-sm" onclick="admPriv('${r.id}','rejected')">Reject</button></div>` : ''}</div>`;
+ ${open ? `<div class="adm-acts row">${r.status === 'open' ? `<button class="cap-btn2 adm-sm" data-on-click="admPriv('${r.id}','in_progress')">Start</button>` : ''}${r.user_id && r.kind === 'export' ? `<button class="cap-btn2 adm-sm" data-on-click="admExportAsk(${J(r.user_id)},${J(r.handle || 'user')})">${sv('arrow', 15)} Export data</button>` : ''}${r.user_id && r.kind === 'delete' && admOk(['owner', 'admin']) ? `<button class="cap-btn2 adm-sm bad" data-on-click="admDeleteAsk(${J(r.user_id)},${J(r.handle || 'user')})">Delete account</button>` : ''}<button class="cap-btn adm-sm" data-on-click="admPriv('${r.id}','done')">Mark done</button><button class="cap-btn2 adm-sm" data-on-click="admPriv('${r.id}','rejected')">Reject</button></div>` : ''}</div>`;
         }).join('')
       : `<div class="adm-empty">${sv('lock', 22)}<b>No requests</b><p>People can ask for a copy of their data or to delete their account from Settings.</p></div>`)
   );
@@ -655,7 +655,7 @@ function admStaff(L) {
   const own = ADM.me.role === 'owner';
   return (
     admHead('Staff', 'Who can open the admin area, and what each role can do.') +
-    `<div class="adm-card">${L.map(s => `<div class="adm-row"><span><b>${esc(s.name || s.email)}</b> <small>${esc(s.email)}</small></span>${own ? `<select aria-label="Role" onchange="admStaffSet(${esc(JSON.stringify(s.email))},this.value)">${['owner', 'admin', 'support', 'moderator', 'finance', 'none'].map(r => `<option value="${r}" ${s.role === r ? 'selected' : ''}>${r === 'none' ? 'Remove access' : r}</option>`).join('')}</select>` : `<b>${esc(s.role)}</b>`}</div>`).join('')}</div>
+    `<div class="adm-card">${L.map(s => `<div class="adm-row"><span><b>${esc(s.name || s.email)}</b> <small>${esc(s.email)}</small></span>${own ? `<select aria-label="Role" data-on-change="admStaffSet(${esc(JSON.stringify(s.email))},this.value)">${['owner', 'admin', 'support', 'moderator', 'finance', 'none'].map(r => `<option value="${r}" ${s.role === r ? 'selected' : ''}>${r === 'none' ? 'Remove access' : r}</option>`).join('')}</select>` : `<b>${esc(s.role)}</b>`}</div>`).join('')}</div>
  ${
    own
      ? `<div class="adm-card"><h3>Add staff</h3><p class="adm-mu">They need an Introthread account first.</p><div class="adm-fg"><label class="x-f"><span>Email</span><input id="stem" type="email" placeholder="name@example.com"></label><label class="x-f"><span>Role</span><select id="strole">${Object.keys(
@@ -664,7 +664,7 @@ function admStaff(L) {
          .map(r => `<option value="${r}" ${r === 'support' ? 'selected' : ''}>${r}</option>`)
          .join(
            ''
-         )}</select></label></div><button class="cap-btn adm-sm" onclick="admStaffSet($('#stem').value.trim(),$('#strole').value)">Add</button></div>`
+         )}</select></label></div><button class="cap-btn adm-sm" data-on-click="admStaffAdd()">Add</button></div>`
      : ''
  }
  <div class="adm-card"><h3>Roles</h3>${Object.entries(ADM_ROLE_DESC)
@@ -687,9 +687,9 @@ function admAudit(L) {
     admHead(
       'Audit log',
       'Every staff action, newest first. Entries cannot be edited or deleted.',
-      `<button class="cap-btn2 adm-sm" onclick="admAuditCsv()">${sv('arrow', 15)} Export CSV</button>`
+      `<button class="cap-btn2 adm-sm" data-on-click="admAuditCsv()">${sv('arrow', 15)} Export CSV</button>`
     ) +
-    `<label class="ct-s adm-search">${sv('search', 16)}<input placeholder="Filter by action, person or reason" oninput="admAuditFilter(this.value)" aria-label="Filter audit log"></label><div class="adm-t" id="admaud">${admAuditRows(L)}</div>`
+    `<label class="ct-s adm-search">${sv('search', 16)}<input placeholder="Filter by action, person or reason" data-on-input="admAuditFilter(this.value)" aria-label="Filter audit log"></label><div class="adm-t" id="admaud">${admAuditRows(L)}</div>`
   );
 }
 function admAuditRows(L) {
@@ -740,10 +740,10 @@ async function myStatusLoad() {
 }
 function vBlocked() {
   const b = MYSTATUS.status === 'banned';
-  return `<div class="adm-gate"><div class="adm-gc"><div class="adm-gi">${sv('lock', 24)}</div><h1>${b ? 'This account has been closed' : 'This account is paused'}</h1><p>${b ? 'It broke the Introthread community rules.' : 'Our team is reviewing activity on this account.'} If you think this is a mistake, email <a href="mailto:hello@introthread.com">hello@introthread.com</a>.</p><button class="cap-btn2" onclick="logout()">Sign out</button></div></div>`;
+  return `<div class="adm-gate"><div class="adm-gc"><div class="adm-gi">${sv('lock', 24)}</div><h1>${b ? 'This account has been closed' : 'This account is paused'}</h1><p>${b ? 'It broke the Introthread community rules.' : 'Our team is reviewing activity on this account.'} If you think this is a mistake, email <a href="mailto:hello@introthread.com">hello@introthread.com</a>.</p><button class="cap-btn2" data-on-click="logout()">Sign out</button></div></div>`;
 }
 function vMaint() {
-  return `<div class="adm-gate"><div class="adm-gc"><div class="adm-gi">${sv('sync', 24)}</div><h1>Back shortly</h1><p>We are making Introthread better. Your Threads and card are safe. Please try again in a few minutes.</p><button class="cap-btn2" onclick="location.reload()">Try again</button></div></div>`;
+  return `<div class="adm-gate"><div class="adm-gc"><div class="adm-gi">${sv('sync', 24)}</div><h1>Back shortly</h1><p>We are making Introthread better. Your Threads and card are safe. Please try again in a few minutes.</p><button class="cap-btn2" data-on-click="location.reload()">Try again</button></div></div>`;
 }
 function annShow() {
   const a = APPSET.announcement;
@@ -757,7 +757,7 @@ function annShow() {
   el.id = 'annbar';
   el.className = 'ann' + (a.tone === 'warn' ? ' warn' : '');
   el.setAttribute('role', 'status');
-  el.innerHTML = `<span>${esc(a.text)}</span><button aria-label="Close" onclick="localStorage.setItem('${key}','1');this.parentNode.remove()">&times;</button>`;
+  el.innerHTML = `<span>${esc(a.text)}</span><button aria-label="Close" data-on-click="localStorage.setItem('${key}','1');this.parentNode.remove()">&times;</button>`;
   document.body.appendChild(el);
 }
 const freeLim = () => {
@@ -773,9 +773,9 @@ isPro = function () {
 };
 limitSheet = function () {
   const n = freeLim();
-  modal(`<div class="cap-m"><div class="row between"><h3>You have used your ${n} free Threads this month</h3><button class="x" aria-label="Close" onclick="closeModal()">&times;</button></div>
+  modal(`<div class="cap-m"><div class="row between"><h3>You have used your ${n} free Threads this month</h3><button class="x" aria-label="Close" data-on-click="closeModal()">&times;</button></div>
  <p class="fu-sub">Upgrade to Pro for unlimited Threads, or save this person as a contact now and invite them next month.</p>
- <button type="button" class="cap-btn" onclick="closeModal();go('/pricing')">${sv('spark', 16)} See Pro</button><button type="button" class="cap-btn2" onclick="ctSaveFromTap()">${sv('users', 16)} Save as a contact</button></div>`);
+ <button type="button" class="cap-btn" data-on-click="closeModal();go('/pricing')">${sv('spark', 16)} See Pro</button><button type="button" class="cap-btn2" data-on-click="ctSaveFromTap()">${sv('users', 16)} Save as a contact</button></div>`);
 };
 const _vTap33 = vTap;
 vTap = function () {
@@ -794,9 +794,9 @@ function reportOpen(type, id, name) {
     toast('Sign in to report');
     return go('/login');
   }
-  modal(`<div class="cap-m"><div class="row between"><h3>Report ${esc(name || 'this')}</h3><button class="x" aria-label="Close" onclick="closeModal()">&times;</button></div><p class="fu-sub">Reports are private. Our team reviews them, usually within 24 hours.</p>
+  modal(`<div class="cap-m"><div class="row between"><h3>Report ${esc(name || 'this')}</h3><button class="x" aria-label="Close" data-on-click="closeModal()">&times;</button></div><p class="fu-sub">Reports are private. Our team reviews them, usually within 24 hours.</p>
  <div class="rep-o">${REP_REASONS.map((r, i) => `<label><input type="radio" name="repr" value="${esc(r)}" ${i === 0 ? 'checked' : ''}><span>${r}</span></label>`).join('')}</div>
- <label class="x-f"><span>Anything else we should know? (optional)</span><textarea id="repd" rows="3" maxlength="1000"></textarea></label><button class="cap-btn" onclick="reportSend('${type}','${esc(id)}')">Send report</button></div>`);
+ <label class="x-f"><span>Anything else we should know? (optional)</span><textarea id="repd" rows="3" maxlength="1000"></textarea></label><button class="cap-btn" data-on-click="reportSend('${type}','${esc(id)}')">Send report</button></div>`);
 }
 async function reportSend(type, id) {
   const reason = (document.querySelector('input[name=repr]:checked') || {}).value || 'Something else';
@@ -819,7 +819,7 @@ vPublic = function (h) {
   if (!u || !out || (me() && me().id === u.id)) return out;
   return (
     out +
-    `<div class="rep-l"><button type="button" onclick="reportOpen('profile',${esc(JSON.stringify(u.id))},${esc(JSON.stringify(u.name || ''))})">${sv('shield', 14)} Report this profile</button></div>`
+    `<div class="rep-l"><button type="button" data-on-click="reportOpen('profile',${esc(JSON.stringify(u.id))},${esc(JSON.stringify(u.name || ''))})">${sv('shield', 14)} Report this profile</button></div>`
   );
 };
 const _vThread33 = vThread;
@@ -829,7 +829,7 @@ vThread = function (id) {
   if (!t || !t._c) return h;
   return (
     h +
-    `<div class="rep-l"><button type="button" onclick="reportOpen('thread',${esc(JSON.stringify(t.id))},${esc(JSON.stringify((t.other || {}).name || ''))})">${sv('shield', 14)} Report a problem with this Thread</button></div>`
+    `<div class="rep-l"><button type="button" data-on-click="reportOpen('thread',${esc(JSON.stringify(t.id))},${esc(JSON.stringify((t.other || {}).name || ''))})">${sv('shield', 14)} Report a problem with this Thread</button></div>`
   );
 };
 /* Privacy requests from Settings */
@@ -851,7 +851,7 @@ function privReq(kind) {
     ]
   }[kind];
   modal(
-    `<div class="cap-m"><div class="row between"><h3>${L[0]}</h3><button class="x" aria-label="Close" onclick="closeModal()">&times;</button></div><p class="fu-sub">${L[1]}</p><button class="cap-btn${kind === 'delete' ? ' bad' : ''}" onclick="privSend('${kind}')">${L[2]}</button></div>`
+    `<div class="cap-m"><div class="row between"><h3>${L[0]}</h3><button class="x" aria-label="Close" data-on-click="closeModal()">&times;</button></div><p class="fu-sub">${L[1]}</p><button class="cap-btn${kind === 'delete' ? ' bad' : ''}" data-on-click="privSend('${kind}')">${L[2]}</button></div>`
   );
 }
 async function privSend(kind) {
@@ -868,7 +868,7 @@ async function privSend(kind) {
 const _vSet33 = vSettings;
 vSettings = function () {
   const h = _vSet33.apply(this, arguments);
-  const card = `<div class="adm-card priv-c"><h3>${sv('lock', 16)} Your data and privacy</h3><p class="adm-mu">Wherever you live, you can ask for a copy of your data or ask us to delete it. We reply by email within 30 days.</p><div class="adm-acts row"><button class="cap-btn2 adm-sm" onclick="privReq('export')">Request a copy</button><button class="cap-btn2 adm-sm bad" onclick="privReq('delete')">Delete my account</button></div></div>`;
+  const card = `<div class="adm-card priv-c"><h3>${sv('lock', 16)} Your data and privacy</h3><p class="adm-mu">Wherever you live, you can ask for a copy of your data or ask us to delete it. We reply by email within 30 days.</p><div class="adm-acts row"><button class="cap-btn2 adm-sm" data-on-click="privReq('export')">Request a copy</button><button class="cap-btn2 adm-sm bad" data-on-click="privReq('delete')">Delete my account</button></div></div>`;
   try {
     const t = document.createElement('div');
     t.innerHTML = h;
@@ -880,7 +880,7 @@ vSettings = function () {
               sv('lock', 22),
               'Your data and privacy',
               'Wherever you live, you can ask for a copy of your data or ask us to delete it. We reply by email within 30 days.',
-              `<div class="priv-acts"><button type="button" class="t-start st-btn priv-b" onclick="privReq('export')">${sv('sgimport', 17)} Request a copy</button><button type="button" class="t-start st-btn priv-b bad" onclick="privReq('delete')">${sv('close', 17)} Request deletion</button></div>`,
+              `<div class="priv-acts"><button type="button" class="t-start st-btn priv-b" data-on-click="privReq('export')">${sv('sgimport', 17)} Request a copy</button><button type="button" class="t-start st-btn priv-b bad" data-on-click="privReq('delete')">${sv('close', 17)} Request deletion</button></div>`,
               '',
               'priv-c'
             )
@@ -907,3 +907,51 @@ vSettings = function () {
     go(a);
   }
 })();
+
+/* v61: named handlers for the admin shell, MFA, search, paging and settings modals (no inline JavaScript). */
+function admRetry() {
+  ADM.stage = 'load';
+  admPaint();
+  admBoot();
+}
+function admMfaIn(v) {
+  if (String(v).replace(/\D/g, '').length === 6) admMfaVerify();
+}
+function admSearchKey(e, el) {
+  if (e.key !== 'Enter') return;
+  ADM.q = el.value.trim();
+  ADM.page = 0;
+  admLoadTab();
+}
+function admPg(d) {
+  if (d === 'prev') ADM.page--;
+  else ADM.page++;
+  admLoadTab();
+}
+function admRf(k) {
+  ADM.rf = k;
+  admLoadTab();
+}
+function admAnnSave() {
+  admSet('announcement', {
+    on: $('#annon').checked,
+    text: $('#anntext').value.trim(),
+    tone: $('#anntone').value
+  });
+}
+/* Switches flip back until the change is confirmed. */
+function admMaintSw(el) {
+  admSet('maintenance', el.checked);
+  el.checked = !el.checked;
+}
+function admFeatSw(k, el) {
+  admSetFeat(k, el.checked);
+  el.checked = !el.checked;
+}
+function admMfaSw(el) {
+  admSet('admin_require_mfa', el.checked);
+  el.checked = !el.checked;
+}
+function admStaffAdd() {
+  admStaffSet($('#stem').value.trim(), $('#strole').value);
+}
