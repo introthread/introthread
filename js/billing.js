@@ -312,15 +312,7 @@ function bCompare(b) {
   const P = PLANS;
   const col = (p, price, per, btn) =>
     `<div class="bl-plan ${p.id === (pro ? 'pro' : 'free') ? 'on' : ''} ${p.id === 'pro' ? 'hot' : ''}">${p.id === 'pro' ? '<span class="bl-tag">Most popular</span>' : ''}<b>${esc(p.name)}</b><small>${esc(p.tag)}</small><div class="bl-pa">${price}<small>${per}</small></div>${btn}<ul>${p.features.map(f => `<li>${sv('check', 14, 'currentColor', 2.6)}${f}</li>`).join('')}</ul></div>`;
-  return `<section class="d-box"><div class="cd-bh"><span class="cd-bi">${sv('grid', 20)}</span><div><b>Plans</b><small>What each plan includes. Prices in USD and exclude tax.</small></div><div class="x-seg bl-int">${[
-    ['month', 'Monthly'],
-    ['year', 'Yearly &middot; save 17%']
-  ]
-    .map(
-      ([k, l]) =>
-        `<button type="button" class="${BINT === k ? 'on' : ''}" data-on-click="bInt('${k}')">${l}</button>`
-    )
-    .join('')}</div></div>
+  return `<section class="d-box"><div class="cd-bh"><span class="cd-bi">${sv('grid', 20)}</span><div><b>Plans</b><small>What each plan includes. Prices in USD and exclude tax.</small></div></div>
  <div class="bl-plans">${col(P.free, '$0', '/forever', pro ? `<button type="button" class="t-how block" data-on-click="bCancel()">${b.cancelAt ? 'Moving to Free' : 'Downgrade'}</button>` : '<button type="button" class="t-how block" disabled>Current plan</button>')}
  ${col(P.pro, money(BINT === 'month' ? proM() : Math.round((proY() / 12) * 100) / 100), BINT === 'month' ? '/month' : '/month, billed ' + money(proY()) + ' yearly', pro ? `<button type="button" class="t-how block" disabled>Current plan</button>` : `<button type="button" class="x-btn block" data-on-click="bUpgrade('${BINT}')">${b.trialUsed ? 'Upgrade to Pro' : 'Start ' + TRIAL_DAYS + '-day free trial'}</button>`)}
  ${col(P.rooms, '$199', '/event', `<button type="button" class="t-how block" data-on-click="bRoomPass()">Buy a Room pass</button>`)}
@@ -413,15 +405,6 @@ function bUpgrade(interval) {
   if (planOf() === 'pro' && b.status !== 'past_due') return toast('You already have Pro');
   const trial = !b.trialUsed;
   modal(`<div class="bl-co"><div class="row between"><h3>Upgrade to Pro</h3><button class="x" aria-label="Close" data-on-click="closeModal()">&times;</button></div>
- <div class="x-seg bl-int" style="margin:12px 0">${[
-   ['month', 'Monthly ' + money(proM())],
-   ['year', 'Yearly ' + money(proY())]
- ]
-   .map(
-     ([k, l]) =>
-       `<button type="button" class="${interval === k ? 'on' : ''}" data-on-click="closeModal();bUpgrade('${k}')">${l}</button>`
-   )
-   .join('')}</div>
  ${bCheckoutBody('pro', interval)}<ul class="bl-incl">${PLANS.pro.features
    .slice(1)
    .map(f => `<li>${sv('check', 13, 'currentColor', 2.6)}${f}</li>`)

@@ -207,15 +207,6 @@ bUpgrade = function (interval) {
   interval = interval || BINT;
   if (isPro()) return toast('You already have Pro');
   modal(`<div class="bl-co"><div class="row between"><h3>Upgrade to Pro</h3><button class="x" aria-label="Close" data-on-click="closeModal()">&times;</button></div>
- <div class="x-seg bl-int" style="margin:12px 0">${[
-   ['month', 'Monthly ' + money(proM())],
-   ['year', 'Yearly ' + money(proY())]
- ]
-   .map(
-     ([k, l]) =>
-       `<button type="button" class="${interval === k ? 'on' : ''}" data-on-click="closeModal();bUpgrade('${k}')">${l}</button>`
-   )
-   .join('')}</div>
  <ul class="bl-incl">${PLANS.pro.features
    .slice(1)
    .map(f => `<li>${sv('check', 13, 'currentColor', 2.6)}${f}</li>`)
