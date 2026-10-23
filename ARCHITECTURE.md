@@ -116,6 +116,11 @@ This is several days of careful work and should be done screen by screen, never 
   - App, admin, card and room routes now use `app-shell.html` (an empty root) through the `vercel.json` catch-all, so they never flash the home page.
   - Login and signup are not pre-rendered, because they change with sign-in options.
   - Screenshots of each page with and without scripts match at 390px and 1366px. The only difference is the pulsing LIVE dot on /rooms.
+- **Step 11 (v59, 23 Oct 2026), in progress: no inline JavaScript.**
+  - `js/actions.js` runs `data-on-*` handlers without eval.
+  - All 10 admin screens are converted. About 520 handlers remain, mostly in `app-core.js`. See HANDOVER, "Stricter security setting".
+  - When none are left, remove `'unsafe-inline'` from `script-src`.
+- **Step 12 (v60, 23 Oct 2026), done: demo account locked down.** See `js/demo-mode.js` and HANDOVER.
 - **Next steps:**
   - Move the older blocks into `/js`, newest first, one file per feature: payments (v26), accessibility (v28), photo crop (v30-v34), then the admin screens.
   - Move CSS into `/css` files.

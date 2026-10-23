@@ -2,7 +2,99 @@
 
 Last updated: 22 Oct 2026, 3:00 pm Nairobi (after v37 security hardening and migration 016). Read this section first, then ARCHITECTURE-ESSENTIALS.md and AGENTS.md. Update this file and docs/CHANGELOG.md with every change.
 
-## START HERE: state on 22 Oct 2026
+## START HERE: state on 23 Oct 2026 (after v60)
+
+### Code layout
+- `index.html` (website home, with pre-rendered text) and `app-shell.html` (an empty root, served by the `vercel.json` catch-all for /app, /admin, cards and rooms). Both are generated: never edit them by hand.
+- `js/` holds all app code, 34 files loaded with `defer` in a fixed order:
+  - `actions.js` loads first.
+  - `app-core.js` (the original app, v1-v16) loads second.
+  - Feature files, admin screens, `payments.js`, then `demo-mode.js` last.
+- `css/` holds the styles: `base`, `app`, `admin`, `features`, in that order.
+- `scripts/build_pages.py`:
+  - writes per-page meta
+  - writes the 9 page folders and `app-shell.html`
+  - adds `?v=<hash>` and `defer`
+- `scripts/prerender.py` saves the drawn text of 8 website pages into their HTML.
+- `scripts/convert_handlers.js` converts inline handlers (see below).
+
+### Build and test (every change)
+1. Build: `python3 scripts/build_pages.py && python3 scripts/prerender.py`. Prerender needs Playwright Chromium. If you skip it, the website pages go back to empty.
+2. Run the 10 admin tests, 3 or 4 at a time: `node tests/admin/<t>.js` with `t` in `tadm tusers tmod trm trv tpl tsg tpq tsf tal`. Each should print `errs []`.
+3. Run `python3 tests/app/photo_crop.py`.
+4. Run the browser sweeps at 390 and 1366 for the app and the site, plus axe. These are sandbox scripts. To rebuild them, serve `index.html`/`app-shell.html` and route `/js` and `/css` from disk.
+5. Commit everything that changed in one commit, because Vercel Hobby limits daily deploys:
+   - `index.html` and `app-shell.html`
+   - the 9 page folders
+   - `js/`, `css/`
+   - the docs
+6. `/js` and `/css` are cached for a year by `?v=`. Always rebuild after editing them.
+
+### Stricter security setting (removing 'unsafe-inline'): IN PROGRESS
+- **How it works:** markup uses `data-on-click="fn('a', this.value)"`, not `onclick`. `js/actions.js` runs it without eval. It supports:
+  - global function calls, separated by `;`
+  - literal arguments, plus `this`/`event` properties
+  - `return false`
+
+  Anything else (assignments, `if`, arrow functions) must become a named function in the same file, under a `/* v59: named handlers ... */` block.
+- **Tool:** `node scripts/convert_handlers.js js/<file>.js` lists what it can convert and what it cannot. Add `--apply` to rename the simple ones, then hand-write the rest. In the browser, `ACT.check(document)` lists any `data-on-*` that would fail.
+- **Done (one commit each):** v59a Dashboard plus `actions.js`, then Users, Moderation, Rooms, Revenue, Plans, Settings, Privacy, Staff, and Audit (v59b-v59j).
+- **Left (about 520 handlers):**
+
+  | Handlers | File |
+  |---|---|
+  | 270 | `app-core.js` (split it by screen: website pages, Today, Threads, Tap, Card, Rooms, Settings) |
+  | 66 | `admin-core.js` (admin shell and modals) |
+  | 51 | `billing.js` |
+  | 37 | `capture.js` |
+  | 25 | `contacts-import.js` |
+  | 15 | `rooms-access.js` |
+  | 8 | `event-mode.js` |
+  | 8 | `app-navigation.js` |
+  | 7 | `payments.js` |
+  | 7 | `app-routing.js` |
+  | 5 | `data-export.js` |
+  | 4 | `late-fixes.js` |
+  | 4 | `first-visit.js` |
+  | 3 | `room-sessions.js` |
+  | 2 each | `match-celebrate.js`, `install-prompt.js`, `company-logo.js` |
+  | 2 | `index.html` (skip link and modal backdrop) |
+- **Watch out:** some code matches handler text, so when you convert the target, update the matcher in the same commit:
+  - `app-navigation.js` replaces `href="/app/profile" onclick="PTAB='look'"`.
+  - `billing.js` does `setAttribute('onclick', "amGo(...)")`.
+  - `rooms-access.js` selects `[onclick*="rMenu("]` and `[onclick*="delRoom"]`.
+  - `admin-audit.js` has a regex for `onclick="showNudges()"`.
+  - `app-core.js` (end) and `late-fixes.js` replace `onclick="acctMenu()"`.
+  - `admin-core.js` and `admin-dashboard.js` already read both `data-on-click` and `onclick`.
+  - The `a11y.js` selector already handles both.
+- **Last step,** once the count is 0:
+  1. Remove `'unsafe-inline'` from `script-src` in `vercel.json`. The JSON-LD block is data, so it is not affected.
+  2. Test everything.
+  3. Watch the console on the live site.
+
+### Demo account (v60, `js/demo-mode.js`)
+- **Where it runs:** the demo (demo@introthread.com, "Explore the live demo") runs only in the visitor's own browser.
+  - It never calls the server: `itApi` needs a cloud session.
+  - It cannot open /admin, which says "Admin needs the live database".
+  - Payments are simulated.
+- **What v60 adds:**
+  - Every demo start loads fresh data, so no visitor's edits carry over.
+  - Delete, deactivate, reactivate and change password are blocked with a message.
+  - The demo keeps the Pro plan so every feature can be tried.
+- **Rules:**
+  - Never create a real Supabase user with the demo email. Signup already refuses it.
+  - Any new account-level action must be added to the `demoGuard` list.
+
+### Live checks still needed (only a person can do these)
+- In browser devtools, check that each page's source has `<!--pre-->` text, that /app and /admin show no homepage flash, and that the console is clear at phone and laptop width. The assistant's browser tools cannot read raw source or the console.
+- Waiting on Agnes:
+  - Google, Microsoft and LinkedIn sign-in providers
+  - Resend
+  - migration 012
+  - the company's legal details for the invoice
+  - workflow permission for the GitHub connection
+
+## Earlier state: 22 Oct 2026
 **Repo docs:**
 - README.md: index of all docs
 - ARCHITECTURE-ESSENTIALS.md: one page

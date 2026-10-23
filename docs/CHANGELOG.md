@@ -3,6 +3,8 @@
 Everything built so far, newest first. Full technical detail for each item is in `HANDOVER.md`. How Rooms, events, communities and the Room pass work: `docs/ROOMS.md`.
 
 ## 23 Oct 2026
+- **v60: Demo account locked down.** Fresh demo data on every start. Delete, deactivate, reactivate and change password are blocked in the demo. The demo stays local, Pro, and has no server or admin access.
+- **v59b-v59j: Safe handlers for every admin screen.** Users, Moderation, Rooms, Revenue, Plans, Settings, Privacy, Staff and Audit now use `data-on-*` and named functions. No change in behaviour.
 - **v59a: Safe handlers, Admin Dashboard.** New `js/actions.js` runs `data-on-*` handlers without inline JavaScript. The Admin Dashboard is the first screen converted (19 handlers). No change in behaviour.
 - **v58: Website text in the page source.** The 8 website pages arrive with their text already in the HTML, so they show straight away and search engines read them without running scripts. App routes use a separate empty shell.
 - **v57: Faster loading.** All scripts are deferred, and `/js` and `/css` files are versioned and cached for a year, so repeat visits only download what changed. No change in behaviour.
