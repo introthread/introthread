@@ -251,7 +251,7 @@ function capLooksRich(s) {
 function capStrip() {
   const ct = 'contacts' in navigator && 'select' in (navigator.contacts || {});
   return `<div class="cap"><div class="cap-h"><b>${sv('spark', 15)} Capture in seconds</b><small>Paste a LinkedIn link, scan their QR or business card. We fill the form for you.</small></div>
- <div class="cap-b"><button type="button" onclick="capPaste()">${sv('link', 18)}<span>Paste link or text</span></button><button type="button" onclick="capScanQR()">${sv('qr', 18)}<span>Scan QR code</span></button><button type="button" onclick="capCard()">${sv('photo', 18)}<span>Scan business card</span></button>${ct ? `<button type="button" onclick="capContacts()">${sv('contact', 18)}<span>From contacts</span></button>` : ''}</div><div class="cap-res" id="capres" role="status" aria-live="polite" hidden></div></div>`;
+ <div class="cap-b"><button type="button" data-on-click="capPaste()">${sv('link', 18)}<span>Paste link or text</span></button><button type="button" data-on-click="capScanQR()">${sv('qr', 18)}<span>Scan QR code</span></button><button type="button" data-on-click="capCard()">${sv('photo', 18)}<span>Scan business card</span></button>${ct ? `<button type="button" data-on-click="capContacts()">${sv('contact', 18)}<span>From contacts</span></button>` : ''}</div><div class="cap-res" id="capres" role="status" aria-live="polite" hidden></div></div>`;
 }
 function capPreview(o) {
   const lab = [
@@ -269,12 +269,12 @@ function capPreview(o) {
     : '<p class="cap-empty">Paste a LinkedIn link, an email signature or contact details. We will pick out the name, email, phone, job title and company.</p>';
 }
 function capPaste(prefill, title) {
-  modal(`<div class="cap-m"><div class="row between"><h3>${title || 'Paste link or text'}</h3><button class="x" aria-label="Close" onclick="closeModal()">&times;</button></div>
- <textarea id="capt" rows="5" placeholder="linkedin.com/in/their-name\nor paste an email signature, WhatsApp contact or notes" oninput="$('#cappv').innerHTML=capPreview(parseContact(this.value))">${esc(prefill || '')}</textarea>
- <div class="cap-mb">${navigator.clipboard && navigator.clipboard.readText ? `<button type="button" class="t-how sm" onclick="navigator.clipboard.readText().then(v=>{$('#capt').value=v;$('#cappv').innerHTML=capPreview(parseContact(v))}).catch(()=>toast('Paste with your keyboard or long-press instead'))">${sv('copy', 15)} Paste from clipboard</button>` : ''}</div>
+  modal(`<div class="cap-m"><div class="row between"><h3>${title || 'Paste link or text'}</h3><button class="x" aria-label="Close" data-on-click="closeModal()">&times;</button></div>
+ <textarea id="capt" rows="5" placeholder="linkedin.com/in/their-name\nor paste an email signature, WhatsApp contact or notes" data-on-input="capPv(this.value)">${esc(prefill || '')}</textarea>
+ <div class="cap-mb">${navigator.clipboard && navigator.clipboard.readText ? `<button type="button" class="t-how sm" data-on-click="capPaste()">${sv('copy', 15)} Paste from clipboard</button>` : ''}</div>
  <div id="cappv">${capPreview(parseContact(prefill || ''))}</div>
  <p class="bl-fine">LinkedIn does not share profile details with other apps, so from a LinkedIn link we save the profile link and the name in it. Ask for their email or phone, or scan their business card.</p>
- <div class="fu-b"><button type="button" class="t-how" onclick="closeModal()">Cancel</button><button type="button" class="x-btn" onclick="const o=parseContact($('#capt').value);closeModal();capApply(o)">Fill the form</button></div></div>`);
+ <div class="fu-b"><button type="button" class="t-how" data-on-click="closeModal()">Cancel</button><button type="button" class="x-btn" data-on-click="capUse()">Fill the form</button></div></div>`);
   setTimeout(() => {
     const t = $('#capt');
     if (t && !prefill) t.focus();
@@ -294,7 +294,7 @@ function capLoad(src, check) {
 let CAPQ = null;
 async function capScanQR() {
   modal(
-    `<div class="cap-m"><div class="row between"><h3>Scan their QR code</h3><button class="x" aria-label="Close" onclick="capQRStop();closeModal()">&times;</button></div><p class="fu-sub">Point your camera at a LinkedIn QR, a contact QR or an Introthread card.</p><div class="cap-cam"><video id="capv" playsinline muted></video><span class="cap-frame"></span></div><p class="cap-st" id="capst">Starting camera...</p><div class="fu-b"><label class="t-how sm">${sv('photo', 15)} Use a photo instead<input type="file" accept="image/*" hidden onchange="capQRFile(this)"></label><button type="button" class="t-how" onclick="capQRStop();closeModal()">Cancel</button></div></div>`
+    `<div class="cap-m"><div class="row between"><h3>Scan their QR code</h3><button class="x" aria-label="Close" data-on-click="capQRStop();closeModal()">&times;</button></div><p class="fu-sub">Point your camera at a LinkedIn QR, a contact QR or an Introthread card.</p><div class="cap-cam"><video id="capv" playsinline muted></video><span class="cap-frame"></span></div><p class="cap-st" id="capst">Starting camera...</p><div class="fu-b"><label class="t-how sm">${sv('photo', 15)} Use a photo instead<input type="file" accept="image/*" hidden data-on-change="capQRFile(this)"></label><button type="button" class="t-how" data-on-click="capQRStop();closeModal()">Cancel</button></div></div>`
   );
   try {
     const st = await navigator.mediaDevices.getUserMedia({ video: { facingMode: 'environment' } });
@@ -466,7 +466,7 @@ vTap = function () {
   let h = _vTap30();
   h = h.replace(
     /<label class="x-f"><span>Email or phone <i>\*<\/i><\/span><input id="te"[^>]*><\/label>/,
-    `<label class="x-f"><span>Email</span><input id="te" type="email" inputmode="email" autocomplete="off" placeholder="name@company.com"></label><label class="x-f"><span>Phone</span><input id="tph" type="tel" inputmode="tel" autocomplete="off" placeholder="+44 7700 900123"></label><label class="x-f t-li"><span>LinkedIn <em>(paste their profile link)</em></span><input id="tln" inputmode="url" autocomplete="off" placeholder="linkedin.com/in/their-name" onchange="const o=liFromUrl(this.value);if(o){this.value=o.url;if(o.name&&!$('#tn').value)capApply({name:o.name,source:'LinkedIn link'})}"></label>`
+    `<label class="x-f"><span>Email</span><input id="te" type="email" inputmode="email" autocomplete="off" placeholder="name@company.com"></label><label class="x-f"><span>Phone</span><input id="tph" type="tel" inputmode="tel" autocomplete="off" placeholder="+44 7700 900123"></label><label class="x-f t-li"><span>LinkedIn <em>(paste their profile link)</em></span><input id="tln" inputmode="url" autocomplete="off" placeholder="linkedin.com/in/their-name" data-on-change="capLiChange(this)"></label>`
   );
   h = h.replace(
     /<label class="x-f"><span>LinkedIn <em>\(optional\)<\/em><\/span><input id="tli"[^>]*><\/label>/,
@@ -687,7 +687,7 @@ vPublic = function (hd) {
     `<label class="pc-in">${sv(ic, 18)}<input id="${id}" placeholder="${ph}" ${o}></label>`;
   h = h.replace(
     /(<label class="pc-in">[\s\S]{0,400}?id="gc"[^>]*><\/label>)/,
-    `$1${fi('gph', 'phone', 'Phone (optional)', 'type="tel" inputmode="tel" autocomplete="tel" maxlength="30" aria-label="Phone"')}${fi('gln', 'li', 'LinkedIn profile link (optional)', 'inputmode="url" autocomplete="url" maxlength="200" aria-label="LinkedIn profile link" onchange="const o=liFromUrl(this.value);if(o)this.value=o.url"')}`
+    `$1${fi('gph', 'phone', 'Phone (optional)', 'type="tel" inputmode="tel" autocomplete="tel" maxlength="30" aria-label="Phone"')}${fi('gln', 'li', 'LinkedIn profile link (optional)', 'inputmode="url" autocomplete="url" maxlength="200" aria-label="LinkedIn profile link" data-on-change="capLiNorm(this)"')}`
   );
   return h.replace(
     '<form class="pc-form"',
@@ -748,7 +748,7 @@ vSignup = function () {
   if (!(SU && SU.step === 2)) return h;
   return h.replace(
     '<div class="x-s2" style="margin-top:30px">',
-    `<div class="su-q"><b>${sv('spark', 15)} Fill this in seconds</b><small>Paste your LinkedIn profile link or your email signature.</small><div class="su-qr"><textarea id="suq" rows="2" placeholder="linkedin.com/in/your-name or your email signature" onpaste="setTimeout(suQuickFill,0)"></textarea><button type="button" class="x-btn" onclick="suQuickFill()">Fill</button></div><p id="suqr" role="status" aria-live="polite"></p></div><div class="x-s2" style="margin-top:22px">`
+    `<div class="su-q"><b>${sv('spark', 15)} Fill this in seconds</b><small>Paste your LinkedIn profile link or your email signature.</small><div class="su-qr"><textarea id="suq" rows="2" placeholder="linkedin.com/in/your-name or your email signature" data-on-paste="suQuickPaste()"></textarea><button type="button" class="x-btn" data-on-click="suQuickFill()">Fill</button></div><p id="suqr" role="status" aria-live="polite"></p></div><div class="x-s2" style="margin-top:22px">`
   );
 };
 /* save the LinkedIn link from sign-up onto the new profile */
@@ -787,7 +787,7 @@ function capAsk() {
   d.id = 'capask';
   d.setAttribute('role', 'group');
   d.setAttribute('aria-label', 'Add their email or phone');
-  d.innerHTML = `<b>Ask for their email or phone now</b><small>LinkedIn codes don't include contact details. Add one so your follow-up reaches them.</small><div class="cap-ask-f"><input id="capae" type="email" inputmode="email" autocomplete="off" autocapitalize="off" placeholder="Email" aria-label="Their email" oninput="capAskSync()"><input id="capap" type="tel" inputmode="tel" autocomplete="off" placeholder="Phone" aria-label="Their phone" oninput="capAskSync()" onblur="capAskSync(1)"></div><div class="cap-ask-s" id="capasks" role="status" aria-live="polite"></div><button type="button" class="cap-ask-x" onclick="capAskClose()">Skip for now</button>`;
+  d.innerHTML = `<b>Ask for their email or phone now</b><small>LinkedIn codes don't include contact details. Add one so your follow-up reaches them.</small><div class="cap-ask-f"><input id="capae" type="email" inputmode="email" autocomplete="off" autocapitalize="off" placeholder="Email" aria-label="Their email" data-on-input="capAskSync()"><input id="capap" type="tel" inputmode="tel" autocomplete="off" placeholder="Phone" aria-label="Their phone" data-on-input="capAskSync()" data-on-blur="capAskSync(1)"></div><div class="cap-ask-s" id="capasks" role="status" aria-live="polite"></div><button type="button" class="cap-ask-x" data-on-click="capAskClose()">Skip for now</button>`;
   r.appendChild(d);
   setTimeout(() => {
     const e = $('#capae');
@@ -1415,8 +1415,8 @@ function capMoreHTML() {
 capStrip = function () {
   const ct = 'contacts' in navigator && 'select' in (navigator.contacts || {});
   return `<div class="cap cap2"><div class="cap2-h"><span class="cap2-badge">${sv('spark', 14)}</span><div><b>Capture in seconds</b><small>Scan or paste. We fill the form for you.</small></div></div>
- <button type="button" class="cap2-hero" onclick="capCard()"><span class="cap2-hi">${sv('photo', 22)}</span><span class="cap2-ht"><b>Scan a business card</b><small>Name, job title, company, phones, email, website and address</small></span><span class="cap2-ch">${sv('chev', 18)}</span></button>
- <div class="cap2-row"><button type="button" onclick="capScanQR()"><span>${sv('qr', 20)}</span>Scan QR</button><button type="button" onclick="capPaste()"><span>${sv('link', 20)}</span>Paste link</button><button type="button" onclick="${ct ? 'capContacts()' : 'capContactsHelp()'}"><span>${sv('contact', 20)}</span>Contacts</button></div>
+ <button type="button" class="cap2-hero" data-on-click="capCard()"><span class="cap2-hi">${sv('photo', 22)}</span><span class="cap2-ht"><b>Scan a business card</b><small>Name, job title, company, phones, email, website and address</small></span><span class="cap2-ch">${sv('chev', 18)}</span></button>
+ <div class="cap2-row"><button type="button" data-on-click="capScanQR()"><span>${sv('qr', 20)}</span>Scan QR</button><button type="button" data-on-click="capPaste()"><span>${sv('link', 20)}</span>Paste link</button><button type="button" data-on-click="${ct ? 'capContacts()' : 'capContactsHelp()'}"><span>${sv('contact', 20)}</span>Contacts</button></div>
  <div class="cap-res" id="capres" role="status" aria-live="polite" hidden></div></div>`;
 };
 const _vTap31 = vTap;
@@ -1453,11 +1453,11 @@ async function capWorker() {
 }
 capCard = function (side) {
   const back = side === 'back';
-  modal(`<div class="cap-m cc"><div class="row between"><h3>${back ? 'Scan the back of the card' : 'Scan a business card'}</h3><button class="x" aria-label="Close" onclick="closeModal()">&times;</button></div>
+  modal(`<div class="cap-m cc"><div class="row between"><h3>${back ? 'Scan the back of the card' : 'Scan a business card'}</h3><button class="x" aria-label="Close" data-on-click="closeModal()">&times;</button></div>
  <div class="cc-ill" aria-hidden="true"><div class="cc-card"><i></i><b></b><b></b><b></b><s></s></div><span class="cc-c tl"></span><span class="cc-c tr"></span><span class="cc-c bl"></span><span class="cc-c br"></span></div>
  <ul class="cc-tips"><li>${sv('check', 14, 'currentColor', 2.4)}Lay the card flat in good light</li><li>${sv('check', 14, 'currentColor', 2.4)}Fill most of the photo with the card</li><li>${sv('check', 14, 'currentColor', 2.4)}Hold steady so the text is sharp</li></ul>
- <label class="cap-btn">${sv('photo', 18)} Take a photo<input type="file" accept="image/*" capture="environment" hidden onchange="capCardRun(this.files&&this.files[0],${back})"></label>
- <label class="cap-btn2">${sv('grid', 16)} Choose from gallery<input type="file" accept="image/*" hidden onchange="capCardRun(this.files&&this.files[0],${back})"></label>
+ <label class="cap-btn">${sv('photo', 18)} Take a photo<input type="file" accept="image/*" capture="environment" hidden data-on-change="capCardFile(this,${back})"></label>
+ <label class="cap-btn2">${sv('grid', 16)} Choose from gallery<input type="file" accept="image/*" hidden data-on-change="capCardFile(this,${back})"></label>
  <p class="cc-pv">${sv('lock', 13)} Read on your device. The photo is not uploaded or kept.</p></div>`);
   capWorker().catch(() => {});
 };
@@ -1607,7 +1607,7 @@ async function capCardRun(f, back) {
 }
 function capCardFail(url) {
   modal(
-    `<div class="cap-m cc"><div class="row between"><h3>We could not read that photo</h3><button class="x" aria-label="Close" onclick="closeModal()">&times;</button></div><div class="cc-scan off"><img src="${url}" alt=""></div><p class="fu-sub">Try again closer, with more light and the card filling the photo. Glossy cards read best without a flash.</p><div class="cc-b"><button type="button" class="cap-btn" onclick="capCard()">${sv('photo', 18)} Try again</button><button type="button" class="cap-btn2" onclick="closeModal();capPaste()">Type or paste instead</button></div></div>`
+    `<div class="cap-m cc"><div class="row between"><h3>We could not read that photo</h3><button class="x" aria-label="Close" data-on-click="closeModal()">&times;</button></div><div class="cc-scan off"><img src="${url}" alt=""></div><p class="fu-sub">Try again closer, with more light and the card filling the photo. Glossy cards read best without a flash.</p><div class="cc-b"><button type="button" class="cap-btn" data-on-click="capCard()">${sv('photo', 18)} Try again</button><button type="button" class="cap-btn2" data-on-click="closeModal();capPaste()">Type or paste instead</button></div></div>`
   );
 }
 const CR_F = [
@@ -1634,10 +1634,10 @@ function capReview() {
     `<label class="cr-r${o[k] ? '' : ' empty'}"><span class="cr-l">${sv(ic, 15)}${l}</span><input id="cr_${k}" type="${t === 'email' ? 'email' : t === 'tel' ? 'tel' : 'text'}" ${t === 'email' ? 'inputmode="email" autocapitalize="off"' : t === 'tel' ? 'inputmode="tel"' : t === 'url' ? 'inputmode="url" autocapitalize="off"' : ''} value="${esc(o[k] || '')}" placeholder="${o[k] ? '' : 'Not found - add it'}" autocomplete="off"></label>`;
   const shown = CR_F.filter(([k]) => main.includes(k) || o[k]),
     hidden = CR_F.filter(([k]) => !main.includes(k) && !o[k]);
-  modal(`<div class="cap-m cr"><div class="cr-top"><div class="cr-imgs"><img src="${C.img}" alt="Front of card">${C.back ? `<img src="${C.back}" alt="Back of card">` : ''}</div><div class="cr-tt"><h3>Check the details</h3><p>${found} detail${found === 1 ? '' : 's'} found. Tap any field to fix it.</p></div><button class="x" aria-label="Close" onclick="closeModal()">&times;</button></div>
+  modal(`<div class="cap-m cr"><div class="cr-top"><div class="cr-imgs"><img src="${C.img}" alt="Front of card">${C.back ? `<img src="${C.back}" alt="Back of card">` : ''}</div><div class="cr-tt"><h3>Check the details</h3><p>${found} detail${found === 1 ? '' : 's'} found. Tap any field to fix it.</p></div><button class="x" aria-label="Close" data-on-click="closeModal()">&times;</button></div>
  <div class="cr-f">${shown.map(row).join('')}${hidden.length ? `<details class="cr-more"><summary>${sv('plus', 14)} Add more fields</summary>${hidden.map(row).join('')}</details>` : ''}</div>
  <details class="cr-raw"><summary>Show the text we read</summary><pre>${esc(C.raw)}</pre></details>
- <div class="cr-b"><button type="button" class="cap-btn" onclick="capReviewUse()">${sv('check', 16, 'currentColor', 2.4)} Use these details</button><div class="cr-b2">${C.back ? '' : `<button type="button" class="cap-btn2" onclick="capReviewKeep();capCard('back')">${sv('card', 16)} Add the back</button>`}<button type="button" class="cap-btn2" onclick="CAPCARD=null;capCard()">${sv('photo', 16)} Retake</button></div></div></div>`);
+ <div class="cr-b"><button type="button" class="cap-btn" data-on-click="capReviewUse()">${sv('check', 16, 'currentColor', 2.4)} Use these details</button><div class="cr-b2">${C.back ? '' : `<button type="button" class="cap-btn2" data-on-click="capReviewKeep();capCard('back')">${sv('card', 16)} Add the back</button>`}<button type="button" class="cap-btn2" data-on-click="capCardReset()">${sv('photo', 16)} Retake</button></div></div></div>`);
 }
 function capReviewKeep() {
   if (!CAPCARD) return;
@@ -1697,11 +1697,11 @@ capContacts = async function () {
 };
 function capContactsHelp() {
   const ios = /iPhone|iPad|iPod/.test(navigator.userAgent);
-  modal(`<div class="cap-m cc"><div class="row between"><h3>Add from your contacts</h3><button class="x" aria-label="Close" onclick="closeModal()">&times;</button></div>
+  modal(`<div class="cap-m cc"><div class="row between"><h3>Add from your contacts</h3><button class="x" aria-label="Close" data-on-click="closeModal()">&times;</button></div>
  <p class="fu-sub">${ios ? 'Safari does not let websites open your contacts directly, so share the contact card here instead. It takes a few seconds.' : 'This browser does not let websites open your contacts directly. Share the contact card here instead.'}</p>
  <ol class="cc-how"><li>Open the person in your <b>Contacts</b> app</li><li>Tap <b>Share contact</b>${ios ? ' and choose <b>Save to Files</b>' : ' and save the .vcf file'}</li><li>Come back and tap the button below</li></ol>
- <label class="cap-btn">${sv('contact', 18)} Choose a contact card (.vcf)<input type="file" accept=".vcf,text/vcard,text/x-vcard,text/directory" hidden onchange="capVcfFile(this)"></label>
- <button type="button" class="cap-btn2" onclick="closeModal();capPaste()">Paste their details instead</button>${ios ? `<p class="cc-pv">Tip: on iPhone you can also turn on Contact Picker in Settings, Apps, Safari, Advanced, Feature Flags.</p>` : ''}</div>`);
+ <label class="cap-btn">${sv('contact', 18)} Choose a contact card (.vcf)<input type="file" accept=".vcf,text/vcard,text/x-vcard,text/directory" hidden data-on-change="capVcfFile(this)"></label>
+ <button type="button" class="cap-btn2" data-on-click="closeModal();capPaste()">Paste their details instead</button>${ios ? `<p class="cc-pv">Tip: on iPhone you can also turn on Contact Picker in Settings, Apps, Safari, Advanced, Feature Flags.</p>` : ''}</div>`);
 }
 function capVcfFile(inp) {
   const f = inp.files && inp.files[0];
@@ -1863,3 +1863,42 @@ tdEditSave = async function (e, id) {
   }
   return r;
 };
+
+/* v62: named handlers for capture (paste a contact, LinkedIn links, card scan) - no inline JavaScript. */
+function capPv(v) {
+  $('#cappv').innerHTML = capPreview(parseContact(v));
+}
+function capPaste() {
+  navigator.clipboard
+    .readText()
+    .then(v => {
+      $('#capt').value = v;
+      capPv(v);
+    })
+    .catch(() => toast('Paste with your keyboard or long-press instead'));
+}
+function capUse() {
+  const o = parseContact($('#capt').value);
+  closeModal();
+  capApply(o);
+}
+function capLiChange(el) {
+  const o = liFromUrl(el.value);
+  if (!o) return;
+  el.value = o.url;
+  if (o.name && !$('#tn').value) capApply({ name: o.name, source: 'LinkedIn link' });
+}
+function capLiNorm(el) {
+  const o = liFromUrl(el.value);
+  if (o) el.value = o.url;
+}
+function suQuickPaste() {
+  setTimeout(suQuickFill, 0);
+}
+function capCardFile(el, back) {
+  capCardRun(el.files && el.files[0], back);
+}
+function capCardReset() {
+  CAPCARD = null;
+  capCard();
+}
