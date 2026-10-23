@@ -50,7 +50,7 @@ function bExportVcf() {
 }
 function bExportMenu() {
   modal(
-    `<div class="bl-co"><div class="row between"><h3>Export your contacts</h3><button class="x" aria-label="Close" onclick="closeModal()">&times;</button></div><p class="fu-sub">Free on every plan. Your data is always yours.</p><div class="bl-exp"><button type="button" onclick="closeModal();bExportVcf()"><span>${sv('user', 20)}</span><div><b>Contacts file (vCard)</b><small>Import into Gmail, Outlook, iPhone or Android contacts.</small></div>${sv('chev', 16)}</button><button type="button" onclick="closeModal();bExportThreads()"><span>${sv('brief', 20)}</span><div><b>Spreadsheet (CSV)</b><small>Every Thread with status, answers, topics and notes.</small></div>${sv('chev', 16)}</button><button type="button" onclick="closeModal();exportMine()"><span>${sv('shield', 20)}</span><div><b>Everything (JSON)</b><small>Your profile, Threads and Rooms in one file.</small></div>${sv('chev', 16)}</button></div></div>`
+    `<div class="bl-co"><div class="row between"><h3>Export your contacts</h3><button class="x" aria-label="Close" data-on-click="closeModal()">&times;</button></div><p class="fu-sub">Free on every plan. Your data is always yours.</p><div class="bl-exp"><button type="button" data-on-click="closeModal();bExportVcf()"><span>${sv('user', 20)}</span><div><b>Contacts file (vCard)</b><small>Import into Gmail, Outlook, iPhone or Android contacts.</small></div>${sv('chev', 16)}</button><button type="button" data-on-click="closeModal();bExportThreads()"><span>${sv('brief', 20)}</span><div><b>Spreadsheet (CSV)</b><small>Every Thread with status, answers, topics and notes.</small></div>${sv('chev', 16)}</button><button type="button" data-on-click="closeModal();exportMine()"><span>${sv('shield', 20)}</span><div><b>Everything (JSON)</b><small>Your profile, Threads and Rooms in one file.</small></div>${sv('chev', 16)}</button></div></div>`
   );
 }
 const _vThreads23 = vThreads;
@@ -64,7 +64,7 @@ const _bPrivacy23 = bPrivacy;
 bPrivacy = function (u) {
   return _bPrivacy23(u).replace(
     '<div class="bl-data"><div><b>Delete your account</b>',
-    `<div class="bl-data"><div><b>Export contacts (vCard)</b><small>Import into Gmail, Outlook or your phone.</small></div><button type="button" class="t-how sm" onclick="bExportVcf()">Download vCard</button></div><div class="bl-data"><div><b>Delete your account</b>`
+    `<div class="bl-data"><div><b>Export contacts (vCard)</b><small>Import into Gmail, Outlook or your phone.</small></div><button type="button" class="t-how sm" data-on-click="bExportVcf()">Download vCard</button></div><div class="bl-data"><div><b>Delete your account</b>`
   );
 };
 HELP.splice(
