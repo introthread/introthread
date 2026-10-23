@@ -700,7 +700,7 @@ function vRoom(id) {
   const by = k => s.T.filter(t => t.mine === k || t.theirs === k).length;
   return shell(
     'rooms',
-    `<a href="#/app/rooms" class="small muted" style="font-weight:800">&larr; Rooms</a><div class="ph" style="margin-top:14px"><div><div class="eyebrow">Resolution Report &middot; ${esc(r.code)}</div><h1>${esc(r.name)}</h1><p>${fmtDate(r.date)}${r.location ? ' &middot; ' + esc(r.location) : ''}</p></div><div class="row"><button class="btn secondary" onclick="exportRoom('${r.id}')">${ic('chart', 16)} Export CSV</button><button class="btn primary" onclick="simTap('${r.id}')">${ic('tap', 16)} Simulate a tap</button></div></div>
+    `<a href="#/app/rooms" class="small muted" style="font-weight:800">&larr; Rooms</a><div class="ph" style="margin-top:14px"><div><div class="eyebrow">Resolution Report &middot; ${esc(r.code)}</div><h1>${esc(r.name)}</h1><p>${fmtDate(r.date)}${r.location ? ' &middot; ' + esc(r.location) : ''}</p></div><div class="row"><button class="btn secondary" data-on-click="exportRoom('${r.id}')">${ic('chart', 16)} Export CSV</button><button class="btn primary" data-on-click="simTap('${r.id}')">${ic('tap', 16)} Simulate a tap</button></div></div>
  <div class="grid g4">${[
    ['Threads', s.T.length],
    ['Verified by both', s.v],
@@ -722,7 +722,7 @@ function vRoom(id) {
    s.T.sort((a, b) => b.createdAt - a.createdAt)
      .map(
        t =>
-         `<div class="tl" onclick="go('#/app/thread/${t.id}')" style="cursor:pointer">${av(t.other.name, 'sm')}<div class="meta"><b>${esc(t.other.name)}</b><span>${esc(t.other.role)}, ${esc(t.other.company)} &middot; ${ago(t.createdAt)}</span></div>${stateChip(t)}</div>`
+         `<div class="tl" data-on-click="go('#/app/thread/${t.id}')" style="cursor:pointer">${av(t.other.name, 'sm')}<div class="meta"><b>${esc(t.other.name)}</b><span>${esc(t.other.role)}, ${esc(t.other.company)} &middot; ${ago(t.createdAt)}</span></div>${stateChip(t)}</div>`
      )
      .join('') || '<div class="empty">No taps yet.</div>'
  }</div></div></div>`
@@ -3605,7 +3605,7 @@ const RIMG = ['uc-conferences', 'uc-communities', 'uc-teams', 'uc-professionals'
 function rMenu(id) {
   const r = DB.rooms.find(x => x.id === id);
   modal(
-    `<div><h2 style="margin:0 0 4px;font-size:20px">${esc(r.name)}</h2><p class="muted" style="margin:0 0 14px">Room code ${esc(r.code)}</p><div class="t-more"><a href="/app/room/${r.id}" onclick="closeModal()">${sv('eye', 18)} Open Room</a><button onclick="copy('https://introthread.com/r/${esc(r.code)}','Room link copied');closeModal()">${sv('link', 18)} Copy Room link</button><button onclick="exportRoom('${r.id}');closeModal()">${sv('arrow', 18)} Export report (CSV)</button></div></div>`
+    `<div><h2 style="margin:0 0 4px;font-size:20px">${esc(r.name)}</h2><p class="muted" style="margin:0 0 14px">Room code ${esc(r.code)}</p><div class="t-more"><a href="/app/room/${r.id}" data-on-click="closeModal()">${sv('eye', 18)} Open Room</a><button data-on-click="copy('https://introthread.com/r/${esc(r.code)}','Room link copied');closeModal()">${sv('link', 18)} Copy Room link</button><button data-on-click="exportRoom('${r.id}');closeModal()">${sv('arrow', 18)} Export report (CSV)</button></div></div>`
   );
 }
 
@@ -4321,14 +4321,14 @@ function rCal(all) {
     if (i === 35 && out) break;
     cells += `<button type="button" class="${out ? 'out' : ''} ${k === today ? 'today' : ''} ${RDAY === k ? 'sel' : ''} ${ev.length ? 'has' : ''}" ${ev.length ? `onclick="RDAY=RDAY==='${k}'?'':'${k}';RLIM9=6;window._keepScroll=true;render()" aria-label="${d.toLocaleDateString('en-GB', { day: 'numeric', month: 'long' })}: ${ev.length} Room${ev.length > 1 ? 's' : ''}" title="${esc(ev.map(r => r.name).join(', '))}"` : 'tabindex="-1" aria-hidden="true"'}>${d.getDate()}${ev.length ? '<i></i>' : ''}</button>`;
   }
-  return `<div class="ro-cal"><div class="ro-calh"><b>${first.toLocaleDateString('en-GB', { month: 'long', year: 'numeric' })}</b><span><button type="button" aria-label="Previous month" onclick="rCalNav(-1)">${sv('chev', 16)}</button><button type="button" aria-label="Next month" onclick="rCalNav(1)">${sv('chev', 16)}</button></span></div><div class="ro-dow">${['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'].map(x => `<span>${x}</span>`).join('')}</div><div class="ro-days">${cells}</div></div>`;
+  return `<div class="ro-cal"><div class="ro-calh"><b>${first.toLocaleDateString('en-GB', { month: 'long', year: 'numeric' })}</b><span><button type="button" aria-label="Previous month" data-on-click="rCalNav(-1)">${sv('chev', 16)}</button><button type="button" aria-label="Next month" data-on-click="rCalNav(1)">${sv('chev', 16)}</button></span></div><div class="ro-dow">${['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'].map(x => `<span>${x}</span>`).join('')}</div><div class="ro-days">${cells}</div></div>`;
 }
 function rFilter() {
   const tp = [...new Set(DB.rooms.flatMap(r => rm9(r).topics || []))];
   const opt = (id, cur, arr) =>
     `<select id="${id}" class="th-sort" style="width:100%">${arr.map(([v, l]) => `<option value="${v}" ${cur === v ? 'selected' : ''}>${l}</option>`).join('')}</select>`;
   modal(
-    `<div><div class="row between"><h3 style="margin:0;font:600 19px var(--xss)">Filter Rooms</h3><button class="x" aria-label="Close" onclick="closeModal()">&times;</button></div><div class="ro-fg"><label class="x-f"><span>Format</span>${opt(
+    `<div><div class="row between"><h3 style="margin:0;font:600 19px var(--xss)">Filter Rooms</h3><button class="x" aria-label="Close" data-on-click="closeModal()">&times;</button></div><div class="ro-fg"><label class="x-f"><span>Format</span>${opt(
       'rff',
       RFF.fmt,
       [
@@ -4341,7 +4341,7 @@ function rFilter() {
       ['', 'Public and private'],
       ['public', 'Public'],
       ['private', 'Private (invite only)']
-    ])}</label><label class="x-f"><span>Topic</span>${opt('rft', RFF.topic, [['', 'Any topic'], ...tp.map(x => [x, x])])}</label></div><div class="fu-b"><button type="button" class="t-how" onclick="RFF={fmt:'',priv:'',topic:''};closeModal();render()">Clear</button><button type="button" class="x-btn" onclick="RFF={fmt:$('#rff').value,priv:$('#rfp').value,topic:$('#rft').value};RLIM9=6;closeModal();render()">Apply</button></div></div>`
+    ])}</label><label class="x-f"><span>Topic</span>${opt('rft', RFF.topic, [['', 'Any topic'], ...tp.map(x => [x, x])])}</label></div><div class="fu-b"><button type="button" class="t-how" data-on-click="rFiltClear()">Clear</button><button type="button" class="x-btn" data-on-click="rFiltApply()">Apply</button></div></div>`
   );
 }
 function newRoomModal() {
@@ -4361,7 +4361,7 @@ function newRoomModal() {
       'Asia/Singapore'
     ])
   ];
-  modal(`<form class="ro-new" onsubmit="return newRoom9(event)"><div class="row between"><div><h3>Create a Room</h3><p>Every tap inside your Room becomes a Thread.</p></div><button type="button" class="x" aria-label="Close" onclick="closeModal()">&times;</button></div>
+  modal(`<form class="ro-new" data-on-submit="return newRoom9(event)"><div class="row between"><div><h3>Create a Room</h3><p>Every tap inside your Room becomes a Thread.</p></div><button type="button" class="x" aria-label="Close" data-on-click="closeModal()">&times;</button></div>
  <label class="x-f"><span>Room name <i>*</i></span><input id="rn" required maxlength="80" placeholder="e.g. London Tech Week Founders Night"></label>
  <div class="ro-g3"><label class="x-f"><span>Date <i>*</i></span><input id="rd" type="date" required value="${ymdL(new Date())}"></label><label class="x-f"><span>Starts</span><input id="rs" type="time" value="18:00"></label><label class="x-f"><span>Ends</span><input id="re" type="time" value="20:00"></label></div>
  <label class="x-f"><span>Time zone</span><select id="rz" class="th-sort" style="width:100%">${tzs.map(z => `<option value="${z}" ${z === tz ? 'selected' : ''}>${z.replace(/_/g, ' ')} (${rTzAbbr(z, ymdL(new Date()))})</option>`).join('')}</select></label>
@@ -4372,14 +4372,14 @@ function newRoomModal() {
  ]
    .map(
      ([k, l], i) =>
-       `<button type="button" data-f="${k}" class="${i ? '' : 'on'}" onclick="document.querySelectorAll('.ro-seg button').forEach(b=>b.classList.toggle('on',b===this));$('#rvw').hidden=this.dataset.f==='online';$('#rlw').hidden=this.dataset.f==='inperson'">${l}</button>`
+       `<button type="button" data-f="${k}" class="${i ? '' : 'on'}" data-on-click="roSeg(this)">${l}</button>`
    )
    .join('')}</div></div>
  <label class="x-f" id="rvw"><span>Venue</span><input id="rl" maxlength="120" placeholder="Venue, area, city"></label>
  <div class="ro-g2" id="rlw" hidden><label class="x-f"><span>Platform</span><input id="rp" maxlength="30" placeholder="Zoom, Google Meet, Teams"></label><label class="x-f"><span>Meeting link</span><input id="ru" type="url" maxlength="300" placeholder="https://"></label></div>
- <div class="ro-g2"><label class="x-f"><span>Type</span><select id="rk" class="th-sort" style="width:100%" onchange="$('#rrw').hidden=this.value==='event'"><option value="event">Event</option><option value="community">Community</option><option value="meeting">Team meeting</option></select></label><label class="x-f" id="rrw" hidden><span>Repeats</span><select id="rr" class="th-sort" style="width:100%"><option value="">Does not repeat</option><option value="weekly">Every week</option><option value="biweekly">Every 2 weeks</option><option value="monthly">Every month</option></select></label></div>
+ <div class="ro-g2"><label class="x-f"><span>Type</span><select id="rk" class="th-sort" style="width:100%" data-on-change="roType(this.value)"><option value="event">Event</option><option value="community">Community</option><option value="meeting">Team meeting</option></select></label><label class="x-f" id="rrw" hidden><span>Repeats</span><select id="rr" class="th-sort" style="width:100%"><option value="">Does not repeat</option><option value="weekly">Every week</option><option value="biweekly">Every 2 weeks</option><option value="monthly">Every month</option></select></label></div>
  <div class="ro-g2"><label class="x-f"><span>Access</span><select id="rv" class="th-sort" style="width:100%"><option value="public">Public: anyone with the link</option><option value="private">Private: invite only</option></select></label><label class="x-f"><span>Attendance limit <em>(optional)</em></span><input id="rc" type="number" min="2" max="1000" placeholder="Up to 1,000"></label></div>
- <div class="x-f"><span>Topics <em>(optional, up to 3)</em></span><div class="tp-wrap">${TOPICS.map(x => `<button type="button" class="tp" aria-pressed="false" data-v="${esc(x)}" onclick="const on=!this.classList.contains('on');if(on&&document.querySelectorAll('.ro-new .tp.on').length>=3)return toast('Pick up to 3 topics');this.classList.toggle('on',on);this.setAttribute('aria-pressed',on)">${esc(x)}</button>`).join('')}</div></div>
+ <div class="x-f"><span>Topics <em>(optional, up to 3)</em></span><div class="tp-wrap">${TOPICS.map(x => `<button type="button" class="tp" aria-pressed="false" data-v="${esc(x)}" data-on-click="roTopic(this)">${esc(x)}</button>`).join('')}</div></div>
  <label class="x-f"><span>Description <em>(optional)</em></span><textarea id="rx" rows="2" maxlength="280" placeholder="Who is it for and what will happen?"></textarea></label>
  <button class="t-start" style="height:50px">${sv('cal', 18)} Create Room</button></form>`);
 }
@@ -4535,21 +4535,21 @@ function vRooms() {
           .join('')}</span>`
       : ''
   }
-  <div class="ro-ca"><a href="/app/room/${r.id}" class="d-act">Open room</a><button type="button" class="d-dots ro-dots" aria-label="More options for ${esc(r.name)}" onclick="rMenu('${r.id}')">&bull;&bull;&bull;</button></div></div></article>`;
+  <div class="ro-ca"><a href="/app/room/${r.id}" class="d-act">Open room</a><button type="button" class="d-dots ro-dots" aria-label="More options for ${esc(r.name)}" data-on-click="rMenu('${r.id}')">&bull;&bull;&bull;</button></div></div></article>`;
   };
   const ico = ['users', 'spark', 'chart', 'brief'],
     cls = ['b', 'o', 'g', 'v'];
   return shell(
     'rooms',
-    `<div class="t-head"><div><div class="t-eye">Rooms</div><h1 class="t-h1">Events and communities</h1><p class="t-sub">Create Rooms for your events, communities and meetups. Every tap in a Room becomes a Thread.</p></div><button type="button" class="x-btn lg th-new" onclick="newRoomModal()"><span aria-hidden="true">+</span> Create a Room</button></div>
+    `<div class="t-head"><div><div class="t-eye">Rooms</div><h1 class="t-h1">Events and communities</h1><p class="t-sub">Create Rooms for your events, communities and meetups. Every tap in a Room becomes a Thread.</p></div><button type="button" class="x-btn lg th-new" data-on-click="newRoomModal()"><span aria-hidden="true">+</span> Create a Room</button></div>
  <div class="d7-top ro-grid"><div class="ro-main">
- <section class="ro-hero"><div class="ro-hc"><h2>Turn events into opportunities</h2><p>Host or join events, communities and private networks. Meet people, share your card and build meaningful relationships.</p><div class="ro-hb"><button type="button" class="x-btn lg" onclick="newRoomModal()">Create a Room</button><a href="/rooms" class="ro-learn"><span>${sv('play', 10)}</span>Learn more</a></div></div>
+ <section class="ro-hero"><div class="ro-hc"><h2>Turn events into opportunities</h2><p>Host or join events, communities and private networks. Meet people, share your card and build meaningful relationships.</p><div class="ro-hb"><button type="button" class="x-btn lg" data-on-click="newRoomModal()">Create a Room</button><a href="/rooms" class="ro-learn"><span>${sv('play', 10)}</span>Learn more</a></div></div>
  <div class="ro-hs"><span>${sv('cal', 26)}<b>${fmtN(all.length)}</b><small>Events hosted</small></span><span>${sv('user', 26)}<b>${fmtN(conn)}</b><small>Connections</small></span><span>${sv('users', 26)}<b>${fmtN(comms.length)}</b><small>Communities</small></span></div></section>
- <div class="ro-bar"><nav class="ro-tabs" aria-label="Room filter">${tabs.map(([k, l, c]) => `<button type="button" class="${RF9 === k ? 'on' : ''}" aria-pressed="${RF9 === k}" onclick="RF9='${k}';RLIM9=6;window._keepScroll=true;render()">${l} (${c})</button>`).join('')}</nav>
- <label class="ro-s">${sv('search', 16)}<input placeholder="Search rooms, events..." value="${esc(RQ9)}" aria-label="Search rooms" oninput="RQ9=this.value;clearTimeout(window._rq9);window._rq9=setTimeout(()=>{window._keepScroll=true;render();const i=document.querySelector('.ro-s input');if(i){i.focus();i.setSelectionRange(i.value.length,i.value.length)}},250)"></label><button type="button" class="th-filter ${nf ? 'on' : ''}" onclick="rFilter()">${sv('grid', 16)} Filter${nf ? ` <i>${nf}</i>` : ''}</button></div>
- ${RDAY ? `<div class="th-q">Showing Rooms on ${new Date(RDAY + 'T12:00:00Z').toLocaleDateString('en-GB', { day: 'numeric', month: 'long', timeZone: 'UTC' })} <button type="button" onclick="RDAY='';render()">Show all dates</button></div>` : ''}
- <div class="ro-sh"><div><h3>${RF9 === 'past' ? 'Past rooms' : RF9 === 'upcoming' ? 'Upcoming rooms' : RF9 === 'invites' ? 'Invites' : RF9 === 'mine' ? 'Rooms you host' : 'Featured rooms'}</h3><p>${RF9 === 'invites' ? 'Private Rooms you have been invited to.' : RF9 === 'past' ? 'See which connections from past events went somewhere.' : 'Your events and communities, happening now and soon.'}</p></div>${R.length > RLIM9 ? `<button type="button" class="ro-va" onclick="RLIM9=999;window._keepScroll=true;render()">View all ${sv('arrow', 15)}</button>` : ''}</div>
- ${R.length ? `<div class="ro-cards">${R.slice(0, RLIM9).map(card).join('')}${RF9 !== 'past' && RF9 !== 'invites' && !q && !RDAY ? [...Array(Math.max(0, 3 - Math.min(R.length, RLIM9)))].map((_, i) => `<button type="button" class="ro-ph" onclick="newRoomModal()"><span>${sv(['cal', 'users', 'globe'][i % 3], 24)}</span><b>${['Host your next event', 'Start a community meetup', 'Run an online session'][i % 3]}</b><small>${['Create a Room and every tap becomes a Thread.', 'Bring your network together around one topic.', 'Add a Zoom, Meet or Teams link and track who connects.'][i % 3]}</small><em>${sv('arrow', 14)} Create a Room</em></button>`).join('') : ''}</div>` : `<div class="d-empty">${sv(RF9 === 'invites' ? 'mail' : 'cal', 22)}<div><b>${RF9 === 'invites' ? 'No invites yet' : all.length ? 'No Rooms match' : 'No Rooms yet'}</b><small>${RF9 === 'invites' ? 'When someone invites you to a private Room, it will appear here.' : all.length ? 'Try another tab, date or filter.' : 'Create a Room for your next event. Every tap inside it becomes a Thread.'}</small></div>${RF9 === 'invites' ? '' : `<button type="button" class="x-btn sm" onclick="newRoomModal()">Create a Room</button>`}</div>`}
+ <div class="ro-bar"><nav class="ro-tabs" aria-label="Room filter">${tabs.map(([k, l, c]) => `<button type="button" class="${RF9 === k ? 'on' : ''}" aria-pressed="${RF9 === k}" data-on-click="roTab('${k}')">${l} (${c})</button>`).join('')}</nav>
+ <label class="ro-s">${sv('search', 16)}<input placeholder="Search rooms, events..." value="${esc(RQ9)}" aria-label="Search rooms" data-on-input="roSearch(this.value)"></label><button type="button" class="th-filter ${nf ? 'on' : ''}" data-on-click="rFilter()">${sv('grid', 16)} Filter${nf ? ` <i>${nf}</i>` : ''}</button></div>
+ ${RDAY ? `<div class="th-q">Showing Rooms on ${new Date(RDAY + 'T12:00:00Z').toLocaleDateString('en-GB', { day: 'numeric', month: 'long', timeZone: 'UTC' })} <button type="button" data-on-click="roDayClear()">Show all dates</button></div>` : ''}
+ <div class="ro-sh"><div><h3>${RF9 === 'past' ? 'Past rooms' : RF9 === 'upcoming' ? 'Upcoming rooms' : RF9 === 'invites' ? 'Invites' : RF9 === 'mine' ? 'Rooms you host' : 'Featured rooms'}</h3><p>${RF9 === 'invites' ? 'Private Rooms you have been invited to.' : RF9 === 'past' ? 'See which connections from past events went somewhere.' : 'Your events and communities, happening now and soon.'}</p></div>${R.length > RLIM9 ? `<button type="button" class="ro-va" data-on-click="roAll()">View all ${sv('arrow', 15)}</button>` : ''}</div>
+ ${R.length ? `<div class="ro-cards">${R.slice(0, RLIM9).map(card).join('')}${RF9 !== 'past' && RF9 !== 'invites' && !q && !RDAY ? [...Array(Math.max(0, 3 - Math.min(R.length, RLIM9)))].map((_, i) => `<button type="button" class="ro-ph" data-on-click="newRoomModal()"><span>${sv(['cal', 'users', 'globe'][i % 3], 24)}</span><b>${['Host your next event', 'Start a community meetup', 'Run an online session'][i % 3]}</b><small>${['Create a Room and every tap becomes a Thread.', 'Bring your network together around one topic.', 'Add a Zoom, Meet or Teams link and track who connects.'][i % 3]}</small><em>${sv('arrow', 14)} Create a Room</em></button>`).join('') : ''}</div>` : `<div class="d-empty">${sv(RF9 === 'invites' ? 'mail' : 'cal', 22)}<div><b>${RF9 === 'invites' ? 'No invites yet' : all.length ? 'No Rooms match' : 'No Rooms yet'}</b><small>${RF9 === 'invites' ? 'When someone invites you to a private Room, it will appear here.' : all.length ? 'Try another tab, date or filter.' : 'Create a Room for your next event. Every tap inside it becomes a Thread.'}</small></div>${RF9 === 'invites' ? '' : `<button type="button" class="x-btn sm" data-on-click="newRoomModal()">Create a Room</button>`}</div>`}
  <div class="ro-sh"><div><h3>Trending communities</h3><p>Join communities based on your interests and the topics in your network.</p></div>${comms.length > 4 ? `<a class="ro-va" href="/app/threads">View all ${sv('arrow', 15)}</a>` : ''}</div>
  ${
    comms.length
@@ -4571,13 +4571,13 @@ function vRooms() {
                      })
                      .join('')}</span>`
                  : ''
-             }${c.sug ? `<button type="button" class="ro-join" onclick="TSEL=['${esc(c.k).replace(/'/g, '&#39;')}'];go('/app/tap')">Join</button>` : `<button type="button" class="ro-join" onclick="TFT=['${esc(c.k).replace(/'/g, '&#39;')}'];TFV=false;TF2='all';TLIM=20;go('/app/threads')">View people</button>`}</article>`
+             }${c.sug ? `<button type="button" class="ro-join" data-on-click="roJoin('${esc(c.k).replace(/'/g, '&#39;')}')">Join</button>` : `<button type="button" class="ro-join" data-on-click="roThreads('${esc(c.k).replace(/'/g, '&#39;')}')">View people</button>`}</article>`
          )
          .join('')}</div>`
      : `<div class="d-empty">${sv('users', 22)}<div><b>No communities yet</b><small>Add topics when you start Threads and your communities will form here.</small></div><a href="/app/tap" class="x-btn sm">Start a Thread</a></div>`
  }
  </div><div class="d-side">
- <section class="d-box"><div class="d-sh"><b>My calendar</b><button type="button" class="ro-va sm" onclick="RCAL=null;RDAY='';RF9='upcoming';render()">View all ${sv('arrow', 14)}</button></div>${rCal(all)}</section>
+ <section class="d-box"><div class="d-sh"><b>My calendar</b><button type="button" class="ro-va sm" data-on-click="roReset()">View all ${sv('arrow', 14)}</button></div>${rCal(all)}</section>
  <section class="d-box">${dSecHead('Upcoming events')}${
    up.length
      ? up
@@ -4590,7 +4590,7 @@ function vRooms() {
          .join('')
      : `<div class="d7-emp"><span>${sv('cal', 24)}</span><div><b>No upcoming events</b><small>Create a Room for your next event and every tap becomes a Thread.</small></div></div>`
  }</section>
- <section class="d-box ro-host"><span>${sv('cal', 30)}</span><div><b>Host your own event</b><small>Create a Room for your event, community or private network.</small><button type="button" class="x-btn" onclick="newRoomModal()">Create a Room ${sv('arrow', 16)}</button></div></section>
+ <section class="d-box ro-host"><span>${sv('cal', 30)}</span><div><b>Host your own event</b><small>Create a Room for your event, community or private network.</small><button type="button" class="x-btn" data-on-click="newRoomModal()">Create a Room ${sv('arrow', 16)}</button></div></section>
  </div></div>`
   );
 }
@@ -6214,4 +6214,73 @@ function ppPick(el, key, inputId) {
 function ppTab(k) {
   PTAB = k;
   keepRender();
+}
+
+/* v61: named handlers for the Rooms screens (no inline JavaScript). */
+function rFiltClear() {
+  RFF = { fmt: '', priv: '', topic: '' };
+  closeModal();
+  render();
+}
+function rFiltApply() {
+  RFF = { fmt: $('#rff').value, priv: $('#rfp').value, topic: $('#rft').value };
+  RLIM9 = 6;
+  closeModal();
+  render();
+}
+function roSeg(el) {
+  document.querySelectorAll('.ro-seg button').forEach(b => b.classList.toggle('on', b === el));
+  $('#rvw').hidden = el.dataset.f === 'online';
+  $('#rlw').hidden = el.dataset.f === 'inperson';
+}
+function roType(v) {
+  $('#rrw').hidden = v === 'event';
+}
+function roTopic(el) {
+  const on = !el.classList.contains('on');
+  if (on && document.querySelectorAll('.ro-new .tp.on').length >= 3) return toast('Pick up to 3 topics');
+  el.classList.toggle('on', on);
+  el.setAttribute('aria-pressed', on);
+}
+function roTab(k) {
+  RF9 = k;
+  RLIM9 = 6;
+  keepRender();
+}
+function roSearch(v) {
+  RQ9 = v;
+  clearTimeout(window._rq9);
+  window._rq9 = setTimeout(() => {
+    keepRender();
+    const i = document.querySelector('.ro-s input');
+    if (i) {
+      i.focus();
+      i.setSelectionRange(i.value.length, i.value.length);
+    }
+  }, 250);
+}
+function roDayClear() {
+  RDAY = '';
+  render();
+}
+function roAll() {
+  RLIM9 = 999;
+  keepRender();
+}
+function roJoin(k) {
+  TSEL = [k];
+  go('/app/tap');
+}
+function roThreads(k) {
+  TFT = [k];
+  TFV = false;
+  TF2 = 'all';
+  TLIM = 20;
+  go('/app/threads');
+}
+function roReset() {
+  RCAL = null;
+  RDAY = '';
+  RF9 = 'upcoming';
+  render();
 }

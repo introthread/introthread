@@ -277,7 +277,9 @@ function raPost() {
     if (s && !s.querySelector('.ra-t')) s.insertAdjacentHTML('afterbegin', raStrip(r));
     if (r.ownerId !== DB.session)
       document
-        .querySelectorAll('#root [onclick*="rMenu("],#root [onclick*="delRoom"]')
+        .querySelectorAll(
+          '#root :is([onclick*="rMenu("],[data-on-click*="rMenu("],[onclick*="delRoom"],[data-on-click*="delRoom"])'
+        )
         .forEach(e => (e.hidden = true));
     const box = raBox(r.id),
       old = $('#rab') || document.querySelector('.ra-box');
