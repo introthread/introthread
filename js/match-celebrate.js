@@ -47,7 +47,7 @@ function mcShow(t) {
   el.setAttribute('aria-labelledby', 'mct');
   el.innerHTML = `<div class="mc-card"><div class="mc-burst" aria-hidden="true">${'<i></i>'.repeat(12)}</div><span class="mc-ic" aria-hidden="true">${typeof sv === 'function' ? sv('check', 26, '#fff', 3) : ''}</span>
  <p class="mc-k">It&rsquo;s a match</p><h2 id="mct">${esc(x.t)}</h2><p>${first} picked the same answer as you. ${esc(x.b)}</p>
- <div class="mc-b"><button type="button" class="t-how" onclick="mcClose()">Close</button><button type="button" class="x-btn" onclick="mcClose(true)">${document.getElementById('draft') ? 'Write the follow-up' : 'Continue'}</button></div></div>`;
+ <div class="mc-b"><button type="button" class="t-how" data-on-click="mcClose()">Close</button><button type="button" class="x-btn" data-on-click="mcClose(true)">${document.getElementById('draft') ? 'Write the follow-up' : 'Continue'}</button></div></div>`;
   el.addEventListener('keydown', e => {
     if (e.key === 'Escape') {
       e.preventDefault();
