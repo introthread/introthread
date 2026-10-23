@@ -21,7 +21,7 @@ function itA11y() {
     });
     document
       .querySelectorAll(
-        '#root [onclick]:not(a):not(button):not(input):not(select):not(textarea):not(label):not([tabindex])'
+        '#root :is([onclick],[data-on-click]):not(a):not(button):not(input):not(select):not(textarea):not(label):not([tabindex])'
       )
       .forEach(e => {
         if (e.closest('button,a')) return;

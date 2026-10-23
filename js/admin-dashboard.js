@@ -52,15 +52,15 @@ vAdmin = function () {
   const u = me() || {};
   const cur = (ADM_TABS.find(t => t[0] === ADM.tab) || [])[1] || 'Admin';
   return `<div class="adm2${ADMCOL ? ' col' : ''}" id="adm2">
- <a class="adm2-skip" href="#admbody" onclick="event.preventDefault();const b=$('#admbody');if(b)b.focus()">Skip to content</a>
+ <a class="adm2-skip" href="#admbody" data-on-click="admSkip(event)">Skip to content</a>
  <aside class="adm2-side" id="admside" aria-label="Admin navigation">
-  <div class="adm2-brand"><a href="/" onclick="go('/');return false" class="adm2-logo" aria-label="Introthread home"><span class="x-lm"><i></i><i></i></span><span class="adm2-wm">intro<b>thread</b></span></a><span class="adm-tag">Admin</span>
-   <button type="button" class="adm2-colb" id="admcolb" onclick="admCol()" aria-label="${ADMCOL ? 'Expand' : 'Collapse'} sidebar" title="${ADMCOL ? 'Expand' : 'Collapse'} sidebar">${sv('chev', 16)}</button></div>
-  <nav class="adm2-nav">${tabs.map(([k, l, ic]) => `<button type="button" class="${ADM.tab === k ? 'on' : ''}" ${ADM.tab === k ? 'aria-current="page"' : ''} data-tab="${k}" onclick="admDrawer(false);admGo('${k}')" title="${l}">${sv(ic, 19)}<span>${l}</span></button>`).join('')}</nav>
+  <div class="adm2-brand"><a href="/" data-on-click="go('/');return false" class="adm2-logo" aria-label="Introthread home"><span class="x-lm"><i></i><i></i></span><span class="adm2-wm">intro<b>thread</b></span></a><span class="adm-tag">Admin</span>
+   <button type="button" class="adm2-colb" id="admcolb" data-on-click="admCol()" aria-label="${ADMCOL ? 'Expand' : 'Collapse'} sidebar" title="${ADMCOL ? 'Expand' : 'Collapse'} sidebar">${sv('chev', 16)}</button></div>
+  <nav class="adm2-nav">${tabs.map(([k, l, ic]) => `<button type="button" class="${ADM.tab === k ? 'on' : ''}" ${ADM.tab === k ? 'aria-current="page"' : ''} data-tab="${k}" data-on-click="admDrawer(false);admGo('${k}')" title="${l}">${sv(ic, 19)}<span>${l}</span></button>`).join('')}</nav>
   <div class="adm2-who"><span class="adm2-av" aria-hidden="true">${esc(initials(u.name || 'A'))}</span><div class="adm2-wt"><b>${esc(u.name || 'Staff')}</b><small>${esc(ADM.me.role)}</small></div>
-   <button type="button" class="adm2-ib" onclick="go('/app')" title="Back to the app" aria-label="Back to the app">${sv('arrow', 17)}</button><button type="button" class="adm2-ib" onclick="admSignOut()" title="Sign out" aria-label="Sign out">${sv('out', 17)}</button></div>
- </aside><div class="adm2-scrim" onclick="admDrawer(false)" aria-hidden="true"></div>
- <div class="adm2-main"><header class="adm2-top"><button type="button" class="adm2-ib dk" id="admmenu" onclick="admDrawer(true)" aria-label="Open menu" aria-controls="admside" aria-expanded="false">${sv('menu', 20)}</button><span class="adm2-tt">${esc(cur)}</span><span class="adm-tag">Admin</span></header>
+   <button type="button" class="adm2-ib" data-on-click="go('/app')" title="Back to the app" aria-label="Back to the app">${sv('arrow', 17)}</button><button type="button" class="adm2-ib" data-on-click="admSignOut()" title="Sign out" aria-label="Sign out">${sv('out', 17)}</button></div>
+ </aside><div class="adm2-scrim" data-on-click="admDrawer(false)" aria-hidden="true"></div>
+ <div class="adm2-main"><header class="adm2-top"><button type="button" class="adm2-ib dk" id="admmenu" data-on-click="admDrawer(true)" aria-label="Open menu" aria-controls="admside" aria-expanded="false">${sv('menu', 20)}</button><span class="adm2-tt">${esc(cur)}</span><span class="adm-tag">Admin</span></header>
  <main id="admbody" class="adm2-body" tabindex="-1">${admLoading()}</main></div></div>`;
 };
 function admCol() {
@@ -106,7 +106,10 @@ admNavBadges = function () {
   const d = ADM.cache.dash;
   if (!d) return;
   document.querySelectorAll('.adm2-nav button,.adm-nav button').forEach(b => {
-    const k = b.dataset.tab || ((b.getAttribute('onclick') || '').match(/admGo\('(\w+)'\)/) || [])[1];
+    const k =
+      b.dataset.tab ||
+      ((b.getAttribute('data-on-click') || b.getAttribute('onclick') || '').match(/admGo\('(\w+)'\)/) ||
+        [])[1];
     const v = k === 'reports' ? d.reports_open : k === 'privacy' ? d.privacy_open : 0;
     const em = b.querySelector('em');
     if (em) em.remove();
@@ -176,7 +179,7 @@ async function admDashLoad() {
     if (ADM.tab === 'dash')
       admBody(
         admDashHead(null) +
-          `<div class="ix-card ix-fail" role="alert">${sv('alert', 22)}<div><b>The dashboard could not load</b><p>${esc((e && e.message) || 'Unknown error')}. Your data is safe. Check your connection and try again.</p></div><button type="button" class="ix-btn" onclick="admDashLoad()">${sv('refresh', 16)} Try again</button></div>`
+          `<div class="ix-card ix-fail" role="alert">${sv('alert', 22)}<div><b>The dashboard could not load</b><p>${esc((e && e.message) || 'Unknown error')}. Your data is safe. Check your connection and try again.</p></div><button type="button" class="ix-btn" data-on-click="admDashLoad()">${sv('refresh', 16)} Try again</button></div>`
       );
   } finally {
     ADM_BUSY = false;
@@ -202,8 +205,8 @@ function trendChip(cur, prev, o) {
 function admDashHead(d) {
   const lim = ADM_LIMITED;
   return `<div class="ix-h"><div><h1>Dashboard</h1><p>How Introthread is doing, and what needs your attention.</p></div>
- <div class="ix-hc"><label class="ix-sel" title="${lim ? 'Run database update 004 to enable 7 and 90 days' : 'Date range'}">${sv('cal', 17)}<span class="sr">Date range</span><select id="admrange" onchange="ADMR=+this.value;try{localStorage.setItem('it_adm_range',ADMR)}catch(_){}admDashLoad()" aria-label="Date range">${[7, 30, 90].map(v => `<option value="${v}" ${ADMR === v ? 'selected' : ''} ${lim && v !== 30 ? 'disabled' : ''}>Last ${v} days</option>`).join('')}</select></label>
- <button type="button" class="ix-btn" id="admref" onclick="admDashLoad()" aria-label="Refresh dashboard">${sv('refresh', 17)}<span>Refresh</span></button></div></div>
+ <div class="ix-hc"><label class="ix-sel" title="${lim ? 'Run database update 004 to enable 7 and 90 days' : 'Date range'}">${sv('cal', 17)}<span class="sr">Date range</span><select id="admrange" data-on-change="admRange(this.value)" aria-label="Date range">${[7, 30, 90].map(v => `<option value="${v}" ${ADMR === v ? 'selected' : ''} ${lim && v !== 30 ? 'disabled' : ''}>Last ${v} days</option>`).join('')}</select></label>
+ <button type="button" class="ix-btn" id="admref" data-on-click="admDashLoad()" aria-label="Refresh dashboard">${sv('refresh', 17)}<span>Refresh</span></button></div></div>
  ${d ? `<p class="ix-upd">Updated ${ADM_UPD ? ADM_UPD.toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit' }) : ''}${lim ? ' · Showing 30 days. 7 and 90 days need database update 004.' : ''}</p>` : ''}`;
 }
 function admDashSkel() {
@@ -216,7 +219,7 @@ function admDashSkel() {
 function admK(o) {
   const inner = `<span class="ix-ki t-${o.tone}" aria-hidden="true">${sv(o.icon, 20)}</span><span class="ix-kb"><span class="ix-kl">${o.label}</span><span class="ix-kv${o.value === dash ? ' na' : ''}">${o.value}</span><span class="ix-ks">${o.sub || ''}</span>${o.trend || ''}</span>${o.link ? `<span class="ix-kgo" aria-hidden="true">${sv('chev', 16)}</span>` : ''}`;
   return o.link
-    ? `<button type="button" class="ix-k link" onclick="admGo('${o.link}')" aria-label="${esc(o.label)}: ${esc(String(o.value))}. Open ${esc(o.linkName)}">${inner}</button>`
+    ? `<button type="button" class="ix-k link" data-on-click="admGo('${o.link}')" aria-label="${esc(o.label)}: ${esc(String(o.value))}. Open ${esc(o.linkName)}">${inner}</button>`
     : `<div class="ix-k">${inner}</div>`;
 }
 function admKpis(d) {
@@ -420,7 +423,7 @@ function admHealth(d) {
         ]
       : ['ok', 'okc', 'All clear', 'No waiting reports, privacy deadlines or security issues.'];
   return `<section class="ix-card ix-ops ${head[0]}" aria-labelledby="adopsh"><div class="ix-opsh"><span class="ix-opi" aria-hidden="true">${sv(head[1], 22)}</span><div><h2 id="adopsh">${head[2]}</h2><p>${head[3]}</p></div></div>
- ${it.length ? `<ul class="ix-opl">${it.map(x => `<li class="${x.lv}"><span class="ix-opd" aria-hidden="true">${sv(x.ic, 17)}</span><div><b>${x.lv === 'crit' ? '<span class="ix-urg">Urgent</span> ' : ''}${x.t}</b><small>${x.s}</small></div><button type="button" class="ix-btn sm" onclick="admGo('${x.k}')">${x.a}</button></li>`).join('')}</ul>` : ''}</section>`;
+ ${it.length ? `<ul class="ix-opl">${it.map(x => `<li class="${x.lv}"><span class="ix-opd" aria-hidden="true">${sv(x.ic, 17)}</span><div><b>${x.lv === 'crit' ? '<span class="ix-urg">Urgent</span> ' : ''}${x.t}</b><small>${x.s}</small></div><button type="button" class="ix-btn sm" data-on-click="admGo('${x.k}')">${x.a}</button></li>`).join('')}</ul>` : ''}</section>`;
 }
 /* ---- charts (real data only) ---- */
 function admNice(m) {
@@ -451,7 +454,7 @@ function admChart(id, S, one, many, empty) {
   xs.push(n - 1);
   window._ach = window._ach || {};
   window._ach[id] = { S, one, many };
-  return `<div class="ach" id="${id}" tabindex="0" role="img" aria-label="${esc(many)} per day: ${fmtN(sum)} in total over ${n} days, highest ${fmtN(mx)} in a day. Use the left and right arrow keys to read each day." onkeydown="achKey(event,this)" onmousemove="achMove(event,this)" onmouseleave="achHide(this)" onfocus="achShow(this,${n - 1})" onblur="achHide(this)">
+  return `<div class="ach" id="${id}" tabindex="0" role="img" aria-label="${esc(many)} per day: ${fmtN(sum)} in total over ${n} days, highest ${fmtN(mx)} in a day. Use the left and right arrow keys to read each day." data-on-keydown="achKey(event,this)" data-on-mousemove="achMove(event,this)" data-on-mouseleave="achHide(this)" data-on-focus="achShow(this,${n - 1})" data-on-blur="achHide(this)">
  <div class="ach-y" aria-hidden="true">${ticks.map(t => `<span style="bottom:${(t / max) * 100}%">${fmtN(t)}</span>`).join('')}</div>
  <div class="ach-p"><div class="ach-g" aria-hidden="true">${ticks.map(t => `<i style="bottom:${(t / max) * 100}%"></i>`).join('')}</div>
  <div class="ach-b" aria-hidden="true">${S.map((x, i) => `<i data-i="${i}" style="height:${x.n ? Math.max(1.5, (x.n / max) * 100) : 0}%"></i>`).join('')}</div>
@@ -533,7 +536,7 @@ function admPlanMix(d) {
   return `<ul class="ix-list">${rows.map(([l, n], i) => `<li><div class="ix-funl"><span>${esc(l)}</span><b>${fmtN(n)}<small> · ${rate(n, d.users) || 0}%</small></b></div><div class="ix-bar${i ? ' g' : ' n'}" role="presentation"><i style="width:${Math.max(n ? 2 : 0, (n / d.users) * 100)}%"></i></div></li>`).join('')}</ul>${d.billing_configured === false ? `<p class="ix-foot">${sv('info', 14)} Paid plans open once billing is connected.</p>` : ''}`;
 }
 function admPanel(title, ic, meta, body, link) {
-  return `<section class="ix-card ix-pn"><div class="ix-pnh"><span class="ix-pni" aria-hidden="true">${sv(ic, 18)}</span><h2>${title}</h2>${meta ? `<span class="ix-pnm">${meta}</span>` : ''}${link ? `<button type="button" class="ix-lnk" onclick="admGo('${link[0]}')">${link[1]} ${sv('chev', 14)}</button>` : ''}</div>${body}</section>`;
+  return `<section class="ix-card ix-pn"><div class="ix-pnh"><span class="ix-pni" aria-hidden="true">${sv(ic, 18)}</span><h2>${title}</h2>${meta ? `<span class="ix-pnm">${meta}</span>` : ''}${link ? `<button type="button" class="ix-lnk" data-on-click="admGo('${link[0]}')">${link[1]} ${sv('chev', 14)}</button>` : ''}</div>${body}</section>`;
 }
 /* ---- page ---- */
 function admDash2(d) {
@@ -543,4 +546,18 @@ function admDash2(d) {
   return `<div id="addash">${admDashHead(d)}<h2 class="sr">Key numbers</h2><div class="ix-kg">${admKpis(d)}</div>${admHealth(d)}
  <div class="ix-g2">${admPanel('New people', 'user', `${fmtN(su)} in ${R}`, admChart('achp', d.signups_by_day, 'new person', 'new people', `No one joined in the last ${R}.`), ['users', 'Users'])}${admPanel('New Threads', 'linkc', `${fmtN(th)} in ${R}`, admChart('acht', d.threads_by_day, 'new Thread', 'new Threads', `No Threads were created in the last ${R}.`))}</div>
  <div class="ix-g3">${admPanel('From Tap to follow-up', 'msg', d.limited ? '' : `Last ${R}`, admFunnel(d))}${admPanel('Where people are', 'pin', 'All time', admPlaces(d))}${admPanel('Plans', 'db', 'Current', admPlanMix(d), ['plans', 'Pricing'])}</div></div>`;
+}
+
+/* v59: named handlers for the dashboard (no inline JavaScript). */
+function admSkip(e) {
+  e.preventDefault();
+  const b = $('#admbody');
+  if (b) b.focus();
+}
+function admRange(v) {
+  ADMR = +v;
+  try {
+    localStorage.setItem('it_adm_range', ADMR);
+  } catch (_) {}
+  admDashLoad();
 }

@@ -222,7 +222,7 @@ function admNavBadges() {
   if (!n || !ADM.cache.dash) return;
   const d = ADM.cache.dash;
   n.querySelectorAll('button').forEach(b => {
-    const on = b.getAttribute('onclick') || '';
+    const on = b.getAttribute('data-on-click') || b.getAttribute('onclick') || '';
     const v = on.includes("'reports'") ? d.reports_open : on.includes("'privacy'") ? d.privacy_open : 0;
     const em = b.querySelector('em');
     if (em) em.remove();
