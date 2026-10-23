@@ -2485,7 +2485,13 @@ function vPricing() {
       '$199',
       'per event',
       'For events and communities',
-      ['Room code, QR and badges', 'Live Resolution Report', 'Up to 1,000 attendees', 'Sponsor-ready export'],
+      [
+        'Free for up to 20 people, one event a month',
+        'Room code, QR and badges',
+        'Live Resolution Report',
+        'Up to 1,000 attendees',
+        'Sponsor-ready export'
+      ],
       'Create a Room',
       '/signup',
       ''

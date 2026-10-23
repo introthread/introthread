@@ -66,7 +66,7 @@ Storage: table `rooms` (`owner_id, name, event_date, location, code`). Extra det
 - The Rooms feature can be switched off in Admin > Settings > Features.
 
 ## 6. Room pass (paying for extra Rooms)
-- **Since v71 every Room needs a Room pass** (`FREE_ROOMS = 0`, migration 020). Rooms created before v71 are kept. Before v71 every account included 1 free Room.
+- **Since v76 one event a month for up to 20 people is free** (attendance limit 1 to 20, migration 021). Bigger or extra Rooms need a Room pass. Before that, v71: every Room needed a Room pass (`FREE_ROOMS = 0`, migration 020). Rooms created before v71 are kept. Before v71 every account included 1 free Room.
 - Each extra Room needs a **Room pass: $199 per event** (one extra Room, Room code, QR and badges, live Resolution Report, up to 1,000 attendees). Defined in `PLANS.rooms`.
 - When someone without an unused pass presses Create a Room, they see "Create a Room with a Room pass" with **Buy a Room pass, $199** (`bRoomAllowed`, `bRoomPass`).
 - Passes are counted as `roomCredits` inside the person's billing record (`profiles.prefs.billing`). Creating an extra Room uses one credit ("Room pass used").

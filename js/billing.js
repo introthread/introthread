@@ -40,6 +40,7 @@ const PLANS = {
     price: { event: 199 },
     tag: 'For events and communities',
     features: [
+      'Free for up to 20 people, one event a month',
       'Room code, QR and badges',
       'Live Resolution Report',
       'Up to 1,000 attendees',
@@ -325,7 +326,7 @@ function bUsageBox(u, b) {
   const bar = (l, v, max, txt) =>
     `<div class="bl-us"><div><span>${l}</span><b>${txt}</b></div><i><s style="width:${max ? Math.min(100, (v / max) * 100) : 100}%"></s></i></div>`;
   return `<section class="d-box"><div class="cd-bh"><span class="cd-bi">${sv('chart', 20)}</span><div><b>Usage and access</b><small>What you can use on your current plan.</small></div></div>
- ${bar('Threads', myThreads().length, 0, myThreads().length + ' &middot; unlimited')}${bar('Rooms', R, allow, R + ' of ' + allow + ' available')}<p class="bl-fine">Each Room needs a Room pass ($199 per event). Unused passes: <b>${b.roomCredits || 0}</b>.</p>
+ ${bar('Threads', myThreads().length, 0, myThreads().length + ' &middot; unlimited')}${bar('Rooms', R, allow, R + ' of ' + allow + ' available')}<p class="bl-fine">One event a month for up to 20 people is free. Bigger or extra events need a Room pass ($199 per event). Unused passes: <b>${b.roomCredits || 0}</b>.</p>
  <ul class="bl-feat">${Object.entries(FEATURES)
    .map(
      ([k, l]) =>
@@ -774,7 +775,7 @@ const _newRoomModal19 = newRoomModal;
 newRoomModal = function () {
   if (!bRoomAllowed()) {
     return modal(
-      `<div class="bl-co"><span class="otp-ic">${sv('cal', 24)}</span><h3>Create a Room with a Room pass</h3><p class="fu-sub">Each Room is $199 per event: Room code, QR and badges, a live Resolution Report and up to 1,000 attendees.</p><div class="fu-b"><button type="button" class="t-how" data-on-click="closeModal()">Not now</button><button type="button" class="x-btn" data-on-click="closeModal();bRoomPass()">Buy a Room pass, $199</button></div></div>`
+      `<div class="bl-co"><span class="otp-ic">${sv('cal', 24)}</span><h3>Create a Room with a Room pass</h3><p class="fu-sub">You&rsquo;ve used this month&rsquo;s free event (up to 20 people). Each further Room is $199 per event: Room code, QR and badges, a live Resolution Report and up to 1,000 attendees.</p><div class="fu-b"><button type="button" class="t-how" data-on-click="closeModal()">Not now</button><button type="button" class="x-btn" data-on-click="closeModal();bRoomPass()">Buy a Room pass, $199</button></div></div>`
     );
   }
   return _newRoomModal19.apply(this, arguments);
@@ -960,7 +961,7 @@ const HELP = [
   [
     'Rooms',
     'How many Rooms can I create?',
-    'Each Room needs a Room pass ($199 per event). Rooms you already created stay yours.'
+    'One event a month for up to 20 people is free. Bigger or extra events need a Room pass ($199 per event). Rooms you already created stay yours.'
   ],
   [
     'Account',
