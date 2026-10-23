@@ -87,20 +87,20 @@ async function auLoad(keep) {
   } catch (e) {
     admBody(
       auHead() +
-        `<div class="ix-card ix-fail" role="alert">${sv('alert', 22)}<div><b>Users could not load</b><p>${esc((e && e.message) || 'Unknown error')}</p></div><button type="button" class="ix-btn" onclick="auLoad()">${sv('refresh', 16)} Try again</button></div>`
+        `<div class="ix-card ix-fail" role="alert">${sv('alert', 22)}<div><b>Users could not load</b><p>${esc((e && e.message) || 'Unknown error')}</p></div><button type="button" class="ix-btn" data-on-click="auLoad()">${sv('refresh', 16)} Try again</button></div>`
     );
   }
 }
 /* header + counts */
 function auHead() {
-  return `<div class="ix-h"><div><h1>Users</h1><p>Manage people, their accounts, plans and activity.</p></div><div class="ix-hc">${canU(['owner', 'admin']) ? `<button type="button" class="ix-btn" onclick="auExport()">${sv('arrow', 16)}<span>Export CSV</span></button>` : ''}${canU(['owner', 'admin', 'support']) ? `<button type="button" class="ix-btn pri" onclick="auInvite()">${sv('userplus', 17)}<span>Invite user</span></button>` : ''}</div></div>`;
+  return `<div class="ix-h"><div><h1>Users</h1><p>Manage people, their accounts, plans and activity.</p></div><div class="ix-hc">${canU(['owner', 'admin']) ? `<button type="button" class="ix-btn" data-on-click="auExport()">${sv('arrow', 16)}<span>Export CSV</span></button>` : ''}${canU(['owner', 'admin', 'support']) ? `<button type="button" class="ix-btn pri" data-on-click="auInvite()">${sv('userplus', 17)}<span>Invite user</span></button>` : ''}</div></div>`;
 }
 function auCounts() {
   const c = ADMU.data && ADMU.data.counts;
   const v = k => (c && isNum(c[k]) ? fmtN(c[k]) : dash);
   const p = k => (c && c.total ? Math.round((c[k] * 100) / c.total) + '%' : dash);
   const card = (k, st, l, ic, tone, sub) =>
-    `<button type="button" class="au-c${ADMU.st === st ? ' on' : ''}" onclick="auFilter('st','${ADMU.st === st ? 'all' : st}')" aria-pressed="${ADMU.st === st}"><span class="ix-ki t-${tone}" aria-hidden="true">${sv(ic, 20)}</span><span><b>${v(k)}</b><span class="au-cl">${l}</span><small>${sub}</small></span></button>`;
+    `<button type="button" class="au-c${ADMU.st === st ? ' on' : ''}" data-on-click="auFilter('st','${ADMU.st === st ? 'all' : st}')" aria-pressed="${ADMU.st === st}"><span class="ix-ki t-${tone}" aria-hidden="true">${sv(ic, 20)}</span><span><b>${v(k)}</b><span class="au-cl">${l}</span><small>${sub}</small></span></button>`;
   return (
     card(
       'total',
@@ -144,7 +144,7 @@ function auPaintCounts() {
 }
 /* toolbar */
 function auSel(id, lab, val, opts, fn) {
-  return `<label class="ix-sel au-sl"><span class="sr">${lab}</span><select id="${id}" aria-label="${lab}" onchange="${fn}">${opts.map(([v, l]) => `<option value="${v}" ${val === v ? 'selected' : ''}>${l}</option>`).join('')}</select></label>`;
+  return `<label class="ix-sel au-sl"><span class="sr">${lab}</span><select id="${id}" aria-label="${lab}" data-on-change="${fn}">${opts.map(([v, l]) => `<option value="${v}" ${val === v ? 'selected' : ''}>${l}</option>`).join('')}</select></label>`;
 }
 function auToolbar() {
   const sorts = [
@@ -158,7 +158,7 @@ function auToolbar() {
   if (ADMU.q) chips.push(['q', `Search: "${esc(ADMU.q)}"`]);
   if (ADMU.plan !== 'all') chips.push(['plan', 'Plan: ' + ADMU.plan]);
   if (ADMU.st !== 'all') chips.push(['st', 'Status: ' + ADMU.st]);
-  return `<div class="au-tb"><label class="au-search">${sv('search', 17)}<input id="auq" type="search" placeholder="Search name, handle, email or company" value="${esc(ADMU.q)}" oninput="auSearch(this.value)" aria-label="Search users"></label>
+  return `<div class="au-tb"><label class="au-search">${sv('search', 17)}<input id="auq" type="search" placeholder="Search name, handle, email or company" value="${esc(ADMU.q)}" data-on-input="auSearch(this.value)" aria-label="Search users"></label>
  ${auSel(
    'auplan',
    'Plan',
@@ -183,8 +183,8 @@ function auToolbar() {
    ],
    "auFilter('st',this.value)"
  )}
- <label class="ix-sel au-sl au-sort">${sv('sort', 16)}<span class="sr">Sort</span><select aria-label="Sort" onchange="const [s,d]=this.value.split(':');ADMU.sort=s;ADMU.dir=d;ADMU.page=0;auLoad(true)">${sorts.map(([v, l]) => `<option value="${v}" ${ADMU.sort + ':' + ADMU.dir === v ? 'selected' : ''}>${l}</option>`).join('')}</select></label></div>
- ${chips.length ? `<div class="au-chips">${chips.map(([k, l]) => `<button type="button" onclick="auFilter('${k}','')" aria-label="Remove filter ${l}">${l} ${sv('x2', 13)}</button>`).join('')}<button type="button" class="au-clr" onclick="ADMU.q='';ADMU.plan='all';ADMU.st='all';ADMU.page=0;admBody(auPage());auLoad(true)">Clear all</button></div>` : ''}`;
+ <label class="ix-sel au-sl au-sort">${sv('sort', 16)}<span class="sr">Sort</span><select aria-label="Sort" data-on-change="auSortSel(this.value)">${sorts.map(([v, l]) => `<option value="${v}" ${ADMU.sort + ':' + ADMU.dir === v ? 'selected' : ''}>${l}</option>`).join('')}</select></label></div>
+ ${chips.length ? `<div class="au-chips">${chips.map(([k, l]) => `<button type="button" data-on-click="auFilter('${k}','')" aria-label="Remove filter ${l}">${l} ${sv('x2', 13)}</button>`).join('')}<button type="button" class="au-clr" data-on-click="auClear()">Clear all</button></div>` : ''}`;
 }
 let _auT = null;
 function auSearch(v) {
@@ -225,22 +225,22 @@ const fmtT = s =>
     : '';
 function auRow(u) {
   const sel = ADMU.sel.has(u.id);
-  return `<tr class="${ADMU.open === u.id ? 'on' : ''}" data-id="${u.id}"><td class="au-ck"><input type="checkbox" aria-label="Select ${esc(u.name)}" ${sel ? 'checked' : ''} onchange="auPick('${u.id}',this.checked)"></td>
- <td><button type="button" class="au-u" onclick="auOpen('${u.id}')"><span class="adm2-av sm" aria-hidden="true">${esc(initials(u.name))}</span><span class="au-ut"><b>${esc(u.name)}${u.staff ? ` <em class="au-role">${esc(u.staff)}</em>` : ''}${u.reports ? ` <em class="au-rep" title="Open reports">${u.reports} report${u.reports > 1 ? 's' : ''}</em>` : ''}</b><small>${esc(u.email || '')}</small><small>${u.handle ? '@' + esc(u.handle) : 'Profile not finished'}</small></span></button></td>
+  return `<tr class="${ADMU.open === u.id ? 'on' : ''}" data-id="${u.id}"><td class="au-ck"><input type="checkbox" aria-label="Select ${esc(u.name)}" ${sel ? 'checked' : ''} data-on-change="auPick('${u.id}',this.checked)"></td>
+ <td><button type="button" class="au-u" data-on-click="auOpen('${u.id}')"><span class="adm2-av sm" aria-hidden="true">${esc(initials(u.name))}</span><span class="au-ut"><b>${esc(u.name)}${u.staff ? ` <em class="au-role">${esc(u.staff)}</em>` : ''}${u.reports ? ` <em class="au-rep" title="Open reports">${u.reports} report${u.reports > 1 ? 's' : ''}</em>` : ''}</b><small>${esc(u.email || '')}</small><small>${u.handle ? '@' + esc(u.handle) : 'Profile not finished'}</small></span></button></td>
  <td>${auPl(u.plan)}</td><td>${auSt(u.status)}</td><td class="num">${fmtN(u.threads)}</td><td>${fmtD(u.created_at)}</td><td>${u.last_sign_in_at ? `${fmtD(u.last_sign_in_at)}<small>${fmtT(u.last_sign_in_at)}</small>` : '<span class="ix-mu">Never</span>'}</td>
- <td class="au-act"><button type="button" class="au-more" aria-label="Actions for ${esc(u.name)}" aria-haspopup="menu" onclick="auMenu(event,'${u.id}')">${sv('more', 18)}</button></td></tr>`;
+ <td class="au-act"><button type="button" class="au-more" aria-label="Actions for ${esc(u.name)}" aria-haspopup="menu" data-on-click="auMenu(event,'${u.id}')">${sv('more', 18)}</button></td></tr>`;
 }
 function auTable() {
   const d = ADMU.data,
     R = d.rows || [];
   const th = (k, l) => {
     const on = ADMU.sort === k;
-    return `<th scope="col" aria-sort="${on ? (ADMU.dir === 'asc' ? 'ascending' : 'descending') : 'none'}"><button type="button" class="au-th${on ? ' on' : ''}" onclick="auSort('${k}')">${l}${on ? sv(ADMU.dir === 'asc' ? 'up' : 'down', 12, 'currentColor', 2.4) : ''}</button></th>`;
+    return `<th scope="col" aria-sort="${on ? (ADMU.dir === 'asc' ? 'ascending' : 'descending') : 'none'}"><button type="button" class="au-th${on ? ' on' : ''}" data-on-click="auSort('${k}')">${l}${on ? sv(ADMU.dir === 'asc' ? 'up' : 'down', 12, 'currentColor', 2.4) : ''}</button></th>`;
   };
   const allOn = R.length && R.every(r => ADMU.sel.has(r.id));
   if (!R.length)
     return `<div class="au-empty">${sv('users', 24)}<b>${ADMU.q || ADMU.plan !== 'all' || ADMU.st !== 'all' ? 'No users match these filters' : 'No users yet'}</b><p>${ADMU.q || ADMU.plan !== 'all' || ADMU.st !== 'all' ? 'Try a different search, or clear the filters.' : 'People appear here as soon as they sign up.'}</p></div>`;
-  return `<div class="au-scroll"><table class="au-t"><caption class="sr">Users, ${fmtN(d.total)} in total</caption><thead><tr><th class="au-ck" scope="col"><input type="checkbox" aria-label="Select all on this page" ${allOn ? 'checked' : ''} onchange="auPickAll(this.checked)"></th>${th('name', 'User')}<th scope="col">Plan</th><th scope="col">Status</th>${th('threads', 'Threads')}${th('joined', 'Joined')}${th('last', 'Last sign-in')}<th scope="col" class="au-act"><span class="sr">Actions</span></th></tr></thead><tbody>${R.map(auRow).join('')}</tbody></table></div>`;
+  return `<div class="au-scroll"><table class="au-t"><caption class="sr">Users, ${fmtN(d.total)} in total</caption><thead><tr><th class="au-ck" scope="col"><input type="checkbox" aria-label="Select all on this page" ${allOn ? 'checked' : ''} data-on-change="auPickAll(this.checked)"></th>${th('name', 'User')}<th scope="col">Plan</th><th scope="col">Status</th>${th('threads', 'Threads')}${th('joined', 'Joined')}${th('last', 'Last sign-in')}<th scope="col" class="au-act"><span class="sr">Actions</span></th></tr></thead><tbody>${R.map(auRow).join('')}</tbody></table></div>`;
 }
 function auFoot() {
   const d = ADMU.data,
@@ -262,14 +262,14 @@ function auFoot() {
       ['25', '25 per page'],
       ['50', '50 per page']
     ],
-    "ADMU.per=+this.value;ADMU.page=0;try{localStorage.setItem('it_adm_per',ADMU.per)}catch(_){}auLoad(true)"
+    'auPer(this.value)'
   )}
- <nav class="au-pn" aria-label="Pages"><button type="button" aria-label="Previous page" ${p ? '' : 'disabled'} onclick="ADMU.page--;auLoad(true)">${sv('chev', 16)}</button>${nums.map(n => (n === '…' ? '<span>…</span>' : `<button type="button" class="${n === p ? 'on' : ''}" ${n === p ? 'aria-current="page"' : ''} onclick="ADMU.page=${n};auLoad(true)">${n + 1}</button>`)).join('')}<button type="button" aria-label="Next page" ${p + 1 < pages ? '' : 'disabled'} onclick="ADMU.page++;auLoad(true)">${sv('chev', 16)}</button></nav></div></div>`;
+ <nav class="au-pn" aria-label="Pages"><button type="button" aria-label="Previous page" ${p ? '' : 'disabled'} data-on-click="auPg('prev')">${sv('chev', 16)}</button>${nums.map(n => (n === '…' ? '<span>…</span>' : `<button type="button" class="${n === p ? 'on' : ''}" ${n === p ? 'aria-current="page"' : ''} data-on-click="auPg(${n})">${n + 1}</button>`)).join('')}<button type="button" aria-label="Next page" ${p + 1 < pages ? '' : 'disabled'} data-on-click="auPg('next')">${sv('chev', 16)}</button></nav></div></div>`;
 }
 function auBulk() {
   const n = ADMU.sel.size;
   return n
-    ? `<div class="au-bulk" role="region" aria-label="Selection"><b>${n} selected</b>${canU(['owner', 'admin']) ? `<button type="button" class="ix-btn sm" onclick="auExport(true)">${sv('arrow', 15)} Export selected</button>` : ''}<button type="button" class="ix-btn sm" onclick="ADMU.sel.clear();auPaintTable()">Clear selection</button></div>`
+    ? `<div class="au-bulk" role="region" aria-label="Selection"><b>${n} selected</b>${canU(['owner', 'admin']) ? `<button type="button" class="ix-btn sm" data-on-click="auExport(true)">${sv('arrow', 15)} Export selected</button>` : ''}<button type="button" class="ix-btn sm" data-on-click="ADMU.sel.clear();auPaintTable()">Clear selection</button></div>`
     : '';
 }
 function auPaintTable() {
@@ -314,7 +314,7 @@ function auSkel() {
 function auPage() {
   return `<div id="auwrap" class="au${ADMU.open ? ' po' : ''}"><div class="au-main">${auHead()}${ADMU.limited ? `<p class="ix-upd">Run database update 005 for overview counts, plan and status filters, sorting and the full details panel.</p>` : ''}<div class="au-cs" id="aucounts">${auCounts()}</div>
  <section class="ix-card au-card"><div id="autb">${auToolbar()}</div><div id="autbody">${auBulk()}${auTable()}${auFoot()}</div></section></div>
- <aside class="au-panel" id="aupanel" aria-label="User details">${ADMU.open ? auPanel() : ''}</aside><div class="au-scrim" onclick="auClose()" aria-hidden="true"></div></div>`;
+ <aside class="au-panel" id="aupanel" aria-label="User details">${ADMU.open ? auPanel() : ''}</aside><div class="au-scrim" data-on-click="auClose()" aria-hidden="true"></div></div>`;
 }
 /* row menu */
 function auMenu(e, id) {
@@ -361,7 +361,7 @@ function auMenu(e, id) {
   m.innerHTML = it
     .map(
       ([ic, l, fn, , c]) =>
-        `<button type="button" role="menuitem" class="${c || ''}" onclick="auMenuClose();${fn}">${sv(ic, 16)}${l}</button>`
+        `<button type="button" role="menuitem" class="${c || ''}" data-on-click="auMenuClose();${fn}">${sv(ic, 16)}${l}</button>`
     )
     .join('');
   document.body.appendChild(m);
@@ -436,7 +436,7 @@ async function auOpen(id) {
     }
   } catch (e) {
     if (p)
-      p.innerHTML = `<div class="au-ph"><p class="adm-err">${esc((e && e.message) || 'Could not load')}</p><button class="ix-btn sm" onclick="auOpen('${id}')">Try again</button></div>`;
+      p.innerHTML = `<div class="au-ph"><p class="adm-err">${esc((e && e.message) || 'Could not load')}</p><button class="ix-btn sm" data-on-click="auOpen('${id}')">Try again</button></div>`;
   }
 }
 function auClose() {
@@ -467,10 +467,10 @@ function auPanel() {
     ['threads', 'Threads'],
     ['notes', 'Notes']
   ];
-  return `<div class="au-ph"><button type="button" class="au-x" onclick="auClose()" aria-label="Close details">${sv('x2', 18)}</button>
+  return `<div class="au-ph"><button type="button" class="au-x" data-on-click="auClose()" aria-label="Close details">${sv('x2', 18)}</button>
  <div class="au-pt"><span class="adm2-av lg" aria-hidden="true">${esc(initials(p.name || r.name))}</span><div><h2>${esc(p.name || r.name || 'User')} ${auSt(st)}</h2><p>${esc(u.email || r.email || '')}</p><p>${p.handle ? '@' + esc(p.handle) : 'Profile not finished'}</p></div></div>
  <div class="au-pb">${pub ? `<a class="ix-btn sm" href="${pub}" target="_blank" rel="noopener">${sv('ext', 15)} View profile</a>` : ''}${canU(['owner', 'admin', 'support']) && (u.email || '').includes('@') && !(u.email || '').includes('***') ? `<a class="ix-btn sm" href="mailto:${esc(u.email)}">${sv('mail', 15)} Message</a>` : ''}</div>
- <div class="au-tabs" role="tablist">${tabs.map(([k, l]) => `<button type="button" role="tab" id="aut-${k}" aria-selected="${ADMU.tab === k}" aria-controls="autp" class="${ADMU.tab === k ? 'on' : ''}" onclick="ADMU.tab='${k}';$('#aupanel').innerHTML=auPanel()">${l}${k === 'notes' && m && m.notes.length ? ` <em>${m.notes.length}</em>` : ''}</button>`).join('')}</div>
+ <div class="au-tabs" role="tablist">${tabs.map(([k, l]) => `<button type="button" role="tab" id="aut-${k}" aria-selected="${ADMU.tab === k}" aria-controls="autp" class="${ADMU.tab === k ? 'on' : ''}" data-on-click="auTab('${k}')">${l}${k === 'notes' && m && m.notes.length ? ` <em>${m.notes.length}</em>` : ''}</button>`).join('')}</div>
  <div id="autp" role="tabpanel" aria-labelledby="aut-${ADMU.tab}">${ADMU.tab === 'overview' ? auOverview(u, m, r) : ADMU.tab === 'activity' ? auActivity(u, m, r) : ADMU.tab === 'threads' ? auThreads(m) : auNotes(m)}</div></div>`;
 }
 function auDL(rows) {
@@ -506,7 +506,7 @@ function auOverview(u, m, r) {
       'Plan',
       esc((u.plan || r.plan || 'free').replace(/^./, x => x.toUpperCase())),
       canU(['owner', 'admin', 'finance'])
-        ? `<button type="button" class="au-inl" onclick="auPlan('${id}')">Change plan</button>`
+        ? `<button type="button" class="au-inl" data-on-click="auPlan('${id}')">Change plan</button>`
         : ''
     ],
     p.role || p.company ? ['Works as', esc([p.role, p.company].filter(Boolean).join(', '))] : null,
@@ -528,7 +528,7 @@ function auOverview(u, m, r) {
        `<div><span class="ix-ki t-b sm" aria-hidden="true">${sv(ic, 16)}</span><b>${isNum(v) ? fmtN(v) : dash}</b><small>${l}</small></div>`
    )
    .join('')}</div></section>
- ${acts.length ? `<section class="au-sec"><h3>${sv('shield', 16)} Actions</h3><div class="au-acts">${acts.map(([ic, l, fn, t]) => `<button type="button" class="au-ab ${t}" onclick="${fn}">${sv(ic, 16)}${l}</button>`).join('')}</div><p class="au-fine">Every action asks for a reason and is saved in the audit log.</p></section>` : ''}`;
+ ${acts.length ? `<section class="au-sec"><h3>${sv('shield', 16)} Actions</h3><div class="au-acts">${acts.map(([ic, l, fn, t]) => `<button type="button" class="au-ab ${t}" data-on-click="${fn}">${sv(ic, 16)}${l}</button>`).join('')}</div><p class="au-fine">Every action asks for a reason and is saved in the audit log.</p></section>` : ''}`;
 }
 function auActivity(u, m, r) {
   if (!m) return `<p class="ix-mu au-pad">Run database update 005 to see activity.</p>`;
@@ -575,8 +575,8 @@ function auThreads(m) {
 function auNotes(m) {
   if (!m) return `<p class="ix-mu au-pad">Run database update 005 to use staff notes.</p>`;
   const id = ADMU.open;
-  return `<p class="au-fine">Private to staff. The person never sees these.</p><label class="x-f"><span class="sr">New note</span><textarea id="aunote" rows="3" maxlength="2000" placeholder="Add a note, for example a support conversation or context for a decision"></textarea></label><button type="button" class="ix-btn sm pri" onclick="auNoteAdd('${id}')">${sv('note', 15)} Add note</button>
- <ul class="au-notes">${(m.notes || []).map(n => `<li><p>${esc(n.body)}</p><small>${esc(n.author || 'Staff')} · ${fmtD(n.created_at)}, ${fmtT(n.created_at)}</small>${n.mine || canU(['owner', 'admin']) ? `<button type="button" class="au-inl" onclick="auNoteDel('${n.id}')">Delete</button>` : ''}</li>`).join('') || '<li class="ix-mu">No notes yet.</li>'}</ul>`;
+  return `<p class="au-fine">Private to staff. The person never sees these.</p><label class="x-f"><span class="sr">New note</span><textarea id="aunote" rows="3" maxlength="2000" placeholder="Add a note, for example a support conversation or context for a decision"></textarea></label><button type="button" class="ix-btn sm pri" data-on-click="auNoteAdd('${id}')">${sv('note', 15)} Add note</button>
+ <ul class="au-notes">${(m.notes || []).map(n => `<li><p>${esc(n.body)}</p><small>${esc(n.author || 'Staff')} · ${fmtD(n.created_at)}, ${fmtT(n.created_at)}</small>${n.mine || canU(['owner', 'admin']) ? `<button type="button" class="au-inl" data-on-click="auNoteDel('${n.id}')">Delete</button>` : ''}</li>`).join('') || '<li class="ix-mu">No notes yet.</li>'}</ul>`;
 }
 async function auNoteAdd(id) {
   const t = (($('#aunote') || {}).value || '').trim();
@@ -726,3 +726,38 @@ admAskGo = async function (t) {
   await _askGo35.apply(this, arguments);
   if (ADM.tab === 'users' && !$('#mback.open') && ADMU.open) auRefreshOpen();
 };
+
+/* v59: named handlers for the Users screen (no inline JavaScript). */
+function auSortSel(v) {
+  const [s, d] = String(v).split(':');
+  ADMU.sort = s;
+  ADMU.dir = d;
+  ADMU.page = 0;
+  auLoad(true);
+}
+function auClear() {
+  ADMU.q = '';
+  ADMU.plan = 'all';
+  ADMU.st = 'all';
+  ADMU.page = 0;
+  admBody(auPage());
+  auLoad(true);
+}
+function auPg(p) {
+  if (p === 'prev') ADMU.page--;
+  else if (p === 'next') ADMU.page++;
+  else ADMU.page = +p;
+  auLoad(true);
+}
+function auPer(v) {
+  ADMU.per = +v;
+  ADMU.page = 0;
+  try {
+    localStorage.setItem('it_adm_per', ADMU.per);
+  } catch (_) {}
+  auLoad(true);
+}
+function auTab(k) {
+  ADMU.tab = k;
+  $('#aupanel').innerHTML = auPanel();
+}
