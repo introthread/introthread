@@ -94,7 +94,7 @@ async function rmLoad(keep) {
   } catch (e) {
     admBody(
       rmHead() +
-        `<div class="ix-card ix-fail" role="alert">${sv('alert', 22)}<div><b>Rooms could not load</b><p>${esc((e && e.message) || 'Unknown error')}</p></div><button type="button" class="ix-btn" onclick="rmLoad()">${sv('refresh', 16)} Try again</button></div>`
+        `<div class="ix-card ix-fail" role="alert">${sv('alert', 22)}<div><b>Rooms could not load</b><p>${esc((e && e.message) || 'Unknown error')}</p></div><button type="button" class="ix-btn" data-on-click="rmLoad()">${sv('refresh', 16)} Try again</button></div>`
     );
   }
 }
@@ -159,13 +159,13 @@ function rmLocal(L) {
 }
 /* header + cards */
 function rmHead() {
-  return `<div class="ix-h"><div><h1>Rooms</h1><p>Create and manage events, meetings and communities. People can join using a link, QR code or from your website.</p></div><div class="ix-hc">${canRoomEdit() ? `<button type="button" class="ix-btn pri rm-cta" onclick="rmEdit()">${sv('plus', 18)}<span>Create room</span></button>` : ''}</div></div>`;
+  return `<div class="ix-h"><div><h1>Rooms</h1><p>Create and manage events, meetings and communities. People can join using a link, QR code or from your website.</p></div><div class="ix-hc">${canRoomEdit() ? `<button type="button" class="ix-btn pri rm-cta" data-on-click="rmEdit()">${sv('plus', 18)}<span>Create room</span></button>` : ''}</div></div>`;
 }
 function rmCounts() {
   const c = (RMX.data && RMX.data.counts) || {};
   const v = k => (isNum(c[k]) ? fmtN(c[k]) : dash);
   const card = (k, l, ic, tone, sub, st) =>
-    `<${st ? `button type="button" onclick="rmFilter('st','${RMX.st === st ? 'all' : st}')" aria-pressed="${RMX.st === st}"` : 'div'} class="rm-c${st && RMX.st === st ? ' on' : ''}"><span class="md-wi t-${tone}w" aria-hidden="true">${sv(ic, 24)}</span><span><span class="rm-cl">${l}</span><b>${v(k)}</b><small>${sub}</small></span></${st ? 'button' : 'div'}>`;
+    `<${st ? `button type="button" data-on-click="rmFilter('st','${RMX.st === st ? 'all' : st}')" aria-pressed="${RMX.st === st}"` : 'div'} class="rm-c${st && RMX.st === st ? ' on' : ''}"><span class="md-wi t-${tone}w" aria-hidden="true">${sv(ic, 24)}</span><span><span class="rm-cl">${l}</span><b>${v(k)}</b><small>${sub}</small></span></${st ? 'button' : 'div'}>`;
   return (
     card('total', 'Total rooms', 'cal', 'b', 'All time') +
     card(
@@ -195,7 +195,7 @@ function rmPaintCounts() {
 /* toolbar */
 function rmToolbar() {
   const on = RMX.q || RMX.st !== 'all' || RMX.kind !== 'all' || RMX.dr !== 'any';
-  return `<div class="md-tb rm-tb"><label class="au-search md-q">${sv('search', 17)}<input id="rmq" type="search" placeholder="Search by name, description or location..." value="${esc(RMX.q)}" oninput="rmSearch(this.value)" aria-label="Search rooms"></label>
+  return `<div class="md-tb rm-tb"><label class="au-search md-q">${sv('search', 17)}<input id="rmq" type="search" placeholder="Search by name, description or location..." value="${esc(RMX.q)}" data-on-input="rmSearch(this.value)" aria-label="Search rooms"></label>
  ${mdSel(
    'rmst',
    'Status',
@@ -234,7 +234,7 @@ function rmToolbar() {
    "rmFilter('dr',this.value)",
    'cal'
  ).replace('<span class="md-sl">Date:</span>', '<span class="sr">Date</span>')}
- <button type="button" class="rm-clr" ${on ? '' : 'disabled'} onclick="rmClear()">Clear filters</button></div>`;
+ <button type="button" class="rm-clr" ${on ? '' : 'disabled'} data-on-click="rmClear()">Clear filters</button></div>`;
 }
 let _rmT = null;
 function rmSearch(v) {
@@ -280,7 +280,7 @@ function rmWhere(m) {
 function rmItem(m) {
   const meta = m.meta || {};
   const k = meta.kind || 'event';
-  return `<li><button type="button" class="md-i rm-i${RMX.open === m.id ? ' on' : ''}" data-id="${m.id}" onclick="rmOpen('${m.id}')" aria-current="${RMX.open === m.id}"><span class="md-wi sm2 t-${k === 'community' ? 'p' : k === 'meeting' ? 'o' : 'b'}w" aria-hidden="true">${sv(k === 'community' ? 'users' : k === 'meeting' ? 'brief' : 'cal', 18)}</span>
+  return `<li><button type="button" class="md-i rm-i${RMX.open === m.id ? ' on' : ''}" data-id="${m.id}" data-on-click="rmOpen('${m.id}')" aria-current="${RMX.open === m.id}"><span class="md-wi sm2 t-${k === 'community' ? 'p' : k === 'meeting' ? 'o' : 'b'}w" aria-hidden="true">${sv(k === 'community' ? 'users' : k === 'meeting' ? 'brief' : 'cal', 18)}</span>
  <span class="md-it"><span class="md-ir"><b>${esc(m.name)}</b>${meta.priv === 'private' ? `<span class="rm-pv">${sv('lock', 12)} Private</span>` : ''}</span><span class="md-is">${rmWhen(m)}${rmWhere(m) ? ' · ' + rmWhere(m) : ''}</span>
  <span class="md-im">${RKIND[k]} · by ${esc((m.owner || {}).name || 'a deleted account')} · code ${esc(m.code)}</span></span>
  <span class="md-ie">${rmStP(m.status)}<span class="rm-n">${fmtN(m.threads || 0)} Thread${m.threads === 1 ? '' : 's'}${isNum(m.people) ? ` · ${fmtN(m.people)} ${m.people === 1 ? 'person' : 'people'}` : ''}</span></span></button></li>`;
@@ -290,7 +290,7 @@ function rmList() {
     R = d.rows || [];
   const filt = RMX.q || RMX.st !== 'all' || RMX.kind !== 'all' || RMX.dr !== 'any';
   if (!R.length)
-    return `<div class="md-empty rm-empty"><span class="md-eic" aria-hidden="true">${sv('cal', 26)}</span><b>${filt ? 'No rooms match these filters' : 'No rooms yet'}</b><p>${filt ? 'Try a different search, or clear the filters.' : 'Create your first room to start connecting people at events, meetings or communities.'}</p>${filt ? `<button type="button" class="ix-btn" onclick="rmClear()">Clear filters</button>` : canRoomEdit() ? `<button type="button" class="ix-btn pri rm-cta" onclick="rmEdit()">${sv('plus', 17)} Create room</button>` : ''}</div>
+    return `<div class="md-empty rm-empty"><span class="md-eic" aria-hidden="true">${sv('cal', 26)}</span><b>${filt ? 'No rooms match these filters' : 'No rooms yet'}</b><p>${filt ? 'Try a different search, or clear the filters.' : 'Create your first room to start connecting people at events, meetings or communities.'}</p>${filt ? `<button type="button" class="ix-btn" data-on-click="rmClear()">Clear filters</button>` : canRoomEdit() ? `<button type="button" class="ix-btn pri rm-cta" data-on-click="rmEdit()">${sv('plus', 17)} Create room</button>` : ''}</div>
  ${
    filt
      ? ''
@@ -305,7 +305,7 @@ function rmList() {
          .join('')}</div>`
  }`;
   const more = d.total > R.length;
-  return `<ul class="md-l">${R.map(rmItem).join('')}</ul>${more ? `<div class="md-more"><button type="button" class="ix-btn" onclick="RMX.page++;rmLoad(true)">Show more (${fmtN(d.total - R.length)} left)</button></div>` : ''}`;
+  return `<ul class="md-l">${R.map(rmItem).join('')}</ul>${more ? `<div class="md-more"><button type="button" class="ix-btn" data-on-click="rmMore()">Show more (${fmtN(d.total - R.length)} left)</button></div>` : ''}`;
 }
 function rmListHead() {
   const d = RMX.data || {};
@@ -345,7 +345,7 @@ function rmPage() {
   return `<div id="rmwrap" class="md rm${RMX.open ? ' po' : ''}">${rmHead()}${RMX.limited ? `<p class="ix-upd">Run database update 007 for attendee counts, full Room details, editing and creating Rooms for other people. Until then this page shows the newest 500 Rooms.</p>` : ''}
  <div class="md-cs" id="rmcounts">${rmCounts()}</div><div class="ix-card md-tbc" id="rmtbw">${rmToolbar()}</div>
  <div class="md-g rm-g"><section class="ix-card md-lc" aria-label="Rooms"><div id="rmlh">${rmListHead()}</div><div id="rmlist">${rmList()}</div></section>
- <aside class="ix-card md-p" id="rmpanel" aria-label="Room details">${RMX.open ? rmPanel() : rmIntro()}</aside></div><div class="md-scrim" onclick="rmClose()" aria-hidden="true"></div></div>`;
+ <aside class="ix-card md-p" id="rmpanel" aria-label="Room details">${RMX.open ? rmPanel() : rmIntro()}</aside></div><div class="md-scrim" data-on-click="rmClose()" aria-hidden="true"></div></div>`;
 }
 function rmIntro() {
   const it = [
@@ -356,16 +356,16 @@ function rmIntro() {
   ];
   return `<div class="md-in rm-in"><div class="rm-art" aria-hidden="true"><span class="rm-a1"><i></i>${'<em></em>'.repeat(18)}</span><span class="rm-a2"><i>${sv('user', 16)}</i><em></em><em></em><em></em></span><span class="rm-a3">${sv('link', 18)}</span></div><h2>Select a room</h2><p>Choose a room from the list to view details, attendees and activity.</p></div>
  <h3 class="md-wy">What you can do with Rooms</h3><ul class="md-wl">${it.map(([ic, t, h, p]) => `<li><span class="md-wi t-${t}w" aria-hidden="true">${sv(ic, 22)}</span><div><b>${h}</b><p>${p}</p></div></li>`).join('')}</ul>
- <div class="md-safe"><span aria-hidden="true">${sv('bulb', 22)}</span><div><b>Rooms help turn introductions into meaningful relationships.</b><p>People can join, answer "What's next?", and stay connected after the event.</p></div><button type="button" class="ix-btn sm" onclick="rmLearn()">Learn more</button></div>`;
+ <div class="md-safe"><span aria-hidden="true">${sv('bulb', 22)}</span><div><b>Rooms help turn introductions into meaningful relationships.</b><p>People can join, answer "What's next?", and stay connected after the event.</p></div><button type="button" class="ix-btn sm" data-on-click="rmLearn()">Learn more</button></div>`;
 }
 function rmLearn() {
-  modal(`<div class="cap-m md-guide"><div class="row between"><h3>How Rooms work</h3><button class="x" aria-label="Close" onclick="closeModal()">&times;</button></div>
+  modal(`<div class="cap-m md-guide"><div class="row between"><h3>How Rooms work</h3><button class="x" aria-label="Close" data-on-click="closeModal()">&times;</button></div>
  <p class="fu-sub">A Room groups every Thread started at one event, meeting or community, so the organiser can see which connections went somewhere.</p>
  <h4>1. Create</h4><p>Give it a name, date, type and place, or an online link. Each Room gets a short code and a link, introthread.com/r/CODE.</p>
  <h4>2. Share</h4><p>Show the QR code on screens, badges or tables, or send the link. Attendees open it in their browser. No app is needed.</p>
  <h4>3. Connect</h4><p>When two people tap or scan cards, the Thread is tagged to the Room. Each person answers one question, "What's next?". Answers stay sealed until both reply.</p>
  <h4>4. Measure</h4><p>Organisers see verified connections, answers, meetings agreed and introductions, live and for 30 days after. Private notes are never shown to organisers or staff.</p>
- <button class="cap-btn" onclick="closeModal()">Got it</button></div>`);
+ <button class="cap-btn" data-on-click="closeModal()">Got it</button></div>`);
 }
 /* detail */
 async function rmOpen(id) {
@@ -418,7 +418,7 @@ async function rmOpen(id) {
     }
   } catch (e) {
     if (p)
-      p.innerHTML = `<div class="md-pp"><p class="adm-err">${esc((e && e.message) || 'Could not load')}</p><button class="ix-btn sm" onclick="rmOpen('${id}')">Try again</button></div>`;
+      p.innerHTML = `<div class="md-pp"><p class="adm-err">${esc((e && e.message) || 'Could not load')}</p><button class="ix-btn sm" data-on-click="rmOpen('${id}')">Try again</button></div>`;
   }
 }
 function rmClose() {
@@ -449,9 +449,9 @@ function rmPanel() {
     ['activity', 'Activity'],
     ['history', 'History']
   ];
-  return `<div class="md-pp"><div class="md-ph"><div><div class="md-ir">${rmStP(r.status)}<span class="rm-k">${RKIND[k]}</span>${m.priv === 'private' ? `<span class="rm-pv">${sv('lock', 12)} Private</span>` : ''}${d.reports_open ? `<span class="md-sev high">${d.reports_open} open report${d.reports_open > 1 ? 's' : ''}</span>` : ''}</div><h2>${esc(r.name)}</h2><p>${rmWhen(r)}${m.tz ? ' ' + esc(m.tz) : ''}${rmWhere(r) ? ' · ' + rmWhere(r) : ''}</p></div><button type="button" class="au-x md-x" onclick="rmClose()" aria-label="Close room">${sv('x2', 18)}</button></div>
- <div class="rm-link"><span class="rm-lk">${sv('link', 16)}<code>introthread.com/r/${esc(r.code)}</code></span><button type="button" class="ix-btn sm" onclick="rmCopy('${id}')">${sv('copy', 15)} Copy link</button><button type="button" class="ix-btn sm" onclick="rmQr('${id}')">${sv('qr2', 15)} QR code</button><a class="ix-btn sm" href="/r/${esc(r.code)}" target="_blank" rel="noopener">${sv('ext', 15)} Open join page</a></div>
- <div class="au-tabs" role="tablist">${tabs.map(([t, l]) => `<button type="button" role="tab" id="rmt-${t}" aria-selected="${RMX.tab === t}" aria-controls="rmtp" class="${RMX.tab === t ? 'on' : ''}" onclick="RMX.tab='${t}';$('#rmpanel').innerHTML=rmPanel()">${l}${t === 'attendees' && isNum((d.stats || {}).people) ? ` <em>${d.stats.people}</em>` : ''}</button>`).join('')}</div>
+  return `<div class="md-pp"><div class="md-ph"><div><div class="md-ir">${rmStP(r.status)}<span class="rm-k">${RKIND[k]}</span>${m.priv === 'private' ? `<span class="rm-pv">${sv('lock', 12)} Private</span>` : ''}${d.reports_open ? `<span class="md-sev high">${d.reports_open} open report${d.reports_open > 1 ? 's' : ''}</span>` : ''}</div><h2>${esc(r.name)}</h2><p>${rmWhen(r)}${m.tz ? ' ' + esc(m.tz) : ''}${rmWhere(r) ? ' · ' + rmWhere(r) : ''}</p></div><button type="button" class="au-x md-x" data-on-click="rmClose()" aria-label="Close room">${sv('x2', 18)}</button></div>
+ <div class="rm-link"><span class="rm-lk">${sv('link', 16)}<code>introthread.com/r/${esc(r.code)}</code></span><button type="button" class="ix-btn sm" data-on-click="rmCopy('${id}')">${sv('copy', 15)} Copy link</button><button type="button" class="ix-btn sm" data-on-click="rmQr('${id}')">${sv('qr2', 15)} QR code</button><a class="ix-btn sm" href="/r/${esc(r.code)}" target="_blank" rel="noopener">${sv('ext', 15)} Open join page</a></div>
+ <div class="au-tabs" role="tablist">${tabs.map(([t, l]) => `<button type="button" role="tab" id="rmt-${t}" aria-selected="${RMX.tab === t}" aria-controls="rmtp" class="${RMX.tab === t ? 'on' : ''}" data-on-click="rmTab('${t}')">${l}${t === 'attendees' && isNum((d.stats || {}).people) ? ` <em>${d.stats.people}</em>` : ''}</button>`).join('')}</div>
  <div id="rmtp" role="tabpanel" aria-labelledby="rmt-${RMX.tab}">${RMX.tab === 'overview' ? rmOverview(d) : RMX.tab === 'attendees' ? rmAtt(d) : RMX.tab === 'activity' ? rmAct(d) : rmHist(d)}</div></div>`;
 }
 function rmOverview(d) {
@@ -476,16 +476,16 @@ function rmOverview(d) {
   ];
   return `<section class="md-sec"><h3><span class="md-wi sm t-bw" aria-hidden="true">${sv('bars', 16)}</span>Results</h3><div class="rm-stats">${st.map(([ic, l, v]) => `<div><b>${isNum(v) ? fmtN(v) : dash}</b><small>${l}</small></div>`).join('')}</div>${isNum(s.confirmed) && s.threads ? `<p class="au-fine">${pct(s.confirmed, s.threads)} of Threads confirmed by both people, ${pct(s.resolved || 0, s.threads)} resolved.</p>` : d.lite ? '<p class="au-fine">Run update 007 for confirmations, answers and outcomes.</p>' : ''}</section>
  <div class="md-secs"><section class="md-sec"><h3><span class="md-wi sm t-ow" aria-hidden="true">${sv('cal', 16)}</span>Room details</h3>${dl([['Type', RKIND[m.kind || 'event']], ['Date', rmWhen(r) + (m.tz ? ' ' + esc(m.tz) : '')], ['Format', RFMT[m.fmt] || 'In person'], r.place ? ['Place', esc(r.place)] : null, m.platform ? ['Platform', esc(m.platform)] : null, m.link ? ['Meeting link', `<a href="${esc(m.link)}" target="_blank" rel="noopener">Open ${sv('ext', 12)}</a>`] : null, ['Access', m.priv === 'private' ? 'Private, invite only' : 'Public, anyone with the link'], m.cap ? ['Attendance limit', fmtN(m.cap)] : null, (m.topics || []).length ? ['Topics', esc(m.topics.join(', '))] : null, ['Code', esc(r.code)], ['Created', fmtD(r.created_at)]])}${m.desc ? `<div class="md-quote"><span>Description</span><p>${esc(m.desc)}</p></div>` : ''}</section>
- <section class="md-sec"><h3><span class="md-wi sm t-pw" aria-hidden="true">${sv('user', 16)}</span>Organiser</h3>${o && o.name ? dl([['Name', `${esc(o.name)}${o.handle ? ` <small>@${esc(o.handle)}</small>` : ''}`], o.company ? ['Company', esc(o.company)] : null, o.status ? ['Account', auSt(o.status)] : null]) + (o.id ? `<button type="button" class="au-inl" onclick="mdToUser('${o.id}')">Open in Users</button>` : '') : '<p class="ix-mu">The organiser account no longer exists.</p>'}
- ${isNum(d.reports) ? `<p class="md-sub">Reports about this Room</p><p class="rm-rp">${fmtN(d.reports)} in total${d.reports_open ? `, ${d.reports_open} open. <button type="button" class="au-inl" onclick="admGo('reports')">Go to Moderation</button>` : ''}</p>` : ''}</section></div>
- ${canRoomEdit() || canRoomDel() ? `<div class="md-acts">${canRoomEdit() && !d.lite ? `<button type="button" class="ix-btn" onclick="rmEdit('${id}')">${sv('edit', 16)} Edit room</button>` : ''}${canRoomEdit() && !d.lite ? `<button type="button" class="ix-btn" onclick="rmExport('${id}')">${sv('dl', 16)} Export results</button>` : ''}${canRoomDel() ? `<button type="button" class="ix-btn rm-del" onclick="rmDel('${id}')">${sv('trash', 16)} Delete room</button>` : ''}</div>${d.lite ? '<p class="au-fine">Editing and exports need database update 007.</p>' : ''}` : ''}`;
+ <section class="md-sec"><h3><span class="md-wi sm t-pw" aria-hidden="true">${sv('user', 16)}</span>Organiser</h3>${o && o.name ? dl([['Name', `${esc(o.name)}${o.handle ? ` <small>@${esc(o.handle)}</small>` : ''}`], o.company ? ['Company', esc(o.company)] : null, o.status ? ['Account', auSt(o.status)] : null]) + (o.id ? `<button type="button" class="au-inl" data-on-click="mdToUser('${o.id}')">Open in Users</button>` : '') : '<p class="ix-mu">The organiser account no longer exists.</p>'}
+ ${isNum(d.reports) ? `<p class="md-sub">Reports about this Room</p><p class="rm-rp">${fmtN(d.reports)} in total${d.reports_open ? `, ${d.reports_open} open. <button type="button" class="au-inl" data-on-click="admGo('reports')">Go to Moderation</button>` : ''}</p>` : ''}</section></div>
+ ${canRoomEdit() || canRoomDel() ? `<div class="md-acts">${canRoomEdit() && !d.lite ? `<button type="button" class="ix-btn" data-on-click="rmEdit('${id}')">${sv('edit', 16)} Edit room</button>` : ''}${canRoomEdit() && !d.lite ? `<button type="button" class="ix-btn" data-on-click="rmExport('${id}')">${sv('dl', 16)} Export results</button>` : ''}${canRoomDel() ? `<button type="button" class="ix-btn rm-del" data-on-click="rmDel('${id}')">${sv('trash', 16)} Delete room</button>` : ''}</div>${d.lite ? '<p class="au-fine">Editing and exports need database update 007.</p>' : ''}` : ''}`;
 }
 function rmAtt(d) {
   if (!d.attendees) return `<p class="ix-mu au-pad">Run database update 007 to see attendees.</p>`;
   const A = d.attendees;
   if (!A.length)
     return `<div class="au-empty sm">${sv('users', 20)}<b>No attendees yet</b><p>People appear here once they start a Thread in this Room.</p></div>`;
-  return `<p class="au-fine">People who started Threads in this Room. The people they met are shown in Activity by first name and initial only.</p><ul class="au-th-l">${A.map(a => `<li><div><b>${esc(a.name || 'Deleted account')}${a.handle ? ` <small>@${esc(a.handle)}</small>` : ''}</b><small>${fmtN(a.threads)} Thread${a.threads === 1 ? '' : 's'} · ${fmtN(a.confirmed)} confirmed · last ${fmtD(a.last)}</small></div>${a.id && a.name ? `<button type="button" class="au-inl" onclick="mdToUser('${a.id}')">Open</button>` : ''}</li>`).join('')}</ul>`;
+  return `<p class="au-fine">People who started Threads in this Room. The people they met are shown in Activity by first name and initial only.</p><ul class="au-th-l">${A.map(a => `<li><div><b>${esc(a.name || 'Deleted account')}${a.handle ? ` <small>@${esc(a.handle)}</small>` : ''}</b><small>${fmtN(a.threads)} Thread${a.threads === 1 ? '' : 's'} · ${fmtN(a.confirmed)} confirmed · last ${fmtD(a.last)}</small></div>${a.id && a.name ? `<button type="button" class="au-inl" data-on-click="mdToUser('${a.id}')">Open</button>` : ''}</li>`).join('')}</ul>`;
 }
 function rmAct(d) {
   if (!d.recent) return `<p class="ix-mu au-pad">Run database update 007 to see activity.</p>`;
@@ -522,7 +522,7 @@ function rmQr(id) {
   const c = rmCode(id),
     n = (RMX.det[id] || { room: {} }).room.name || 'Room';
   modal(
-    `<div class="cap-m rm-qrm"><div class="row between"><h3>QR code</h3><button class="x" aria-label="Close" onclick="closeModal()">&times;</button></div><p class="fu-sub">Show this on screens, badges or tables. Scanning it opens the ${esc(n)} join page.</p><div id="rmqr" class="rm-qr"></div><p class="rm-qc">introthread.com/r/${esc(c)}</p><button class="cap-btn" onclick="rmQrDl('${id}')">${sv('dl', 16)} Download PNG</button></div>`
+    `<div class="cap-m rm-qrm"><div class="row between"><h3>QR code</h3><button class="x" aria-label="Close" data-on-click="closeModal()">&times;</button></div><p class="fu-sub">Show this on screens, badges or tables. Scanning it opens the ${esc(n)} join page.</p><div id="rmqr" class="rm-qr"></div><p class="rm-qc">introthread.com/r/${esc(c)}</p><button class="cap-btn" data-on-click="rmQrDl('${id}')">${sv('dl', 16)} Download PNG</button></div>`
   );
   setTimeout(() => qr($('#rmqr'), rmLink(c), 240), 0);
 }
@@ -610,7 +610,7 @@ function rmEdit(id) {
   <label class="x-f"><span>Type</span><select id="rmk">${Object.entries(RKIND)
     .map(([k, l]) => `<option value="${k}" ${(m.kind || 'event') === k ? 'selected' : ''}>${l}</option>`)
     .join('')}</select></label>
-  <div class="ro-g2"><label class="x-f"><span>Date <i>*</i></span><input id="rmd" type="date" value="${v(String(r.event_date || ymdToday()).slice(0, 10))}"></label><label class="x-f"><span>Format</span><select id="rmf" onchange="$('#rmpl').hidden=this.value==='online';$('#rmon').hidden=this.value==='inperson'">${Object.entries(
+  <div class="ro-g2"><label class="x-f"><span>Date <i>*</i></span><input id="rmd" type="date" value="${v(String(r.event_date || ymdToday()).slice(0, 10))}"></label><label class="x-f"><span>Format</span><select id="rmf" data-on-change="rmFmt(this.value)">${Object.entries(
     RFMT
   )
     .map(([k, l]) => `<option value="${k}" ${fmt === k ? 'selected' : ''}>${l}</option>`)
@@ -699,3 +699,17 @@ admAskGo = async function () {
     } else rmClose();
   }
 };
+
+/* v59: named handlers for the Rooms screen (no inline JavaScript). */
+function rmMore() {
+  RMX.page++;
+  rmLoad(true);
+}
+function rmTab(t) {
+  RMX.tab = t;
+  $('#rmpanel').innerHTML = rmPanel();
+}
+function rmFmt(v) {
+  $('#rmpl').hidden = v === 'online';
+  $('#rmon').hidden = v === 'inperson';
+}
