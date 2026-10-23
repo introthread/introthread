@@ -3,6 +3,7 @@
 Everything built so far, newest first. Full technical detail for each item is in `HANDOVER.md`. How Rooms, events, communities and the Room pass work: `docs/ROOMS.md`.
 
 ## 23 Oct 2026
+- **v57: Faster loading.** All scripts are deferred, and `/js` and `/css` files are versioned and cached for a year, so repeat visits only download what changed. No change in behaviour.
 - **v56: Core app moved to `js/app-core.js`.** `index.html` is now only page structure and file links (about 6 KB, down from 1.2 MB on 21 Oct). No change in behaviour.
 
 ## 22 Oct 2026

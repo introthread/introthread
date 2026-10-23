@@ -1008,6 +1008,9 @@ setInterval(() => {
 /* ---------- Supabase cloud layer ----------
    Real accounts, cards, Threads and Rooms live in Supabase (row-level security).
    The "Explore the live demo" account stays local to the browser so anyone can try it safely. */
+/* v57: remember when the page has finished loading every script (see boot()). */
+let DOM_READY = document.readyState === 'complete';
+document.addEventListener('DOMContentLoaded', () => (DOM_READY = true), { once: true });
 const CFG = window.INTROTHREAD_CONFIG || {};
 const SB =
   window.supabase && CFG.supabaseUrl && CFG.supabaseAnonKey
@@ -3869,9 +3872,9 @@ render = function () {
 (async function boot() {
   /* wait until every script (main + /js files) has run, so all wrappers exist before the first render */ await new Promise(
     r =>
-      document.readyState === 'loading'
-        ? document.addEventListener('DOMContentLoaded', r, { once: true })
-        : r()
+      /* v57: scripts are deferred, so readyState is already 'interactive' here.
+         DOMContentLoaded fires only after every deferred file has run. */
+      DOM_READY ? r() : document.addEventListener('DOMContentLoaded', r, { once: true })
   );
   if (AUTH_CB) {
     $('#root').innerHTML =

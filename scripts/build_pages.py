@@ -43,6 +43,17 @@ h=h.replace('<meta name="theme-color" content="#0f1218">','<meta name="theme-col
 # JS meta map for client-side navigation
 jsmap='const PAGE_META='+json.dumps({k:list(v) for k,v in META.items()})+';'
 h=re.sub(r'const PAGE_META=\{.*?\};',lambda m:jsmap,h,flags=re.S) if 'const PAGE_META=' in h else h
+
+# --- v57 speed: defer every script (order is kept) and add a content hash to
+# /js and /css links so browsers can cache them for a year (see vercel.json).
+import hashlib
+def _ver(m):
+    tag,attr,path=m.group(1),m.group(2),m.group(3)
+    hv=hashlib.sha1(open(path,'rb').read()).hexdigest()[:10]
+    return f'{tag}{attr}="/{path}?v={hv}"'
+h=re.sub(r'(<(?:script|link rel="stylesheet")[^>]*?\s)(src|href)="/((?:js|css)/[\w-]+\.(?:js|css))(?:\?v=\w+)?"',_ver,h)
+h=re.sub(r'<script (?!type=)(?![^>]*\bdefer\b)([^>]*)></script>',r'<script \1 defer></script>',h)
+# --- end v57
 open('index.html','w').write(h)
 for p in META:
     if p=='/':continue

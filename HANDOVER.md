@@ -31,6 +31,8 @@ Last updated: 22 Oct 2026, 3:00 pm Nairobi (after v37 security hardening and mig
 - **Photo popup:** Save photo is visible. The root cause was ad blockers hiding `ad-` classes; all were renamed to `ix-` (v35).
 - **Admin:** all screens are redesigned, including the Audit log (v43, done 21 Oct). Do not redo it unless Agnes sends a new mockup.
 
+**Caching (v57):** `/js` and `/css` are cached for a year by version tag. Always run `python3 scripts/build_pages.py` after editing them.
+
 **Code layout (v56):**
 - `index.html` is now about 6 KB: page structure and `<link>`/`<script>` tags only.
 - The original app (v1-v16, no duplicate functions left) is in `js/app-core.js` and must load first.

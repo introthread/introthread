@@ -12,6 +12,7 @@
 
    **Editing `index.html`:**
    - **All app code lives in `/js`** (since v56). `js/app-core.js` holds the core app and loads first; `index.html` has no inline app script any more. Format JS with Prettier.
+   - **Scripts are deferred and versioned (v57).** `scripts/build_pages.py` adds `defer` to every script and `?v=<hash>` to every `/js` and `/css` link. `vercel.json` caches `/js` and `/css` for a year, so ALWAYS run the build after editing any of them, or visitors keep the old file. Never load `/js` or `/css` files without `?v=`. Code that must wait for all files uses `DOM_READY` / `DOMContentLoaded`, not `document.readyState`.
    - **CSS lives in `/css`** (since v55), loaded in this order: `base.css`, `app.css`, `admin.css`, `features.css`. Add new styles at the end of `css/features.css`, or in a new file linked after it. Do NOT search for `</style>` in `index.html` any more: the only one left is inside the invoice print template in JavaScript. Format with Prettier.
    - Add JS before the last `</script>`.
    - Wrap existing functions; do not rewrite them.
