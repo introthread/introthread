@@ -74,7 +74,7 @@ function ipCheck() {
   el.className = 'ip-bar';
   el.setAttribute('role', 'region');
   el.setAttribute('aria-label', 'Install Introthread');
-  el.innerHTML = `<img src="/img/icon-192.png" alt="" width="36" height="36"><div class="ip-t"><b>Get the Introthread app</b><span>Open it from your home screen, full screen, in one tap.</span></div><div class="ip-a"><button type="button" class="x-btn sm" onclick="ipGo()">${IP.evt ? 'Install' : 'How'}</button><button type="button" class="ip-x" aria-label="Not now" onclick="ipHide()">&times;</button></div>`;
+  el.innerHTML = `<img src="/img/icon-192.png" alt="" width="36" height="36"><div class="ip-t"><b>Get the Introthread app</b><span>Open it from your home screen, full screen, in one tap.</span></div><div class="ip-a"><button type="button" class="x-btn sm" data-on-click="ipGo()">${IP.evt ? 'Install' : 'How'}</button><button type="button" class="ip-x" aria-label="Not now" data-on-click="ipHide()">&times;</button></div>`;
   document.body.appendChild(el);
 }
 const _render47 = render;
