@@ -87,7 +87,7 @@ Last updated: 22 Oct 2026, 3:00 pm Nairobi (after v37 security hardening and mig
 
 ### Demo with many visitors (tested 23 Oct 2026)
 - Five separate browsers used the demo at the same time, each editing and moving between all app screens. None saw another's changes and there were no errors. Each visitor's demo lives only in their own browser, so the number of visitors only adds static file downloads from Vercel's CDN.
-- **Known quirk:** two tabs in the same browser share one demo copy. Starting the demo in a second tab resets the stored copy. The first tab keeps working, but whichever tab saves last wins. Possible fix: keep demo data per tab in `sessionStorage`.
+- **Fixed in v64:** each browser tab keeps its own demo copy. The tab's demo, with its sign-in, lives in `sessionStorage` under `introthread_v1_demo_tab` and survives reloads of that tab. `localStorage` keeps only a signed-out copy, so a page opened in a new tab (such as "View as visitor" on `/sarah`) can still show the demo card. A new tab is not signed in until its visitor starts the demo. Real accounts are unaffected because their data is in Supabase. See `js/demo-mode.js`.
 
 ### Live checks still needed (only a person can do these)
 - In browser devtools, check that each page's source has `<!--pre-->` text, that /app and /admin show no homepage flash, and that the console is clear at phone and laptop width. The assistant's browser tools cannot read raw source or the console.
