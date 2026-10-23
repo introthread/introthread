@@ -98,7 +98,7 @@ async function pqLoad(keep) {
   } catch (e) {
     admBody(
       pqHead() +
-        `<div class="ix-card ix-fail" role="alert">${sv('alert', 22)}<div><b>Privacy requests could not load</b><p>${esc((e && e.message) || 'Unknown error')}</p></div><button type="button" class="ix-btn" onclick="pqLoad()">${sv('refresh', 16)} Try again</button></div>`
+        `<div class="ix-card ix-fail" role="alert">${sv('alert', 22)}<div><b>Privacy requests could not load</b><p>${esc((e && e.message) || 'Unknown error')}</p></div><button type="button" class="ix-btn" data-on-click="pqLoad()">${sv('refresh', 16)} Try again</button></div>`
     );
   }
 }
@@ -151,7 +151,7 @@ function pqLocal(L) {
 }
 /* header, cards, toolbar */
 function pqHead() {
-  return `<div class="ix-h"><div><h1>Privacy requests</h1><p>Copies of personal data and account deletions. Introthread aims to reply within 30 days; the legal deadline depends on the law that applies to the person.</p></div><div class="ix-hc"><button type="button" class="ix-btn" onclick="pqGuide()">${sv('info', 17)} Learn about GDPR &amp; CCPA</button></div></div>`;
+  return `<div class="ix-h"><div><h1>Privacy requests</h1><p>Copies of personal data and account deletions. Introthread aims to reply within 30 days; the legal deadline depends on the law that applies to the person.</p></div><div class="ix-hc"><button type="button" class="ix-btn" data-on-click="pqGuide()">${sv('info', 17)} Learn about GDPR &amp; CCPA</button></div></div>`;
 }
 function pqSkel() {
   return (
@@ -162,7 +162,7 @@ function pqSkel() {
 function pqCards() {
   const c = (PQX.data || {}).counts || {};
   const card = (st, ic, tone, l, v, sub) =>
-    `<button type="button" class="rm-c${PQX.st === st ? ' on' : ''}" onclick="pqFilter('st','${st}')" aria-pressed="${PQX.st === st}"><span class="md-wi t-${tone}w" aria-hidden="true">${sv(ic, 24)}</span><span><span class="rm-cl">${l}</span><b>${fmtN(v)}</b>${sub ? `<small class="rv-ch ${sub[1]}">${sub[0]}</small>` : ''}</span></button>`;
+    `<button type="button" class="rm-c${PQX.st === st ? ' on' : ''}" data-on-click="pqFilter('st','${st}')" aria-pressed="${PQX.st === st}"><span class="md-wi t-${tone}w" aria-hidden="true">${sv(ic, 24)}</span><span><span class="rm-cl">${l}</span><b>${fmtN(v)}</b>${sub ? `<small class="rv-ch ${sub[1]}">${sub[0]}</small>` : ''}</span></button>`;
   return (
     card('all', 'pqdoc', 'b', 'Total requests', c.all, PQX.days ? ['In the chosen dates', 'm'] : null) +
     card(
@@ -184,7 +184,7 @@ function pqCards() {
 function pqBar() {
   const c = (PQX.data || {}).counts || {};
   const tab = (k, l) =>
-    `<button type="button" role="tab" aria-selected="${PQX.st === k}" class="${PQX.st === k ? 'on' : ''}" onclick="pqFilter('st','${k}')">${l} (${fmtN(c[k] || 0)})</button>`;
+    `<button type="button" role="tab" aria-selected="${PQX.st === k}" class="${PQX.st === k ? 'on' : ''}" data-on-click="pqFilter('st','${k}')">${l} (${fmtN(c[k] || 0)})</button>`;
   return `<div class="pq-tb"><div class="pq-tabs" role="tablist" aria-label="Status">${tab('all', 'All')}${tab('open', 'Open')}${tab('actioned', 'Actioned')}${tab('dismissed', 'Dismissed')}</div>
  ${mdSel(
    'pqd',
@@ -200,7 +200,7 @@ function pqBar() {
    "pqFilter('days',+this.value)",
    'cal'
  ).replace('<span class="md-sl">Date:</span>', '<span class="sr">Date</span>')}
- <label class="au-search pq-q">${sv('search', 17)}<input id="pqq" type="search" value="${esc(PQX.q)}" placeholder="Name, email or request ID" aria-label="Search by name, email or request ID" oninput="clearTimeout(PQX._t);const v=this.value;PQX._t=setTimeout(()=>pqFilter('q',v),300)"></label></div>`;
+ <label class="au-search pq-q">${sv('search', 17)}<input id="pqq" type="search" value="${esc(PQX.q)}" placeholder="Name, email or request ID" aria-label="Search by name, email or request ID" data-on-input="pqSearchIn(this.value)"></label></div>`;
 }
 function pqFilter(k, v) {
   PQX[k] = v;
@@ -215,20 +215,20 @@ function pqTable() {
   if (!R.length) return pqEmpty();
   return `<div class="pq-tw"><table class="au-t pq-t"><thead><tr><th scope="col">Request</th><th scope="col">Person</th><th scope="col">Type</th><th scope="col">Reason</th><th scope="col">Received</th><th scope="col" title="Introthread's 30-day target. Legal deadlines vary and can sometimes be extended.">Respond by</th><th scope="col">Status</th><th scope="col"><span class="sr">Actions</span></th></tr></thead><tbody>
  ${R.map(
-   r => `<tr class="pq-r" onclick="if(!event.target.closest('button'))pqOpen('${esc(r.id)}')"><td data-l="Request"><b class="pq-ref">${pqRef(r)}</b></td><td data-l="Person"><b>${esc(r.name || 'Deleted account')}</b><small>${esc(r.account_email || r.email || '')}</small></td><td data-l="Type">${pqKindP(r.kind)}</td>
+   r => `<tr class="pq-r" data-on-click="pqRow(event,'${esc(r.id)}')"><td data-l="Request"><b class="pq-ref">${pqRef(r)}</b></td><td data-l="Person"><b>${esc(r.name || 'Deleted account')}</b><small>${esc(r.account_email || r.email || '')}</small></td><td data-l="Type">${pqKindP(r.kind)}</td>
  <td data-l="Reason" class="pq-rs">${r.details ? esc(r.details) : '<span class="ix-mu">No note given</span>'}</td><td data-l="Received">${fmtD(r.created_at)}</td><td data-l="Respond by">${fmtD(r.due_at)}${pqDue(r)}</td><td data-l="Status">${pqStP(r.status)}</td>
- <td class="pq-ac"><button type="button" class="ix-btn" onclick="pqOpen('${esc(r.id)}')">${pqGrp(r.status) === 'open' && pqCan() ? 'Review' : 'View'}</button></td></tr>`
+ <td class="pq-ac"><button type="button" class="ix-btn" data-on-click="pqOpen('${esc(r.id)}')">${pqGrp(r.status) === 'open' && pqCan() ? 'Review' : 'View'}</button></td></tr>`
  ).join('')}</tbody></table></div>
- ${pages > 1 ? `<div class="pq-pg"><button type="button" class="ix-btn" ${PQX.page ? '' : 'disabled'} onclick="PQX.page--;pqLoad(true)">Previous</button><span>Page ${PQX.page + 1} of ${pages}</span><button type="button" class="ix-btn" ${PQX.page + 1 < pages ? '' : 'disabled'} onclick="PQX.page++;pqLoad(true)">Next</button></div>` : ''}`;
+ ${pages > 1 ? `<div class="pq-pg"><button type="button" class="ix-btn" ${PQX.page ? '' : 'disabled'} data-on-click="pqPg('prev')">Previous</button><span>Page ${PQX.page + 1} of ${pages}</span><button type="button" class="ix-btn" ${PQX.page + 1 < pages ? '' : 'disabled'} data-on-click="pqPg('next')">Next</button></div>` : ''}`;
 }
 function pqEmpty() {
   const filt = PQX.q || PQX.days || PQX.st !== 'all';
   return `<div class="pq-empty"><div class="pq-ill" aria-hidden="true"><i></i><span>${sv('lock', 30)}</span><i></i></div><h2>${filt ? 'No requests match' : 'No requests yet'}</h2>
  <p>${filt ? 'Try another status, date or search.' : 'People ask for a copy of their data or for their account to be deleted from Settings, under "Your data and privacy", in the app. Each request appears here with a 30-day reminder.'}</p>
- ${filt ? `<button type="button" class="ix-btn" onclick="PQX.q='';PQX.days=0;PQX.st='all';PQX.page=0;pqLoad(true)">Clear filters</button>` : `<button type="button" class="ix-btn pri" onclick="pqGuide()">${sv('pqdoc', 17)} Data handling guide</button>`}</div>`;
+ ${filt ? `<button type="button" class="ix-btn" data-on-click="pqClear()">Clear filters</button>` : `<button type="button" class="ix-btn pri" data-on-click="pqGuide()">${sv('pqdoc', 17)} Data handling guide</button>`}</div>`;
 }
 function pqInfo() {
-  return `<div class="ix-card pq-info"><div><span class="sg-ri" aria-hidden="true">${sv('shield', 20)}</span><div><b>What are privacy requests?</b><p>People can ask for a copy of the personal data Introthread holds about them, ask for it to be corrected, or ask for their account to be deleted. Every step you take here is recorded.</p><button type="button" class="au-inl" onclick="pqGuide()">Learn more</button></div></div>
+  return `<div class="ix-card pq-info"><div><span class="sg-ri" aria-hidden="true">${sv('shield', 20)}</span><div><b>What are privacy requests?</b><p>People can ask for a copy of the personal data Introthread holds about them, ask for it to be corrected, or ask for their account to be deleted. Every step you take here is recorded.</p><button type="button" class="au-inl" data-on-click="pqGuide()">Learn more</button></div></div>
  <div><span class="sg-ri" aria-hidden="true">${sv('clock', 20)}</span><div><b>Your checklist</b><ul><li>Check the request really comes from the account holder</li><li>Reply within the deadline that applies (30-day reminder here)</li><li>Send data securely, only to the account's email</li><li>Record what you did and when you told them</li></ul></div></div>
  <div><span class="sg-ri" aria-hidden="true">${sv('pqdoc', 20)}</span><div><b>What a data copy includes</b><ul><li>Account email and sign-up date</li><li>Profile and card details</li><li>Threads they started</li><li>Contacts they saved</li><li>Rooms they organise</li></ul></div></div></div>`;
 }
@@ -274,7 +274,7 @@ async function pqOpen(id) {
   } catch (e) {
     const b = $('#pqmb');
     if (b)
-      b.innerHTML = `<div class="row between"><h3>Request</h3><button class="x" aria-label="Close" onclick="closeModal()">&times;</button></div><p class="adm-err">${esc((e && e.message) || 'Could not load the request')}</p>`;
+      b.innerHTML = `<div class="row between"><h3>Request</h3><button class="x" aria-label="Close" data-on-click="closeModal()">&times;</button></div><p class="adm-err">${esc((e && e.message) || 'Could not load the request')}</p>`;
   }
 }
 function pqDetail(r) {
@@ -300,7 +300,7 @@ function pqDetail(r) {
             ? 'A data export was downloaded for this request. Send it only to the account email, through a secure link.'
             : 'Download everything Introthread holds about this person as a file. Send it only to the account email, through a secure link.',
           open && can && r.user_id && !exported
-            ? `<button type="button" class="ix-btn" onclick="PQX.reopen='${r.id}';admExportAsk(${J(r.user_id)},${J(r.handle || 'user')})">${sv('sgimport', 16)} Export data</button>`
+            ? `<button type="button" class="ix-btn" data-on-click="pqExport('${r.id}',${J(r.user_id)},${J(r.handle || 'user')})">${sv('sgimport', 16)} Export data</button>`
             : ''
         )
       : r.kind === 'delete'
@@ -315,7 +315,7 @@ function pqDetail(r) {
                 : 'Permanently deletes the account, card, Threads, contacts and Rooms. Export a copy first if they also asked for one.',
             open && r.user_id && !deleted && !r.is_staff
               ? admOk(['owner', 'admin'])
-                ? `<button type="button" class="ix-btn bad" onclick="PQX.reopen='${r.id}';admDeleteAsk(${J(r.user_id)},${J(r.handle || 'user')})">${sv('pqtrash', 16)} Delete account</button>`
+                ? `<button type="button" class="ix-btn bad" data-on-click="pqDelete('${r.id}',${J(r.user_id)},${J(r.handle || 'user')})">${sv('pqtrash', 16)} Delete account</button>`
                 : '<p class="ix-mu">Only owners and admins can delete accounts.</p>'
               : ''
           )
@@ -325,17 +325,17 @@ function pqDetail(r) {
             'Correct their details',
             'Open the person in Users to check what needs changing. Ask them what is wrong if their note does not say.',
             r.user_id && typeof mdToUser === 'function'
-              ? `<button type="button" class="ix-btn" onclick="closeModal();mdToUser('${r.user_id}')">${sv('users', 16)} Open in Users</button>`
+              ? `<button type="button" class="ix-btn" data-on-click="closeModal();mdToUser('${r.user_id}')">${sv('users', 16)} Open in Users</button>`
               : ''
           );
-  return `<div class="row between pq-mh"><div><span class="pq-ref">${pqRef(r)}</span><h3>${esc(k[0])}</h3></div><button class="x" aria-label="Close" onclick="closeModal()">&times;</button></div>
+  return `<div class="row between pq-mh"><div><span class="pq-ref">${pqRef(r)}</span><h3>${esc(k[0])}</h3></div><button class="x" aria-label="Close" data-on-click="closeModal()">&times;</button></div>
  <div class="pq-pills">${pqStP(r.status)}${pqDue(r)}</div>
  <dl class="pq-dl"><div><dt>Person</dt><dd>${esc(r.name || 'Deleted account')}${r.handle ? ` <small>@${esc(r.handle)}</small>` : ''}</dd></div><div><dt>Email</dt><dd>${esc(r.account_email || r.email || dash)}</dd></div><div><dt>Received</dt><dd>${fmtD(r.created_at)} ${fmtT(r.created_at)}</dd></div><div><dt>Respond by</dt><dd>${fmtD(r.due_at)} <small>(30-day reminder)</small></dd></div>${r.account_created ? `<div><dt>Account created</dt><dd>${fmtD(r.account_created)}</dd></div>` : ''}${r.others ? `<div><dt>Other requests</dt><dd>${fmtN(r.others)}</dd></div>` : ''}</dl>
  <div class="pq-note"><b>Their note</b><p>${r.details ? esc(r.details) : '<span class="ix-mu">No note given.</span>'}</p></div>
  ${
    open
-     ? `<ol class="pq-steps">${step(1, !!r.identity_checked_at, 'Check identity', vfy, can && !r.identity_checked_at && !PQX.limited ? `<button type="button" class="ix-btn" onclick="pqAct('${r.id}','verify')">${sv('pqid', 16)} Mark identity checked</button>` : '')}${s2}
- ${step(3, false, 'Close the request', 'Mark it actioned once you have done what they asked and told them. Dismiss it only when it is not valid, for example identity could not be confirmed, and tell them why.', can ? `<div class="pq-acts">${r.status === 'open' ? `<button type="button" class="ix-btn" onclick="pqAct('${r.id}','start')">Start working on it</button>` : ''}<button type="button" class="ix-btn pri" onclick="pqAct('${r.id}','done')">${sv('pqok', 16)} Mark actioned</button><button type="button" class="ix-btn" onclick="pqAct('${r.id}','reject')">Dismiss</button></div>` : '<p class="ix-mu">Only owners, admins and support can act on requests.</p>')}</ol>`
+     ? `<ol class="pq-steps">${step(1, !!r.identity_checked_at, 'Check identity', vfy, can && !r.identity_checked_at && !PQX.limited ? `<button type="button" class="ix-btn" data-on-click="pqAct('${r.id}','verify')">${sv('pqid', 16)} Mark identity checked</button>` : '')}${s2}
+ ${step(3, false, 'Close the request', 'Mark it actioned once you have done what they asked and told them. Dismiss it only when it is not valid, for example identity could not be confirmed, and tell them why.', can ? `<div class="pq-acts">${r.status === 'open' ? `<button type="button" class="ix-btn" data-on-click="pqAct('${r.id}','start')">Start working on it</button>` : ''}<button type="button" class="ix-btn pri" data-on-click="pqAct('${r.id}','done')">${sv('pqok', 16)} Mark actioned</button><button type="button" class="ix-btn" data-on-click="pqAct('${r.id}','reject')">Dismiss</button></div>` : '<p class="ix-mu">Only owners, admins and support can act on requests.</p>')}</ol>`
      : `<div class="pq-closed">${sv(r.status === 'done' ? 'pqok' : 'pqx', 18)}<div><b>${r.status === 'done' ? 'Actioned' : 'Dismissed'}${r.handled_at ? ' on ' + fmtD(r.handled_at) : ''}${r.handled_by_name ? ' by ' + esc(r.handled_by_name) : ''}</b>${r.resolution ? `<p>${esc(r.resolution)}</p>` : ''}</div></div>`
  }
  <h4 class="pq-hh">History</h4>${H.length ? `<ol class="pq-hist">${H.map(h => `<li><b>${esc(pqAction(h.action))}</b><span>${fmtD(h.created_at)} ${fmtT(h.created_at)} · ${esc(h.actor || 'Staff member')}</span>${h.reason ? `<p>${esc(h.reason)}</p>` : ''}</li>`).join('')}</ol>` : `<p class="ix-mu">Received ${fmtD(r.created_at)}. No staff actions yet.</p>`}`;
@@ -401,7 +401,7 @@ function pqAct(id, act) {
 }
 /* guide */
 function pqGuide() {
-  modal(`<div class="cap-m pq-m pq-g"><div class="row between"><h3>Privacy request guide</h3><button class="x" aria-label="Close" onclick="closeModal()">&times;</button></div>
+  modal(`<div class="cap-m pq-m pq-g"><div class="row between"><h3>Privacy request guide</h3><button class="x" aria-label="Close" data-on-click="closeModal()">&times;</button></div>
  <p class="fu-sub">Practical steps for handling requests at Introthread. This is not legal advice. When unsure, check the regulator's guidance or ask a lawyer.</p>
  <h4>1. Check identity</h4><p>Requests come from a signed-in account, which is good evidence. Before deleting an account or sending data, reply to the account email and ask them to confirm. Do not send data to a different address. Ask for more proof only if something looks wrong, and only what you need.</p>
  <h4>2. Copy of data</h4><p>Use Export data on the request. It downloads their account email and sign-up date, profile, Threads they started, contacts and Rooms they organise. Share it through a secure link to the account email, never as a plain attachment to someone else, and delete your local copy afterwards.</p>
@@ -438,4 +438,33 @@ if (typeof privSend === 'function') {
     closeModal();
     toast('Request received. We will reply by email within 30 days.');
   };
+}
+
+/* v59: named handlers for the Privacy requests screen (no inline JavaScript). */
+function pqSearchIn(v) {
+  clearTimeout(PQX._t);
+  PQX._t = setTimeout(() => pqFilter('q', v), 300);
+}
+function pqRow(e, id) {
+  if (!e.target.closest('button')) pqOpen(id);
+}
+function pqPg(d) {
+  if (d === 'prev') PQX.page--;
+  else PQX.page++;
+  pqLoad(true);
+}
+function pqClear() {
+  PQX.q = '';
+  PQX.days = 0;
+  PQX.st = 'all';
+  PQX.page = 0;
+  pqLoad(true);
+}
+function pqExport(rid, uid, handle) {
+  PQX.reopen = rid;
+  admExportAsk(uid, handle);
+}
+function pqDelete(rid, uid, handle) {
+  PQX.reopen = rid;
+  admDeleteAsk(uid, handle);
 }
