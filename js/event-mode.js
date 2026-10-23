@@ -65,13 +65,13 @@ function vScan() {
     }
     scanWake(true);
   }, 20);
-  return `<div class="scan ${SCAN.dark ? 'dk' : ''}"><header class="scan-h"><button type="button" class="scan-ib" aria-label="Close" onclick="scanClose()">${sv('close', 20)}</button><span class="scan-live"><i></i>Event mode</span><button type="button" class="scan-ib" aria-label="Full screen" onclick="scanFull()">${sv('grid', 18)}</button></header>
+  return `<div class="scan ${SCAN.dark ? 'dk' : ''}"><header class="scan-h"><button type="button" class="scan-ib" aria-label="Close" data-on-click="scanClose()">${sv('close', 20)}</button><span class="scan-live"><i></i>Event mode</span><button type="button" class="scan-ib" aria-label="Full screen" data-on-click="scanFull()">${sv('grid', 18)}</button></header>
  <main class="scan-m"><div class="scan-who">${avatarC(u, 56)}<div><b>${esc(u.name || '')}</b><small>${esc([u.role, u.company].filter(Boolean).join(' · '))}</small></div></div>
- <button type="button" class="scan-qr" aria-label="QR code for introthread.com/${esc(u.handle)}. Tap to switch light or dark" onclick="SCAN.dark=!SCAN.dark;render()"><div id="scanqr"></div><span class="t-qrlogo"><span class="x-lm"><i></i><i></i></span></span></button>
+ <button type="button" class="scan-qr" aria-label="QR code for introthread.com/${esc(u.handle)}. Tap to switch light or dark" data-on-click="scanDark()"><div id="scanqr"></div><span class="t-qrlogo"><span class="x-lm"><i></i><i></i></span></span></button>
  <p class="scan-cta">Scan to connect with ${esc((u.name || '').split(' ')[0])}</p><p class="scan-url">introthread.com/${esc(u.handle)}</p>
  ${room ? `<p class="scan-room">${sv('pin', 14)} New Threads are tagged <b>${esc(room.name)}</b></p>` : ''}
- <div class="scan-ev" role="radiogroup" aria-label="Event"><button type="button" role="radio" aria-checked="${!room}" class="${room ? '' : 'on'}" onclick="SCAN.room='';render()">No event</button>${R.map(r => `<button type="button" role="radio" aria-checked="${SCAN.room === r.id}" class="${SCAN.room === r.id ? 'on' : ''}" onclick="SCAN.room='${r.id}';render()">${esc(r.name)}</button>`).join('')}</div>
- <div class="scan-acts"><button type="button" onclick="shareNative()">${sv('send', 18)}<span>Share link</span></button><button type="button" onclick="tapNFC()">${sv('nfc', 18)}<span>NFC</span></button><button type="button" onclick="scanWallpaper()">${sv('photo', 18)}<span>Save as wallpaper</span></button><a href="/app/tap">${sv('user', 18)}<span>Add manually</span></a></div>
+ <div class="scan-ev" role="radiogroup" aria-label="Event"><button type="button" role="radio" aria-checked="${!room}" class="${room ? '' : 'on'}" data-on-click="scanRoom('')">No event</button>${R.map(r => `<button type="button" role="radio" aria-checked="${SCAN.room === r.id}" class="${SCAN.room === r.id ? 'on' : ''}" data-on-click="scanRoom('${r.id}')">${esc(r.name)}</button>`).join('')}</div>
+ <div class="scan-acts"><button type="button" data-on-click="shareNative()">${sv('send', 18)}<span>Share link</span></button><button type="button" data-on-click="tapNFC()">${sv('nfc', 18)}<span>NFC</span></button><button type="button" data-on-click="scanWallpaper()">${sv('photo', 18)}<span>Save as wallpaper</span></button><a href="/app/tap">${sv('user', 18)}<span>Add manually</span></a></div>
  <p class="scan-tip">${sv('spark', 13)} ${n ? `${n} Thread${n > 1 ? 's' : ''} started today. ` : ''}Turn up your brightness for faster scanning. Your screen stays on in event mode.</p></main></div>`;
 }
 function scanWallpaper() {
@@ -183,3 +183,5 @@ SV.thread = '<circle cx="6.5" cy="12" r="3.5"/><circle cx="17.5" cy="12" r="3.5"
 
 /* v29 page changes start at the top (scroll position no longer carries over between pages) */
 window.addEventListener('itroute', () => setTimeout(() => window.scrollTo(0, 0), 0));
+
+/* v62: scanDark and scanRoom (defined in admin-audit.js) handle the event-mode buttons. */
