@@ -184,12 +184,12 @@ async function sfLoad(keep) {
   } catch (e) {
     admBody(
       sfHead() +
-        `<div class="ix-card ix-fail" role="alert">${sv('alert', 22)}<div><b>Staff could not load</b><p>${esc((e && e.message) || 'Unknown error')}</p></div><button type="button" class="ix-btn" onclick="sfLoad()">${sv('refresh', 16)} Try again</button></div>`
+        `<div class="ix-card ix-fail" role="alert">${sv('alert', 22)}<div><b>Staff could not load</b><p>${esc((e && e.message) || 'Unknown error')}</p></div><button type="button" class="ix-btn" data-on-click="sfLoad()">${sv('refresh', 16)} Try again</button></div>`
     );
   }
 }
 function sfHead() {
-  return `<div class="ix-h"><div><h1>Staff</h1><p>Manage admin access and permissions. Control who can open the admin area and what they can do.</p></div><div class="ix-hc"><button type="button" class="ix-btn" onclick="admGo('audit')">${sv('eye', 17)} View audit log</button></div></div>`;
+  return `<div class="ix-h"><div><h1>Staff</h1><p>Manage admin access and permissions. Control who can open the admin area and what they can do.</p></div><div class="ix-hc"><button type="button" class="ix-btn" data-on-click="admGo('audit')">${sv('eye', 17)} View audit log</button></div></div>`;
 }
 function sfSkel() {
   return (
@@ -274,22 +274,22 @@ function sfList() {
     return `<tr><td data-l="Name"><span class="sf-n"><span class="sf-av" aria-hidden="true">${esc(initials(s.name || s.email))}</span><span><b>${esc(s.name || s.email)}${mine ? ' <span class="sf-you">You</span>' : ''}</b><small class="sf-em">${esc(s.email)}</small></span></span></td>
  <td data-l="Role">${esc(sfRoleName(s.role))}</td><td data-l="Two-step">${s.mfa == null ? dash : s.mfa ? '<span class="sf-ok">On</span>' : '<span class="sf-warn">Not set up</span>'}</td>
  <td data-l="Status"><span class="pq-st ${paused ? 't-m' : 't-g'}">${paused ? 'Suspended' : 'Active'}</span></td><td data-l="Last active">${sfWhen(s.last_sign_in_at)}</td>
- <td class="sf-ac">${own && !mine ? `<button type="button" class="sf-more" aria-label="Manage ${esc(s.name || s.email)}" onclick="sfManage('${esc(s.user_id)}')">${sv('sfdots', 18)}</button>` : ''}</td></tr>`;
+ <td class="sf-ac">${own && !mine ? `<button type="button" class="sf-more" aria-label="Manage ${esc(s.name || s.email)}" data-on-click="sfManage('${esc(s.user_id)}')">${sv('sfdots', 18)}</button>` : ''}</td></tr>`;
   };
   const irow = i => {
     const st = sfInvSt(i);
     return `<tr class="sf-inv"><td data-l="Name"><span class="sf-n"><span class="sf-av inv" aria-hidden="true">${sv('mail', 15)}</span><span><b class="sf-em">${esc(i.email)}</b><small>Invitation${i.invited_by_name ? ' from ' + esc(i.invited_by_name) : ''}</small></span></span></td>
  <td data-l="Role">${esc(sfRoleName(i.role))}</td><td data-l="Two-step">${dash}</td><td data-l="Status"><span class="pq-st t-${st[1]}" ${i.failure_reason ? `title="${esc(i.failure_reason)}"` : ''}>${st[0]}</span>${i.status === 'failed' && i.failure_reason ? `<small class="sf-fr">${esc(i.failure_reason)}</small>` : ''}</td>
  <td data-l="Sent">${i.sent_at ? `${fmtD(i.sent_at)}<small>Expires ${fmtD(i.expires_at)}</small>` : `${fmtD(i.created_at)}<small>Not sent</small>`}</td>
- <td class="sf-ac">${own ? `<button type="button" class="ix-btn sf-sm" onclick="sfResend('${i.id}')">Resend</button><button type="button" class="ix-btn sf-sm" onclick="sfRevoke('${i.id}')">Revoke</button>` : ''}</td></tr>`;
+ <td class="sf-ac">${own ? `<button type="button" class="ix-btn sf-sm" data-on-click="sfResend('${i.id}')">Resend</button><button type="button" class="ix-btn sf-sm" data-on-click="sfRevoke('${i.id}')">Revoke</button>` : ''}</td></tr>`;
   };
   return `<section class="ix-card sf-main" aria-labelledby="sfmt"><div class="sf-mh"><div><h2 id="sfmt">Staff members</h2><p>Everyone with access to the admin area${I.length ? ', and open invitations' : ''}.</p></div>
- <div class="sf-tb"><label class="au-search">${sv('search', 17)}<input id="sfq" type="search" value="${esc(SFX.q)}" placeholder="Search by name or email" aria-label="Search staff by name or email" oninput="clearTimeout(SFX._t);const v=this.value;SFX._t=setTimeout(()=>{SFX.q=v;sfLoad(true)},250)"></label>
+ <div class="sf-tb"><label class="au-search">${sv('search', 17)}<input id="sfq" type="search" value="${esc(SFX.q)}" placeholder="Search by name or email" aria-label="Search staff by name or email" data-on-input="sfSearchIn(this.value)"></label>
  ${mdSel('sfrf', 'Role', SFX.role, [['all', 'All roles']].concat(SF_ROLES.map(r => [r[0], r[1]])), 'SFX.role=this.value;sfLoad(true)').replace('<span class="md-sl">Role:</span>', '<span class="sr">Role</span>')}</div></div>
  ${
    S.length || I.length
      ? `<div class="pq-tw"><table class="au-t pq-t sf-t${I.length && own ? ' has-inv' : ''}"><thead><tr><th scope="col">Staff member</th><th scope="col">Role</th><th scope="col">Two-step</th><th scope="col">Status</th><th scope="col">Last active</th><th scope="col"><span class="sr">Actions</span></th></tr></thead><tbody>${S.map(row).join('')}${I.map(irow).join('')}</tbody></table></div>`
-     : `<div class="pq-empty"><h2>No staff match</h2><p>Try another role or search.</p><button type="button" class="ix-btn" onclick="SFX.q='';SFX.role='all';sfLoad(true)">Clear filters</button></div>`
+     : `<div class="pq-empty"><h2>No staff match</h2><p>Try another role or search.</p><button type="button" class="ix-btn" data-on-click="sfClear()">Clear filters</button></div>`
  }</section>`;
 }
 /* invite panel */
@@ -298,8 +298,8 @@ function sfInvite() {
   if (!own)
     return `<section class="ix-card sf-inv-p"><h2>Add new staff member</h2><p class="sf-sub">Only owners can invite staff or change roles.</p><div class="sg-box"><span class="sg-ic t-bw" aria-hidden="true">${sv('lock', 20)}</span><div><b>Need someone added?</b><p>Ask an owner. Every staff change is recorded in the audit log.</p></div></div></section>`;
   return `<section class="ix-card sf-inv-p" aria-labelledby="sfit"><h2 id="sfit">Add new staff member</h2><p class="sf-sub">${SFX.limited ? 'Give an existing Introthread account admin access.' : 'Send an invitation to give someone admin access.'}</p>
- <form onsubmit="event.preventDefault();sfInviteGo()" novalidate><div class="pl-f"><label for="sfem">Email address</label><div class="pl-in np" id="sfemw"><input id="sfem" type="email" inputmode="email" autocomplete="off" maxlength="254" placeholder="name@company.com" oninput="sfInvInput()"></div><small class="pl-err" id="sfemerr" role="alert"></small></div>
- <div class="pl-f"><label for="sfrole2">Role</label><label class="md-sel sg-sel">${sv('users', 17)}<select id="sfrole2" onchange="sfInvInput()">${SF_ROLES.map(r => `<option value="${r[0]}" ${r[0] === 'support' ? 'selected' : ''}>${r[1]}</option>`).join('')}</select>${sv('chevd', 16)}</label><small class="ix-mu" id="sfrolehint"></small></div>
+ <form data-on-submit="event.preventDefault();sfInviteGo()" novalidate><div class="pl-f"><label for="sfem">Email address</label><div class="pl-in np" id="sfemw"><input id="sfem" type="email" inputmode="email" autocomplete="off" maxlength="254" placeholder="name@company.com" data-on-input="sfInvInput()"></div><small class="pl-err" id="sfemerr" role="alert"></small></div>
+ <div class="pl-f"><label for="sfrole2">Role</label><label class="md-sel sg-sel">${sv('users', 17)}<select id="sfrole2" data-on-change="sfInvInput()">${SF_ROLES.map(r => `<option value="${r[0]}" ${r[0] === 'support' ? 'selected' : ''}>${r[1]}</option>`).join('')}</select>${sv('chevd', 16)}</label><small class="ix-mu" id="sfrolehint"></small></div>
  <div class="sg-box sf-note"><span class="sg-ic t-bw" aria-hidden="true">${sv('mail', 20)}</span><div><p>${SFX.limited ? 'They must already have an Introthread account with this email. They get access straight away.' : 'They get a sign-in email from Introthread. When they sign in with this email and open the admin area within 7 days, they join with this role. They will need two-step verification.'}</p></div></div>
  <button type="submit" class="ix-btn pri sf-send" id="sfsend" disabled>${sv('sfsend', 17)} ${SFX.limited ? 'Add staff member' : 'Send invitation'}</button></form></section>`;
 }
@@ -403,10 +403,10 @@ function sfManage(uid) {
     x => x.role === 'owner' && !x.suspended_at && x.user_id !== uid
   ).length;
   const lastOwner = s.role === 'owner' && !owners;
-  modal(`<div class="cap-m sf-mm"><div class="row between"><h3>${esc(s.name || s.email)}</h3><button class="x" aria-label="Close" onclick="closeModal()">&times;</button></div><p class="fu-sub">${esc(s.email)} · ${esc(sfRoleName(s.role))}${paused ? ' · Suspended' : ''}</p>
+  modal(`<div class="cap-m sf-mm"><div class="row between"><h3>${esc(s.name || s.email)}</h3><button class="x" aria-label="Close" data-on-click="closeModal()">&times;</button></div><p class="fu-sub">${esc(s.email)} · ${esc(sfRoleName(s.role))}${paused ? ' · Suspended' : ''}</p>
  ${lastOwner ? `<div class="sg-warn">${sv('lock', 16)}<span>This is the only active owner. Add another owner before changing, pausing or removing this account.</span></div>` : ''}
- <div class="pl-f"><label for="sfnr">Role</label><div class="sf-rr"><label class="md-sel sg-sel"><select id="sfnr" ${lastOwner ? 'disabled' : ''}>${SF_ROLES.map(r => `<option value="${r[0]}" ${r[0] === s.role ? 'selected' : ''}>${r[1]}</option>`).join('')}</select>${sv('chevd', 16)}</label><button type="button" class="ix-btn pri" ${lastOwner ? 'disabled' : ''} onclick="sfRole('${uid}',$('#sfnr').value)">Change role</button></div></div>
- <div class="sf-mact">${SFX.limited ? '' : `<button type="button" class="ix-btn" ${lastOwner && !paused ? 'disabled' : ''} onclick="sfPause('${uid}',${!paused})">${sv(paused ? 'check' : 'sfpause', 16)} ${paused ? 'Restore access' : 'Pause access'}</button>`}<button type="button" class="ix-btn bad" ${lastOwner ? 'disabled' : ''} onclick="sfRemove('${uid}')">${sv('pqtrash', 16)} Remove access</button></div>
+ <div class="pl-f"><label for="sfnr">Role</label><div class="sf-rr"><label class="md-sel sg-sel"><select id="sfnr" ${lastOwner ? 'disabled' : ''}>${SF_ROLES.map(r => `<option value="${r[0]}" ${r[0] === s.role ? 'selected' : ''}>${r[1]}</option>`).join('')}</select>${sv('chevd', 16)}</label><button type="button" class="ix-btn pri" ${lastOwner ? 'disabled' : ''} data-on-click="sfRoleSel('${uid}')">Change role</button></div></div>
+ <div class="sf-mact">${SFX.limited ? '' : `<button type="button" class="ix-btn" ${lastOwner && !paused ? 'disabled' : ''} data-on-click="sfPause('${uid}',${!paused})">${sv(paused ? 'check' : 'sfpause', 16)} ${paused ? 'Restore access' : 'Pause access'}</button>`}<button type="button" class="ix-btn bad" ${lastOwner ? 'disabled' : ''} data-on-click="sfRemove('${uid}')">${sv('pqtrash', 16)} Remove access</button></div>
  <p class="ix-mu sf-fine">${s.invited_by_name ? 'Invited by ' + esc(s.invited_by_name) + '. ' : ''}On staff since ${fmtD(s.created_at)}. Changes ask for a reason and are recorded in the audit log.</p></div>`);
 }
 function sfRole(uid, role) {
@@ -523,3 +523,20 @@ async function planSync() {
   for (let i = 0; i < 40 && !SB; i++) await new Promise(r => setTimeout(r, 150));
   await planSync();
 })();
+
+/* v59: named handlers for the Staff screen (no inline JavaScript). */
+function sfSearchIn(v) {
+  clearTimeout(SFX._t);
+  SFX._t = setTimeout(() => {
+    SFX.q = v;
+    sfLoad(true);
+  }, 250);
+}
+function sfClear() {
+  SFX.q = '';
+  SFX.role = 'all';
+  sfLoad(true);
+}
+function sfRoleSel(uid) {
+  sfRole(uid, $('#sfnr').value);
+}
