@@ -62,7 +62,12 @@ Last updated: 22 Oct 2026, 3:00 pm Nairobi (after v37 security hardening and mig
     - the `a11y.js` selector
     - the `features.css` danger-button rule (`button[data-on-click^='stConfirm']`)
   - Before each commit, grep `css/` and `js/` for `[onclick` and `onclick=` inside strings.
-- **NEXT STEP (count is now 0):**
+- **DONE in v63 (23 Oct 2026):** `'unsafe-inline'` was removed from `script-src`.
+  - The earlier count missed four handlers that come straight after a quote or backtick. They are now fixed, including `data-export`'s export-button matcher, which had silently stopped matching.
+  - A browser test with the strict policy enforced, covering the website, the demo app and admin at 390 and 1366, recorded 0 violations.
+  - To check new markup for leftovers, use: `grep -no "[^a-z-]on[a-z]*=[\\]\?[\"']" js/*.js index.html`
+  - **Still to do by a person:** watch the live console for blocked scripts, especially from PostHog and the Supabase/QR CDNs.
+- **Previous plan, kept for history (count is now 0):**
   1. Remove `'unsafe-inline'` from `script-src` in `vercel.json`. The JSON-LD block is data, so it is not affected.
   2. Test everything.
   3. Watch the console on the live site.
@@ -79,6 +84,10 @@ Last updated: 22 Oct 2026, 3:00 pm Nairobi (after v37 security hardening and mig
 - **Rules:**
   - Never create a real Supabase user with the demo email. Signup already refuses it.
   - Any new account-level action must be added to the `demoGuard` list.
+
+### Demo with many visitors (tested 23 Oct 2026)
+- Five separate browsers used the demo at the same time, each editing and moving between all app screens. None saw another's changes and there were no errors. Each visitor's demo lives only in their own browser, so the number of visitors only adds static file downloads from Vercel's CDN.
+- **Known quirk:** two tabs in the same browser share one demo copy. Starting the demo in a second tab resets the stored copy. The first tab keeps working, but whichever tab saves last wins. Possible fix: keep demo data per tab in `sessionStorage`.
 
 ### Live checks still needed (only a person can do these)
 - In browser devtools, check that each page's source has `<!--pre-->` text, that /app and /admin show no homepage flash, and that the console is clear at phone and laptop width. The assistant's browser tools cannot read raw source or the console.
