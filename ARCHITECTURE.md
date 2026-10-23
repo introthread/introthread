@@ -122,9 +122,10 @@ Each step was done one screen or file per commit, with the full test list re-run
   - All 747 inline handlers, across the admin screens and the app, are converted (v59-v62).
   - v63 removed `'unsafe-inline'` from `script-src`. A test with the policy enforced over the website, the demo app and admin found 0 violations.
 - **Step 12 (v60, 23 Oct 2026), done: demo account locked down.** See `js/demo-mode.js` and HANDOVER.
-- **Next steps (not started):**
+- **Step 13 (v83, 23 Oct 2026), done: website pages split out.** The 15 website page functions (home, how it works, rooms with the sample report, networks, pricing, about, privacy, terms, 404, plus `mnav`, `foot`, `pHero`, `ctaBand`, `legalDoc`) moved unchanged from `js/app-core.js` to `js/site-pages.js`, loaded straight after it. `app-core.js` is down to about 5,800 lines. The pre-rendered pages were byte-for-byte the same before and after, apart from the new script tag.
+- **Next steps (next):**
   - Fold the remaining `vNN` wrappers (`const _f=f; f=function(){...}`) into the functions they wrap, one screen per commit, and merge `js/late-fixes.js` into the files it patches.
-  - Split `js/app-core.js` (about 6,300 lines) into one file per screen: Today, Threads, Tap and Card, Rooms, Settings and profile, website pages.
+  - Keep splitting `js/app-core.js` (about 5,800 lines), one screen per commit: sign-up and login, Today, Threads, Tap and Card, Rooms, Settings and profile.
   - Split `css/app.css` (about 12,800 lines) the same way, and remove unused rules.
   - Move the billing display off `profiles.prefs.billing` onto the server-written `subscriptions`, `payments` and `room_passes` tables (SECURITY-AUDIT.md, item 6).
 

@@ -3,6 +3,7 @@
 Everything built so far, newest first. Full technical detail for each item is in `HANDOVER.md`. How Rooms, events, communities and the Room pass work: `docs/ROOMS.md`.
 
 ## 23 Oct 2026
+- **v83: Code cleanup, step 1: website pages split out.** The website page functions moved unchanged from `js/app-core.js` (now about 5,800 lines) to a new `js/site-pages.js`, loaded right after it. The pre-rendered pages are identical before and after. No change in behaviour.
 - **v82: No personal emails in the tests.** The admin tests use owner@example.com and member@example.com, and the integrations mock uses contact@example.com. All 10 admin tests pass. `supabase/migrations/002_contacts_admin.sql` still seeds the real owner address, because changing an already-run migration would change who becomes owner if it is run again.
 - **v81: Scan a paper card, front and centre.** Home page: a new "Got their paper card? Scan it in seconds." section with three steps, Get your free card, and Try it in the demo. App: "Scan a paper card" in Today's quick actions and on the Tap screen. Both open the existing on-device card reader.
 - **v80: Billing receipts come from the server's payment records.** New `js/billing-server.js`: on the live site, Settings > Billing lists receipts from the `payments` table and unused Room passes from `room_passes`, instead of the copy kept in the profile. A receipt only the browser wrote can no longer appear as paid. Invoices you requested yourself still show. The demo is unchanged.
