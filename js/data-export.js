@@ -56,8 +56,8 @@ function bExportMenu() {
 const _vThreads23 = vThreads;
 vThreads = function () {
   return _vThreads23().replace(
-    'onclick="bExportThreads()" title="Export Threads to CSV">',
-    'onclick="bExportMenu()" title="Export your contacts">'
+    'data-on-click="bExportThreads()" title="Export Threads to CSV">',
+    'data-on-click="bExportMenu()" title="Export your contacts">'
   );
 };
 const _bPrivacy23 = bPrivacy;

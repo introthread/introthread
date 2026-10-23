@@ -1804,7 +1804,7 @@ function bizCard(u, o = {}) {
  <div class="x-card-top"><span class="x-card-brand"><span class="x-lm"><i></i><i></i></span>introthread</span>${sv('nfc', 20)}</div>
  <div class="x-card-id">${avatarC(u, o.phone ? 78 : 96)}<div class="x-card-name">${esc(u.name || 'Your name')}</div><div class="x-card-role">${esc(u.role || 'Your title')}${u.company ? ' &bull; ' + esc(u.company) : ''}</div></div>
  <div class="x-card-icons">${['li', 'x', 'cal', 'link', 'mail'].map(k => `<span>${sv(k, 17)}</span>`).join('')}</div>
- <a class="x-card-save" ${o.save ? `onclick="${o.save}"` : ''}>Save Contact</a>
+ <a class="x-card-save" ${o.save ? `data-on-click="${o.save}"` : ''}>Save Contact</a>
  ${o.phone && u.bio ? `<div class="x-card-about"><b>About</b><p>${esc(u.bio)}</p></div>` : ''}
  <div class="x-card-rows"><div>${sv('pin', 17)}<span>${esc(u.city || 'Your city')}</span></div><div>${sv('globe', 17)}<span>${esc(site)}</span>${sv('chev', 15)}</div>${u.open ? `<div>${sv('brief', 17)}<span>Open to opportunities</span>${sv('chev', 15)}</div>` : !o.phone && u.bio ? `<div>${sv('brief', 17)}<span>${esc(u.bio)}</span></div>` : ''}</div>
  ${tags.length ? `<div class="x-card-tags"><b>Let's connect</b><div>${tags.map(x => `<span>${esc(x)}</span>`).join('')}</div></div>` : ''}</div>`;
@@ -4319,7 +4319,7 @@ function rCal(all) {
       ev = by[k] || [],
       out = d.getMonth() !== mo;
     if (i === 35 && out) break;
-    cells += `<button type="button" class="${out ? 'out' : ''} ${k === today ? 'today' : ''} ${RDAY === k ? 'sel' : ''} ${ev.length ? 'has' : ''}" ${ev.length ? `onclick="RDAY=RDAY==='${k}'?'':'${k}';RLIM9=6;window._keepScroll=true;render()" aria-label="${d.toLocaleDateString('en-GB', { day: 'numeric', month: 'long' })}: ${ev.length} Room${ev.length > 1 ? 's' : ''}" title="${esc(ev.map(r => r.name).join(', '))}"` : 'tabindex="-1" aria-hidden="true"'}>${d.getDate()}${ev.length ? '<i></i>' : ''}</button>`;
+    cells += `<button type="button" class="${out ? 'out' : ''} ${k === today ? 'today' : ''} ${RDAY === k ? 'sel' : ''} ${ev.length ? 'has' : ''}" ${ev.length ? `data-on-click="rCalDay('${k}')" aria-label="${d.toLocaleDateString('en-GB', { day: 'numeric', month: 'long' })}: ${ev.length} Room${ev.length > 1 ? 's' : ''}" title="${esc(ev.map(r => r.name).join(', '))}"` : 'tabindex="-1" aria-hidden="true"'}>${d.getDate()}${ev.length ? '<i></i>' : ''}</button>`;
   }
   return `<div class="ro-cal"><div class="ro-calh"><b>${first.toLocaleDateString('en-GB', { month: 'long', year: 'numeric' })}</b><span><button type="button" aria-label="Previous month" data-on-click="rCalNav(-1)">${sv('chev', 16)}</button><button type="button" aria-label="Next month" data-on-click="rCalNav(1)">${sv('chev', 16)}</button></span></div><div class="ro-dow">${['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'].map(x => `<span>${x}</span>`).join('')}</div><div class="ro-days">${cells}</div></div>`;
 }
@@ -6329,4 +6329,11 @@ function stBioCount(v) {
 function amHelp() {
   amClose();
   location.href = 'mailto:hello@introthread.com?subject=Introthread%20support';
+}
+
+/* v63: named handler for a Rooms calendar day (tap again to clear). */
+function rCalDay(k) {
+  RDAY = RDAY === k ? '' : k;
+  RLIM9 = 6;
+  keepRender();
 }
