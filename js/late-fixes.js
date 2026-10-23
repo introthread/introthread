@@ -149,17 +149,17 @@ vPublic = function (hd) {
     .slice(a, b + 10)
     .replace(
       '<article class="pc-card',
-      '<article class="pc-card pc-front" onclick="pcTap(event)" aria-hidden="false"'
+      '<article class="pc-card pc-front" data-on-click="pcTap(event)" aria-hidden="false"'
     );
   const flipBtn = k =>
-    `<button type="button" class="pc-flipbtn" onclick="pcFlip()" aria-pressed="false" aria-controls="pcflip" title="${k ? 'Show the front' : 'Show the QR code'}">${sv(k ? 'user' : 'qr', 15)}<span>${k ? 'Front' : 'Flip for QR'}</span></button>`;
+    `<button type="button" class="pc-flipbtn" data-on-click="pcFlip()" aria-pressed="false" aria-controls="pcflip" title="${k ? 'Show the front' : 'Show the QR code'}">${sv(k ? 'user' : 'qr', 15)}<span>${k ? 'Front' : 'Flip for QR'}</span></button>`;
   front = front.replace(
     '</article>',
     `<div class="pc-fqr" aria-hidden="true"><div class="pc-fqr-b"><div id="pcqr1"></div><span class="t-qrlogo"><span class="x-lm"><i></i><i></i></span></span></div><small>Scan to connect</small></div>${flipBtn(0)}</article>`
   );
-  const back = `<article class="pc-card pc-back${lt}" style="${style}" onclick="pcTap(event)" aria-hidden="true" aria-label="Card back with QR code"><div class="pc-top"><span class="x-logo${lt ? '' : ' dk'}"><span class="x-lm"><i></i><i></i></span><span>intro<b>thread</b></span></span>${flipBtn(1)}</div>
+  const back = `<article class="pc-card pc-back${lt}" style="${style}" data-on-click="pcTap(event)" aria-hidden="true" aria-label="Card back with QR code"><div class="pc-top"><span class="x-logo${lt ? '' : ' dk'}"><span class="x-lm"><i></i><i></i></span><span>intro<b>thread</b></span></span>${flipBtn(1)}</div>
   <div class="pc-bq"><div class="pc-bq-b"><div id="pcqr2"></div><span class="t-qrlogo"><span class="x-lm"><i></i><i></i></span></span></div></div>
-  <p class="pc-bt">Scan to connect with ${f}</p><button type="button" class="pc-blink" onclick="copy('${url}','Link copied')">${short} ${sv('copy', 15)}</button><p class="pc-bh2">Point a phone camera at the code. No app needed.</p></article>`;
+  <p class="pc-bt">Scan to connect with ${f}</p><button type="button" class="pc-blink" data-on-click="copy('${url}','Link copied')">${short} ${sv('copy', 15)}</button><p class="pc-bh2">Point a phone camera at the code. No app needed.</p></article>`;
   h =
     h.slice(0, a) +
     `<div class="pc-flip" id="pcflip"><div class="pc-flip-in">${front}${back}</div></div>` +
