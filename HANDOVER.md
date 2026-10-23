@@ -44,27 +44,15 @@ Last updated: 22 Oct 2026, 3:00 pm Nairobi (after v37 security hardening and mig
   - v61h: `admin-core.js` is now at 0.
   - v61i: `billing.js` is now at 0. The card form keeps its action in `data-act` and runs it with `ACT.run`.
   - `convert_handlers.js --only=fnA,fnB` converts inside the named top-level functions only.
-- **Left (130 handlers, as of 23 Oct 2026 after v61i):**
-
-  | Handlers | File |
-  |---|---|
-  | 37 | `capture.js` |
-  | 25 | `contacts-import.js` |
-  | 15 | `rooms-access.js` |
-  | 8 | `event-mode.js` |
-  | 7 | `app-navigation.js` |
-  | 7 | `payments.js` |
-  | 7 | `app-routing.js` |
-  | 5 | `data-export.js` |
-  | 4 | `late-fixes.js` |
-  | 4 | `first-visit.js` |
-  | 3 | `room-sessions.js` |
-  | 2 each | `match-celebrate.js`, `install-prompt.js`, `company-logo.js` |
-  | 1 | `index.html` (modal backdrop) |
-  | 1 | `admin-audit.js` (the showNudges regex, which matches both forms; leave it) |
-  | 1 | `actions.js` (a comment) |
-
-  Recount with: `grep -o ' on[a-z]\+=\\\?["'"'"']' js/*.js index.html | sort | uniq -c`
+- **v62 (23 Oct 2026):** every remaining file is converted, one commit each:
+  - v62a `capture.js`, v62b `contacts-import.js`
+  - v62c `rooms-access.js`, v62d `event-mode.js`, v62e `app-navigation.js`, v62f `payments.js`, v62g `app-routing.js`
+  - v62h `data-export.js`, v62i `late-fixes.js`, v62j `first-visit.js`, v62k `room-sessions.js`
+  - v62l `match-celebrate.js`, v62m `install-prompt.js`, v62n `company-logo.js`
+  - v62o: the `index.html` modal backdrop uses `backdropClose(event,this)` in `actions.js`.
+  - `actions.js` also handles `dragover`, `dragleave` and `drop`, and exposes `ACT.run`.
+- **Left: 0 inline handlers** in `index.html`, `app-shell.html` and `js/`. The only match is a comment in `actions.js`. Recount with: `grep -o ' on[a-z]\+=\\\?["'"'"']' js/*.js index.html app-shell.html | sort | uniq -c`
+- **Lesson from v62:** never commit two steps in parallel. The v62j commit was rejected ("not a fast forward") while v62k landed with pages that pointed at first-visit's new `?v=` tag, before that file was in the repo. For the retry, a one-line header note gave `first-visit.js` a fresh tag so no browser could have cached the old file under it. After every build, check that each `?v=` tag in `index.html` equals the first 10 characters of `sha1sum js/<file>`.
 - **Watch out:** CSS and JS can target handler text, so update them in the same commit.
   - Already handled:
     - `rooms-access.js` selectors
@@ -74,7 +62,7 @@ Last updated: 22 Oct 2026, 3:00 pm Nairobi (after v37 security hardening and mig
     - the `a11y.js` selector
     - the `features.css` danger-button rule (`button[data-on-click^='stConfirm']`)
   - Before each commit, grep `css/` and `js/` for `[onclick` and `onclick=` inside strings.
-- **Last step,** once the count is 0:
+- **NEXT STEP (count is now 0):**
   1. Remove `'unsafe-inline'` from `script-src` in `vercel.json`. The JSON-LD block is data, so it is not affected.
   2. Test everything.
   3. Watch the console on the live site.
