@@ -36,9 +36,9 @@ function sesBox(id) {
   if (today)
     h += today.me
       ? `<p class="rj-ok">You are checked in for today.</p>`
-      : `<button type="button" class="x-btn" onclick="sesCheck('${id}',this)">Check in to today's session</button>`;
+      : `<button type="button" class="x-btn" data-on-click="sesCheck('${id}',this)">Check in to today's session</button>`;
   h += L.length
-    ? `<ul class="ra-l">${L.map(x => `<li><span class="ra-w"><b>${esc(sesD(x.date))}${x.today ? ' (today)' : ''}</b><small>${+x.count || 0} of ${+d.members || 0} attended${x.me ? ' &middot; you were there' : ''}</small></span>${own ? `<span class="ra-b"><button type="button" class="t-how sm" onclick="sesOpen('${id}','${esc(x.date)}')" aria-expanded="${S.open === x.date}">${S.open === x.date ? 'Close' : 'Attendance'}</button></span>` : ''}</li>${own && S.open === x.date ? `<li class="ses-p">${S.people ? (S.people.length ? S.people.map(u => `<label class="ses-m"><input type="checkbox" ${u.attended ? 'checked' : ''} onchange="sesMark('${id}','${esc(u.id)}','${esc(x.date)}',this.checked)"> <span>${esc(u.name || 'Member')}</span></label>`).join('') : '<span class="muted small">No members yet.</span>') : '<span class="muted small">Loading...</span>'}</li>` : ''}`).join('')}</ul>`
+    ? `<ul class="ra-l">${L.map(x => `<li><span class="ra-w"><b>${esc(sesD(x.date))}${x.today ? ' (today)' : ''}</b><small>${+x.count || 0} of ${+d.members || 0} attended${x.me ? ' &middot; you were there' : ''}</small></span>${own ? `<span class="ra-b"><button type="button" class="t-how sm" data-on-click="sesOpen('${id}','${esc(x.date)}')" aria-expanded="${S.open === x.date}">${S.open === x.date ? 'Close' : 'Attendance'}</button></span>` : ''}</li>${own && S.open === x.date ? `<li class="ses-p">${S.people ? (S.people.length ? S.people.map(u => `<label class="ses-m"><input type="checkbox" ${u.attended ? 'checked' : ''} data-on-change="sesMark('${id}','${esc(u.id)}','${esc(x.date)}',this.checked)"> <span>${esc(u.name || 'Member')}</span></label>`).join('') : '<span class="muted small">No members yet.</span>') : '<span class="muted small">Loading...</span>'}</li>` : ''}`).join('')}</ul>`
     : `<p class="muted small">The first session has not happened yet.</p>`;
   return h + `</div>`;
 }
