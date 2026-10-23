@@ -3,6 +3,7 @@
 Everything built so far, newest first. Full technical detail for each item is in `HANDOVER.md`. How Rooms, events, communities and the Room pass work: `docs/ROOMS.md`.
 
 ## 23 Oct 2026
+- **v73: Calendar booking from a match is Pro only**, as on the price card. "Add to calendar" on a Thread opens the Pro upgrade dialog for Free users. The "Book a meeting" link on your own card stays free.
 - **v72: Thread search is Pro only**, as on the price card. New `js/pro-gates.js` (loaded last) shows an upgrade card when a Free user searches Threads or uses the phone search sheet. Filters and topics stay free.
 - **v71: Every Room is paid.** `FREE_ROOMS = 0`, so creating any Room needs a Room pass ($199 per event), matching the price card. Rooms already created are kept. Migration 020 updates the database trigger; it must be run in Supabase.
 - **v70: Yearly Pro toggle removed.** /pricing, Settings > Billing and the Upgrade dialogs offer monthly Pro only, matching the published price card. Existing yearly subscriptions keep working.

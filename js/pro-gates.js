@@ -28,3 +28,12 @@ mbSearchRun = function () {
   if (has('search') || !q || !r) return _mbSearchRun72.apply(this, arguments);
   r.innerHTML = bLockCard('search', 'Upgrade to Pro to search your Threads, people and Rooms.');
 };
+
+/* v73: Calendar booking from a match is a Pro feature (price card: Pro, "Calendar booking from a match").
+   The "Add to calendar" file on a Thread is the booking step today. Some buttons call closeModal()
+   right after dIcs(), so the upgrade dialog opens on the next tick. */
+const _dIcs73 = dIcs;
+dIcs = function () {
+  if (has('booking')) return _dIcs73.apply(this, arguments);
+  setTimeout(() => bLocked('booking'), 0);
+};
