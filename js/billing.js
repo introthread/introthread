@@ -11,52 +11,47 @@ const PLANS = {
     id: 'free',
     name: 'Free',
     price: { month: 0, year: 0 },
-    tag: 'For every professional',
+    tag: 'Basic access for new users.',
     features: [
-      'Digital card, link and QR code',
-      'Unlimited Threads',
+      'Your card, link and QR',
+      '5 new Threads a month',
       'What&rsquo;s next? and the quiet reveal',
       'Save to contacts',
-      '1 Room included',
-      'Last 7 days of analytics'
+      'Export your contacts anytime'
     ]
   },
   pro: {
     id: 'pro',
     name: 'Pro',
     price: { month: 12, year: 120 },
-    tag: 'For people who follow through',
+    tag: 'For professionals and teams.',
     features: [
       'Everything in Free',
-      'AI follow-up drafts in your voice',
+      'Unlimited Threads',
+      'AI follow-ups in your voice',
       'Calendar booking from a match',
-      'NFC card writing',
-      'Thread export (CSV)',
-      'Advanced analytics (14 and 30 days)'
+      'NFC card support',
+      'Thread search'
     ]
   },
   rooms: {
     id: 'rooms',
-    name: 'Room pass',
+    name: 'Rooms',
     price: { event: 199 },
     tag: 'For events and communities',
     features: [
-      'One extra Room for an event',
       'Room code, QR and badges',
       'Live Resolution Report',
-      'Up to 1,000 attendees'
+      'Up to 1,000 attendees',
+      'Sponsor-ready export'
     ]
   },
   networks: {
     id: 'networks',
     name: 'Networks',
     tag: 'For VC platforms and networks',
-    features: [
-      'Warmth dashboard and API',
-      'SSO and admin controls',
-      'Dedicated success manager',
-      'Custom contract and invoicing'
-    ]
+    price: { custom: 'annual' },
+    features: ['Warmth dashboard', 'Warmth API', 'SSO and admin controls', 'Dedicated success manager']
   }
 };
 const FEATURES = {

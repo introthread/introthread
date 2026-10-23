@@ -3,6 +3,7 @@
 Everything built so far, newest first. Full technical detail for each item is in `HANDOVER.md`. How Rooms, events, communities and the Room pass work: `docs/ROOMS.md`.
 
 ## 23 Oct 2026
+- **v65: Pricing matches the published card exactly.** Free, Pro, Rooms and Networks names, subtitles, prices and features; Rooms always $199, with the yearly $166 removed; GBP display Pro £9 and Rooms £149; page meta updated; migration 019 for the plans table. Open pricing decisions are listed in HANDOVER.
 - **v60: Demo account locked down.** Fresh demo data on every start. Delete, deactivate, reactivate and change password are blocked in the demo. The demo stays local, Pro, and has no server or admin access.
 - **v59b-v59j: Safe handlers for every admin screen.** Users, Moderation, Rooms, Revenue, Plans, Settings, Privacy, Staff and Audit now use `data-on-*` and named functions. No change in behaviour.
 - **v59a: Safe handlers, Admin Dashboard.** New `js/actions.js` runs `data-on-*` handlers without inline JavaScript. The Admin Dashboard is the first screen converted (19 handlers). No change in behaviour.

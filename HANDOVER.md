@@ -2,6 +2,54 @@
 
 Last updated: 22 Oct 2026, 3:00 pm Nairobi (after v37 security hardening and migration 016). Read this section first, then ARCHITECTURE-ESSENTIALS.md and AGENTS.md. Update this file and docs/CHANGELOG.md with every change.
 
+## PRICING: source of truth (v65, 23 Oct 2026)
+
+This is exactly what `/pricing` shows. It was checked in a browser in US and UK time zones.
+
+| Plan | Subtitle | Price | Features |
+|---|---|---|---|
+| Free | Basic access for new users. | $0, forever ("Get started") | Your card, link and QR; 5 new Threads a month; What's next? and the quiet reveal; Save to contacts; Export your contacts anytime |
+| Pro (Most popular) | For professionals and teams. | $12 per month ("Start Pro") | Everything in Free; Unlimited Threads; AI follow-ups in your voice; Calendar booking from a match; NFC card support; Thread search |
+| Rooms | For events and communities | $199 per event ("Create a Room") | Room code, QR and badges; Live Resolution Report; Up to 1,000 attendees; Sponsor-ready export |
+| Networks | For VC platforms and networks | Custom, annual ("Talk to us") | Warmth dashboard; Warmth API; SSO and admin controls; Dedicated success manager |
+
+The page footer reads: "UK prices in GBP at checkout: Pro £9/month, Rooms £149/event. Prices exclude VAT and sales tax where applicable."
+
+**Where each price lives (change all of them together)**
+- **`js/billing.js` `PLANS`:** names, subtitles, prices and feature lists. The billing screen and the pricing page read from here.
+- **`js/app-core.js` `vPricing()`:** the pricing page layout. Rooms always shows $199. There is no yearly Room discount; the old $166 yearly Room price was removed in v65.
+- **`js/contacts-import.js` `GBP` map:** the UK display prices. 12→9, 199→149, 120→90 (yearly Pro, pending confirmation, see below).
+- **`js/admin-staff.js` `planApply()`:** overrides names, subtitles, USD/GBP prices and Thread limits from the Supabase `plans` table, which staff edit in Admin, Plans and pricing.
+- **`supabase/migrations/019_pricing.sql`:** sets Free to $0 with 5 Threads a month, and Pro to $12 / £9 a month, $120 / £90 a year, with the subtitles above. **Agnes must run it.** Until she does, the live table still has Pro at £10 a month and £96 a year.
+- **`api/_lib/pay.js`:** the Room pass is charged in KES, at `ROOM_PASS_KES` = 199 × `KES_PER_USD` (default 130), which is KES 25,870. Pro is charged through the Paystack plan codes `PAYSTACK_PLAN_MONTH` / `PAYSTACK_PLAN_YEAR`. Their amounts are set in the Paystack dashboard: about KES 1,560 a month at 130 KES/USD. Agnes needs to confirm these.
+- **`scripts/build_pages.py` META `/pricing`:** the search/social description, which now matches the page.
+
+**How each plan works today**
+- **Free:**
+  - The 5 new Threads a month are enforced by `freeLim()` / `freeLeft()` / `limitSheet()`. Staff can change the number in Admin, Settings (`free_threads_per_month`, default 5).
+  - Contact export is free on every plan (`bExportMenu`).
+- **Pro:**
+  - AI drafts, NFC and analytics are gated with `has('ai_drafts' | 'nfc' | 'analytics')`.
+  - The yearly toggle shows $10 a month billed yearly ($120 a year).
+  - Cancelling keeps Pro until the end of the paid period. Nothing is deleted.
+- **Rooms:**
+  - Every account currently gets **1 Room included** (`FREE_ROOMS = 1` in billing.js). Each extra Room needs a Room pass at $199 per event (`bRoomPass()`), charged through Paystack (`/api/pay-init { kind: 'rooms' }`).
+  - Room size is capped at 1,000 attendees in the create-room form.
+  - The Resolution Report and the sponsor export come with the Room.
+- **Networks:**
+  - Sales-led, with no self-serve checkout. "Talk to us" goes to /about (contact).
+  - Contracts are custom annual, invoiced by bank transfer for now.
+  - The Warmth dashboard and Warmth API are **not built yet**. They are roadmap items: a consent-scoped read API over two-sided confirmed Threads (see the strategy document).
+  - SSO and admin controls for a customer's own network are also roadmap. The current admin area is Introthread staff only.
+
+**Open pricing decisions (ask the owner; don't guess)**
+1. **GBP at checkout is not real yet.** Paystack charges in KES; GBP isn't supported for this account. UK customers see £9 / £149, but the card is charged the KES equivalent. Either add a GBP-capable provider (Stripe) or change the footer wording.
+2. **Yearly Pro:** $120 a year (shown as $10 a month) is not on the published price card. The GBP yearly price of £90 is a placeholder. Confirm both, or remove the yearly toggle.
+3. **1 free Room per account** is not listed under Free on the price card. Either add "1 Room included" to Free, or set `FREE_ROOMS = 0`.
+4. **Thread search** is listed as Pro, but search works on Free today, because it isn't gated. Gate it with `has('search')`, or keep it open and change the card.
+5. **"Calendar booking from a match"** is in the `booking` feature list, but there is no `has('booking')` check. Confirm whether it should be Pro-only.
+6. **Paystack plan amounts** for Pro in KES need checking against $12 (monthly) and $120 (yearly).
+
 ## STATUS SUMMARY: 23 Oct 2026, after v64 (read this first)
 
 ### Done (all on `main`, tested, deployed by Vercel)
@@ -29,6 +77,7 @@ Last updated: 22 Oct 2026, 3:00 pm Nairobi (after v37 security hardening and mig
   - payments
 
 ### Waiting on Agnes (she owns GitHub, Vercel, Supabase and the domain)
+0. Run `supabase/migrations/019_pricing.sql`, which sets Pro to £9/month and the published plan text. Confirm the Paystack Pro plan amounts in KES.
 1. Turn on the Google, Microsoft and LinkedIn sign-in providers in Supabase.
 2. Set up Resend for sign-in emails and add its key in Vercel.
 3. Run database migration 012 in Supabase.

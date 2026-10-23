@@ -540,7 +540,8 @@ function isUK() {
     return false;
   }
 }
-const GBP = { 0: 0, 10: 8, 12: 10, 96: 77, 120: 96, 166: 129, 199: 159, 2: 2, 1: 1 };
+/* v65 pricing: Pro $12 = £9 a month, Rooms $199 = £149 an event. Yearly Pro $120 = £90 (pending confirmation, see HANDOVER). */
+const GBP = { 0: 0, 12: 9, 199: 149, 120: 90, 10: 8, 2: 2, 1: 1 };
 function toGBP(h) {
   return h.replace(/\$(\d[\d,]*)(?![\d])/g, (m, n) => {
     const v = +n.replace(/,/g, '');

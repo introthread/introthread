@@ -2451,7 +2451,7 @@ function vPricing() {
       'Free',
       '$0',
       'forever',
-      ' ' + (PLANS.free.tag || 'For every professional'),
+      PLANS.free.tag || 'Basic access for new users.',
       [
         'Your card, link and QR',
         thrTxt(freeLim()),
@@ -2467,7 +2467,7 @@ function vPricing() {
       'Pro',
       p(usd0(proM()), usd0(proY() / 12)),
       'per month' + (billing === 'y' ? ', billed yearly' : ''),
-      PLANS.pro.tag || 'For people who follow through',
+      PLANS.pro.tag || 'For professionals and teams.',
       [
         'Everything in Free',
         thrTxt(PLANS.pro.threads),
@@ -2482,7 +2482,7 @@ function vPricing() {
     ],
     [
       'Rooms',
-      p('$199', '$166'),
+      '$199',
       'per event',
       'For events and communities',
       ['Room code, QR and badges', 'Live Resolution Report', 'Up to 1,000 attendees', 'Sponsor-ready export'],
