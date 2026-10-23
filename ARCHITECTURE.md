@@ -10,7 +10,7 @@ Paystack --webhook (HMAC)--> api/paystack-webhook
 Vercel Cron (06:00 UTC) --> api/cron-nudge
 ```
 
-## Front end (`index.html`)
+## Front end (`index.html` + `/js` + `/css`)
 - **Routing:** clean paths mapped to the hash router `RH()`.
   - `/` and the marketing pages
   - `/app/...`: the signed-in app, with Today, Tap, Threads, Rooms, Card, Profile, Settings and Event mode at `/app/scan`
@@ -19,7 +19,8 @@ Vercel Cron (06:00 UTC) --> api/cron-nudge
   - `/r/<CODE>`: Room join page
   - `/admin/<tab>`: staff area
 - **State:** the `DB` object, saved in localStorage in demo mode. In cloud mode it is loaded from Supabase by `loadCloud`. `MODE` is `'demo'` or `'cloud'`; use `cloud()` to check.
-- **Layering:** each feature version appends a JS block that wraps earlier functions, for example `render`, `vRoom` and `newRoom9`, and a CSS block. Global name prefixes, so names never clash:
+- **Files:** `index.html` (about 6 KB) holds page structure and `<link>`/`<script>` tags. `js/app-core.js` loads first; the other `/js` feature files load after it, in order, deferred and versioned with `?v=<hash>`. Styles load from `css/base.css`, `app.css`, `admin.css` and `features.css`.
+- **Layering:** some later features still wrap earlier functions (for example `render`, `vRoom` and `newRoom9`); folding these in is a next step. Global name prefixes, so names never clash:
 
   | Prefix | Area |
   |---|---|
@@ -68,13 +69,13 @@ Each returns 503 `not_configured` until its keys exist.
 - Every table has row-level security. Privileged work runs in `security definer` functions that check `auth.uid()` or `assert_staff()`.
 - Migrations are numbered and safe to re-run. 015 adds the security hardening.
 
-## Refactor plan (in progress, one step per commit)
-The single-file, layered design works and is fully tested, but it is hard to read. A safe refactor would:
-1. split it into `app/*.js` modules and `styles/*.css`, keeping the same global names;
-2. fold each `vNN` override into the function it wraps, one screen at a time, re-running the tests after each step;
-3. replace inline `onclick` with event listeners, so the CSP can drop `unsafe-inline`.
+## Refactor plan (steps 1-12 done)
+The app used to be one 1.2 MB `index.html` with inline scripts, inline styles and inline `onclick` handlers. As of v63 it is:
+1. split into `/js` feature files and four `/css` files, with the same global names;
+2. free of duplicate function declarations (merged in v54);
+3. free of inline JavaScript: every handler is a `data-on-*` attribute run by `js/actions.js`, and `'unsafe-inline'` is no longer in `script-src`.
 
-This is several days of careful work and should be done screen by screen, never in one commit.
+Each step was done one screen or file per commit, with the full test list re-run after each.
 
 ### Progress
 - **Step 1 (v41, 22 Oct 2026), done:** the newest feature code moved out of `index.html` into `/js` files, loaded after the main script in this order:
@@ -116,15 +117,15 @@ This is several days of careful work and should be done screen by screen, never 
   - App, admin, card and room routes now use `app-shell.html` (an empty root) through the `vercel.json` catch-all, so they never flash the home page.
   - Login and signup are not pre-rendered, because they change with sign-in options.
   - Screenshots of each page with and without scripts match at 390px and 1366px. The only difference is the pulsing LIVE dot on /rooms.
-- **Step 11 (v59, 23 Oct 2026), in progress: no inline JavaScript.**
+- **Step 11 (v59-v63, 23 Oct 2026), done: no inline JavaScript.**
   - `js/actions.js` runs `data-on-*` handlers without eval.
-  - All 10 admin screens are converted. About 520 handlers remain, mostly in `app-core.js`. See HANDOVER, "Stricter security setting".
-  - When none are left, remove `'unsafe-inline'` from `script-src`.
+  - All 747 inline handlers, across the admin screens and the app, are converted (v59-v62).
+  - v63 removed `'unsafe-inline'` from `script-src`. A test with the policy enforced over the website, the demo app and admin found 0 violations.
 - **Step 12 (v60, 23 Oct 2026), done: demo account locked down.** See `js/demo-mode.js` and HANDOVER.
-- **Next steps:**
-  - Move the older blocks into `/js`, newest first, one file per feature: payments (v26), accessibility (v28), photo crop (v30-v34), then the admin screens.
-  - Move CSS into `/css` files.
-  - Fold the overrides into the functions they wrap.
-  - Replace `onclick`.
+- **Next steps (not started):**
+  - Fold the remaining `vNN` wrappers (`const _f=f; f=function(){...}`) into the functions they wrap, one screen per commit, and merge `js/late-fixes.js` into the files it patches.
+  - Split `js/app-core.js` (about 6,300 lines) into one file per screen: Today, Threads, Tap and Card, Rooms, Settings and profile, website pages.
+  - Split `css/app.css` (about 12,800 lines) the same way, and remove unused rules.
+  - Move the billing display off `profiles.prefs.billing` onto the server-written `subscriptions`, `payments` and `room_passes` tables (SECURITY-AUDIT.md, item 6).
 
-  Run the full test list after each step.
+  Run the full test list (`npm test`, plus the browser checks in HANDOVER.md) after each step.

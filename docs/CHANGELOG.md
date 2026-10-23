@@ -3,6 +3,7 @@
 Everything built so far, newest first. Full technical detail for each item is in `HANDOVER.md`. How Rooms, events, communities and the Room pass work: `docs/ROOMS.md`.
 
 ## 23 Oct 2026
+- **v67: Docs match the current code.** SECURITY-AUDIT.md records that inline scripts are blocked since v63. ARCHITECTURE.md and ARCHITECTURE-ESSENTIALS.md describe the split `/js` and `/css` layout and list the real next steps. PRD.md uses the published plan names: Free, Pro, Rooms and Networks. Docs only, no change in behaviour.
 - **v66: Personal email addresses removed from README.md and HANDOVER.md.** Owner, staff and test accounts are now described by role. Docs only, no change in behaviour.
 - **v65: Pricing matches the published card exactly.** Free, Pro, Rooms and Networks names, subtitles, prices and features; Rooms always $199, with the yearly $166 removed; GBP display Pro £9 and Rooms £149; page meta updated; migration 019 for the plans table. Open pricing decisions are listed in HANDOVER.
 - **v60: Demo account locked down.** Fresh demo data on every start. Delete, deactivate, reactivate and change password are blocked in the demo. The demo stays local, Pro, and has no server or admin access.

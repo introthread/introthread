@@ -1,13 +1,13 @@
 # Architecture essentials (read this first)
 
 - **Product:** Introthread turns a real-life meeting into a Thread. Tap or scan a card, both people confirm, each answers one question ("What's next?"), and answers stay sealed until both reply.
-- **Front end:** a single-page app in `index.html`, plus feature files in `/js`, loaded in order after the main script (since v41). The main page holds the HTML, CSS and older JS inline, about 1.2 MB.. `scripts/build_pages.py` copies it into 9 static marketing pages with their own SEO head. Always rebuild and commit `index.html` and all 9 pages together.
+- **Front end:** a single-page app. `index.html` (about 6 KB) holds only page structure and file links. All app code is in `/js` (`js/app-core.js` loads first, then the feature files in order), and all styles are in four `/css` files. Scripts are deferred and versioned with `?v=<hash>`. `scripts/build_pages.py` builds the 9 static website pages with their own SEO head, and `scripts/prerender.py` saves their drawn text into the HTML. Always rebuild and commit `index.html`, `app-shell.html` and all 9 pages together.
 - **Back end:**
   - Supabase: Postgres with row-level security, Auth and RPC functions. Schema in `supabase/schema.sql`, changes in `supabase/migrations/NNN_*.sql`, which Agnes runs by hand.
   - Vercel serverless functions in `api/`.
 - **Hosting:** Vercel deploys `main` automatically (Hobby plan, about 100 deploys a day, so make one commit per change). Headers and CSP are in `vercel.json`.
 - **Payments:** Paystack (KES, test mode) for Pro subscriptions and Room passes. The server writes `subscriptions`, `payments` and `room_passes`.
-- **Code style:** later versions override earlier functions by wrapping them (`const _f=f; f=function(){...}`), in blocks marked `/* vNN ... */`. New CSS goes in `/css` (see AGENTS.md); new JS goes before the last `</script>`.
+- **Code style:** some later versions still override earlier functions by wrapping them (`const _f=f; f=function(){...}`), in blocks marked `/* vNN ... */`; folding these in is planned (ARCHITECTURE.md). New JS goes in a new `/js/<feature>.js` file, new CSS at the end of `css/features.css` (see AGENTS.md). No inline JavaScript: use `data-on-*` handlers, run by `js/actions.js`.
 - **Rules:**
   - Real backend only; nothing faked.
   - Sans-serif fonts only, no emojis.

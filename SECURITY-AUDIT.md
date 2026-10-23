@@ -2,6 +2,8 @@
 
 Date: 22 Oct 2026 (v37). Scope: the whole app (`index.html`), server functions (`api/`), database (`supabase/schema.sql`, migrations 002-015), hosting config (`vercel.json`), and third-party scripts.
 
+**Update (23 Oct 2026, v63-v66):** the Content Security Policy no longer allows inline scripts. All 747 inline handlers were converted to `data-on-*` attributes run by `js/actions.js`, and `'unsafe-inline'` was removed from `script-src`; an enforced-policy test over the website, demo app and admin found 0 violations. `style-src` still allows `'unsafe-inline'`. The remaining actions are listed under "Still to do".
+
 **Status (22 Oct 2026):** Agnes ran `supabase/migrations/015_security.sql`, but a check showed visitors could still read private profile fields, so `016_security_fix.sql` re-applies it with a built-in self-check. She also turned on leaked-password protection and checked the sign-in rate limits in the Supabase dashboard (reported by the owner).
 
 ## Findings and fixes
@@ -31,14 +33,14 @@ Date: 22 Oct 2026 (v37). Scope: the whole app (`index.html`), server functions (
 - **Session hijacking:** tokens are kept by supabase-js in browser storage. The strict CSP (no third-party scripts except the pinned, integrity-checked CDN files and consented PostHog) limits XSS-based theft. Access tokens expire after 1 hour by default.
 
 ## Still to do (cannot be done from code)
-1. Run migration 015.
+1. ~~Run migration 015.~~ Done, and re-applied with a self-check by 016.
 2. Supabase dashboard > Authentication:
-   - turn on leaked-password protection
+   - ~~turn on leaked-password protection~~ (done, reported by the owner)
    - keep the minimum password length at 8 or more
    - keep refresh token rotation on
    - consider a session time-box, for example 30 days
 3. Supabase dashboard > Authentication > Rate limits: check the email and OTP limits.
 4. Paystack: switch to live keys only when going live, and keep the webhook secret in Vercel only.
-5. **Content Security Policy:** it still allows `unsafe-inline` because the whole app is inline with `onclick` handlers. Removing that needs the app split into files (see ARCHITECTURE.md, "Refactor plan").
+5. **Content Security Policy:** done for scripts in v63 (see the update above). `style-src` still allows `'unsafe-inline'`, because the app sets inline `style` attributes; removing it would need those moved into classes. Low risk, since scripts cannot run from styles.
 6. **Dependencies (monthly check added in v43, `scripts/check_deps.py`):** the only third-party code is the pinned CDN files plus scripts loaded on demand (jsQR, tesseract.js, PostHog). Review versions monthly and update the pins and hashes together. A Dependabot config could not be added because the GitHub connection cannot write to `.github/`.
 7. **Card data in profiles (fixed in v40 / migration 018):** `prefs.billing` (invoices, card last 4) is still written by the browser for display. The payment truth is in `subscriptions`, `payments` and `room_passes`, which only the server writes. Moving billing display to those tables would remove client-edited billing data entirely.
