@@ -11,6 +11,7 @@
    Format `/js` files with Prettier using the repo's `.prettierrc.json`; it only changes layout, never behaviour.
 
    **Editing `index.html`:**
+   - **All app code lives in `/js`** (since v56). `js/app-core.js` holds the core app and loads first; `index.html` has no inline app script any more. Format JS with Prettier.
    - **CSS lives in `/css`** (since v55), loaded in this order: `base.css`, `app.css`, `admin.css`, `features.css`. Add new styles at the end of `css/features.css`, or in a new file linked after it. Do NOT search for `</style>` in `index.html` any more: the only one left is inside the invoice print template in JavaScript. Format with Prettier.
    - Add JS before the last `</script>`.
    - Wrap existing functions; do not rewrite them.

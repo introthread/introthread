@@ -102,6 +102,11 @@ This is several days of careful work and should be done screen by screen, never 
   - The 382 KB `<style>` block moved to `css/base.css`, `app.css`, `admin.css` and `features.css`, in the original order, and Prettier-formatted.
   - Before-and-after screenshots of 14 page and size combinations matched, apart from normal animation noise.
   - `index.html` is now about 0.29 MB.
+- **Step 8 (v56, 23 Oct 2026), done: core app moved.**
+  - The last inline app script (285 KB, v1-v16) now lives in `js/app-core.js`, Prettier-formatted, about 6,000 lines.
+  - It loads first, straight after `config.js` and the four `/css` files. Every other `/js` file depends on it.
+  - `index.html` is now only page structure, the schema.org data and `<link>`/`<script>` tags, about 6 KB.
+  - Tests swap in a fake Supabase by matching the formatted `const SB =` line in `js/app-core.js`. If you reformat that line, update `tests/admin/*.js` and `tests/app/*.py` too.
 - **Next steps:**
   - Move the older blocks into `/js`, newest first, one file per feature: payments (v26), accessibility (v28), photo crop (v30-v34), then the admin screens.
   - Move CSS into `/css` files.

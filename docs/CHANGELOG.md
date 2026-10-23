@@ -2,6 +2,9 @@
 
 Everything built so far, newest first. Full technical detail for each item is in `HANDOVER.md`. How Rooms, events, communities and the Room pass work: `docs/ROOMS.md`.
 
+## 23 Oct 2026
+- **v56: Core app moved to `js/app-core.js`.** `index.html` is now only page structure and file links (about 6 KB, down from 1.2 MB on 21 Oct). No change in behaviour.
+
 ## 22 Oct 2026
 - **v55: Styles moved to `/css`.** Four formatted files (base, app, admin, features) in the original order. Nothing changes visually; screenshots before and after match.
 - **v54: Duplicate functions merged.** All 27 functions that were declared more than once now have a single version, one screen per commit (caebbb2, 63327db, 379eeba, 48646c7, 0955e6d, eaf6579). No change in behaviour.

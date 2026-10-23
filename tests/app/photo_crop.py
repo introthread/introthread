@@ -1,3 +1,13 @@
+# --- v56: app code now lives in js/app-core.js; swap in the test Supabase there too ---
+import builtins as _bi, io as _io
+def open(p,*a,**k):
+    f=_bi.open(p,*a,**k)
+    if isinstance(p,str) and p.endswith('js/app-core.js') and 'b' not in (a[0] if a else k.get('mode','r')):
+        t=f.read(); f.close()
+        return _io.StringIO(t.replace('const SB =\n  window.supabase','const SB = window.__SB ? window.__SB :\n  window.supabase'))
+    return f
+# --- end v56 ---
+
 # Profile photo crop dialog: the Save photo button must be fully visible at every screen size (Playwright).
 # Run from the repo root: python3 tests/app/photo_crop.py
 # Needs: pip install playwright && python3 -m playwright install chromium.

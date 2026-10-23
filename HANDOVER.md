@@ -31,8 +31,9 @@ Last updated: 22 Oct 2026, 3:00 pm Nairobi (after v37 security hardening and mig
 - **Photo popup:** Save photo is visible. The root cause was ad blockers hiding `ad-` classes; all were renamed to `ix-` (v35).
 - **Admin:** all screens are redesigned, including the Audit log (v43, done 21 Oct). Do not redo it unless Agnes sends a new mockup.
 
-**Code layout (v55):**
-- `index.html` is now about 0.29 MB: HTML, the original app script (v1-v16, with no duplicate functions left) and `<link>`/`<script>` tags.
+**Code layout (v56):**
+- `index.html` is now about 6 KB: page structure and `<link>`/`<script>` tags only.
+- The original app (v1-v16, no duplicate functions left) is in `js/app-core.js` and must load first.
 - Styles are in `css/` (base, app, admin, features).
 - Features are in `js/` (32 files, in load order).
 - The sandbox browser tests and `tests/admin` serve or inline both `/js` and `/css`.

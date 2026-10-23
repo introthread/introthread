@@ -1,6 +1,16 @@
 
 import asyncio,json
 from playwright.async_api import async_playwright
+# --- v56: app code now lives in js/app-core.js; swap in the test Supabase there too ---
+import builtins as _bi, io as _io
+def open(p,*a,**k):
+    f=_bi.open(p,*a,**k)
+    if isinstance(p,str) and p.endswith('js/app-core.js') and 'b' not in (a[0] if a else k.get('mode','r')):
+        t=f.read(); f.close()
+        return _io.StringIO(t.replace('const SB =\n  window.supabase','const SB = window.__SB ? window.__SB :\n  window.supabase'))
+    return f
+# --- end v56 ---
+
 async def main():
     html=open('index.html').read().replace('const SB=(window.supabase','const SB=window.__SB?window.__SB:(window.supabase')
     async with async_playwright() as p:
