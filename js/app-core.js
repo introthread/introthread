@@ -530,7 +530,7 @@ function logout() {
   go('#/');
 }
 function tRow(t) {
-  return `<div class="tl" onclick="go('#/app/thread/${t.id}')">${ring(t)}${av(t.other.name)}<div class="meta"><b>${esc(t.other.name)}</b><span>${esc(t.other.role)}${t.other.company ? ', ' + esc(t.other.company) : ''} &middot; ${esc(t.where)} &middot; ${ago(t.createdAt)}</span></div>${warmBar(warmth(t))}<div class="hide-sm">${stateChip(t)}</div></div>`;
+  return `<div class="tl" data-on-click="go('#/app/thread/${t.id}')">${ring(t)}${av(t.other.name)}<div class="meta"><b>${esc(t.other.name)}</b><span>${esc(t.other.role)}${t.other.company ? ', ' + esc(t.other.company) : ''} &middot; ${esc(t.where)} &middot; ${ago(t.createdAt)}</span></div>${warmBar(warmth(t))}<div class="hide-sm">${stateChip(t)}</div></div>`;
 }
 function nudges() {
   return myThreads().filter(t => {
@@ -541,7 +541,7 @@ function nudges() {
 function showNudges() {
   const n = nudges();
   modal(
-    `<div class="row between"><h3 style="margin:0">Nudges</h3><button class="x" onclick="closeModal()">&times;</button></div><div class="stack" style="margin-top:16px">${n.length ? n.map(t => `<div class="tl" onclick="closeModal();go('#/app/thread/${t.id}')">${av(t.other.name, 'sm')}<div class="meta"><b>${esc(t.other.name)}</b><span>${threadState(t) === 'matched' ? 'You matched. Send the follow-up.' : threadState(t) === 'pending' ? 'Waiting for them to confirm.' : 'Answer "What\'s next?" before the Thread fades.'}</span></div></div>`).join('') : '<div class="empty">All caught up.</div>'}</div>`
+    `<div class="row between"><h3 style="margin:0">Nudges</h3><button class="x" data-on-click="closeModal()">&times;</button></div><div class="stack" style="margin-top:16px">${n.length ? n.map(t => `<div class="tl" data-on-click="closeModal();go('#/app/thread/${t.id}')">${av(t.other.name, 'sm')}<div class="meta"><b>${esc(t.other.name)}</b><span>${threadState(t) === 'matched' ? 'You matched. Send the follow-up.' : threadState(t) === 'pending' ? 'Waiting for them to confirm.' : 'Answer "What\'s next?" before the Thread fades.'}</span></div></div>`).join('') : '<div class="empty">All caught up.</div>'}</div>`
   );
 }
 
@@ -3554,7 +3554,7 @@ function dAction(t) {
 function dMenu(id) {
   const t = findThread(id);
   modal(
-    `<div><div class="row" style="gap:12px;margin-bottom:14px">${xav(t.other.name, 44)}<div><b>${esc(t.other.name)}</b><div class="small muted">${esc([t.other.role, t.other.company].filter(Boolean).join(' · '))}</div></div></div><div class="t-more"><a href="/app/thread/${t.id}" onclick="closeModal()">${sv('eye', 18)} Open Thread</a><button onclick="copy(threadLink(findThread('${t.id}')),'Confirm link copied');closeModal()">${sv('link', 18)} Copy confirm link</button><button onclick="closeModal();tpEdit('${t.id}')">${sv('grid', 18)} Edit topics</button><button onclick="dIcs('${t.id}');closeModal()">${sv('cal', 18)} Add follow-up to calendar</button><button onclick="closeModal();delThread('${t.id}')" style="color:#d14343">${sv('close', 18)} Delete Thread</button></div></div>`
+    `<div><div class="row" style="gap:12px;margin-bottom:14px">${xav(t.other.name, 44)}<div><b>${esc(t.other.name)}</b><div class="small muted">${esc([t.other.role, t.other.company].filter(Boolean).join(' · '))}</div></div></div><div class="t-more"><a href="/app/thread/${t.id}" data-on-click="closeModal()">${sv('eye', 18)} Open Thread</a><button data-on-click="copyThreadLink('${t.id}','Confirm link copied',true)">${sv('link', 18)} Copy confirm link</button><button data-on-click="closeModal();tpEdit('${t.id}')">${sv('grid', 18)} Edit topics</button><button data-on-click="dIcs('${t.id}');closeModal()">${sv('cal', 18)} Add follow-up to calendar</button><button data-on-click="closeModal();delThread('${t.id}')" style="color:#d14343">${sv('close', 18)} Delete Thread</button></div></div>`
   );
 }
 function dIcs(id) {
@@ -3812,7 +3812,7 @@ async function gcalLoad() {
 function gcalPanel() {
   const tok = gTok();
   if (!tok)
-    return `<div class="g-conn"><span>${oG()}</span><div><b>Connect Google Calendar</b><small>See today&rsquo;s meetings here and start Threads from them.</small></div><button type="button" class="d-act ghost sm" onclick="oauth('Google',1)">Connect</button></div>`;
+    return `<div class="g-conn"><span>${oG()}</span><div><b>Connect Google Calendar</b><small>See today&rsquo;s meetings here and start Threads from them.</small></div><button type="button" class="d-act ghost sm" data-on-click="oauth('Google',1)">Connect</button></div>`;
   if (!GCAL) {
     gcalLoad();
     return '<p class="d-muted">Loading your calendar...</p>';
@@ -3941,11 +3941,11 @@ function fuOpen(id) {
   const t = findThread(id);
   if (!t) return toast('That Thread is no longer available.');
   const s = threadState(t);
-  modal(`<div class="fu-m"><div class="row between"><div class="row" style="gap:12px">${xav(t.other.name, 46)}<div><b>${esc(t.other.name)}</b><div class="small muted">${esc([t.other.role, t.other.company].filter(Boolean).join(', ') || 'New connection')}</div></div></div><button class="x" aria-label="Close" onclick="closeModal()">&times;</button></div>
+  modal(`<div class="fu-m"><div class="row between"><div class="row" style="gap:12px">${xav(t.other.name, 46)}<div><b>${esc(t.other.name)}</b><div class="small muted">${esc([t.other.role, t.other.company].filter(Boolean).join(', ') || 'New connection')}</div></div></div><button class="x" aria-label="Close" data-on-click="closeModal()">&times;</button></div>
  <h3>Record the follow-up</h3><p class="fu-sub">${s === 'pending' ? 'They have not confirmed yet. Resend the confirm link, then log what happened.' : 'Log what happened so the Thread stays accurate.'}</p>
  <div class="fu-opts" role="radiogroup" aria-label="Outcome">${D_OUT.map(([k, l, i], n) => `<label><input type="radio" name="fuo" value="${k}" ${n === 0 ? 'checked' : ''}><span>${sv(i, 17)}${l}</span></label>`).join('')}</div>
  <label class="x-f"><span>Note <em>(optional)</em></span><textarea id="fun" maxlength="200" rows="2" placeholder="e.g. Intro call booked for Friday"></textarea></label>
- <div class="fu-b"><a class="t-how" href="/app/thread/${t.id}" onclick="closeModal()">${sv('eye', 16)} Open Thread</a>${s === 'pending' ? `<button type="button" class="t-how" onclick="copy(threadLink(findThread('${t.id}')),'Confirm link copied')">${sv('link', 16)} Copy confirm link</button>` : ''}<button type="button" class="x-btn" onclick="fuSave('${t.id}')">Save outcome</button></div></div>`);
+ <div class="fu-b"><a class="t-how" href="/app/thread/${t.id}" data-on-click="closeModal()">${sv('eye', 16)} Open Thread</a>${s === 'pending' ? `<button type="button" class="t-how" data-on-click="copyThreadLink('${t.id}','Confirm link copied')">${sv('link', 16)} Copy confirm link</button>` : ''}<button type="button" class="x-btn" data-on-click="fuSave('${t.id}')">Save outcome</button></div></div>`);
 }
 async function fuSave(id) {
   const t = findThread(id);
@@ -4016,10 +4016,10 @@ function vToday() {
   const nrow = t => {
     const last = (t.events || []).slice(-1)[0];
     const s = threadState(t);
-    return `<div class="d-nrow">${dRing(t)}${xav(t.other.name, 52)}<div class="d-who"><b><a href="/app/thread/${t.id}">${esc(t.other.name)}</a>${t.confirmed ? `<span class="d-ver" title="Verified">${sv('check', 10, '#fff', 3.2)}</span>` : ''}</b><small>${esc([t.other.role, t.other.company].filter(Boolean).join(', ') || 'New connection')}</small>${tagChips(t)}</div><div class="d-st">${dChip(t)}<small>${sv(t.note ? 'mail' : 'pin', 14)} ${esc(t.note || (t.where ? 'Met at ' + t.where : '') || (last && last.text) || 'Thread started')}</small><small>${sv('cal', 14)} ${ago(t.createdAt)}</small></div><button type="button" class="d-act" onclick="${s === 'open' && !t.mine ? `go('/app/thread/${t.id}')` : `fuOpen('${t.id}')`}">${s === 'open' && !t.mine ? 'Answer' : 'Follow up'}</button><button type="button" class="d-dots" aria-label="More options for ${esc(t.other.name)}" onclick="dMenu('${t.id}')">&#8942;</button></div>`;
+    return `<div class="d-nrow">${dRing(t)}${xav(t.other.name, 52)}<div class="d-who"><b><a href="/app/thread/${t.id}">${esc(t.other.name)}</a>${t.confirmed ? `<span class="d-ver" title="Verified">${sv('check', 10, '#fff', 3.2)}</span>` : ''}</b><small>${esc([t.other.role, t.other.company].filter(Boolean).join(', ') || 'New connection')}</small>${tagChips(t)}</div><div class="d-st">${dChip(t)}<small>${sv(t.note ? 'mail' : 'pin', 14)} ${esc(t.note || (t.where ? 'Met at ' + t.where : '') || (last && last.text) || 'Thread started')}</small><small>${sv('cal', 14)} ${ago(t.createdAt)}</small></div><button type="button" class="d-act" data-on-click="${s === 'open' && !t.mine ? `go('/app/thread/${t.id}')` : `fuOpen('${t.id}')`}">${s === 'open' && !t.mine ? 'Answer' : 'Follow up'}</button><button type="button" class="d-dots" aria-label="More options for ${esc(t.other.name)}" data-on-click="dMenu('${t.id}')">&#8942;</button></div>`;
   };
   const qa = (href, fn, ic, l, s) =>
-    `${href ? `<a href="${href}"` : `<button type="button" onclick="${fn}"`} class="d-qi"><span>${sv(ic, 20)}</span><span><b>${l}</b><small>${s}</small></span>${href ? '</a>' : '</button>'}`;
+    `${href ? `<a href="${href}"` : `<button type="button" data-on-click="${fn}"`} class="d-qi"><span>${sv(ic, 20)}</span><span><b>${l}</b><small>${s}</small></span>${href ? '</a>' : '</button>'}`;
   return shell(
     'today',
     `<div class="t-head"><div><div class="t-eye">${date}</div><h1 class="t-h1">${greet}, ${esc((u.name || '').split(' ')[0])}</h1><p class="t-sub">${need.length ? `${need.length} Thread${need.length > 1 ? 's' : ''} need${need.length > 1 ? '' : 's'} a next step. Start with the relationships most likely to go cold.` : 'You are all caught up. Start a Thread at your next meeting.'}</p></div><div class="d-hbtns"><a href="/app/card" class="t-how">${sv('user', 18)} My card</a><a href="/app/tap" class="x-btn lg">${sv('nfc', 18)} Tap to Thread</a></div></div>
@@ -4036,9 +4036,9 @@ function vToday() {
            return `<a class="d-ev" href="/app/room/${r.id}"><span class="d-evd">${rFmt(r, { weekday: 'short' })}<b>${rFmt(r, { day: 'numeric' })}</b></span><span class="d-evl"><i></i></span><span class="d-evt"><b>${esc(r.name)}</b><small>${esc(r.location || 'Room ' + r.code)}</small></span><em>${dd <= 0 ? 'Today' : dd === 1 ? 'Tomorrow' : 'In ' + dd + ' days'}</em></a>`;
          })
          .join('')
-     : `<div class="d7-emp"><span>${sv('cal', 24)}</span><div><b>No upcoming events</b><small>Create a Room for your next event and every tap becomes a Thread.</small><button type="button" class="x-btn sm" onclick="newRoomModal()">Create a Room</button></div></div>`
+     : `<div class="d7-emp"><span>${sv('cal', 24)}</span><div><b>No upcoming events</b><small>Create a Room for your next event and every tap becomes a Thread.</small><button type="button" class="x-btn sm" data-on-click="newRoomModal()">Create a Room</button></div></div>`
  }</section>
- <section class="d-box"><div class="d-sh"><b>Thread activity</b><select class="d7-sel" aria-label="Date range" onchange="DRANGE=+this.value;window._keepScroll=true;render()">${[7, 14, 30].map(n => `<option value="${n}" ${DRANGE === n ? 'selected' : ''}>Last ${n} days</option>`).join('')}</select></div><div class="d-chart ${DRANGE > 7 ? 'many' : ''}">${bins.map(b => `<div class="d-bar" title="${b.l}: ${b.n} new, ${b.v} verified, ${b.r} resolved"><span><i class="r" style="height:${(b.r / mx) * 100}%"></i><i class="n" style="height:${(Math.max(0, b.n - b.v) / mx) * 100}%"></i><i class="v" style="height:${(b.v / mx) * 100}%"></i></span><small>${b.l}</small></div>`).join('')}</div>
+ <section class="d-box"><div class="d-sh"><b>Thread activity</b><select class="d7-sel" aria-label="Date range" data-on-change="setDRange(this.value)">${[7, 14, 30].map(n => `<option value="${n}" ${DRANGE === n ? 'selected' : ''}>Last ${n} days</option>`).join('')}</select></div><div class="d-chart ${DRANGE > 7 ? 'many' : ''}">${bins.map(b => `<div class="d-bar" title="${b.l}: ${b.n} new, ${b.v} verified, ${b.r} resolved"><span><i class="r" style="height:${(b.r / mx) * 100}%"></i><i class="n" style="height:${(Math.max(0, b.n - b.v) / mx) * 100}%"></i><i class="v" style="height:${(b.v / mx) * 100}%"></i></span><small>${b.l}</small></div>`).join('')}</div>
  <div class="d-leg"><span><i class="n"></i>New threads <b>${tot('n')}</b></span><span><i class="v"></i>Verified <b>${tot('v')}</b></span><span><i class="r"></i>Resolved <b>${tot('r')}</b></span></div></section>
  </div></div>
  <div class="d7-bot"><section class="d-box">${dSecHead('Recent activity', '/app/threads')}${acts.length ? acts.map(({ e, t }) => `<a class="d-act-row" href="/app/thread/${t.id}"><span class="d-aic">${sv(e.k === 'resolved' ? 'check' : e.k === 'confirm' ? 'users' : e.k === 'followup' ? 'mail' : 'pin', 17)}</span><span><b>${esc(t.other.name)}</b> ${esc(e.text || '')}<small>${ago(e.at)}</small></span></a>`).join('') : '<p class="d-muted">Activity on your Threads will show here.</p>'}</section>
@@ -4149,7 +4149,7 @@ function vThreads() {
   <div class="th-who"><b>${esc(t.other.name)}${t.confirmed ? `<span class="d-ver" title="Verified">${sv('check', 10, '#fff', 3.2)}</span>` : ''}</b><small>${esc([t.other.role, t.other.company].filter(Boolean).join(' · ') || 'New connection')}</small>
    <span class="th-meta"><span>${sv('pin', 14)} ${esc(t.where || 'In person')}</span><span>${sv('cal', 14)} ${ago(t.createdAt)}</span></span>${tagChips(t)}</div>
   <div class="th-st"><span class="th-chip ${{ pending: 'o', open: t.mine ? 'o' : 'b', matched: 'g', resolved: 'g', closed: 'n' }[s]}">${chipIc(s)} ${dChip(t).replace(/<[^>]+>/g, '')}</span><small>${sv('mail', 14)} <span>${esc(t.note || (last && last.text) || 'Thread started')}</span></small>${dWarm(t)}</div>
-  ${act ? `<button type="button" class="d-act" onclick="${s === 'open' && !t.mine ? `go('/app/thread/${t.id}')` : `fuOpen('${t.id}')`}">${s === 'open' && !t.mine ? 'Answer' : 'Follow up'}</button>` : `<button type="button" class="d-act ghost" onclick="go('/app/thread/${t.id}')">View</button>`}
+  ${act ? `<button type="button" class="d-act" data-on-click="${s === 'open' && !t.mine ? `go('/app/thread/${t.id}')` : `fuOpen('${t.id}')`}">${s === 'open' && !t.mine ? 'Answer' : 'Follow up'}</button>` : `<button type="button" class="d-act ghost" onclick="go('/app/thread/${t.id}')">View</button>`}
   <button type="button" class="d-dots" aria-label="More options for ${esc(t.other.name)}" onclick="dMenu('${t.id}')">&#8942;</button></div>`;
   };
   return shell(
@@ -6041,4 +6041,15 @@ function contactSend(e) {
     '&body=' +
     encodeURIComponent($('#cm').value + '\n\n' + $('#cn').value + ' <' + $('#ce').value + '>');
   toast('Opening your email app to send this.');
+}
+
+/* v61: named handlers for the Today screen (no inline JavaScript). */
+function copyThreadLink(id, msg, close) {
+  copy(threadLink(findThread(id)), msg);
+  if (close) closeModal();
+}
+function setDRange(v) {
+  DRANGE = +v;
+  window._keepScroll = true;
+  render();
 }

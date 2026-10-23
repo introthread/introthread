@@ -1330,7 +1330,7 @@ bNotifs = function (u) {
   const t = (k, l, d) => bTog(P[k] !== false, l, d, `setPref('${k}',this.checked)`);
   let h = _bNotifsNf.apply(this, arguments);
   h = h.replace(
-    /(\$\{bSec\('bell')|<button type="button" class="t-how sm" onclick="showNudges\(\)">Open notifications<\/button>/,
+    /(\$\{bSec\('bell')|<button type="button" class="t-how sm" (?:data-on-click|onclick)="showNudges\(\)">Open notifications<\/button>/,
     m => m
   );
   const extra =
