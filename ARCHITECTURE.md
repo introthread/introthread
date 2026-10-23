@@ -162,7 +162,7 @@ Each step was done one screen or file per commit, with the full test list re-run
 1. ~~Remove the unused variables `RF`, `RQ`, `RS` and `TF`.~~ Done in v95.
 2. ~~Move the leftover screen handlers to their screen files.~~ Done in v96.
 3. ~~Move the website content (`PAGE_META`, `setMeta`, `feat3`, `secHead`, `POLICY`, `TERMS`) to `site-pages.js`.~~ Done in v98: moved unchanged to the top of `site-pages.js`; nothing uses them while loading (the `render` wrapper calls `setMeta` only at run time); `app-core.js` is down to about 2,530 lines.
-4. Move the public card and guest pages to a new `public-pages.js`: `vPublic` with all 5 versions in order, `vcard`, `pcVcf`, `PUB`, `GUEST` and the guest functions.
+4. ~~Move the public card and guest pages to a new `public-pages.js`.~~ Done in v99: 25 top-level statements moved unchanged and in their original order (`vPublic` with its 4 layered versions, `vcard` and its later version, `pcVcf`, `PUB`, `GUEST`, and `guestThread`, `vGuest`, `guestConfirm`, `guestAnswer` each with its later version). `public-pages.js` loads straight after `app-core.js`, so its wrappers still run before the later files that wrap `vPublic`, `pcVcf` or `guestThread` (billing, capture, admin-core, late-fixes, event-mode, company-logo). `render` calls `vPublic` and `vGuest` only at run time. `app-core.js` is down to about 2,200 lines.
 5. Move Google Calendar to a new `google-calendar.js`, keeping its `oauth` version after the earlier sign-in versions.
 6. Move photo upload next to `photo-crop.js`, with its sign-up wrapper.
 7. Move the account menu (`am*`, `acctMenu`, its listeners, `setQ`, `searchKey`, `amHelp`) to `app-navigation.js` or its own file.
