@@ -149,12 +149,12 @@ async function sgLoad(keep) {
   } catch (e) {
     admBody(
       sgHead() +
-        `<div class="ix-card ix-fail" role="alert">${sv('alert', 22)}<div><b>Settings could not load</b><p>${esc((e && e.message) || 'Unknown error')}</p></div><button type="button" class="ix-btn" onclick="sgLoad()">${sv('refresh', 16)} Try again</button></div>`
+        `<div class="ix-card ix-fail" role="alert">${sv('alert', 22)}<div><b>Settings could not load</b><p>${esc((e && e.message) || 'Unknown error')}</p></div><button type="button" class="ix-btn" data-on-click="sgLoad()">${sv('refresh', 16)} Try again</button></div>`
     );
   }
 }
 function sgHead() {
-  return `<div class="ix-h"><div><h1>Settings</h1><p>Configure how Introthread works, manage features and control security.</p></div><div class="ix-hc"><button type="button" class="ix-btn" onclick="sgHist()">${sv('plhist', 17)} View changes log</button></div></div>`;
+  return `<div class="ix-h"><div><h1>Settings</h1><p>Configure how Introthread works, manage features and control security.</p></div><div class="ix-hc"><button type="button" class="ix-btn" data-on-click="sgHist()">${sv('plhist', 17)} View changes log</button></div></div>`;
 }
 function sgSkel() {
   return (
@@ -164,7 +164,7 @@ function sgSkel() {
 }
 const sgWhen = k => (SGX.at && SGX.at[k] ? `Last changed ${fmtD(SGX.at[k])} ${fmtT(SGX.at[k])}` : '');
 const sgSw = (id, on, fn, lab, dis) =>
-  `<label class="sg-sw"><input type="checkbox" id="${id}" ${on ? 'checked' : ''} onchange="${fn}" ${dis ? 'disabled' : ''}><span class="pl-swt" aria-hidden="true"></span><span class="sr">${lab}</span></label>`;
+  `<label class="sg-sw"><input type="checkbox" id="${id}" ${on ? 'checked' : ''} data-on-change="${fn}" ${dis ? 'disabled' : ''}><span class="pl-swt" aria-hidden="true"></span><span class="sr">${lab}</span></label>`;
 const sgSecH = (ic, tone, t, p, right) =>
   `<div class="sg-sh"><span class="sg-ic t-${tone}w" aria-hidden="true">${sv(ic, 22)}</span><div><h2>${t}</h2><p>${p}</p></div>${right || ''}</div>`;
 function sgPage() {
@@ -179,12 +179,12 @@ function sgAnn() {
     ed = sgCan(),
     dis = ed ? '' : ' disabled';
   return `<section class="ix-card sg-sec" aria-labelledby="sgat">${sgSecH('sgmega', 'b', '<span id="sgat">Announcement banner</span>', 'Show a message at the top of the app until each person closes it.', `<span class="sg-pill" id="sgast"></span>`)}
- <div class="pl-f"><label for="sgatext">Message</label><div class="pl-in np sg-ta" id="sgaw"><textarea id="sgatext" rows="3" maxlength="160" placeholder="e.g. New: import your LinkedIn connections" oninput="sgAnnInput()"${dis}>${esc(a.text || '')}</textarea></div><div class="sg-cnt"><small class="pl-err" id="sgaerr" role="alert"></small><small id="sgacnt">0 / 160</small></div></div>
- <div class="pl-2"><div class="pl-f"><label for="sgatone">Banner style</label><label class="md-sel sg-sel">${sv('info', 17)}<select id="sgatone" onchange="sgAnnInput()"${dis}><option value="info" ${a.tone !== 'warn' ? 'selected' : ''}>Information</option><option value="warn" ${a.tone === 'warn' ? 'selected' : ''}>Warning</option></select>${sv('chevd', 16)}</label></div>
+ <div class="pl-f"><label for="sgatext">Message</label><div class="pl-in np sg-ta" id="sgaw"><textarea id="sgatext" rows="3" maxlength="160" placeholder="e.g. New: import your LinkedIn connections" data-on-input="sgAnnInput()"${dis}>${esc(a.text || '')}</textarea></div><div class="sg-cnt"><small class="pl-err" id="sgaerr" role="alert"></small><small id="sgacnt">0 / 160</small></div></div>
+ <div class="pl-2"><div class="pl-f"><label for="sgatone">Banner style</label><label class="md-sel sg-sel">${sv('info', 17)}<select id="sgatone" data-on-change="sgAnnInput()"${dis}><option value="info" ${a.tone !== 'warn' ? 'selected' : ''}>Information</option><option value="warn" ${a.tone === 'warn' ? 'selected' : ''}>Warning</option></select>${sv('chevd', 16)}</label></div>
  <div class="pl-f"><span class="sg-lab" id="sgaonl">Show banner</span><div class="sg-swr">${sgSw('sgaon', a.on, 'sgAnnInput()', 'Show banner', !ed)}<span id="sgaonx" class="ix-mu"></span></div></div></div>
  <div class="sg-pv"><span class="sg-lab">Preview</span><div class="sg-pvb"><div class="ann sg-ann" id="sgapv" aria-hidden="true"><span></span><button type="button" tabindex="-1">&times;</button></div></div></div>
  <small class="ix-mu sg-when">${sgWhen('announcement')}</small>
- ${ed ? `<div class="pl-ft"><button type="button" class="ix-btn pri" id="sgasv" onclick="sgAnnSave()" disabled>${sv('plsave', 17)} Save announcement</button><button type="button" class="ix-btn" id="sgars" hidden onclick="sgAnnReset()">${sv('plundo', 16)} Undo</button><span class="pl-st ok" id="sgasst" role="status"></span></div>` : ''}</section>`;
+ ${ed ? `<div class="pl-ft"><button type="button" class="ix-btn pri" id="sgasv" data-on-click="sgAnnSave()" disabled>${sv('plsave', 17)} Save announcement</button><button type="button" class="ix-btn" id="sgars" hidden data-on-click="sgAnnReset()">${sv('plundo', 16)} Undo</button><span class="pl-st ok" id="sgasst" role="status"></span></div>` : ''}</section>`;
 }
 const sgAnnRead = () => ({
   text: ($('#sgatext') || {}).value != null ? $('#sgatext').value.trim() : '',
@@ -286,9 +286,9 @@ function sgMaint() {
   return `<section class="ix-card sg-sec" aria-labelledby="sgmt">${sgSecH('sgwrench', 'o', '<span id="sgmt">Maintenance mode</span>', 'Pause the app for everyone except staff. Public cards stay visible.', `<span class="sg-pill ${on ? 'warn' : 'off'}">${on ? sv('alert', 13) + ' On: app paused' : 'Off'}</span>`)}
  <div class="sg-box"><span class="sg-ic t-bw" aria-hidden="true">${sv('lock', 22)}</span><div><b>When maintenance mode is on</b><p>Signed-in people see a "Back shortly" screen with your message and cannot use the app. Public cards and Thread guest pages stay open. Staff can still use the app and the admin area.</p></div></div>
  <div class="sg-swr">${sgSw('sgmon', on, 'sgMaintInput()', 'Enable maintenance mode', !ed)}<label for="sgmon" class="sg-swl">Enable maintenance mode</label></div>
- <div class="pl-f"><label for="sgmmsg">Message <span>(optional)</span></label><div class="pl-in np" id="sgmw"><input id="sgmmsg" type="text" maxlength="200" autocomplete="off" placeholder="e.g. Back at 6 pm Nairobi time." value="${esc(APPSET.maintenance_message || '')}" oninput="sgMaintInput()"${dis}></div><div class="sg-cnt"><small class="ix-mu">Shown on the maintenance screen. Leave empty for the standard message.</small><small id="sgmcnt">0 / 200</small></div></div>
+ <div class="pl-f"><label for="sgmmsg">Message <span>(optional)</span></label><div class="pl-in np" id="sgmw"><input id="sgmmsg" type="text" maxlength="200" autocomplete="off" placeholder="e.g. Back at 6 pm Nairobi time." value="${esc(APPSET.maintenance_message || '')}" data-on-input="sgMaintInput()"${dis}></div><div class="sg-cnt"><small class="ix-mu">Shown on the maintenance screen. Leave empty for the standard message.</small><small id="sgmcnt">0 / 200</small></div></div>
  <small class="ix-mu sg-when">${sgWhen('maintenance')}</small>
- ${ed ? `<div class="pl-ft"><button type="button" class="ix-btn pri" id="sgmsv" onclick="sgMaintSave()" disabled>${sv('plsave', 17)} Save changes</button><button type="button" class="ix-btn" id="sgmrs" hidden onclick="sgMaintReset()">${sv('plundo', 16)} Undo</button><span class="pl-st ok" id="sgmst" role="status"></span></div>` : ''}</section>`;
+ ${ed ? `<div class="pl-ft"><button type="button" class="ix-btn pri" id="sgmsv" data-on-click="sgMaintSave()" disabled>${sv('plsave', 17)} Save changes</button><button type="button" class="ix-btn" id="sgmrs" hidden data-on-click="sgMaintReset()">${sv('plundo', 16)} Undo</button><span class="pl-st ok" id="sgmst" role="status"></span></div>` : ''}</section>`;
 }
 const sgMaintRead = () => ({
   on: !!($('#sgmon') || {}).checked,
@@ -373,7 +373,7 @@ function sgFeat() {
  <ul class="sg-list">${SG_FEAT.map(([k, l, d, ic]) => {
    const on = sgOn(k),
      dep = k === 'linkedin_import' && !sgOn('contact_import');
-   return `<li class="sw"><span class="sg-ri" aria-hidden="true">${ic === 'li' ? sv('li', 20, 'none').replace('fill="none" stroke="none"', 'fill="currentColor" stroke="none"') : sv(ic, 20)}</span><div><b id="sgfl_${k}">${l}</b><p>${d}${dep ? ' <span class="sg-dep">Has no effect while Contact import is off.</span>' : ''}</p></div><span class="sg-state ${on ? 'on' : 'off'}">${on ? 'On' : 'Off'}</span>${sgSw('sgf_' + k, on, `sgFeatAsk('${k}',this.checked);this.checked=!this.checked`, l, !ed)}</li>`;
+   return `<li class="sw"><span class="sg-ri" aria-hidden="true">${ic === 'li' ? sv('li', 20, 'none').replace('fill="none" stroke="none"', 'fill="currentColor" stroke="none"') : sv(ic, 20)}</span><div><b id="sgfl_${k}">${l}</b><p>${d}${dep ? ' <span class="sg-dep">Has no effect while Contact import is off.</span>' : ''}</p></div><span class="sg-state ${on ? 'on' : 'off'}">${on ? 'On' : 'Off'}</span>${sgSw('sgf_' + k, on, `sgFeatSw('${k}',this)`, l, !ed)}</li>`;
  }).join('')}</ul>
  <small class="ix-mu sg-when">${sgWhen('features')}</small></section>`;
 }
@@ -405,8 +405,8 @@ function sgSec() {
     `<li class="${c || 'inf'}"><span class="sg-ri" aria-hidden="true">${sv(ic, 20)}</span><div><b>${t}</b><p>${p}</p></div>${right}</li>`;
   const fixed = '<span class="sg-state fx">Built in</span>';
   return `<section class="ix-card sg-sec" aria-labelledby="sgst">${sgSecH('shield', 'b', '<span id="sgst">Security</span>', 'Protection for staff and the admin area.')}
- <ul class="sg-list">${row('lock', 'Require two-step verification for staff', `Staff must use an authenticator app to open the admin area. Recommended on.${own ? '' : ' Only owners can change this.'}`, `<span class="sg-state ${mfa ? 'on' : 'off'}">${mfa ? 'On' : 'Off'}</span>${sgSw('sgmfa', mfa, 'sgMfaAsk(this.checked);this.checked=!this.checked', 'Require two-step verification for staff', !own)}`, 'sw')}
- ${row('users', 'Staff roles', 'Owner, admin, moderator, support and finance. Each role only sees the screens it needs.', `<button type="button" class="au-inl" onclick="admGo('staff')">Manage staff</button>`)}
+ <ul class="sg-list">${row('lock', 'Require two-step verification for staff', `Staff must use an authenticator app to open the admin area. Recommended on.${own ? '' : ' Only owners can change this.'}`, `<span class="sg-state ${mfa ? 'on' : 'off'}">${mfa ? 'On' : 'Off'}</span>${sgSw('sgmfa', mfa, 'sgMfaSw(this)', 'Require two-step verification for staff', !own)}`, 'sw')}
+ ${row('users', 'Staff roles', 'Owner, admin, moderator, support and finance. Each role only sees the screens it needs.', `<button type="button" class="au-inl" data-on-click="admGo('staff')">Manage staff</button>`)}
  ${row('sgimport', 'Data exports', 'Only owners and admins can export user data, and finance can export subscriptions. Every export is recorded.', fixed)}
  ${row('sgmail', 'Email addresses in admin', 'Hidden from moderator and finance roles. Shown in full only for email actions by owners, admins and support.', fixed)}</ul>
  <small class="ix-mu sg-when">${sgWhen('admin_require_mfa')}</small></section>`;
@@ -453,7 +453,7 @@ function sgVal(k, v) {
 }
 async function sgHist() {
   modal(
-    `<div class="cap-m pl-hm"><div class="row between"><h3>Settings changes log</h3><button class="x" aria-label="Close" onclick="closeModal()">&times;</button></div><div id="sghb"><div class="ix-card sk" style="height:180px"></div></div></div>`
+    `<div class="cap-m pl-hm"><div class="row between"><h3>Settings changes log</h3><button class="x" aria-label="Close" data-on-click="closeModal()">&times;</button></div><div id="sghb"><div class="ix-card sk" style="height:180px"></div></div></div>`
   );
   try {
     const L = ((await arpc('admin_audit', { lim: 1000 })) || []).filter(
@@ -473,4 +473,15 @@ async function sgHist() {
     const b = $('#sghb');
     if (b) b.innerHTML = `<p class="adm-err">${esc((e && e.message) || 'Could not load the log')}</p>`;
   }
+}
+
+/* v59: named handlers for the Settings screen (no inline JavaScript).
+   The switch flips back until the change is confirmed in the dialog. */
+function sgFeatSw(k, el) {
+  sgFeatAsk(k, el.checked);
+  el.checked = !el.checked;
+}
+function sgMfaSw(el) {
+  sgMfaAsk(el.checked);
+  el.checked = !el.checked;
 }
