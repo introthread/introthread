@@ -3,6 +3,7 @@
 Everything built so far, newest first. Full technical detail for each item is in `HANDOVER.md`. How Rooms, events, communities and the Room pass work: `docs/ROOMS.md`.
 
 ## 23 Oct 2026
+- **v69: Honest GBP footer on /pricing.** Paystack charges in Kenyan shillings, so the footer now says UK prices are shown in GBP and cards are charged the KES equivalent, instead of "in GBP at checkout".
 - **v68: `.gitignore` and `package.json` added.** `.gitignore` keeps out `node_modules`, `.env` files, `.vercel` and test leftovers. `package.json` pins Prettier 3.9.10, jsdom 29.1.1 and acorn 8.19.0, with `npm test`, `test:photo-crop`, `format`, `format:check`, `build` and `check:deps` scripts. All 10 admin tests pass with the pinned versions. No change in behaviour.
 - **v67: Docs match the current code.** SECURITY-AUDIT.md records that inline scripts are blocked since v63. ARCHITECTURE.md and ARCHITECTURE-ESSENTIALS.md describe the split `/js` and `/css` layout and list the real next steps. PRD.md uses the published plan names: Free, Pro, Rooms and Networks. Docs only, no change in behaviour.
 - **v66: Personal email addresses removed from README.md and HANDOVER.md.** Owner, staff and test accounts are now described by role. Docs only, no change in behaviour.

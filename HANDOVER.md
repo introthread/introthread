@@ -13,7 +13,7 @@ This is exactly what `/pricing` shows. It was checked in a browser in US and UK 
 | Rooms | For events and communities | $199 per event ("Create a Room") | Room code, QR and badges; Live Resolution Report; Up to 1,000 attendees; Sponsor-ready export |
 | Networks | For VC platforms and networks | Custom, annual ("Talk to us") | Warmth dashboard; Warmth API; SSO and admin controls; Dedicated success manager |
 
-The page footer reads: "UK prices in GBP at checkout: Pro £9/month, Rooms £149/event. Prices exclude VAT and sales tax where applicable."
+The page footer reads (since v69): "UK prices shown in GBP: Pro £9/month, Rooms £149/event. Cards are charged the equivalent in Kenyan shillings. Prices exclude VAT and sales tax where applicable." Update the published price card image to match.
 
 **Where each price lives (change all of them together)**
 - **`js/billing.js` `PLANS`:** names, subtitles, prices and feature lists. The billing screen and the pricing page read from here.
@@ -43,7 +43,7 @@ The page footer reads: "UK prices in GBP at checkout: Pro £9/month, Rooms £149
   - SSO and admin controls for a customer's own network are also roadmap. The current admin area is Introthread staff only.
 
 **Open pricing decisions (ask the owner; don't guess)**
-1. **GBP at checkout is not real yet.** Paystack charges in KES; GBP isn't supported for this account. UK customers see £9 / £149, but the card is charged the KES equivalent. Either add a GBP-capable provider (Stripe) or change the footer wording.
+1. **GBP at checkout: RESOLVED in v69 (footer wording).** Paystack charges in KES, so the footer now reads "UK prices shown in GBP: Pro £9/month, Rooms £149/event. Cards are charged the equivalent in Kenyan shillings." Adding Stripe for real GBP charges remains an option later; it needs a Stripe account and keys from the owner.
 2. **Yearly Pro:** $120 a year (shown as $10 a month) is not on the published price card. The GBP yearly price of £90 is a placeholder. Confirm both, or remove the yearly toggle.
 3. **1 free Room per account** is not listed under Free on the price card. Either add "1 Room included" to Free, or set `FREE_ROOMS = 0`.
 4. **Thread search** is listed as Pro, but search works on Free today, because it isn't gated. Gate it with `has('search')`, or keep it open and change the card.
