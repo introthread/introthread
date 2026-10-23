@@ -21,7 +21,7 @@ if(onlyArg){
 }
 const inRange=i=>!ranges||ranges.some(([a,b])=>i>=a&&i<b);
 let s=fs.readFileSync(f,'utf8');
-const re=/ on(click|dblclick|change|input|submit|keydown|keyup|paste|mousemove|focus|blur|mouseenter|mouseleave)=(\\?)(["'])/g;
+const re=/ on(click|dblclick|change|input|submit|keydown|keyup|paste|mousemove|dragover|dragleave|drop|focus|blur|mouseenter|mouseleave)=(\\?)(["'])/g;
 let out='',last=0,conv=0;const left=[];let m;
 while((m=re.exec(s))){
   const delim=m[2]+m[3];let i=m.index+m[0].length,start=i;

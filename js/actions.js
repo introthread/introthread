@@ -217,7 +217,20 @@
     const src = el instanceof Element && el.getAttribute('data-on-' + ev.type);
     if (src) run(src, el, ev);
   }
-  const BUBBLE = ['click', 'dblclick', 'change', 'input', 'submit', 'keydown', 'keyup', 'paste', 'mousemove'];
+  const BUBBLE = [
+    'click',
+    'dblclick',
+    'change',
+    'input',
+    'submit',
+    'keydown',
+    'keyup',
+    'paste',
+    'mousemove',
+    'dragover',
+    'dragleave',
+    'drop'
+  ];
   const DIRECT = ['focus', 'blur', 'mouseenter', 'mouseleave'];
   BUBBLE.forEach(t => document.addEventListener(t, bubbling));
   DIRECT.forEach(t => document.addEventListener(t, direct, true));

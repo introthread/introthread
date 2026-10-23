@@ -206,7 +206,7 @@ function ctKnown() {
 /* ---- page ---- */
 function ctBar(on) {
   const n = ctList().length;
-  return `<div class="ct-seg" role="tablist"><button role="tab" class="${on === 't' ? 'on' : ''}" onclick="go('/app/threads')">Threads</button><button role="tab" class="${on === 'c' ? 'on' : ''}" onclick="go('/app/contacts')">Contacts${n ? ` <span>${n}</span>` : ''}</button></div>`;
+  return `<div class="ct-seg" role="tablist"><button role="tab" class="${on === 't' ? 'on' : ''}" data-on-click="go('/app/threads')">Threads</button><button role="tab" class="${on === 'c' ? 'on' : ''}" data-on-click="go('/app/contacts')">Contacts${n ? ` <span>${n}</span>` : ''}</button></div>`;
 }
 const CT_SRC = [
   ['LinkedIn', 'li'],
@@ -218,7 +218,7 @@ const CT_SRC = [
 ];
 function ctRowHTML(c) {
   const sub = [c.role, c.company].filter(Boolean).join(' · ') || c.email || c.phone || '';
-  return `<div class="ct-r"><span class="ct-av">${esc(initials(c.name || c.email || '?'))}</span><div class="ct-m"><b>${esc(c.name || c.email || c.phone)}</b><small>${esc(sub)}</small></div>${c.source ? `<span class="ct-src">${esc(c.source)}</span>` : ''}<button type="button" class="ct-inv" onclick="ctInvite('${c.id}')">Invite</button><button type="button" class="ct-dots" aria-label="More actions" onclick="ctMenu('${c.id}')">${sv('grid', 16)}</button></div>`;
+  return `<div class="ct-r"><span class="ct-av">${esc(initials(c.name || c.email || '?'))}</span><div class="ct-m"><b>${esc(c.name || c.email || c.phone)}</b><small>${esc(sub)}</small></div>${c.source ? `<span class="ct-src">${esc(c.source)}</span>` : ''}<button type="button" class="ct-inv" data-on-click="ctInvite('${c.id}')">Invite</button><button type="button" class="ct-dots" aria-label="More actions" data-on-click="ctMenu('${c.id}')">${sv('grid', 16)}</button></div>`;
 }
 function ctFiltered() {
   const q = CTQ.toLowerCase().trim();
@@ -275,13 +275,13 @@ function vContacts() {
   ctLoad();
   const all = ctList();
   const srcs = [...new Set(all.map(c => c.source).filter(Boolean))];
-  const head = `<div class="ct-h"><div><h1>Contacts</h1><p>People you have imported or saved. Invite anyone to a Thread when you are ready. Nothing is sent until you choose.</p></div><button type="button" class="cap-btn ct-impb" onclick="ctImport()">${sv('plus', 16)} Import</button></div>`;
+  const head = `<div class="ct-h"><div><h1>Contacts</h1><p>People you have imported or saved. Invite anyone to a Thread when you are ready. Nothing is sent until you choose.</p></div><button type="button" class="cap-btn ct-impb" data-on-click="ctImport()">${sv('plus', 16)} Import</button></div>`;
   const warn = CT_LOCAL
     ? `<div class="ct-warn">${sv('lock', 14)} Contacts are saved on this device for now. They move to your account automatically after the database update.</div>`
     : '';
   const body = all.length
-    ? `<div class="ct-tools"><label class="ct-s">${sv('search', 16)}<input placeholder="Search contacts" value="${esc(CTQ)}" oninput="CTQ=this.value;ctRenderList()" aria-label="Search contacts"></label><div class="ct-chips"><button class="${CTF === 'all' ? 'on' : ''}" onclick="CTF='all';render()">All</button>${srcs.map(s => `<button class="${CTF === s ? 'on' : ''}" onclick="CTF='${esc(s)}';render()">${esc(s)}</button>`).join('')}</div><small class="ct-n" id="ctcount"></small></div><div class="ct-l" id="ctlist"></div>`
-    : `<div class="ct-empty"><div class="ct-ei">${sv('users', 26)}</div><h2>Bring your contacts in</h2><p>Import from LinkedIn, Gmail, Outlook or your phone. They stay private to you until you invite someone to a Thread.</p><button type="button" class="cap-btn" onclick="ctImport()">${sv('plus', 16)} Import contacts</button></div>${ctGuides()}`;
+    ? `<div class="ct-tools"><label class="ct-s">${sv('search', 16)}<input placeholder="Search contacts" value="${esc(CTQ)}" data-on-input="ctSearch(this.value)" aria-label="Search contacts"></label><div class="ct-chips"><button class="${CTF === 'all' ? 'on' : ''}" data-on-click="ctFilt('all')">All</button>${srcs.map(s => `<button class="${CTF === s ? 'on' : ''}" data-on-click="ctFilt('${esc(s)}')">${esc(s)}</button>`).join('')}</div><small class="ct-n" id="ctcount"></small></div><div class="ct-l" id="ctlist"></div>`
+    : `<div class="ct-empty"><div class="ct-ei">${sv('users', 26)}</div><h2>Bring your contacts in</h2><p>Import from LinkedIn, Gmail, Outlook or your phone. They stay private to you until you invite someone to a Thread.</p><button type="button" class="cap-btn" data-on-click="ctImport()">${sv('plus', 16)} Import contacts</button></div>${ctGuides()}`;
   setTimeout(ctRenderList, 0);
   return `<div class="ct">${ctBar('c')}${head}${warn}${body}</div>`;
 }
@@ -296,9 +296,9 @@ vThreads = function () {
 };
 /* ---- import flow ---- */
 function ctImport() {
-  modal(`<div class="cap-m ci"><div class="row between"><h3>Import contacts</h3><button class="x" aria-label="Close" onclick="closeModal()">&times;</button></div>
+  modal(`<div class="cap-m ci"><div class="row between"><h3>Import contacts</h3><button class="x" aria-label="Close" data-on-click="closeModal()">&times;</button></div>
  <p class="fu-sub">Choose a file from LinkedIn, Google, Outlook or your phone. We detect the format and show you everyone before anything is saved.</p>
- <label class="ci-drop" ondragover="event.preventDefault();this.classList.add('on')" ondragleave="this.classList.remove('on')" ondrop="event.preventDefault();this.classList.remove('on');ctFile(event.dataTransfer.files[0])"><span class="ci-di">${sv('arrow', 22)}</span><b>Choose a file</b><small>.csv or .vcf, up to 10 MB</small><input type="file" accept=".csv,.vcf,.txt,text/csv,text/vcard,text/x-vcard" hidden onchange="ctFile(this.files&&this.files[0])"></label>
+ <label class="ci-drop" data-on-dragover="event.preventDefault();this.classList.add('on')" data-on-dragleave="this.classList.remove('on')" data-on-drop="ctDrop(event,this)"><span class="ci-di">${sv('arrow', 22)}</span><b>Choose a file</b><small>.csv or .vcf, up to 10 MB</small><input type="file" accept=".csv,.vcf,.txt,text/csv,text/vcard,text/x-vcard" hidden data-on-change="ctFileIn(this)"></label>
  <p class="ci-how">How to get the file</p>${ctGuides()}<p class="cc-pv">${sv('lock', 13)} Your file is read on this device. Contacts are private to you.</p></div>`);
 }
 function ctFile(f) {
@@ -333,17 +333,17 @@ function ctPreview() {
   const C = CTIMP;
   if (!C) return;
   const dup = C.rows.filter(r => r._dup).length;
-  modal(`<div class="cap-m ci"><div class="row between"><h3>Import from ${esc(C.source)}</h3><button class="x" aria-label="Close" onclick="closeModal()">&times;</button></div>
+  modal(`<div class="cap-m ci"><div class="row between"><h3>Import from ${esc(C.source)}</h3><button class="x" aria-label="Close" data-on-click="closeModal()">&times;</button></div>
  <p class="fu-sub">${C.rows.length} contact${C.rows.length === 1 ? '' : 's'} found${dup ? `, ${dup} already saved` : ''}. Untick anyone you do not want.</p>
- <div class="ci-top"><label class="ci-all"><input type="checkbox" ${C.sel.size === C.rows.filter(r => !r._dup).length ? 'checked' : ''} onchange="ctAll(this.checked)"> Select all</label><span id="cisel">${C.sel.size} selected</span></div>
+ <div class="ci-top"><label class="ci-all"><input type="checkbox" ${C.sel.size === C.rows.filter(r => !r._dup).length ? 'checked' : ''} data-on-change="ctAll(this.checked)"> Select all</label><span id="cisel">${C.sel.size} selected</span></div>
  <div class="ci-l">${C.rows
    .slice(0, 2000)
    .map(
      (r, i) =>
-       `<label class="ci-r${r._dup ? ' dup' : ''}"><input type="checkbox" ${C.sel.has(i) ? 'checked' : ''} ${r._dup ? 'disabled' : ''} onchange="ctTog(${i},this.checked)"><span class="ct-av sm">${esc(initials(r.name || r.email || '?'))}</span><span class="ct-m"><b>${esc(r.name || r.email || r.phone)}</b><small>${esc([r.role, r.company].filter(Boolean).join(' · ') || r.email || r.phone)}</small></span>${r._dup ? '<em>Already saved</em>' : ''}</label>`
+       `<label class="ci-r${r._dup ? ' dup' : ''}"><input type="checkbox" ${C.sel.has(i) ? 'checked' : ''} ${r._dup ? 'disabled' : ''} data-on-change="ctTog(${i},this.checked)"><span class="ct-av sm">${esc(initials(r.name || r.email || '?'))}</span><span class="ct-m"><b>${esc(r.name || r.email || r.phone)}</b><small>${esc([r.role, r.company].filter(Boolean).join(' · ') || r.email || r.phone)}</small></span>${r._dup ? '<em>Already saved</em>' : ''}</label>`
    )
    .join('')}</div>
- <button type="button" class="cap-btn" id="cigo" onclick="ctDoImport()" ${C.sel.size ? '' : 'disabled'}>${sv('check', 16, 'currentColor', 2.4)} Import ${C.sel.size} contact${C.sel.size === 1 ? '' : 's'}</button></div>`);
+ <button type="button" class="cap-btn" id="cigo" data-on-click="ctDoImport()" ${C.sel.size ? '' : 'disabled'}>${sv('check', 16, 'currentColor', 2.4)} Import ${C.sel.size} contact${C.sel.size === 1 ? '' : 's'}</button></div>`);
 }
 function ctSelUI() {
   const n = CTIMP.sel.size;
@@ -449,9 +449,9 @@ function ctMenu(id) {
   const c = ctGet(id);
   if (!c) return;
   const a = (h, ic, t, x) => `<a class="ct-ma" href="${h}" ${x || ''}>${sv(ic, 18)}<span>${t}</span></a>`;
-  modal(`<div class="cap-m"><div class="row between"><h3>${esc(c.name || c.email || c.phone)}</h3><button class="x" aria-label="Close" onclick="closeModal()">&times;</button></div><p class="fu-sub">${esc([c.role, c.company].filter(Boolean).join(' · '))}</p>
- <div class="ct-mm"><button type="button" class="ct-ma" onclick="ctInvite('${c.id}')">${sv('spark', 18)}<span>Invite to a Thread</span></button>${c.email ? a('mailto:' + esc(c.email), 'mail', 'Email ' + esc(c.email)) : ''}${c.phone ? a('tel:' + esc(c.phone), 'phone', 'Call ' + esc(c.phone)) : ''}${c.linkedin ? a(esc(c.linkedin), 'li', 'Open LinkedIn profile', 'target="_blank" rel="noopener"') : ''}
- <button type="button" class="ct-ma bad" onclick="ctDel('${c.id}')">${sv('x', 18)}<span>Delete contact</span></button></div></div>`);
+  modal(`<div class="cap-m"><div class="row between"><h3>${esc(c.name || c.email || c.phone)}</h3><button class="x" aria-label="Close" data-on-click="closeModal()">&times;</button></div><p class="fu-sub">${esc([c.role, c.company].filter(Boolean).join(' · '))}</p>
+ <div class="ct-mm"><button type="button" class="ct-ma" data-on-click="ctInvite('${c.id}')">${sv('spark', 18)}<span>Invite to a Thread</span></button>${c.email ? a('mailto:' + esc(c.email), 'mail', 'Email ' + esc(c.email)) : ''}${c.phone ? a('tel:' + esc(c.phone), 'phone', 'Call ' + esc(c.phone)) : ''}${c.linkedin ? a(esc(c.linkedin), 'li', 'Open LinkedIn profile', 'target="_blank" rel="noopener"') : ''}
+ <button type="button" class="ct-ma bad" data-on-click="ctDel('${c.id}')">${sv('x', 18)}<span>Delete contact</span></button></div></div>`);
 }
 async function ctDel(id) {
   const c = ctGet(id);
@@ -493,9 +493,9 @@ newThread = function (e) {
   return _nt32.call(this, e);
 };
 function limitSheet() {
-  modal(`<div class="cap-m"><div class="row between"><h3>You have used your ${freeLim()} free Threads this month</h3><button class="x" aria-label="Close" onclick="closeModal()">&times;</button></div>
+  modal(`<div class="cap-m"><div class="row between"><h3>You have used your ${freeLim()} free Threads this month</h3><button class="x" aria-label="Close" data-on-click="closeModal()">&times;</button></div>
  <p class="fu-sub">Upgrade to Pro for unlimited Threads, or save this person as a contact now and invite them next month.</p>
- <button type="button" class="cap-btn" onclick="closeModal();go('/pricing')">${sv('spark', 16)} See Pro</button><button type="button" class="cap-btn2" onclick="ctSaveFromTap()">${sv('users', 16)} Save as a contact</button></div>`);
+ <button type="button" class="cap-btn" data-on-click="closeModal();go('/pricing')">${sv('spark', 16)} See Pro</button><button type="button" class="cap-btn2" data-on-click="ctSaveFromTap()">${sv('users', 16)} Save as a contact</button></div>`);
 }
 async function ctSaveFromTap() {
   const v = id => (($('#' + id) || {}).value || '').trim();
@@ -525,7 +525,7 @@ vTap = function () {
     const n = freeLeft();
     h = h.replace(
       '<div class="cap cap2">',
-      `<div class="fl-note${n ? '' : ' out'}">${sv('spark', 14)}<span>${n ? `${n} of ${FREE_LIMIT} free Threads left this month` : 'No free Threads left this month'}</span><a href="/pricing" onclick="go('/pricing');return false">Go unlimited</a></div><div class="cap cap2">`
+      `<div class="fl-note${n ? '' : ' out'}">${sv('spark', 14)}<span>${n ? `${n} of ${FREE_LIMIT} free Threads left this month` : 'No free Threads left this month'}</span><a href="/pricing" data-on-click="go('/pricing');return false">Go unlimited</a></div><div class="cap cap2">`
     );
   }
   return h;
@@ -571,3 +571,21 @@ vPricing = function () {
   }
   return h;
 };
+
+/* v62: named handlers for contacts import (no inline JavaScript). */
+function ctSearch(v) {
+  CTQ = v;
+  ctRenderList();
+}
+function ctFilt(k) {
+  CTF = k;
+  render();
+}
+function ctFileIn(el) {
+  ctFile(el.files && el.files[0]);
+}
+function ctDrop(e, el) {
+  e.preventDefault();
+  el.classList.remove('on');
+  ctFile(e.dataTransfer.files[0]);
+}
