@@ -11,9 +11,7 @@ Introthread starts with a digital business card and turns every introduction int
 
 ## Connected accounts and services
 
-All project services are registered to and connected through the main account email:
-
-**agneswamaria@gmail.com**
+All project services are registered to and connected through the project owner's account. Contact details for the owner and staff are kept outside this public repository.
 
 | Service | Purpose | Status |
 | --- | --- | --- |

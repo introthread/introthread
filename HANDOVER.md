@@ -286,7 +286,7 @@ The page footer reads: "UK prices in GBP at checkout: Pro £9/month, Rooms £149
   - 002/003: tables `staff`, `audit_log`, `reports`, `account_status`, `plans`, `subscriptions`, `app_settings`, `contacts`, `privacy_requests`; admin functions.
   - 004: `admin_stats_range` exists. 005: `admin_notes` table exists. 006: `reports.outcome` column exists. 007: `admin_rooms2` exists. 008: `payments` table and `subscriptions.started_at` exist; `admin_revenue` exists.
   - Check method used: select/count on new tables and order by new columns; call new functions with the service connection and expect "Not allowed" (42501 from `assert_staff`), which proves the function exists. "Could not find the function" would mean it is missing.
-- Live data: 3 profiles, 0 threads, 0 rooms, 0 contacts, 0 reports, 0 subscriptions, 0 payments, 0 admin notes. Staff: one owner, mosemqute@gmail.com.
+- Live data: 3 profiles, 0 threads, 0 rooms, 0 contacts, 0 reports, 0 subscriptions, 0 payments, 0 admin notes. Staff: one owner (the admin owner account).
 - app_settings: `admin_require_mfa` = true (staff must set up two-step verification at /admin), announcement off, maintenance off, all features on, `free_threads_per_month` = 5.
 - Lockout fix if two-step breaks: `update app_settings set value='false' where key='admin_require_mfa';`
 - Every admin screen still has a fallback for a missing migration, but none are needed now. Do not remove the fallbacks; they keep the page usable if a future migration is not yet run.
@@ -312,7 +312,7 @@ The page footer reads: "UK prices in GBP at checkout: Pro £9/month, Rooms £149
 ## Where things are
 - Docs: `docs/CHANGELOG.md` (all changes, newest first), `docs/ROOMS.md` (Rooms, events, communities, Room pass, with known gaps). Keep both updated.
 - Live site: https://www.introthread.com (apex redirects to www). Vercel deploys automatically from `main` of `introthread/introthread` (preset "Other", static).
-- Owner: Agnes. All services (GitHub, Vercel, Supabase, domain) are registered to agneswamaria@gmail.com.
+- Owner: Agnes. All services (GitHub, Vercel, Supabase, domain) are registered to the project owner's account.
 - Supabase project: `zpcsmsqnesqftodnondn`. The public anon key is in `config.js` (safe to ship). Never commit service-role keys, passwords or other secrets.
 - Schema: `supabase/schema.sql`. Email templates: `supabase/email-templates/`.
 
@@ -354,7 +354,7 @@ Tap -> Thread -> one question, "What's next?". Answers stay sealed until both pe
   - `parseContact` now also handles full vCard 2.1/3/4 (multiple TEL/EMAIL, CELL preferred, ADR, quoted-printable, NOTE, social URLs), MECARD with multiple numbers, BIZCARD, `tel:`, `sms:`, `mailto:`, `MATMSG`, and WhatsApp `wa.me` links. Signatures also pick up second phone, address and social.
   - Contacts: `capContacts` asks for name, email, tel and address (whatever the phone supports) and fills second phone/email. Where the picker is not available (iPhone Safari by default) the Contacts tile opens `capContactsHelp`: share the contact as a .vcf file and choose it (`capVcfFile`), or paste.
   - Tap form gained a "More details" section (`#capmore`): Second phone `#tp2`, Second email `#te2`, Website `#tws`, Social `#tso`, Address `#tad`. Card notes go into "One line to remember" `#tx`. These are stored in `where_met` via `tPack` (keys phone2, email2, website, address, social), shown on the Thread page (tap to call, mailto, website, Google Maps link), editable (second phone, website, address), and included in vCard and CSV exports.
-- Agnes's decisions (21 Oct 2026): prices in US dollars, pounds shown to UK visitors; Free plan = 5 new Threads a month; admin Owner = mosemqute@gmail.com; build order: contacts + file import (done), then admin area, then Stripe, then Google/Microsoft connect, then LinkedIn sign-in/share. No LinkedIn company page yet (needed before a LinkedIn developer app). Full plan: Town doc "Introthread: connections, LinkedIn, admin and revenue plan".
+- Agnes's decisions (21 Oct 2026): prices in US dollars, pounds shown to UK visitors; Free plan = 5 new Threads a month; admin Owner = the admin owner account; build order: contacts + file import (done), then admin area, then Stripe, then Google/Microsoft connect, then LinkedIn sign-in/share. No LinkedIn company page yet (needed before a LinkedIn developer app). Full plan: Town doc "Introthread: connections, LinkedIn, admin and revenue plan".
 - Contacts and file import v32:
   - New page `/app/contacts` (`vContacts`, routed through the `vToday` fallback). Threads and Contacts pages share a segmented switch (`ctBar`).
   - Contact = private, unconfirmed person; Thread = confirmed by both. Imports never send anything.
@@ -363,8 +363,8 @@ Tap -> Thread -> one question, "What's next?". Answers stay sealed until both pe
   - Storage: Supabase table `contacts` (see migration). If the table is missing, contacts are kept on the device (`_local`) with a notice, and upload automatically once the table exists (`ctLoad`).
   - Free limit: real (cloud) accounts not on Pro get 5 new Threads per calendar month (`FREE_LIMIT`, `threadsThisMonth`, `freeLeft`). The Tap page shows "N of 5 free Threads left". At the limit, a sheet offers "See Pro" or "Save as a contact". Demo mode is not limited.
   - Pricing: Free now says "5 new Threads a month", Pro adds "Unlimited Threads", FAQ copy updated. UK visitors (timezone Europe/London or en-GB language) see pounds (`isUK`, `toGBP`; $10->8, $12->10, $96->77, $120->96, $166->129, $199->159, others x0.8).
-- Database migration `supabase/migrations/002_contacts_admin.sql` (NOT YET RUN; Agnes must paste it into Supabase SQL Editor and run): contacts, staff + `is_staff()` function, audit_log, reports, account_status, plans (free 5 Threads, pro), subscriptions, app_settings (free_threads_per_month=5, maintenance, feature switches), privacy_requests. All with row level security. Seeds mosemqute@gmail.com as owner (only works once that email has signed up; re-run the insert after sign-up).
-- Migration 002 verified live in Supabase on 21 Oct 2026: all tables exist, plans (free 5 Threads, pro) and app_settings seeded, mosemqute@gmail.com is owner in `staff`.
+- Database migration `supabase/migrations/002_contacts_admin.sql` (NOT YET RUN; Agnes must paste it into Supabase SQL Editor and run): contacts, staff + `is_staff()` function, audit_log, reports, account_status, plans (free 5 Threads, pro), subscriptions, app_settings (free_threads_per_month=5, maintenance, feature switches), privacy_requests. All with row level security. Seeds the admin owner account as owner (only works once that email has signed up; re-run the insert after sign-up).
+- Migration 002 verified live in Supabase on 21 Oct 2026: all tables exist, plans (free 5 Threads, pro) and app_settings seeded, the admin owner account is owner in `staff`.
 - Admin area v33 at `/admin` (and `/admin/<tab>`), routed by a `render` wrapper:
   - Gate: signed-in check, `admin_me()` staff check, then two-step verification (Supabase TOTP: enroll with QR, then `challengeAndVerify` to reach aal2). Required while app_settings `admin_require_mfa` is true (default). If an owner is ever locked out, run in SQL editor: `update app_settings set value='false' where key='admin_require_mfa';`
   - Tabs (shown by role): Dashboard (people, active 7/30 days, Threads, confirm rate, both-answered rate, paying, estimated monthly revenue, contacts, 30-day bar charts, cities, plan split, alerts for open reports and privacy deadlines), Users (search, paging, CSV export, detail with change plan, suspend, ban, reactivate, export data JSON, delete account with typed DELETE), Moderation (open/actioned/dismissed/all), Rooms (delete), Revenue (MRR, run rate, conversion, subscriptions, price list; Stripe not connected yet), Plans and pricing (edit USD/GBP prices and Thread limits), Settings (announcement banner, maintenance mode, feature switches, require 2-step), Privacy requests (30-day clock, overdue flag, start/export/delete/done/reject), Staff (owner adds by email, changes or removes roles), Audit log (filter, CSV export).
@@ -484,18 +484,18 @@ Tap -> Thread -> one question, "What's next?". Answers stay sealed until both pe
 0. Agnes: run migration 013 (`013_fix_ambiguous.sql`) now. Live, /admin/users failed with 'column reference "plan" is ambiguous' and /admin/audit with 'column reference "actor" is ambiguous': a function parameter had the same name as a column (plan in admin_users2 from 005; actor/outcome in admin_audit2 from 012). 013 qualifies every reference; 005 and 012 are patched in place for fresh setups. Lesson: in plpgsql functions never reuse a column name as a parameter name, or always qualify it (function_name.param).
 1. Agnes: migrations 009, 010 and 011 are run and verified (staff invitation tested: Pending, then Accepted, both in the audit log). Run migration 012 next, then reload /admin/audit (the update note disappears).
 1b. All admin screens are redesigned (v34 to v43). Agnes sends one mockup at a time.
-2. Agnes: sign in as mosemqute@gmail.com, open /admin, set up two-step verification.
+2. Agnes: sign in with the admin owner account, open /admin, set up two-step verification.
 3. Stripe billing (next in the build order after admin): Product + monthly/yearly Prices in USD and GBP, Price IDs into Plans, secret key and webhook secret in Vercel env (never in code), checkout, customer portal, webhook writing `subscriptions` (incl. started_at, canceled_at, amount, current_period_end) and `payments` (amount_usd for totals). The Revenue badge turns green automatically once Stripe ids appear.
 4. Then Google/Microsoft connect, then LinkedIn (agreed build order: contacts and import, admin, Stripe, Google/Microsoft, LinkedIn). No LinkedIn company page yet.
 5. Supabase email templates (code based, code length 8) and Resend SMTP; then a real end-to-end sign-up test with a real inbox.
-6. Real Google and Microsoft sign-in (Google sign-in being tested with mkautospareske@gmail.com).
+6. Real Google and Microsoft sign-in (Google sign-in being tested with a separate test account).
 7. Agnes's on-phone test of capture (business card, QR, paste, contacts/.vcf); fix what she reports.
 8. Contacts are stored on the device until used with the `contacts` table (exists since 002); check sync when real users arrive.
 9. Possible future: move phone/LinkedIn out of `where_met` into proper columns.
 
 ## Product decisions (Agnes, 21 Oct 2026)
 - Prices in USD everywhere; GBP shown to UK visitors (Pro $12 or GBP 10 a month; yearly $120 / GBP 96). Free plan: 5 new Threads a month.
-- Admin Owner account: mosemqute@gmail.com.
+- Admin Owner account: the admin owner account (details kept outside the repository).
 
 ## Testing approach used
 - Sandbox workflow: write large JS/CSS to the session file store first, copy one file at a time into the sandbox, insert JS before the last `</script>` and CSS before the last `\n</style>`, run `python3 scripts/build_pages.py` (prints "built 10"), keep a `.bak` of `index.html` before each insert.
