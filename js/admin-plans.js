@@ -115,7 +115,7 @@ async function plLoad(keep) {
   } catch (e) {
     admBody(
       plHead() +
-        `<div class="ix-card ix-fail" role="alert">${sv('alert', 22)}<div><b>Plans could not load</b><p>${esc((e && e.message) || 'Unknown error')}</p></div><button type="button" class="ix-btn" onclick="plLoad()">${sv('refresh', 16)} Try again</button></div>`
+        `<div class="ix-card ix-fail" role="alert">${sv('alert', 22)}<div><b>Plans could not load</b><p>${esc((e && e.message) || 'Unknown error')}</p></div><button type="button" class="ix-btn" data-on-click="plLoad()">${sv('refresh', 16)} Try again</button></div>`
     );
   }
 }
@@ -281,7 +281,7 @@ function plSum(id, v) {
 }
 /* page */
 function plHead() {
-  return `<div class="ix-h"><div><h1>Plans and pricing</h1><p>Manage subscription prices, billing intervals and usage limits.</p></div><div class="ix-hc"><button type="button" class="ix-btn" onclick="plHist()">${sv('plhist', 17)} Pricing history</button></div></div>`;
+  return `<div class="ix-h"><div><h1>Plans and pricing</h1><p>Manage subscription prices, billing intervals and usage limits.</p></div><div class="ix-hc"><button type="button" class="ix-btn" data-on-click="plHist()">${sv('plhist', 17)} Pricing history</button></div></div>`;
 }
 function plSkel() {
   return (
@@ -306,7 +306,7 @@ function plCard(p) {
     pro = p.id !== 'free',
     d = PLX.data;
   const inp = (k, lab, sub, pre, extra) =>
-    `<div class="pl-f"><label for="pl_${id}_${k}">${lab}${sub ? ` <span>${sub}</span>` : ''}</label><div class="pl-in${pre ? '' : ' np'}" id="plw_${id}_${k}">${pre ? `<span class="pl-pre" aria-hidden="true">${pre}</span>` : ''}<input id="pl_${id}_${k}" ${extra || ''} value="${esc(o[k] == null ? '' : o[k])}" oninput="plOnInput('${id}')" onblur="(PLX.touched=PLX.touched||{})['${id}${k}']=1;plOnInput('${id}')" aria-describedby="ple_${id}_${k}"${dis}></div><small class="pl-err" id="ple_${id}_${k}" role="alert"></small></div>`;
+    `<div class="pl-f"><label for="pl_${id}_${k}">${lab}${sub ? ` <span>${sub}</span>` : ''}</label><div class="pl-in${pre ? '' : ' np'}" id="plw_${id}_${k}">${pre ? `<span class="pl-pre" aria-hidden="true">${pre}</span>` : ''}<input id="pl_${id}_${k}" ${extra || ''} value="${esc(o[k] == null ? '' : o[k])}" data-on-input="plOnInput('${id}')" data-on-blur="plTouch('${id}','${k}')" aria-describedby="ple_${id}_${k}"${dis}></div><small class="pl-err" id="ple_${id}_${k}" role="alert"></small></div>`;
   const prc = (c, s) => {
     const fixed = p.id === 'free' ? ' readonly title="The Free plan is always free"' : '';
     return `<div class="pl-2">${inp('price_' + c + '_month', `Price (${c.toUpperCase()})`, 'per month', s, `type="text" inputmode="decimal" autocomplete="off"${fixed}`)}<div>${inp('price_' + c + '_year', `Price (${c.toUpperCase()})`, 'per year', s, `type="text" inputmode="decimal" autocomplete="off"${fixed}`)}${plYear(p.id, o, c)}</div></div>`;
@@ -329,15 +329,15 @@ function plCard(p) {
   return `<section class="ix-card pl-card${pro ? ' pro' : ''}" id="plf_${id}" aria-labelledby="plt_${id}"><div class="pl-hd"><span class="pl-ic" aria-hidden="true">${sv(pro ? 'plcrown' : 'plgift', 28)}</span><div class="pl-hn"><h2 id="plt_${id}">${esc(p.name)}</h2><p>${esc(p.description || (pro ? 'For professionals and teams.' : 'Basic access for new users.'))}</p></div>
  <span class="pl-pill ${p.active ? 'on' : 'off'}">${p.active ? sv('check', 14, 'currentColor', 2.4) + ' Active' : 'Hidden'}</span></div>
  <div class="pl-meta">${people ? `<span class="pl-chip">${sv('users', 13)} ${people}</span>` : ''}${stripe}${upd}</div>
- <form class="pl-body" onsubmit="event.preventDefault();plSave('${id}')" novalidate>
+ <form class="pl-body" data-on-submit="event.preventDefault();plSave('${id}')" novalidate>
  ${inp('name', 'Plan name', '', '', 'type="text" maxlength="40" autocomplete="off"')}
  ${PLX.limited ? '' : inp('description', 'Description', 'shown under the plan name', '', 'type="text" maxlength="140" autocomplete="off"')}
  ${prc('usd', '$')}${prc('gbp', '£')}
- <div class="pl-f"><label for="pl_${id}_threads_per_month">New Threads <span>per month</span></label><div class="pl-tr"><div class="pl-in np" id="plw_${id}_threads_per_month"><input id="pl_${id}_threads_per_month" type="text" inputmode="numeric" autocomplete="off" value="${o.threads_per_month == null ? '' : o.threads_per_month}" placeholder="${o.threads_per_month == null ? 'Unlimited' : ''}" oninput="plOnInput('${id}')" aria-describedby="ple_${id}_threads_per_month"${o.threads_per_month == null || !ed ? ' disabled' : ''}></div>
- ${pro ? `<label class="pl-ck"><input type="checkbox" id="pl_${id}_unl" ${o.threads_per_month == null ? 'checked' : ''} onchange="const t=plEl('${id}','threads_per_month');if(!this.checked&&t&&!t.value)t.value=${+(PLX.orig.free || {}).threads_per_month || 5};plOnInput('${id}')"${dis}> Unlimited</label>` : ''}</div><small class="pl-err" id="ple_${id}_threads_per_month" role="alert"></small></div>
- ${pro ? `<label class="pl-sw"><input type="checkbox" id="pl_${id}_active" ${o.active ? 'checked' : ''} onchange="plOnInput('${id}')"${dis}><span class="pl-swt" aria-hidden="true"></span><span><b>Offer this plan</b><small>Hidden plans stay on existing accounts but are not offered to new customers.</small></span></label>` : ''}
+ <div class="pl-f"><label for="pl_${id}_threads_per_month">New Threads <span>per month</span></label><div class="pl-tr"><div class="pl-in np" id="plw_${id}_threads_per_month"><input id="pl_${id}_threads_per_month" type="text" inputmode="numeric" autocomplete="off" value="${o.threads_per_month == null ? '' : o.threads_per_month}" placeholder="${o.threads_per_month == null ? 'Unlimited' : ''}" data-on-input="plOnInput('${id}')" aria-describedby="ple_${id}_threads_per_month"${o.threads_per_month == null || !ed ? ' disabled' : ''}></div>
+ ${pro ? `<label class="pl-ck"><input type="checkbox" id="pl_${id}_unl" ${o.threads_per_month == null ? 'checked' : ''} data-on-change="plUnlim('${id}',this.checked,${+(PLX.orig.free || {}).threads_per_month || 5})"${dis}> Unlimited</label>` : ''}</div><small class="pl-err" id="ple_${id}_threads_per_month" role="alert"></small></div>
+ ${pro ? `<label class="pl-sw"><input type="checkbox" id="pl_${id}_active" ${o.active ? 'checked' : ''} data-on-change="plOnInput('${id}')"${dis}><span class="pl-swt" aria-hidden="true"></span><span><b>Offer this plan</b><small>Hidden plans stay on existing accounts but are not offered to new customers.</small></span></label>` : ''}
  <div class="pl-sum"><span class="pl-si" aria-hidden="true">${sv('pllist', 20)}</span><div><b>Plan summary</b><p id="pls_${id}" aria-live="polite">${esc(plSum(p.id, o))}</p></div></div>
- ${ed ? `<div class="pl-ft"><button type="submit" class="ix-btn pri" id="plsv_${id}" disabled>${sv('plsave', 17)} Save ${esc(p.name)} plan</button><button type="button" class="ix-btn" id="plrs_${id}" hidden onclick="plReset('${id}')">${sv('plundo', 16)} Undo changes</button><span class="pl-st ok" id="plst_${id}" role="status">${sv('check', 16, 'currentColor', 2.2)} No changes to save</span></div>` : ''}
+ ${ed ? `<div class="pl-ft"><button type="submit" class="ix-btn pri" id="plsv_${id}" disabled>${sv('plsave', 17)} Save ${esc(p.name)} plan</button><button type="button" class="ix-btn" id="plrs_${id}" hidden data-on-click="plReset('${id}')">${sv('plundo', 16)} Undo changes</button><span class="pl-st ok" id="plst_${id}" role="status">${sv('check', 16, 'currentColor', 2.2)} No changes to save</span></div>` : ''}
  </form></section>`;
 }
 function plReset(id) {
@@ -390,7 +390,7 @@ function plSave(id) {
 /* pricing history */
 async function plHist() {
   modal(
-    `<div class="cap-m pl-hm"><div class="row between"><h3>Pricing history</h3><button class="x" aria-label="Close" onclick="closeModal()">&times;</button></div><div id="plhb"><div class="ix-card sk" style="height:180px"></div></div></div>`
+    `<div class="cap-m pl-hm"><div class="row between"><h3>Pricing history</h3><button class="x" aria-label="Close" data-on-click="closeModal()">&times;</button></div><div id="plhb"><div class="ix-card sk" style="height:180px"></div></div></div>`
   );
   try {
     let L;
@@ -434,4 +434,15 @@ function plHistDraw() {
   };
   b.innerHTML = `<div class="pl-hf">${mdSel('plhp', 'Plan', PLX.histPlan, [['all', 'All plans']].concat(P.map(p => [p.id, esc(p.name)])), 'PLX.histPlan=this.value;plHistDraw()')}<span class="ix-mu">${fmtN(L.length)} change${L.length === 1 ? '' : 's'}</span></div>
  ${L.length ? `<ol class="pl-hl">${L.map(x => `<li><div class="pl-hh"><b>${esc(name(x))}</b><span>${fmtD(x.created_at)} ${fmtT(x.created_at)}</span></div><small>${esc(x.actor || 'Unknown staff member')}${x.reason ? ' · ' + esc(x.reason) : ''}</small><ul>${ch(x) || '<li>No field changes recorded</li>'}</ul></li>`).join('')}</ol>` : `<div class="adm-empty">${sv('plhist', 22)}<b>No price changes yet</b><p>Saved changes to plans appear here with who made them and why.</p></div>`}`;
+}
+
+/* v59: named handlers for the Plans screen (no inline JavaScript). */
+function plTouch(id, k) {
+  (PLX.touched = PLX.touched || {})[id + k] = 1;
+  plOnInput(id);
+}
+function plUnlim(id, checked, def) {
+  const t = plEl(id, 'threads_per_month');
+  if (!checked && t && !t.value) t.value = def;
+  plOnInput(id);
 }
