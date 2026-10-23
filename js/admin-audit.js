@@ -147,7 +147,7 @@ async function alLoad(keep) {
   } catch (e) {
     admBody(
       alHead() +
-        `<div class="ix-card ix-fail" role="alert">${sv('alert', 22)}<div><b>The audit log could not load</b><p>${esc((e && e.message) || 'Unknown error')}</p></div><button type="button" class="ix-btn" onclick="alLoad()">${sv('refresh', 16)} Try again</button></div>`
+        `<div class="ix-card ix-fail" role="alert">${sv('alert', 22)}<div><b>The audit log could not load</b><p>${esc((e && e.message) || 'Unknown error')}</p></div><button type="button" class="ix-btn" data-on-click="alLoad()">${sv('refresh', 16)} Try again</button></div>`
     );
   }
 }
@@ -229,7 +229,7 @@ function alLocal(L) {
   };
 }
 function alHead() {
-  return `<div class="ix-h"><div><h1>Audit log</h1><p>A read-only record of administrative actions, newest first.</p></div><div class="ix-hc"><button type="button" class="ix-btn" onclick="alExport()">${sv('aldl', 17)} Export CSV</button></div></div>`;
+  return `<div class="ix-h"><div><h1>Audit log</h1><p>A read-only record of administrative actions, newest first.</p></div><div class="ix-hc"><button type="button" class="ix-btn" data-on-click="alExport()">${sv('aldl', 17)} Export CSV</button></div></div>`;
 }
 function alSkel() {
   return (
@@ -283,7 +283,7 @@ function alBar() {
       `<span class="md-sl">${lab}:</span>`,
       `<span class="sr">${lab}</span>`
     );
-  return `<div class="al-tb"><label class="au-search al-q">${sv('search', 17)}<input id="alq" type="search" value="${esc(ALX.q)}" placeholder="Search action, staff member, target or reason" aria-label="Search the audit log" oninput="clearTimeout(ALX._t);const v=this.value;ALX._t=setTimeout(()=>alFilter('q',v),300)"></label>
+  return `<div class="al-tb"><label class="au-search al-q">${sv('search', 17)}<input id="alq" type="search" value="${esc(ALX.q)}" placeholder="Search action, staff member, target or reason" aria-label="Search the audit log" data-on-input="alSearchIn(this.value)"></label>
  ${sel('alc', 'Action type', ALX.cat, [['all', 'All actions']].concat(Object.entries(AL_CAT).map(([k, v]) => [k, v[0]])), "alFilter('cat',this.value)")}
  ${sel('ala', 'Staff member', ALX.actor, [['', 'All staff']].concat(A.map(a => [a.id, esc(a.name || 'Staff member')])), "alFilter('actor',this.value)")}
  ${sel(
@@ -312,7 +312,7 @@ function alBar() {
    ],
    "alFilter('outcome',this.value)"
  )}
- ${filt ? `<button type="button" class="al-clr" onclick="ALX.q='';ALX.cat='all';ALX.actor='';ALX.days=30;ALX.outcome='all';ALX.page=0;alLoad(true)">Clear filters</button>` : ''}</div>`;
+ ${filt ? `<button type="button" class="al-clr" data-on-click="alClear()">Clear filters</button>` : ''}</div>`;
 }
 function alFilter(k, v) {
   ALX[k] = v;
@@ -353,19 +353,19 @@ function alRows() {
    const c = AL_CAT[a.category || alCat(a.action)] || AL_CAT.other,
      t = alTgt(a),
      fail = (a.outcome || alOut(a.action)) === 'failed';
-   return `<tr class="pq-r" onclick="if(!event.target.closest('button'))alOpen(${i})"><td data-l="Event"><span class="al-ev"><span class="al-ic t-${c[2] === 'r' ? 'o' : c[2]}w" aria-hidden="true">${sv(c[1], 18)}</span><span><b>${esc(alLab(a.action))}</b><span class="al-pills"><span class="sf-tag sf-tag-${c[2]}">${c[0]}</span>${fail ? '<span class="sf-tag sf-tag-r">Failed</span>' : ''}</span></span></span></td>
+   return `<tr class="pq-r" data-on-click="alRow(event,${i})"><td data-l="Event"><span class="al-ev"><span class="al-ic t-${c[2] === 'r' ? 'o' : c[2]}w" aria-hidden="true">${sv(c[1], 18)}</span><span><b>${esc(alLab(a.action))}</b><span class="al-pills"><span class="sf-tag sf-tag-${c[2]}">${c[0]}</span>${fail ? '<span class="sf-tag sf-tag-r">Failed</span>' : ''}</span></span></span></td>
  <td data-l="Staff member"><span class="sf-n"><span class="sf-av sm" aria-hidden="true">${esc(initials(a.actor || '?'))}</span><span><b>${esc(a.actor || 'Former staff member')}</b>${a.actor_role ? `<small>${esc(sfRoleName ? sfRoleName(a.actor_role) : a.actor_role)}</small>` : ''}</span></span></td>
  <td data-l="Date and time">${fmtD(a.created_at)}<small>${fmtT(a.created_at)}</small></td><td data-l="Target"><span class="al-tg">${esc(t.label)}</span><small>${esc(t.type)}</small></td>
- <td data-l="Reason" class="pq-rs">${a.reason ? esc(a.reason) : '<span class="ix-mu">No reason recorded</span>'}</td><td class="pq-ac"><button type="button" class="sf-more" aria-label="Details for ${esc(alLab(a.action))}" onclick="alOpen(${i})">${sv('eye', 18)}</button></td></tr>`;
+ <td data-l="Reason" class="pq-rs">${a.reason ? esc(a.reason) : '<span class="ix-mu">No reason recorded</span>'}</td><td class="pq-ac"><button type="button" class="sf-more" aria-label="Details for ${esc(alLab(a.action))}" data-on-click="alOpen(${i})">${sv('eye', 18)}</button></td></tr>`;
  }).join('')}</tbody></table></div>
- <div class="al-pg"><span>Showing ${fmtN(from)}&ndash;${fmtN(to)} of ${fmtN(n)} event${n === 1 ? '' : 's'}</span>${pages > 1 ? `<div class="al-pn"><button type="button" aria-label="Previous page" ${ALX.page ? '' : 'disabled'} onclick="ALX.page--;alLoad(true)">${sv('chev', 16).replace('<svg', '<svg style="transform:rotate(180deg)"')}</button>${pg.map(i => `<button type="button" class="${i === ALX.page ? 'on' : ''}" aria-current="${i === ALX.page ? 'page' : 'false'}" onclick="ALX.page=${i};alLoad(true)">${i + 1}</button>`).join('')}<button type="button" aria-label="Next page" ${ALX.page + 1 < pages ? '' : 'disabled'} onclick="ALX.page++;alLoad(true)">${sv('chev', 16)}</button></div>` : ''}</div>`;
+ <div class="al-pg"><span>Showing ${fmtN(from)}&ndash;${fmtN(to)} of ${fmtN(n)} event${n === 1 ? '' : 's'}</span>${pages > 1 ? `<div class="al-pn"><button type="button" aria-label="Previous page" ${ALX.page ? '' : 'disabled'} data-on-click="alPg('prev')">${sv('chev', 16).replace('<svg', '<svg style="transform:rotate(180deg)"')}</button>${pg.map(i => `<button type="button" class="${i === ALX.page ? 'on' : ''}" aria-current="${i === ALX.page ? 'page' : 'false'}" data-on-click="alPg(${i})">${i + 1}</button>`).join('')}<button type="button" aria-label="Next page" ${ALX.page + 1 < pages ? '' : 'disabled'} data-on-click="alPg('next')">${sv('chev', 16)}</button></div>` : ''}</div>`;
 }
 function alEmpty() {
   const any = ((ALX.data || {}).counts || {}).all_time;
   const filt = ALX.q || ALX.cat !== 'all' || ALX.actor || ALX.outcome !== 'all' || ALX.days !== 30;
   return any === 0 || (!filt && !any)
     ? `<div class="pq-empty"><span class="al-eic" aria-hidden="true">${sv('alact', 30)}</span><h2>No activity recorded yet</h2><p>Administrative actions, such as role changes, setting updates, exports and moderation decisions, appear here automatically with who made them, when and why.</p></div>`
-    : `<div class="pq-empty"><span class="al-eic" aria-hidden="true">${sv('search', 28)}</span><h2>No matching activity</h2><p>Nothing matches these filters${ALX.days ? ' in the chosen date range' : ''}.</p><button type="button" class="ix-btn" onclick="ALX.q='';ALX.cat='all';ALX.actor='';ALX.days=30;ALX.outcome='all';ALX.page=0;alLoad(true)">Clear filters</button></div>`;
+    : `<div class="pq-empty"><span class="al-eic" aria-hidden="true">${sv('search', 28)}</span><h2>No matching activity</h2><p>Nothing matches these filters${ALX.days ? ' in the chosen date range' : ''}.</p><button type="button" class="ix-btn" data-on-click="alClear()">Clear filters</button></div>`;
 }
 function alPage() {
   return `<div id="alwrap" class="al">${alHead()}${ALX.limited ? `<p class="ix-upd">Run database update 012 to lock the log against edits at the database level, record audit exports, and search the full history on the server. Until then the newest 1,000 entries are filtered in your browser.</p>` : ''}
@@ -390,24 +390,24 @@ function alOpen(i) {
   const kv = Object.entries(D).filter(([k]) => k !== 'changes');
   const link =
     a.target_type === 'user' && a.target_id && typeof mdToUser === 'function' && a.action !== 'user.delete'
-      ? `<button type="button" class="ix-btn" onclick="closeModal();mdToUser('${esc(a.target_id)}')">${sv('users', 16)} Open user</button>`
+      ? `<button type="button" class="ix-btn" data-on-click="closeModal();mdToUser('${esc(a.target_id)}')">${sv('users', 16)} Open user</button>`
       : a.target_type === 'privacy'
-        ? `<button type="button" class="ix-btn" onclick="closeModal();admGo('privacy')">${sv('pqdoc', 16)} Privacy requests</button>`
+        ? `<button type="button" class="ix-btn" data-on-click="closeModal();admGo('privacy')">${sv('pqdoc', 16)} Privacy requests</button>`
         : a.target_type === 'plan'
-          ? `<button type="button" class="ix-btn" onclick="closeModal();admGo('plans')">${sv('grid', 16)} Plans and pricing</button>`
+          ? `<button type="button" class="ix-btn" data-on-click="closeModal();admGo('plans')">${sv('grid', 16)} Plans and pricing</button>`
           : a.target_type === 'setting'
-            ? `<button type="button" class="ix-btn" onclick="closeModal();admGo('settings')">${sv('gear', 16)} Settings</button>`
+            ? `<button type="button" class="ix-btn" data-on-click="closeModal();admGo('settings')">${sv('gear', 16)} Settings</button>`
             : /^staff/.test(a.action)
-              ? `<button type="button" class="ix-btn" onclick="closeModal();admGo('staff')">${sv('user', 16)} Staff</button>`
+              ? `<button type="button" class="ix-btn" data-on-click="closeModal();admGo('staff')">${sv('user', 16)} Staff</button>`
               : '';
-  modal(`<div class="cap-m pq-m al-m"><div class="row between pq-mh"><div><span class="pq-ref">${esc(a.action)}</span><h3>${esc(alLab(a.action))}</h3></div><button class="x" aria-label="Close" onclick="closeModal()">&times;</button></div>
+  modal(`<div class="cap-m pq-m al-m"><div class="row between pq-mh"><div><span class="pq-ref">${esc(a.action)}</span><h3>${esc(alLab(a.action))}</h3></div><button class="x" aria-label="Close" data-on-click="closeModal()">&times;</button></div>
  <div class="pq-pills"><span class="sf-tag sf-tag-${c[2]}">${c[0]}</span><span class="pq-st ${fail ? 't-o' : 't-g'}">${fail ? 'Failed' : 'Completed'}</span></div>
  <dl class="pq-dl"><div><dt>Staff member</dt><dd>${esc(a.actor || 'Former staff member')}${a.actor_role ? ` <small>${esc(a.actor_role)}</small>` : ''}</dd></div><div><dt>Date and time</dt><dd>${new Date(a.created_at).toLocaleString('en-GB', { day: 'numeric', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit', second: '2-digit' })}</dd></div>
  <div><dt>Target</dt><dd>${esc(t.label)} <small>${esc(t.type)}</small></dd></div><div><dt>Target ID</dt><dd class="al-id">${esc(a.target_id || dash)}</dd></div></dl>
  <div class="pq-note"><b>Reason</b><p>${a.reason ? esc(a.reason) : '<span class="ix-mu">No reason recorded.</span>'}</p></div>
  ${ch && ch.length ? `<h4 class="pq-hh">Changes</h4><div class="pl-diff"><table><thead><tr><th scope="col">Field</th><th scope="col">Before</th><th scope="col">After</th></tr></thead><tbody>${ch.map(([k, v]) => `<tr><th scope="row">${esc(k.replace(/_/g, ' '))}</th><td>${esc(alVal(v && v.from))}</td><td>${esc(alVal(v && v.to))}</td></tr>`).join('')}</tbody></table></div>` : ''}
  ${kv.length ? `<h4 class="pq-hh">Details</h4><dl class="al-kv">${kv.map(([k, v]) => `<div><dt>${esc(k.replace(/_/g, ' '))}</dt><dd>${esc(alVal(v))}</dd></div>`).join('')}</dl>` : ''}
- <div class="al-ma">${link}<button type="button" class="ix-btn" onclick="copy(${esc(JSON.stringify(String(a.id)))},'Entry ID copied')">Copy entry ID</button></div>
+ <div class="al-ma">${link}<button type="button" class="ix-btn" data-on-click="copy(${esc(JSON.stringify(String(a.id)))},'Entry ID copied')">Copy entry ID</button></div>
  <p class="ix-mu al-fine">${sv('lock', 13)} Entry #${esc(String(a.id))}. This record cannot be edited or deleted.</p></div>`);
 }
 /* export: the filtered list, recorded in the log */
@@ -505,11 +505,11 @@ pickPhoto = async function (inp, live) {
   im.src = url;
 };
 function pcOpen() {
-  modal(`<div class="cap-m pc-m"><div class="row between"><h3>Adjust your photo</h3><button type="button" class="pcb pri pc-hsave" aria-label="Save photo" onclick="pcUse()" style="display:inline-flex!important;visibility:visible!important;opacity:1!important;height:36px!important;padding:0 14px!important;margin-left:auto;margin-right:8px;flex:none;background:#1f5eff!important;color:#fff!important;border:0!important;border-radius:10px;font-weight:700;cursor:pointer">Save</button><button class="x" aria-label="Close" onclick="pcCancel()">&times;</button></div>
+  modal(`<div class="cap-m pc-m"><div class="row between"><h3>Adjust your photo</h3><button type="button" class="pcb pri pc-hsave" aria-label="Save photo" data-on-click="pcUse()" style="display:inline-flex!important;visibility:visible!important;opacity:1!important;height:36px!important;padding:0 14px!important;margin-left:auto;margin-right:8px;flex:none;background:#1f5eff!important;color:#fff!important;border:0!important;border-radius:10px;font-weight:700;cursor:pointer">Save</button><button class="x" aria-label="Close" data-on-click="pcCancel()">&times;</button></div>
  <p class="fu-sub">Drag to choose the part to show and use the slider to zoom. Then tap Save photo.</p>
  <div class="pc-stage" id="pcst" tabindex="0" aria-label="Photo position. Use the arrow keys to move and plus or minus to zoom."><canvas id="pccv" width="560" height="560"></canvas><span class="pc-ring" aria-hidden="true"></span></div>
- <label class="pc-zoom"><span>${sv('search', 16)}</span><input type="range" id="pcz" min="1" max="4" step="0.01" value="1" aria-label="Zoom" oninput="pcZoom(+this.value)"></label>
- <div class="pc-acts" style="display:flex!important;visibility:visible!important;opacity:1!important;position:sticky!important;bottom:0;z-index:5;background:#fff"><button type="button" class="pcb" onclick="pcCancel()" style="visibility:visible!important;opacity:1!important">Cancel</button><button type="button" class="pcb pri" id="pcuse" onclick="pcUse()" style="visibility:visible!important;opacity:1!important">Save photo</button></div></div>`);
+ <label class="pc-zoom"><span>${sv('search', 16)}</span><input type="range" id="pcz" min="1" max="4" step="0.01" value="1" aria-label="Zoom" data-on-input="pcZoomIn(this.value)"></label>
+ <div class="pc-acts" style="display:flex!important;visibility:visible!important;opacity:1!important;position:sticky!important;bottom:0;z-index:5;background:#fff"><button type="button" class="pcb" data-on-click="pcCancel()" style="visibility:visible!important;opacity:1!important">Cancel</button><button type="button" class="pcb pri" id="pcuse" data-on-click="pcUse()" style="visibility:visible!important;opacity:1!important">Save photo</button></div></div>`);
   setTimeout(() => {
     try {
       if (typeof pcFit === 'function') pcFit();
@@ -906,7 +906,7 @@ vSettings = function () {
   const u = me();
   if (!u) return h;
   const on = !(u.prefs && u.prefs.geo === false);
-  const row = `<label class="t-tog st-row geo-set"><input type="checkbox" ${on ? 'checked' : ''} onchange="setPref('geo',this.checked)"><span class="t-sw"></span><span><b>Save where I meet people</b><small>When you save a new Thread, record the exact time and your phone's location (with your permission). Only your own location, never the other person's. The place name is looked up with OpenStreetMap.</small></span></label>`;
+  const row = `<label class="t-tog st-row geo-set"><input type="checkbox" ${on ? 'checked' : ''} data-on-change="setPref('geo',this.checked)"><span class="t-sw"></span><span><b>Save where I meet people</b><small>When you save a new Thread, record the exact time and your phone's location (with your permission). Only your own location, never the other person's. The place name is looked up with OpenStreetMap.</small></span></label>`;
   return h.replace('<div class="priv-acts">', row + '<div class="priv-acts">');
 };
 
@@ -983,8 +983,8 @@ function secView(u) {
     hasPw
       ? 'Use at least 10 characters with letters and numbers.'
       : 'You sign in with ' + esc(prov.join(', ')) + '. Add a password to also sign in with your email.',
-    `<form class="sec-f" onsubmit="event.preventDefault();secPw(${hasPw ? 1 : 0})" novalidate>${hasPw ? `<label class="x-f"><span>Current password</span><input id="secpc" type="password" autocomplete="current-password"></label>` : ''}<label class="x-f"><span>New password</span><input id="secpn" type="password" autocomplete="new-password" minlength="10"></label><label class="x-f"><span>Repeat new password</span><input id="secpr" type="password" autocomplete="new-password"></label><p class="sec-err" id="secperr" role="alert"></p>
-  <div class="sec-acts"><button type="submit" class="x-btn">${hasPw ? 'Change password' : 'Set password'}</button>${live ? `<button type="button" class="pf-btn" onclick="secReset()">Email me a reset link</button>` : ''}</div></form>`
+    `<form class="sec-f" data-on-submit="event.preventDefault();secPw(${hasPw ? 1 : 0})" novalidate>${hasPw ? `<label class="x-f"><span>Current password</span><input id="secpc" type="password" autocomplete="current-password"></label>` : ''}<label class="x-f"><span>New password</span><input id="secpn" type="password" autocomplete="new-password" minlength="10"></label><label class="x-f"><span>Repeat new password</span><input id="secpr" type="password" autocomplete="new-password"></label><p class="sec-err" id="secperr" role="alert"></p>
+  <div class="sec-acts"><button type="submit" class="x-btn">${hasPw ? 'Change password' : 'Set password'}</button>${live ? `<button type="button" class="pf-btn" data-on-click="secReset()">Email me a reset link</button>` : ''}</div></form>`
   );
   const f = SECX.f,
     en = SECX.enroll;
@@ -997,10 +997,10 @@ function secView(u) {
     !live
       ? '<p class="st-p">Available on real accounts, not the demo.</p>'
       : f
-        ? `<div class="sec-on">${sv('check', 16, 'currentColor', 2.4)} Two-step verification is on</div><div class="sec-acts"><button type="button" class="pf-btn bad" onclick="secMfaOff()">Turn off</button></div>`
+        ? `<div class="sec-on">${sv('check', 16, 'currentColor', 2.4)} Two-step verification is on</div><div class="sec-acts"><button type="button" class="pf-btn bad" data-on-click="secMfaOff()">Turn off</button></div>`
         : en
-          ? `<div class="sec-qr"><img src="${en.qr}" alt="QR code to add Introthread to your authenticator app" width="180" height="180"><div><b>1. Scan this QR code</b><small>Or enter this key: <code>${esc(en.secret)}</code></small><b>2. Enter the 6-digit code</b><input id="secmc" inputmode="numeric" autocomplete="one-time-code" maxlength="6" placeholder="123456"><p class="sec-err" id="secmerr" role="alert"></p><div class="sec-acts"><button type="button" class="x-btn" onclick="secMfaVerify()">Turn on</button><button type="button" class="pf-btn" onclick="secMfaCancel()">Cancel</button></div></div></div>`
-          : `<div class="sec-acts"><button type="button" class="x-btn" onclick="secMfaStart()">${sv('shield', 16)} Set up two-step verification</button></div>`
+          ? `<div class="sec-qr"><img src="${en.qr}" alt="QR code to add Introthread to your authenticator app" width="180" height="180"><div><b>1. Scan this QR code</b><small>Or enter this key: <code>${esc(en.secret)}</code></small><b>2. Enter the 6-digit code</b><input id="secmc" inputmode="numeric" autocomplete="one-time-code" maxlength="6" placeholder="123456"><p class="sec-err" id="secmerr" role="alert"></p><div class="sec-acts"><button type="button" class="x-btn" data-on-click="secMfaVerify()">Turn on</button><button type="button" class="pf-btn" data-on-click="secMfaCancel()">Cancel</button></div></div></div>`
+          : `<div class="sec-acts"><button type="button" class="x-btn" data-on-click="secMfaStart()">${sv('shield', 16)} Set up two-step verification</button></div>`
   );
   const ses = stCard(
     sv('sync', 22),
@@ -1009,18 +1009,18 @@ function secView(u) {
     row(
       'This device',
       'You are signed in here.',
-      `<button type="button" class="pf-btn" onclick="logout()">Sign out</button>`
+      `<button type="button" class="pf-btn" data-on-click="logout()">Sign out</button>`
     ) +
       (live
         ? row(
             'All other devices',
             'Signs out every other phone, tablet and browser. This one stays signed in.',
-            `<button type="button" class="pf-btn" onclick="secOut('others')">Sign out others</button>`
+            `<button type="button" class="pf-btn" data-on-click="secOut('others')">Sign out others</button>`
           ) +
           row(
             'Everywhere',
             'Signs out every device, including this one.',
-            `<button type="button" class="pf-btn bad" onclick="secOut('global')">Sign out everywhere</button>`
+            `<button type="button" class="pf-btn bad" data-on-click="secOut('global')">Sign out everywhere</button>`
           )
         : '')
   );
@@ -1120,7 +1120,7 @@ async function secMfaCancel() {
 }
 function secMfaOff() {
   modal(
-    `<div class="cap-m"><div class="row between"><h3>Turn off two-step verification</h3><button class="x" aria-label="Close" onclick="closeModal()">&times;</button></div><p class="fu-sub">Enter a current code from your authenticator app to confirm. Your account will then only need your password.</p><label class="x-f"><span>6-digit code</span><input id="secoc" inputmode="numeric" autocomplete="one-time-code" maxlength="6"></label><p class="sec-err" id="secoerr"></p><button class="cap-btn bad" onclick="secMfaOffGo()">Turn off</button></div>`
+    `<div class="cap-m"><div class="row between"><h3>Turn off two-step verification</h3><button class="x" aria-label="Close" data-on-click="closeModal()">&times;</button></div><p class="fu-sub">Enter a current code from your authenticator app to confirm. Your account will then only need your password.</p><label class="x-f"><span>6-digit code</span><input id="secoc" inputmode="numeric" autocomplete="one-time-code" maxlength="6"></label><p class="sec-err" id="secoerr"></p><button class="cap-btn bad" data-on-click="secMfaOffGo()">Turn off</button></div>`
   );
 }
 async function secMfaOffGo() {
@@ -1175,7 +1175,7 @@ async function mfaCheck() {
   } catch (_) {}
 }
 function mfaGate() {
-  return `<div class="adm-gate"><div class="adm-gc"><div class="adm-gi">${sv('shield', 24)}</div><h1>Enter your code</h1><p>Two-step verification is on for this account. Open your authenticator app and enter the 6-digit code for Introthread.</p><label class="x-f"><span>6-digit code</span><input id="mfagc" inputmode="numeric" autocomplete="one-time-code" maxlength="6" onkeydown="if(event.key==='Enter')mfaGo()"></label><p class="sec-err" id="mfagerr"></p><button class="cap-btn" onclick="mfaGo()">Continue</button><button class="cap-btn2" style="margin-top:8px" onclick="MFAG=null;logout()">Use another account</button></div></div>`;
+  return `<div class="adm-gate"><div class="adm-gc"><div class="adm-gi">${sv('shield', 24)}</div><h1>Enter your code</h1><p>Two-step verification is on for this account. Open your authenticator app and enter the 6-digit code for Introthread.</p><label class="x-f"><span>6-digit code</span><input id="mfagc" inputmode="numeric" autocomplete="one-time-code" maxlength="6" data-on-keydown="mfaKey(event)"></label><p class="sec-err" id="mfagerr"></p><button class="cap-btn" data-on-click="mfaGo()">Continue</button><button class="cap-btn2" style="margin-top:8px" data-on-click="mfaOut()">Use another account</button></div></div>`;
 }
 async function mfaGo() {
   const c = (($('#mfagc') || {}).value || '').trim(),
@@ -1302,9 +1302,9 @@ showNudges = function () {
   try {
     localStorage.setItem(nfKey(), String(Date.now()));
   } catch (_) {}
-  modal(`<div class="cap-m nf-m"><div class="row between"><h3>Notifications</h3><button class="x" aria-label="Close" onclick="closeModal();nfBadge()">&times;</button></div>
- ${L.length ? `<ul class="nf-l">${L.map(x => `<li class="${x.at > r ? 'new' : ''}"><button type="button" onclick="closeModal();nfBadge();go('/app/thread/${x.t.id}')"><span class="nf-i t-${x.tone}w" aria-hidden="true">${sv(x.ic, 16)}</span><span class="nf-tx">${x.txt}<small>${ago(x.at)}</small></span>${x.at > r ? '<i class="nf-dot" aria-label="New"></i>' : ''}</button></li>`).join('')}</ul>` : `<div class="nf-empty">${sv('bell', 22)}<b>You're all caught up</b><small>Confirmations, answers, matches and follow-ups appear here.</small></div>`}
- <a class="nf-set" href="/app/settings?tab=notifications" onclick="closeModal()">Notification settings</a></div>`);
+  modal(`<div class="cap-m nf-m"><div class="row between"><h3>Notifications</h3><button class="x" aria-label="Close" data-on-click="closeModal();nfBadge()">&times;</button></div>
+ ${L.length ? `<ul class="nf-l">${L.map(x => `<li class="${x.at > r ? 'new' : ''}"><button type="button" data-on-click="closeModal();nfBadge();go('/app/thread/${x.t.id}')"><span class="nf-i t-${x.tone}w" aria-hidden="true">${sv(x.ic, 16)}</span><span class="nf-tx">${x.txt}<small>${ago(x.at)}</small></span>${x.at > r ? '<i class="nf-dot" aria-label="New"></i>' : ''}</button></li>`).join('')}</ul>` : `<div class="nf-empty">${sv('bell', 22)}<b>You're all caught up</b><small>Confirmations, answers, matches and follow-ups appear here.</small></div>`}
+ <a class="nf-set" href="/app/settings?tab=notifications" data-on-click="closeModal()">Notification settings</a></div>`);
   nfBadge();
 };
 function nfBadge() {
@@ -1407,13 +1407,13 @@ function intView() {
       sub = d;
     } else if (id) {
       const only = n < 2;
-      btn = `<button type="button" class="st12-cb on" ${only ? 'disabled title="This is your only way to sign in. Set a password in Security first."' : ''} onclick="intDisconnect('${k}')">Disconnect</button>`;
+      btn = `<button type="button" class="st12-cb on" ${only ? 'disabled title="This is your only way to sign in. Set a password in Security first."' : ''} data-on-click="intDisconnect('${k}')">Disconnect</button>`;
       sub = `Connected${em ? ' as ' + esc(em) : ''}.${only ? ' This is your only way to sign in, so set a password in Security before disconnecting.' : ''}`;
     } else if (avail === false) {
       btn = `<button type="button" class="st12-cb" disabled>Not set up yet</button>`;
       sub = `${name} sign-in is not switched on for Introthread yet.`;
     } else {
-      btn = `<button type="button" class="st12-cb" onclick="intConnect('${k}')">Connect</button>`;
+      btn = `<button type="button" class="st12-cb" data-on-click="intConnect('${k}')">Connect</button>`;
       sub = d;
     }
     return `<div class="st12-conn"><span class="st12-ci ${c}">${intIcon(c)}</span><div><b>${name}</b><small>${sub}</small></div>${btn}</div>`;
@@ -1422,11 +1422,11 @@ function intView() {
     typeof stGConnect === 'function' && typeof gTok === 'function'
       ? (() => {
           const g = gTok();
-          return `<div class="st12-conn"><span class="st12-ci g">${intIcon('g')}</span><div><b>Google Calendar</b><small>${g ? 'Connected. Today&rsquo;s meetings show on your dashboard.' : 'Show today&rsquo;s meetings on your dashboard.'}</small></div>${g ? `<button type="button" class="st12-cb on" onclick="stGDisc()">Disconnect</button>` : `<button type="button" class="st12-cb" onclick="stGConnect()">Connect</button>`}</div>`;
+          return `<div class="st12-conn"><span class="st12-ci g">${intIcon('g')}</span><div><b>Google Calendar</b><small>${g ? 'Connected. Today&rsquo;s meetings show on your dashboard.' : 'Show today&rsquo;s meetings on your dashboard.'}</small></div>${g ? `<button type="button" class="st12-cb on" data-on-click="stGDisc()">Disconnect</button>` : `<button type="button" class="st12-cb" data-on-click="stGConnect()">Connect</button>`}</div>`;
         })()
       : '';
   return `<section class="d-box st12-box"><div class="cd-bh"><span class="cd-bi">${sv('link', 20)}</span><div><b>Connected accounts</b><small>Link the accounts you use to sign in. You can sign in with any linked account.</small></div></div>
- ${INTX.err ? `<p class="sec-err">${esc(INTX.err)} <button type="button" class="au-inl" onclick="intLoad(true)">Try again</button></p>` : ''}${INT_P.map(row).join('')}${cal}
+ ${INTX.err ? `<p class="sec-err">${esc(INTX.err)} <button type="button" class="au-inl" data-on-click="intLoad(true)">Try again</button></p>` : ''}${INT_P.map(row).join('')}${cal}
  <p class="st12-sec">${sv('lock', 13)} Connections use the provider&rsquo;s secure sign-in. Introthread never sees your password. LinkedIn does not share your connections list with any app; to import contacts, use the LinkedIn export file in Contacts.</p></section>`;
 }
 async function intConnect(k) {
@@ -1524,7 +1524,7 @@ intView = function () {
       if (only)
         sub +=
           '<br><span class="in-warn">Your only sign-in method. Set a password in Security before disconnecting.</span>';
-      btn = `<button type="button" class="in-btn ghost" ${only ? 'disabled' : ''} onclick="intDisconnect('${k}')">Disconnect</button>`;
+      btn = `<button type="button" class="in-btn ghost" ${only ? 'disabled' : ''} data-on-click="intDisconnect('${k}')">Disconnect</button>`;
     } else if (avail === false) {
       st = pill('wait', 'Not set up yet');
       sub = `${name} sign-in has not been switched on for Introthread yet.`;
@@ -1532,7 +1532,7 @@ intView = function () {
     } else {
       st = pill('av', 'Available');
       sub = d;
-      btn = `<button type="button" class="in-btn" onclick="intConnect('${k}')">Connect</button>`;
+      btn = `<button type="button" class="in-btn" data-on-click="intConnect('${k}')">Connect</button>`;
     }
     return `<li class="in-row"><span class="in-ic ${c}" aria-hidden="true">${intIcon(c)}</span><div class="in-tx"><div class="in-t"><b>${name}</b>${st}</div><small>${sub}</small></div>${btn}</li>`;
   };
@@ -1541,11 +1541,11 @@ intView = function () {
     typeof stGConnect === 'function' && typeof gTok === 'function'
       ? (() => {
           const g = gTok();
-          return `<li class="in-row"><span class="in-ic g" aria-hidden="true">${intIcon('g')}</span><div class="in-tx"><div class="in-t"><b>Google Calendar</b>${g ? pill('on', 'Connected') : pill('av', 'Available')}</div><small>${g ? 'Today&rsquo;s meetings show on your dashboard.' : 'Show today&rsquo;s meetings on your dashboard, so you know who you will meet.'}</small></div>${g ? `<button type="button" class="in-btn ghost" onclick="stGDisc()">Disconnect</button>` : `<button type="button" class="in-btn" onclick="stGConnect()">Connect</button>`}</li>`;
+          return `<li class="in-row"><span class="in-ic g" aria-hidden="true">${intIcon('g')}</span><div class="in-tx"><div class="in-t"><b>Google Calendar</b>${g ? pill('on', 'Connected') : pill('av', 'Available')}</div><small>${g ? 'Today&rsquo;s meetings show on your dashboard.' : 'Show today&rsquo;s meetings on your dashboard, so you know who you will meet.'}</small></div>${g ? `<button type="button" class="in-btn ghost" data-on-click="stGDisc()">Disconnect</button>` : `<button type="button" class="in-btn" data-on-click="stGConnect()">Connect</button>`}</li>`;
         })()
       : '';
   return `<div class="in-wrap"><section class="d-box st12-box in-card"><div class="in-h"><span class="cd-bi">${sv('link', 20)}</span><div><b>Sign-in accounts</b><small>Link the accounts you use, then sign in with any of them.</small></div>${live && INTX.ids ? `<span class="in-sum">${linked} of ${INT_P.length} connected</span>` : ''}</div>
- ${INTX.err ? `<p class="sec-err">${esc(INTX.err)} <button type="button" class="au-inl" onclick="intLoad(true)">Try again</button></p>` : ''}<ul class="in-list">${rows}</ul></section>
+ ${INTX.err ? `<p class="sec-err">${esc(INTX.err)} <button type="button" class="au-inl" data-on-click="intLoad(true)">Try again</button></p>` : ''}<ul class="in-list">${rows}</ul></section>
  ${cal ? `<section class="d-box st12-box in-card"><div class="in-h"><span class="cd-bi">${sv('cal', 20)}</span><div><b>Calendar</b><small>See your meetings next to your Threads.</small></div></div><ul class="in-list">${cal}</ul></section>` : ''}
  <div class="in-note">${sv('lock', 15)}<p>Every connection uses the provider&rsquo;s own secure sign-in. Introthread never sees or stores your passwords, and you can disconnect at any time. LinkedIn does not share anyone&rsquo;s connections list with apps; to bring in contacts, use your LinkedIn export file in Contacts.</p></div></div>`;
 };
@@ -1574,14 +1574,14 @@ vScan = function () {
     scanWake(true);
   }, 20);
   const sub = [u.role, u.company].filter(Boolean).join(' · ');
-  return `<div class="ev2 ${SCAN.dark ? 'dk' : ''}"><header class="ev2-h"><button type="button" class="ev2-ib" aria-label="Close event mode" onclick="scanClose()">${sv('close', 20)}</button>
+  return `<div class="ev2 ${SCAN.dark ? 'dk' : ''}"><header class="ev2-h"><button type="button" class="ev2-ib" aria-label="Close event mode" data-on-click="scanClose()">${sv('close', 20)}</button>
  <span class="ev2-live" role="status"><i aria-hidden="true"></i>Live<span class="ev2-sep">·</span>Screen stays on</span>
- <div class="ev2-hr"><button type="button" class="ev2-ib" aria-label="${SCAN.dark ? 'Light' : 'Dark'} QR background" onclick="SCAN.dark=!SCAN.dark;render()">${sv(SCAN.dark ? 'evsun' : 'evmoon', 18)}</button><button type="button" class="ev2-ib" aria-label="Full screen" onclick="scanFull()">${sv('evfs', 18)}</button></div></header>
+ <div class="ev2-hr"><button type="button" class="ev2-ib" aria-label="${SCAN.dark ? 'Light' : 'Dark'} QR background" data-on-click="scanDark()">${sv(SCAN.dark ? 'evsun' : 'evmoon', 18)}</button><button type="button" class="ev2-ib" aria-label="Full screen" data-on-click="scanFull()">${sv('evfs', 18)}</button></div></header>
  <main class="ev2-m"><div class="ev2-card"><div class="ev2-who">${avatarC(u, 52)}<div><b>${esc(u.name || '')}</b>${sub ? `<small>${esc(sub)}</small>` : ''}</div></div>
  <div class="ev2-qrw"><span class="ev2-c tl"></span><span class="ev2-c tr"></span><span class="ev2-c bl"></span><span class="ev2-c br"></span><div id="scanqr" role="img" aria-label="QR code for introthread.com/${esc(u.handle)}"></div><span class="t-qrlogo"><span class="x-lm"><i></i><i></i></span></span></div>
- <p class="ev2-cta">Scan to connect with ${first}</p><button type="button" class="ev2-url" onclick="copy('https://introthread.com/${esc(u.handle)}','Link copied')" title="Copy link">introthread.com/${esc(u.handle)} ${sv('copy', 14)}</button></div>
- <section class="ev2-tag" aria-label="Event tagging"><span class="ev2-lab">${sv('pin', 14)} Tag new Threads to</span><div class="ev2-chips" role="radiogroup" aria-label="Event"><button type="button" role="radio" aria-checked="${!room}" class="${room ? '' : 'on'}" onclick="SCAN.room='';render()">No event</button>${R.map(r => `<button type="button" role="radio" aria-checked="${SCAN.room === r.id}" class="${SCAN.room === r.id ? 'on' : ''}" onclick="SCAN.room='${r.id}';render()">${esc(r.name)}</button>`).join('')}<a class="ev2-new" href="/app/rooms">${sv('plus', 14)} New event</a></div></section>
- <nav class="ev2-bar" aria-label="More ways to connect"><button type="button" onclick="shareNative()">${sv('send', 20)}<span>Share</span></button><button type="button" onclick="tapNFC()">${sv('nfc', 20)}<span>NFC</span></button><button type="button" onclick="scanWallpaper()">${sv('photo', 20)}<span>Wallpaper</span></button><a href="/app/tap">${sv('user', 20)}<span>Add manually</span></a></nav>
+ <p class="ev2-cta">Scan to connect with ${first}</p><button type="button" class="ev2-url" data-on-click="copy('https://introthread.com/${esc(u.handle)}','Link copied')" title="Copy link">introthread.com/${esc(u.handle)} ${sv('copy', 14)}</button></div>
+ <section class="ev2-tag" aria-label="Event tagging"><span class="ev2-lab">${sv('pin', 14)} Tag new Threads to</span><div class="ev2-chips" role="radiogroup" aria-label="Event"><button type="button" role="radio" aria-checked="${!room}" class="${room ? '' : 'on'}" data-on-click="scanRoom('')">No event</button>${R.map(r => `<button type="button" role="radio" aria-checked="${SCAN.room === r.id}" class="${SCAN.room === r.id ? 'on' : ''}" data-on-click="scanRoom('${r.id}')">${esc(r.name)}</button>`).join('')}<a class="ev2-new" href="/app/rooms">${sv('plus', 14)} New event</a></div></section>
+ <nav class="ev2-bar" aria-label="More ways to connect"><button type="button" data-on-click="shareNative()">${sv('send', 20)}<span>Share</span></button><button type="button" data-on-click="tapNFC()">${sv('nfc', 20)}<span>NFC</span></button><button type="button" data-on-click="scanWallpaper()">${sv('photo', 20)}<span>Wallpaper</span></button><a href="/app/tap">${sv('user', 20)}<span>Add manually</span></a></nav>
  <p class="ev2-tip">${n ? `<b>${n} Thread${n > 1 ? 's' : ''} today.</b> ` : ''}Tip: turn your brightness up for faster scanning.</p></main></div>`;
 };
 
@@ -1701,3 +1701,46 @@ vContacts = function () {
   const h = _vContacts18.apply(this, arguments);
   return /class="app[ "]/.test(h) ? h : shell('threads', h);
 };
+
+/* v59: named handlers for the Audit log, MFA prompt, photo zoom and event-mode
+   scanner (no inline JavaScript). */
+function alSearchIn(v) {
+  clearTimeout(ALX._t);
+  ALX._t = setTimeout(() => alFilter('q', v), 300);
+}
+function alClear() {
+  ALX.q = '';
+  ALX.cat = 'all';
+  ALX.actor = '';
+  ALX.days = 30;
+  ALX.outcome = 'all';
+  ALX.page = 0;
+  alLoad(true);
+}
+function alRow(e, i) {
+  if (!e.target.closest('button')) alOpen(i);
+}
+function alPg(p) {
+  if (p === 'prev') ALX.page--;
+  else if (p === 'next') ALX.page++;
+  else ALX.page = +p;
+  alLoad(true);
+}
+function pcZoomIn(v) {
+  pcZoom(+v);
+}
+function mfaKey(e) {
+  if (e.key === 'Enter') mfaGo();
+}
+function mfaOut() {
+  MFAG = null;
+  logout();
+}
+function scanDark() {
+  SCAN.dark = !SCAN.dark;
+  render();
+}
+function scanRoom(id) {
+  SCAN.room = id;
+  render();
+}
