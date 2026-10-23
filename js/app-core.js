@@ -2729,46 +2729,6 @@ function stOther(u, t) {
 /* ===== v5 Today, Threads, Rooms ===== */
 const xav = (n, s = 44) =>
   `<span class="d-av" style="width:${s}px;height:${s}px;font-size:${Math.round(s * 0.36)}px;background:${colorFor(n)}">${esc(initials(n))}</span>`;
-const dChip = t => {
-  const s = threadState(t);
-  const m = {
-    pending: ['o', 'Awaiting confirmation'],
-    open: ['b', t.mine ? 'Waiting on them' : 'Waiting on &ldquo;What&rsquo;s next?&rdquo;'],
-    matched: ['g', 'Matched, act now'],
-    resolved: ['g', 'Resolved'],
-    closed: ['n', 'Closed gently']
-  }[s];
-  return `<span class="d-chip ${m[0]}">${m[1]}</span>`;
-};
-const dWarm = t => {
-  const n = warmth(t),
-    s = threadState(t),
-    c = s === 'pending' ? 'o' : s === 'closed' ? 'n' : s === 'open' ? 'b' : 'g';
-  return `<span class="d-warm ${c}" title="Warmth ${n}/5">${[1, 2, 3, 4, 5].map(i => `<i class="${i <= n ? 'on' : ''}"></i>`).join('')}</span>`;
-};
-const dRing = t => {
-  const p = pulse(t),
-    st = threadState(t);
-  const c =
-    st === 'resolved' || st === 'matched'
-      ? '#12a065'
-      : st === 'closed'
-        ? '#98a2b3'
-        : p > 0.5
-          ? '#1f5eff'
-          : p > 0.2
-            ? '#ff6a3d'
-            : '#d14343';
-  const r = 19,
-    C = 2 * Math.PI * r;
-  const d = Math.max(1, Math.ceil((1 - p) * 7) || 1);
-  const lab = st === 'resolved' ? '&#10003;' : st === 'closed' ? '&ndash;' : (Math.ceil(p * 7) || 0) + 'd';
-  return `<span class="d-ring" style="color:${c}"><svg width="46" height="46"><circle cx="23" cy="23" r="${r}" stroke="#eceff4" stroke-width="3" fill="none"/><circle cx="23" cy="23" r="${r}" stroke="currentColor" stroke-width="3" fill="none" stroke-linecap="round" stroke-dasharray="${C}" stroke-dashoffset="${C * (1 - p)}" transform="rotate(-90 23 23)"/></svg><b>${lab}</b></span>`;
-};
-const dSecHead = (t, href, lab) =>
-  `<div class="d-sh"><b>${t}</b>${href ? `<a href="${href}">${lab || 'View all'} ${sv('arrow', 15)}</a>` : ''}</div>`;
-const dPromo = (title, items, cta) =>
-  `<div class="d-promo"><span class="d-promo-ic">${sv('spark', 22)}</span><div><b>${title}</b>${items ? `<ul>${items.map(x => `<li>${sv('check', 12, '#fff', 3)}${x}</li>`).join('')}</ul>` : ''}${cta || ''}</div></div>`;
 /* ---------- Today ---------- */
 /* vToday: earlier version removed in the v54 merge (the later declaration below always won) */
 /* ---------- Threads ---------- */
@@ -3060,15 +3020,6 @@ render = function () {
 })();
 
 /* ===== v7 Today dashboard (design: Relationship Today) ===== */
-let DRANGE = 7;
-const D_OUT = [
-  ['message', 'Sent a message', 'mail'],
-  ['call', 'Had a call', 'phone'],
-  ['meeting', 'Meeting booked', 'cal'],
-  ['opportunity', 'Opportunity created', 'spark'],
-  ['notnow', 'Not now, stay in touch', 'sync'],
-  ['resolved', 'Resolved', 'check']
-];
 
 /* ===== v8 Threads screen (design: Relationship Thread) ===== */
 let TSORT = 'priority',
