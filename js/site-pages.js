@@ -1,6 +1,192 @@
 // Introthread - Website pages (v83): home, how it works, rooms, networks, pricing, about, privacy, terms, 404.
 // Moved out of js/app-core.js unchanged (code cleanup step 1). Loads straight after app-core.js; shares its globals
-// (sv, esc, secHead, feat3, PLANS, ...). Later files wrap some of these (for example vPricing in contacts-import.js).
+// (sv, esc, PLANS, ...). Later files wrap some of these (for example vPricing in contacts-import.js).
+
+/* v98: website content and helpers (feat3, secHead, PAGE_META, setMeta, POLICY, TERMS), moved unchanged from
+   js/app-core.js (cleanup plan step 3). Nothing uses them while the page loads; the render wrapper in app-core.js
+   calls setMeta only at run time. */
+const feat3 = a =>
+  `<div class="x-f3">${a.map(([ic, t, s]) => `<div class="x-f3-i"><span class="x-f3-ic">${sv(ic, 21)}</span><h3>${t}</h3><p>${s}</p></div>`).join('')}</div>`;
+
+const secHead = (eye, h, p) =>
+  `<div class="x-head2"><div><div class="x-eye">${eye}</div><h2 class="x-h2">${h}</h2></div>${p ? `<p class="x-sub">${p}</p>` : '<span></span>'}</div>`;
+
+const PAGE_META = {
+  '/': [
+    'Introthread | Every handshake, followed through',
+    'Create your professional card, share it by tap, QR or link, and turn every introduction into a shared Thread with one clear next step. Built for professionals everywhere.'
+  ],
+  '/how': [
+    'How it works | Introthread',
+    "Tap or scan, confirm a shared Thread, answer one private question: What's next? See how Introthread turns introductions into follow-through."
+  ],
+  '/rooms': [
+    'Thread Rooms for events and communities | Introthread',
+    'Measure what your event created: verified connections, meetings booked and introductions made, live and for 30 days after.'
+  ],
+  '/networks': [
+    'Warmth for teams and networks | Introthread',
+    'Consented, verified relationship strength for VC platform teams, accelerators and professional communities. Warm intros that are actually warm.'
+  ],
+  '/pricing': [
+    'Pricing | Introthread',
+    'Start free with your card, link, QR and unlimited Threads. Pro for people who follow through, Rooms from $166 per event, custom plans for networks.'
+  ],
+  '/about': [
+    'About | Introthread',
+    'Introthread records the moment two people meet and agree on what happens next. Our story, and how to get in touch.'
+  ],
+  '/privacy': [
+    'Trust and privacy | Introthread',
+    'Two-sided consent, private answers and opt-in network visibility. Designed for UK GDPR, the DPA 2018 and US state privacy laws.'
+  ],
+  '/terms': [
+    'Terms of Service | Introthread',
+    'The terms for using Introthread: your account, your content, acceptable use, plans and payments, and your rights.'
+  ],
+  '/login': ['Log in | Introthread', 'Log in to Introthread and pick up every Thread where you left it.'],
+  '/signup': [
+    'Create your free card | Introthread',
+    'Create your free Introthread card in 60 seconds. No card required.'
+  ]
+};
+
+function setMeta() {
+  const p = '/' + (location.pathname.split('/').filter(Boolean)[0] || '');
+  const m = PAGE_META[p];
+  if (!m) return;
+  document.title = m[0];
+  const set = (sel, attr, val) => {
+    const e = document.head.querySelector(sel);
+    if (e) e.setAttribute(attr, val);
+  };
+  set('meta[name="description"]', 'content', m[1]);
+  set('link[rel="canonical"]', 'href', 'https://www.introthread.com' + (p === '/' ? '/' : p));
+  set('meta[property="og:title"]', 'content', m[0]);
+  set('meta[property="og:description"]', 'content', m[1]);
+  set('meta[property="og:url"]', 'content', 'https://www.introthread.com' + (p === '/' ? '/' : p));
+}
+
+const POLICY = [
+  [
+    'who',
+    'Who we are',
+    '<p>Introthread (&ldquo;we&rdquo;, &ldquo;us&rdquo;) provides digital professional cards and shared Threads that record when two people meet. We are the controller of the personal data described here. Contact us at <a href="mailto:privacy@introthread.com">privacy@introthread.com</a>.</p>'
+  ],
+  [
+    'data',
+    'Data we collect',
+    '<ul><li><b>Account data:</b> name, email address and password (stored as a secure hash by our authentication provider).</li><li><b>Card data:</b> job title, company, city, bio, links, profile photo and card style you choose to add.</li><li><b>Thread data:</b> who you met, when and where, your private notes and your answer to What&rsquo;s next?.</li><li><b>Details of people you meet or import:</b> when you add someone (typed, scanned from a QR code or business card, pasted, picked from your phone contacts or imported from a LinkedIn, Google or Outlook file), we store the name, email, phone, LinkedIn, job title, company and other details you choose to keep. Importing never contacts anyone.</li><li><b>Billing data:</b> if you buy a paid plan, your plan, payment status and invoices. Card details are handled by our payment provider and never reach us.</li><li><b>Time and location of a Thread:</b> when you save a Thread, the exact time and, if you allow it, your phone&rsquo;s location. See &ldquo;Location when you save a Thread&rdquo; below.</li><li><b>Technical data:</b> basic device and log information needed to keep the service secure.</li></ul>'
+  ],
+  [
+    'location',
+    'Location when you save a Thread',
+    '<p>When you save a new Thread, we record the exact time you saved it. If you allow it, we also record your phone&rsquo;s location at that moment: the coordinates, how accurate they are (for example &ldquo;about 12 m&rdquo;) and a place name, so you can remember where you met.</p><ul><li><b>Your permission:</b> your phone asks before sharing your location. If you say no, the Thread is still saved, with the time only.</li><li><b>Only your own location:</b> we record the location of your phone, never the location of the person you met.</li><li><b>Place name:</b> to turn the coordinates into a place name, we send them to OpenStreetMap&rsquo;s Nominatim service. We send only the coordinates, not your name or any details about the person you met.</li><li><b>Who can see it:</b> the time and location are shown only to you, on your Thread, and are included when you export your data.</li><li><b>Turn it off:</b> you can stop recording location at any time in Settings, under &ldquo;Your data and privacy&rdquo;, with the &ldquo;Save where I meet people&rdquo; switch. You can also remove location permission in your phone or browser settings.</li></ul><p>We use this data to provide the feature you chose to use (contract), and the location part only with your permission, which you can withdraw at any time. It is kept and deleted with the Thread it belongs to.</p>'
+  ],
+  [
+    'scan',
+    'Business card and QR scanning',
+    '<p>When you scan a business card, the text is read on your own phone or computer. The photo is not uploaded to us; only the details you choose to save are stored with your Thread or contact.</p>'
+  ],
+  [
+    'ai',
+    'AI follow-up drafts',
+    '<p>If you switch on &ldquo;Draft follow-ups with AI&rdquo;, we send the context of that one Thread (names, where you met, your note and your answers) to our AI provider to write a suggested message. Drafts are never sent without you. Our AI provider processes this data only to create the draft, under a data processing agreement, and may not use it to train its models. You can switch this off at any time in Settings.</p>'
+  ],
+  [
+    'use',
+    'How and why we use it',
+    '<p>We use your data to provide the service you asked for (contract), to keep it secure and improve it (legitimate interests), and to send service messages such as sign-in codes, Thread invitations to the person you met, and follow-up reminders you have switched on. When you start a Thread with someone, we email them once so they can confirm it; they can ignore it and nothing more is sent. We do not sell your personal data and we do not use it for third-party advertising.</p>'
+  ],
+  [
+    'sharing',
+    'Who can see what',
+    '<p>Your public card is visible to anyone with your link. A Thread is only created when both people confirm it. Your answer to What&rsquo;s next? stays hidden until both people reply, and your private notes are never shown to anyone else. Event organisers and networks only see aggregate results, and only where you opted in.</p>'
+  ],
+  [
+    'processors',
+    'Service providers and transfers',
+    '<p>We use trusted providers to run Introthread, including hosting (Vercel), database and authentication (Supabase), email delivery (Resend), payments (Paystack), AI follow-up drafts when you switch them on, sign-in with Google, Microsoft or LinkedIn when you choose it, fonts (Google Fonts) and place names for saved locations (OpenStreetMap Nominatim, which receives only coordinates). Where data is transferred outside the UK or EEA, we rely on appropriate safeguards such as the UK International Data Transfer Addendum or Standard Contractual Clauses.</p>'
+  ],
+  [
+    'retention',
+    'How long we keep it',
+    '<p>We keep your data while your account is active. If you delete your account, we delete your card and your side of every Thread within 30 days, except where we must keep limited records by law.</p>'
+  ],
+  [
+    'rights',
+    'Your rights',
+    '<p>Under UK GDPR and applicable US state laws you can access, correct, export or delete your data, object to or restrict certain processing, and withdraw consent at any time. You can export or delete your data in Settings, or email <a href="mailto:privacy@introthread.com">privacy@introthread.com</a>. You may also complain to the UK Information Commissioner&rsquo;s Office (ico.org.uk).</p>'
+  ],
+  [
+    'cookies',
+    'Cookies and storage',
+    '<p>We only use storage that is strictly necessary to keep you signed in and remember your preferences. We do not use advertising cookies. If we add product analytics to understand how the service is used, we will ask for your consent first where the law requires it and update this policy.</p>'
+  ],
+  [
+    'security',
+    'Security',
+    '<p>Data is encrypted in transit, access is protected by row-level security so you can only read and change your own records, and passwords are never stored in plain text.</p>'
+  ],
+  [
+    'changes',
+    'Changes to this policy',
+    '<p>If we make material changes we will tell you by email or in the app before they take effect.</p>'
+  ]
+];
+
+const TERMS = [
+  [
+    'accept',
+    'Using Introthread',
+    '<p>By creating an account or using Introthread you agree to these terms. If you use Introthread for an organisation, you confirm you can accept them on its behalf.</p>'
+  ],
+  [
+    'account',
+    'Your account',
+    '<p>You must be at least 16, give accurate information and keep your password secure. You are responsible for activity on your account.</p>'
+  ],
+  [
+    'content',
+    'Your content',
+    '<p>You own the content you add. You give us permission to host and display it so we can run the service, for example showing your card to people you share it with.</p>'
+  ],
+  [
+    'use',
+    'Acceptable use',
+    '<ul><li>Do not impersonate others or create Threads with people you have not met.</li><li>Do not send spam, scrape the service or try to access other people&rsquo;s data.</li><li>Do not upload unlawful, misleading or infringing content.</li></ul>'
+  ],
+  [
+    'plans',
+    'Plans and payments',
+    '<p>The Free plan is free. Paid plans are billed in advance, monthly or annually, and renew until cancelled. You can cancel at any time and keep access until the end of the paid period. Prices exclude VAT and sales tax where applicable. UK consumers have a 14-day right to cancel a new subscription.</p>'
+  ],
+  [
+    'availability',
+    'Availability and changes',
+    '<p>We work to keep Introthread available and secure but cannot promise it will be uninterrupted. We may improve or change features, and will give notice of material changes.</p>'
+  ],
+  [
+    'ending',
+    'Ending your account',
+    '<p>You can delete your account at any time in Settings. We may suspend accounts that break these terms.</p>'
+  ],
+  [
+    'liability',
+    'Liability',
+    '<p>Nothing in these terms limits liability that cannot be limited by law. Otherwise, to the extent permitted by law, we are not liable for indirect or consequential losses, and our total liability is limited to the amount you paid us in the 12 months before the claim.</p>'
+  ],
+  [
+    'law',
+    'Governing law',
+    '<p>These terms are governed by the laws of England and Wales. If you live elsewhere, you keep any mandatory protections of your local law.</p>'
+  ],
+  [
+    'contact',
+    'Contact',
+    '<p>Questions about these terms: <a href="mailto:hello@introthread.com">hello@introthread.com</a>.</p>'
+  ]
+];
 
 function mnav(on) {
   return `<header class="x-nav"><div class="x-wrap x-nav-in">${logo()}<nav class="x-links" aria-label="Main"><a href="#/how" class="${on === 'how' ? 'on' : ''}">How it works</a><a href="#/rooms" class="${on === 'rooms' ? 'on' : ''}">Events &amp; communities</a><a href="#/networks" class="${on === 'networks' ? 'on' : ''}">For teams</a><a href="#/pricing" class="${on === 'pricing' ? 'on' : ''}">Pricing</a><div class="x-dd"><button type="button">Resources ${sv('chevd', 14)}</button><div class="x-dd-m"><a href="#/about">About Introthread</a><a href="#/privacy">Privacy &amp; consent</a><a href="#/how">How Threads work</a></div></div>${me() ? '' : '<a href="#/login" class="x-mlogin">Log in</a>'}</nav>

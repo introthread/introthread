@@ -161,7 +161,7 @@ Each step was done one screen or file per commit, with the full test list re-run
 
 1. ~~Remove the unused variables `RF`, `RQ`, `RS` and `TF`.~~ Done in v95.
 2. ~~Move the leftover screen handlers to their screen files.~~ Done in v96.
-3. Move the website content (`PAGE_META`, `setMeta`, `feat3`, `secHead`, `POLICY`, `TERMS`) to `site-pages.js`. The pre-rendered pages make this easy to check.
+3. ~~Move the website content (`PAGE_META`, `setMeta`, `feat3`, `secHead`, `POLICY`, `TERMS`) to `site-pages.js`.~~ Done in v98: moved unchanged to the top of `site-pages.js`; nothing uses them while loading (the `render` wrapper calls `setMeta` only at run time); `app-core.js` is down to about 2,530 lines.
 4. Move the public card and guest pages to a new `public-pages.js`: `vPublic` with all 5 versions in order, `vcard`, `pcVcf`, `PUB`, `GUEST` and the guest functions.
 5. Move Google Calendar to a new `google-calendar.js`, keeping its `oauth` version after the earlier sign-in versions.
 6. Move photo upload next to `photo-crop.js`, with its sign-up wrapper.

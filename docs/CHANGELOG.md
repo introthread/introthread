@@ -3,6 +3,7 @@
 Everything built so far, newest first. Full technical detail for each item is in `HANDOVER.md`. How Rooms, events, communities and the Room pass work: `docs/ROOMS.md`.
 
 ## 23 Oct 2026
+- **v98: Code cleanup, plan step 3: website content moved.** `PAGE_META`, `setMeta`, `feat3`, `secHead`, `POLICY` and `TERMS` moved unchanged from `js/app-core.js` (now about 2,530 lines) to the top of `js/site-pages.js`. The pre-rendered pages are identical before and after. No change in behaviour.
 - **v97: Cleanup plan for what is left in `js/app-core.js`.** ARCHITECTURE.md, Next steps, now groups the remaining code, explains the layered-function risk and lists the 10-step order (steps 1 and 2 done in v95 and v96). Docs only, no code change.
 - **v96: Code cleanup: leftover screen handlers moved.** 13 small handlers moved unchanged from `js/app-core.js` (now about 2,710 lines) to their screens: `setDRange` to `today.js`; `copyThreadLink`, `copyDraft`, `draftMail` and `resolveAsk` to `threads.js`; the sign-up helpers to `auth-pages.js`; `scrollToId`, `setBilling` and `contactSend` to `site-pages.js`. The pre-rendered pages are identical before and after. No change in behaviour.
 - **v95: Code cleanup: unused variables removed.** `RF`, `RQ`, `RS` and `TF` were declared in `js/app-core.js` but never used anywhere, so they are gone. The pre-rendered pages are identical before and after. No change in behaviour.
