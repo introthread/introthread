@@ -258,3 +258,8 @@
   }
   window.ACT = { check, parse, run };
 })();
+
+/* Modal backdrop: close only when the click lands on the backdrop itself. */
+function backdropClose(e, el) {
+  if (e.target === el) closeModal();
+}
