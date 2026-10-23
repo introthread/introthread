@@ -2046,7 +2046,6 @@ const TERMS = [
 ];
 
 /* ===== v5 Tap to Thread ===== */
-let TAPM = 'q';
 
 /* ===== v6 Tap to Thread: card tags, recent activity, sharing analytics ===== */
 
@@ -2468,10 +2467,6 @@ render = function () {
   return _render91.apply(this, arguments);
 };
 /* ===== v10 My card (design: Digital My Card) ===== */
-let CTAB = 'basic',
-  SHT = 'qr',
-  CD = null;
-const cdHref = v => (!v ? '' : /^https?:\/\//i.test(v) ? v : 'https://' + v);
 
 const _saveCard10 = saveCard;
 saveCard = function (e) {
