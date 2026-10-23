@@ -3659,10 +3659,10 @@ function tpChips(sel) {
     all
       .map(
         x =>
-          `<button type="button" class="tp ${sel.includes(x) ? 'on' : ''}" aria-pressed="${sel.includes(x)}" onclick="tpToggle(this.dataset.v)" data-v="${esc(x)}">${esc(x)}</button>`
+          `<button type="button" class="tp ${sel.includes(x) ? 'on' : ''}" aria-pressed="${sel.includes(x)}" data-on-click="tpToggle(this.dataset.v)" data-v="${esc(x)}">${esc(x)}</button>`
       )
       .join('') +
-    `<input class="tp-add" placeholder="+ Add your own" maxlength="20" onkeydown="if(event.key==='Enter'){event.preventDefault();tpAddCustom(this)}" onblur="tpAddCustom(this)">`
+    `<input class="tp-add" placeholder="+ Add your own" maxlength="20" data-on-keydown="tpKey(event,this)" data-on-blur="tpAddCustom(this)">`
   );
 }
 const topicsField = sel =>
@@ -3698,7 +3698,7 @@ function tpEdit(id) {
   const t = findThread(id);
   TSEL = tagsOf(t).slice();
   modal(
-    `<div><h2 style="margin:0 0 4px;font-size:20px">Topics for ${esc(t.other.name)}</h2><p class="muted" style="margin:0 0 16px">Tag what you talked about so you can find them later.</p>${topicsField(TSEL)}<div class="row" style="gap:10px;margin-top:18px"><button type="button" class="x-btn ghost" onclick="closeModal()">Cancel</button><button type="button" class="x-btn grow" onclick="tpSave('${t.id}')">Save topics</button></div></div>`
+    `<div><h2 style="margin:0 0 4px;font-size:20px">Topics for ${esc(t.other.name)}</h2><p class="muted" style="margin:0 0 16px">Tag what you talked about so you can find them later.</p>${topicsField(TSEL)}<div class="row" style="gap:10px;margin-top:18px"><button type="button" class="x-btn ghost" data-on-click="closeModal()">Cancel</button><button type="button" class="x-btn grow" data-on-click="tpSave('${t.id}')">Save topics</button></div></div>`
   );
 }
 async function tpSave(id) {
@@ -4093,10 +4093,10 @@ function thSorted(T) {
 }
 function thFilter() {
   const all = [...new Set(myThreads().flatMap(tagsOf))].sort();
-  modal(`<div><div class="row between"><h3 style="margin:0;font:600 19px var(--xss)">Filter Threads</h3><button class="x" aria-label="Close" onclick="closeModal()">&times;</button></div>
- <div class="x-f" style="margin-top:16px"><span>Topics</span><div class="tp-wrap">${all.length ? all.map(x => `<button type="button" class="tp ${TFT.includes(x) ? 'on' : ''}" aria-pressed="${TFT.includes(x)}" onclick="this.classList.toggle('on');this.setAttribute('aria-pressed',this.classList.contains('on'))" data-v="${esc(x)}">${esc(x)}</button>`).join('') : '<small class="muted">No topics on your Threads yet.</small>'}</div></div>
+  modal(`<div><div class="row between"><h3 style="margin:0;font:600 19px var(--xss)">Filter Threads</h3><button class="x" aria-label="Close" data-on-click="closeModal()">&times;</button></div>
+ <div class="x-f" style="margin-top:16px"><span>Topics</span><div class="tp-wrap">${all.length ? all.map(x => `<button type="button" class="tp ${TFT.includes(x) ? 'on' : ''}" aria-pressed="${TFT.includes(x)}" data-on-click="tpPress(this)" data-v="${esc(x)}">${esc(x)}</button>`).join('') : '<small class="muted">No topics on your Threads yet.</small>'}</div></div>
  <label class="t-tog" style="margin-top:16px"><input type="checkbox" id="tfv" ${TFV ? 'checked' : ''}><span class="t-sw"></span><span><b>Verified only</b><small>Show Threads both people confirmed.</small></span></label>
- <div class="fu-b"><button type="button" class="t-how" onclick="TFT=[];TFV=false;closeModal();TLIM=20;render()">Clear</button><button type="button" class="x-btn" onclick="TFT=[...document.querySelectorAll('.modal .tp.on')].map(b=>b.dataset.v);TFV=$('#tfv').checked;closeModal();TLIM=20;render()">Apply</button></div></div>`);
+ <div class="fu-b"><button type="button" class="t-how" data-on-click="thFiltClear()">Clear</button><button type="button" class="x-btn" data-on-click="thFiltApply()">Apply</button></div></div>`);
 }
 function vThreads() {
   const all = myThreads();
@@ -4144,22 +4144,22 @@ function vThreads() {
       p = thPri(t),
       act = ['matched', 'open', 'pending'].includes(s);
     const last = (t.events || []).slice(-1)[0];
-    return `<div class="th-row ${p.c} ${TCOMPACT ? 'cmp' : ''}" role="link" tabindex="0" aria-label="Open Thread with ${esc(t.other.name)}" onclick="if(!event.target.closest('button,a'))go('/app/thread/${t.id}')" onkeydown="if(event.key==='Enter'&&event.target===this)go('/app/thread/${t.id}')">
+    return `<div class="th-row ${p.c} ${TCOMPACT ? 'cmp' : ''}" role="link" tabindex="0" aria-label="Open Thread with ${esc(t.other.name)}" data-on-click="thRowClick(event,'${t.id}')" data-on-keydown="thRowKey(event,this,'${t.id}')">
   ${thRing(p)}${xav(t.other.name, TCOMPACT ? 44 : 60)}
   <div class="th-who"><b>${esc(t.other.name)}${t.confirmed ? `<span class="d-ver" title="Verified">${sv('check', 10, '#fff', 3.2)}</span>` : ''}</b><small>${esc([t.other.role, t.other.company].filter(Boolean).join(' · ') || 'New connection')}</small>
    <span class="th-meta"><span>${sv('pin', 14)} ${esc(t.where || 'In person')}</span><span>${sv('cal', 14)} ${ago(t.createdAt)}</span></span>${tagChips(t)}</div>
   <div class="th-st"><span class="th-chip ${{ pending: 'o', open: t.mine ? 'o' : 'b', matched: 'g', resolved: 'g', closed: 'n' }[s]}">${chipIc(s)} ${dChip(t).replace(/<[^>]+>/g, '')}</span><small>${sv('mail', 14)} <span>${esc(t.note || (last && last.text) || 'Thread started')}</span></small>${dWarm(t)}</div>
-  ${act ? `<button type="button" class="d-act" data-on-click="${s === 'open' && !t.mine ? `go('/app/thread/${t.id}')` : `fuOpen('${t.id}')`}">${s === 'open' && !t.mine ? 'Answer' : 'Follow up'}</button>` : `<button type="button" class="d-act ghost" onclick="go('/app/thread/${t.id}')">View</button>`}
-  <button type="button" class="d-dots" aria-label="More options for ${esc(t.other.name)}" onclick="dMenu('${t.id}')">&#8942;</button></div>`;
+  ${act ? `<button type="button" class="d-act" data-on-click="${s === 'open' && !t.mine ? `go('/app/thread/${t.id}')` : `fuOpen('${t.id}')`}">${s === 'open' && !t.mine ? 'Answer' : 'Follow up'}</button>` : `<button type="button" class="d-act ghost" data-on-click="go('/app/thread/${t.id}')">View</button>`}
+  <button type="button" class="d-dots" aria-label="More options for ${esc(t.other.name)}" data-on-click="dMenu('${t.id}')">&#8942;</button></div>`;
   };
   return shell(
     'threads',
     `<div class="t-head"><div><div class="t-eye">Threads</div><h1 class="t-h1">Every relationship, followed through</h1><p class="t-sub">Turn introductions into meaningful opportunities. ${all.length} Thread${all.length === 1 ? '' : 's'} &middot; sorted by ${sortL}</p></div><a href="/app/tap" class="x-btn lg th-new"><span aria-hidden="true">+</span> New Thread</a></div>
- <div class="th-bar"><nav class="th-tabs" aria-label="Thread status">${tabs.map(([k, l, c]) => `<button type="button" class="${TF2 === k ? 'on' : ''}" aria-pressed="${TF2 === k}" onclick="TF2='${k}';TLIM=20;window._keepScroll=true;render()">${l} (${c})</button>`).join('')}</nav>
- <div class="th-tools"><select class="th-sort" aria-label="Sort Threads" onchange="TSORT=this.value;window._keepScroll=true;render()">${TH_SORTS.map(([k, l]) => `<option value="${k}" ${TSORT === k ? 'selected' : ''}>${l}</option>`).join('')}</select><button type="button" class="th-ib ${TCOMPACT ? 'on' : ''}" aria-pressed="${TCOMPACT}" title="${TCOMPACT ? 'Comfortable rows' : 'Compact rows'}" aria-label="Toggle compact rows" onclick="TCOMPACT=!TCOMPACT;window._keepScroll=true;render()">${sv('menu2', 18)}</button><button type="button" class="th-filter ${nf ? 'on' : ''}" onclick="thFilter()">${sv('grid', 16)} Filter${nf ? ` <i>${nf}</i>` : ''}</button></div></div>
- ${q ? `<div class="th-q">Showing results for &ldquo;${esc(q)}&rdquo; <button type="button" onclick="TQ2='';Q='';const i=document.querySelector('.topbar input');if(i)i.value='';render()">Clear search</button></div>` : ''}
+ <div class="th-bar"><nav class="th-tabs" aria-label="Thread status">${tabs.map(([k, l, c]) => `<button type="button" class="${TF2 === k ? 'on' : ''}" aria-pressed="${TF2 === k}" data-on-click="thTab('${k}')">${l} (${c})</button>`).join('')}</nav>
+ <div class="th-tools"><select class="th-sort" aria-label="Sort Threads" data-on-change="thSort(this.value)">${TH_SORTS.map(([k, l]) => `<option value="${k}" ${TSORT === k ? 'selected' : ''}>${l}</option>`).join('')}</select><button type="button" class="th-ib ${TCOMPACT ? 'on' : ''}" aria-pressed="${TCOMPACT}" title="${TCOMPACT ? 'Comfortable rows' : 'Compact rows'}" aria-label="Toggle compact rows" data-on-click="thCompact()">${sv('menu2', 18)}</button><button type="button" class="th-filter ${nf ? 'on' : ''}" data-on-click="thFilter()">${sv('grid', 16)} Filter${nf ? ` <i>${nf}</i>` : ''}</button></div></div>
+ ${q ? `<div class="th-q">Showing results for &ldquo;${esc(q)}&rdquo; <button type="button" data-on-click="thClearQ()">Clear search</button></div>` : ''}
  <div class="d7-top th-grid"><div class="th-list">${shown.length ? shown.map(row).join('') : `<div class="d-empty">${sv('search', 22)}<div><b>No Threads here</b><small>${q || nf ? 'Try a different search or clear your filters.' : 'Threads in this state will appear here.'}</small></div><a href="/app/tap" class="x-btn sm">Start a Thread</a></div>`}
- ${T.length > TLIM ? `<button type="button" class="th-more" onclick="TLIM+=20;window._keepScroll=true;render()">Show more <span>${Math.min(20, T.length - TLIM)} of ${T.length - TLIM} remaining</span></button>` : T.length > 20 ? `<p class="th-end">All ${T.length} Threads shown</p>` : ''}</div>
+ ${T.length > TLIM ? `<button type="button" class="th-more" data-on-click="thMore()">Show more <span>${Math.min(20, T.length - TLIM)} of ${T.length - TLIM} remaining</span></button>` : T.length > 20 ? `<p class="th-end">All ${T.length} Threads shown</p>` : ''}</div>
  <div class="d-side">
  <section class="d-box">${dSecHead('Threads at a glance', '/app', 'View analytics')}<div class="d-glance th-gl"><div class="b">${sv('users', 24)}<b>${all.length}</b><small>Total Threads</small></div><div class="g">${sv('shield', 24)}<b>${conf}</b><small>Verified (${pct(conf, all.length)}%)</small></div><div class="o">${sv('bell', 24)}<b>${wait}</b><small>Awaiting next step</small></div><div class="b">${sv('chart', 24)}<b>${res}</b><small>Resolved (${pct(res, all.length)}%)</small></div></div></section>
  <section class="d-box">${dSecHead('Upcoming follow-ups', '/app/threads')}${
@@ -4167,7 +4167,7 @@ function vThreads() {
      ? fu
          .map(t => {
            const p = thPri(t);
-           return `<div class="th-fu"><span class="th-fud ${p.c}">${thDaysLeft(t)}d</span>${xav(t.other.name, 44)}<div class="th-fuw"><a href="/app/thread/${t.id}"><b>${esc(t.other.name)}</b></a><small>${esc([t.other.role, t.other.company].filter(Boolean).join(' · ') || 'New connection')}</small><small>${sv('pin', 12)} ${esc(t.where || 'In person')}</small>${tagChips(t)}</div><button type="button" class="th-cal" aria-label="Add follow-up with ${esc(t.other.name)} to calendar" title="Add to calendar" onclick="dIcs('${t.id}')">${sv('cal', 17)}</button></div>`;
+           return `<div class="th-fu"><span class="th-fud ${p.c}">${thDaysLeft(t)}d</span>${xav(t.other.name, 44)}<div class="th-fuw"><a href="/app/thread/${t.id}"><b>${esc(t.other.name)}</b></a><small>${esc([t.other.role, t.other.company].filter(Boolean).join(' · ') || 'New connection')}</small><small>${sv('pin', 12)} ${esc(t.where || 'In person')}</small>${tagChips(t)}</div><button type="button" class="th-cal" aria-label="Add follow-up with ${esc(t.other.name)} to calendar" title="Add to calendar" data-on-click="dIcs('${t.id}')">${sv('cal', 17)}</button></div>`;
          })
          .join('')
      : '<p class="d-muted">No follow-ups due. Nice work.</p>'
@@ -5663,7 +5663,7 @@ function tdEdit(id) {
   const f = (i, l, v, o = '') =>
     `<label class="x-f"><span>${l}</span><input id="${i}" value="${esc(v || '')}" ${o}></label>`;
   modal(
-    `<form onsubmit="return tdEditSave(event,'${id}')"><div class="row between"><h3 style="margin:0;font:600 19px var(--xss)">Edit details</h3><button type="button" class="x" aria-label="Close" onclick="closeModal()">&times;</button></div><div class="t-g2" style="margin-top:14px">${f('ten', 'Name', t.other.name, 'required maxlength="80"')}${f('tee', 'Email', t.other.email, 'type="email" maxlength="120"')}${f('ter', 'Job title', t.other.role, 'maxlength="80"')}${f('tec', 'Company', t.other.company, 'maxlength="80"')}</div>${f('tew', 'Where you met', t.where, 'maxlength="120"')}<div class="fu-b"><button type="button" class="t-how" onclick="closeModal()">Cancel</button><button class="x-btn">Save details</button></div></form>`
+    `<form data-on-submit="return tdEditSave(event,'${id}')"><div class="row between"><h3 style="margin:0;font:600 19px var(--xss)">Edit details</h3><button type="button" class="x" aria-label="Close" data-on-click="closeModal()">&times;</button></div><div class="t-g2" style="margin-top:14px">${f('ten', 'Name', t.other.name, 'required maxlength="80"')}${f('tee', 'Email', t.other.email, 'type="email" maxlength="120"')}${f('ter', 'Job title', t.other.role, 'maxlength="80"')}${f('tec', 'Company', t.other.company, 'maxlength="80"')}</div>${f('tew', 'Where you met', t.where, 'maxlength="120"')}<div class="fu-b"><button type="button" class="t-how" data-on-click="closeModal()">Cancel</button><button class="x-btn">Save details</button></div></form>`
   );
 }
 async function tdEditSave(e, id) {
@@ -5745,22 +5745,22 @@ function tdReveal(t) {
   const link = threadLink(t);
   const pAv = (n, ph) => (ph ? avatarC(ph, 72) : xav(n, 72));
   if (!t.confirmed)
-    return `<section class="td-rv"><div class="td-eye">Waiting for confirmation</div><div class="td-rvt">${f} has not confirmed this Thread yet.</div><p class="td-rvp">They received a link. When they confirm, the relationship becomes verified and you can both answer &ldquo;What&rsquo;s next?&rdquo;</p><div class="td-rvb"><button type="button" onclick="copy('${link}','Confirm link copied')">${sv('link', 16)} Copy confirm link</button><button type="button" onclick="go('/t/${t.token || t.id}')">${sv('eye', 16)} ${demo ? 'Simulate their view' : 'Open their view'}</button></div></section>`;
+    return `<section class="td-rv"><div class="td-eye">Waiting for confirmation</div><div class="td-rvt">${f} has not confirmed this Thread yet.</div><p class="td-rvp">They received a link. When they confirm, the relationship becomes verified and you can both answer &ldquo;What&rsquo;s next?&rdquo;</p><div class="td-rvb"><button type="button" data-on-click="copy('${link}','Confirm link copied')">${sv('link', 16)} Copy confirm link</button><button type="button" data-on-click="go('/t/${t.token || t.id}')">${sv('eye', 16)} ${demo ? 'Simulate their view' : 'Open their view'}</button></div></section>`;
   if (!t.mine)
     return `<section class="td-rv"><div class="td-eye">One question</div><div class="td-rvt">What&rsquo;s next with ${f}?</div><p class="td-rvp">${sv('lock', 13)} Private until you both answer. A &ldquo;Not now&rdquo; is shown to them as &ldquo;Stay in touch&rdquo;.</p><div class="td-ans">${Object.entries(
       NEXT
     )
       .map(
         ([k, v]) =>
-          `<button type="button" onclick="answer('${t.id}','${k}')"><b>${v.label}</b><small>${v.desc}</small></button>`
+          `<button type="button" data-on-click="answer('${t.id}','${k}')"><b>${v.label}</b><small>${v.desc}</small></button>`
       )
       .join('')}</div></section>`;
   if (!t.theirs)
-    return `<section class="td-rv"><div class="td-eye">The quiet reveal</div><div class="td-two"><div class="td-p">${pAv(u.name, u)}<div><b>${esc((u.name || '').split(' ')[0])} (You) <i>${sv('check', 9, '#fff', 3.4)}</i></b><span>${mine.label}</span></div></div><div class="td-lock"><span>${sv('lock', 20)}</span><small>Both answers are private<br>until ${f} replies.</small></div><div class="td-p">${pAv(t.other.name)}<div><b>${f}</b><span class="dim">Not answered yet</span></div></div></div><div class="td-rvt c">Your answer is locked in. We&rsquo;ll reveal both when ${f} replies.</div><div class="td-rvb c"><button type="button" onclick="answer('${t.id}',null)">${sv('brief', 16)} Change my answer</button><button type="button" onclick="go('/t/${t.token || t.id}')">${sv('spark', 16)} ${demo ? 'Simulate their answer' : 'Open their view'}</button></div></section>`;
+    return `<section class="td-rv"><div class="td-eye">The quiet reveal</div><div class="td-two"><div class="td-p">${pAv(u.name, u)}<div><b>${esc((u.name || '').split(' ')[0])} (You) <i>${sv('check', 9, '#fff', 3.4)}</i></b><span>${mine.label}</span></div></div><div class="td-lock"><span>${sv('lock', 20)}</span><small>Both answers are private<br>until ${f} replies.</small></div><div class="td-p">${pAv(t.other.name)}<div><b>${f}</b><span class="dim">Not answered yet</span></div></div></div><div class="td-rvt c">Your answer is locked in. We&rsquo;ll reveal both when ${f} replies.</div><div class="td-rvb c"><button type="button" data-on-click="answer('${t.id}',null)">${sv('brief', 16)} Change my answer</button><button type="button" data-on-click="go('/t/${t.token || t.id}')">${sv('spark', 16)} ${demo ? 'Simulate their answer' : 'Open their view'}</button></div></section>`;
   const closed = t.mine === 'notnow' || t.theirs === 'notnow',
     th = t.theirs === 'notnow' ? 'keep' : t.theirs,
     match = !closed && t.mine === t.theirs;
-  return `<section class="td-rv"><div class="td-eye">Revealed</div><div class="td-two"><div class="td-p">${pAv(u.name, u)}<div><b>You</b><span>${mine.label}</span></div></div><div class="td-lock ${match ? 'ok' : ''}"><span>${sv(match ? 'check' : 'link', 20)}</span><small>${match ? 'It&rsquo;s a match' : 'Both answered'}</small></div><div class="td-p">${pAv(t.other.name)}<div><b>${f}</b><span>${NEXT[th].label}</span></div></div></div><div class="td-rvt c">${t.mine === 'notnow' ? `You closed this Thread gently. ${f} sees &ldquo;Stay in touch&rdquo;.` : match ? `You both chose ${NEXT[t.mine].label.toLowerCase()}.` : `You chose ${mine.label.toLowerCase()}, ${f} chose ${NEXT[th].label.toLowerCase()}.`}</div>${t.mine !== 'notnow' && !t.resolvedAt ? `<div class="td-rvb c"><button type="button" onclick="TDT='fu';window._keepScroll=true;render()">${sv('mail', 16)} Open drafted follow-up</button></div>` : ''}</section>`;
+  return `<section class="td-rv"><div class="td-eye">Revealed</div><div class="td-two"><div class="td-p">${pAv(u.name, u)}<div><b>You</b><span>${mine.label}</span></div></div><div class="td-lock ${match ? 'ok' : ''}"><span>${sv(match ? 'check' : 'link', 20)}</span><small>${match ? 'It&rsquo;s a match' : 'Both answered'}</small></div><div class="td-p">${pAv(t.other.name)}<div><b>${f}</b><span>${NEXT[th].label}</span></div></div></div><div class="td-rvt c">${t.mine === 'notnow' ? `You closed this Thread gently. ${f} sees &ldquo;Stay in touch&rdquo;.` : match ? `You both chose ${NEXT[t.mine].label.toLowerCase()}.` : `You chose ${mine.label.toLowerCase()}, ${f} chose ${NEXT[th].label.toLowerCase()}.`}</div>${t.mine !== 'notnow' && !t.resolvedAt ? `<div class="td-rvb c"><button type="button" data-on-click="tdTab('fu')">${sv('mail', 16)} Open drafted follow-up</button></div>` : ''}</section>`;
 }
 function vThread(id) {
   const t = findThread(id);
@@ -5792,11 +5792,11 @@ function vThread(id) {
     ]
       .map(
         ([k, l]) =>
-          `<button type="button" class="${TDC === k ? 'on' : ''}" onclick="TDC='${k}';window._keepScroll=true;render()">${l}</button>`
+          `<button type="button" class="${TDC === k ? 'on' : ''}" data-on-click="tdCat('${k}')">${l}</button>`
       )
       .join(
         ''
-      )}</div>${TDC === 'note' ? `<div class="td-box"><textarea id="tdn" rows="2" maxlength="500" placeholder="Add a private note about this conversation..."></textarea><div class="td-bb"><span>${sv('lock', 13)} Only you can see this note</span><button type="button" class="x-btn sm" onclick="tdNoteAdd('${t.id}')">Save note</button></div></div>` : tdSuggest(t)}</div>`;
+      )}</div>${TDC === 'note' ? `<div class="td-box"><textarea id="tdn" rows="2" maxlength="500" placeholder="Add a private note about this conversation..."></textarea><div class="td-bb"><span>${sv('lock', 13)} Only you can see this note</span><button type="button" class="x-btn sm" data-on-click="tdNoteAdd('${t.id}')">Save note</button></div></div>` : tdSuggest(t)}</div>`;
   else if (TDT === 'det')
     tab = `<dl class="td-dl">${[
       ['Name', t.other.name],
@@ -5814,13 +5814,13 @@ function vThread(id) {
       )
       .join(
         ''
-      )}</dl><button type="button" class="t-how sm" onclick="tdEdit('${t.id}')">${sv('brief', 15)} Edit details</button>`;
+      )}</dl><button type="button" class="t-how sm" data-on-click="tdEdit('${t.id}')">${sv('brief', 15)} Edit details</button>`;
   else if (TDT === 'notes')
     tab = `${notes.length ? `<ul class="td-notes">${notes.map(n => `<li><p>${esc(n.text)}</p><small>${tdWhen(n.at)}</small></li>`).join('')}</ul>` : '<p class="d-muted">No notes yet. Add one from the Conversation tab.</p>'}`;
   else if (TDT === 'fu') {
     const fus = evs.filter(e => e.k === 'followup');
-    tab = `${t.mine && t.mine !== 'notnow' && t.theirs && !t.resolvedAt ? `<div class="td-draft"><div class="row between"><b>${sv('spark', 14)} Drafted from this Thread</b><span class="th-chip b">Edit before sending</span></div><textarea id="draft" rows="8">${esc(draftFor(t))}</textarea><div class="fu-b" style="justify-content:flex-start"><button type="button" class="x-btn" onclick="sendFollow('${t.id}')">${sv('mail', 15)} Mark as sent</button><button type="button" class="t-how" onclick="copy($('#draft').value,'Draft copied')">Copy</button>${t.other.email ? `<a class="t-how" href="mailto:${esc(t.other.email)}?subject=${encodeURIComponent('Great meeting you')}&body=" onclick="this.href=this.href.split('&body=')[0]+'&body='+encodeURIComponent($('#draft').value)">Open in email</a>` : ''}</div></div>` : `<p class="d-muted">${t.resolvedAt ? 'This Thread is resolved.' : 'A drafted follow-up appears here once you both answer &ldquo;What&rsquo;s next?&rdquo;.'}</p>`}
-  <div class="fu-b" style="justify-content:flex-start"><button type="button" class="t-how sm" onclick="fuOpen('${t.id}')">${sv('check', 15)} Record a follow-up</button><button type="button" class="t-how sm" onclick="dIcs('${t.id}')">${sv('cal', 15)} Add reminder to calendar</button></div>${fus.length ? `<ol class="td-evs">${fus.map(ev).join('')}</ol>` : ''}`;
+    tab = `${t.mine && t.mine !== 'notnow' && t.theirs && !t.resolvedAt ? `<div class="td-draft"><div class="row between"><b>${sv('spark', 14)} Drafted from this Thread</b><span class="th-chip b">Edit before sending</span></div><textarea id="draft" rows="8">${esc(draftFor(t))}</textarea><div class="fu-b" style="justify-content:flex-start"><button type="button" class="x-btn" data-on-click="sendFollow('${t.id}')">${sv('mail', 15)} Mark as sent</button><button type="button" class="t-how" data-on-click="copyDraft()">Copy</button>${t.other.email ? `<a class="t-how" href="mailto:${esc(t.other.email)}?subject=${encodeURIComponent('Great meeting you')}&body=" data-on-click="draftMail(this)">Open in email</a>` : ''}</div></div>` : `<p class="d-muted">${t.resolvedAt ? 'This Thread is resolved.' : 'A drafted follow-up appears here once you both answer &ldquo;What&rsquo;s next?&rdquo;.'}</p>`}
+  <div class="fu-b" style="justify-content:flex-start"><button type="button" class="t-how sm" data-on-click="fuOpen('${t.id}')">${sv('check', 15)} Record a follow-up</button><button type="button" class="t-how sm" data-on-click="dIcs('${t.id}')">${sv('cal', 15)} Add reminder to calendar</button></div>${fus.length ? `<ol class="td-evs">${fus.map(ev).join('')}</ol>` : ''}`;
   } else if (TDT === 'opp')
     tab = `<p class="td-fine" style="margin-top:0">${t.resolvedAt ? `Resolved ${tdWhen(t.resolvedAt)}.` : 'Record what this relationship led to. Resolving moves it out of your active list.'}</p><div class="td-opps">${[
       ['Meeting booked', 'cal'],
@@ -5830,13 +5830,13 @@ function vThread(id) {
     ]
       .map(
         ([l, i]) =>
-          `<button type="button" ${t.resolvedAt ? 'disabled' : ''} onclick="if(confirm('Resolve this Thread as: ${l}?'))resolve('${t.id}','${l}')">${sv(i, 18)} ${l}</button>`
+          `<button type="button" ${t.resolvedAt ? 'disabled' : ''} data-on-click="resolveAsk('${t.id}','${l}')">${sv(i, 18)} ${l}</button>`
       )
       .join('')}</div>`;
   else
     tab = room
       ? `<a class="td-room big" href="/app/room/${room.id}"><span style="background-image:url(${rImg(room)})"></span><div><b>${esc(room.name)}</b><small>${rFmt(room, { day: 'numeric', month: 'short', year: 'numeric' })} &middot; ${rPlace(room)}</small></div><em>${sv('users', 15)} ${roomStats(room).T.length} people</em>${sv('chev', 16)}</a>`
-      : `<p class="d-muted">This Thread was not started in a Room.</p><button type="button" class="t-how sm" onclick="newRoomModal()">Create a Room</button>`;
+      : `<p class="d-muted">This Thread was not started in a Room.</p><button type="button" class="t-how sm" data-on-click="newRoomModal()">Create a Room</button>`;
   const tl = evs
     .filter(
       e =>
@@ -5854,7 +5854,7 @@ function vThread(id) {
   return shell(
     'threads',
     `<div class="td-head"><div><a href="/app/threads" class="td-back">${sv('arrow', 15).replace('M5 12h14M13 6l6 6-6 6', 'M19 12H5M11 6l-6 6 6 6')} Back to Threads</a><div class="td-who">${xav(t.other.name, 84)}<div><h1>${esc(t.other.name)}${t.confirmed ? `<span class="d-ver" title="Verified">${sv('check', 11, '#fff', 3.2)}</span>` : ''}</h1><p>${esc([t.other.role, t.other.company].filter(Boolean).join(', ') || 'New connection')}</p><div class="td-chips">${chips}</div></div></div></div>
- <div class="td-acts"><div class="td-btns"><button type="button" class="t-how" onclick="copy(threadLink(findThread('${t.id}')),'Thread link copied')">${sv('hub', 17)} Share</button><button type="button" class="t-how" onclick="tapVcf({name:findThread('${t.id}').other.name,role:findThread('${t.id}').other.role,company:findThread('${t.id}').other.company,email:findThread('${t.id}').other.email,where:findThread('${t.id}').where});toast('Contact file downloaded')">${sv('user', 17)} Add to contacts</button><button type="button" class="t-how" onclick="dMenu('${t.id}')">&bull;&bull;&bull; More</button>${['matched', 'open', 'pending'].includes(s) ? `<button type="button" class="x-btn lg" onclick="fuOpen('${t.id}')">${sv('cal', 17)} Follow up</button>` : ''}</div><div class="td-warm">${thRing(p).replace(/<small>[^<]*<\/small>/, '')}<div><small>Verified warmth</small>${dWarm(t)}</div></div></div></div>
+ <div class="td-acts"><div class="td-btns"><button type="button" class="t-how" data-on-click="copyThreadLink('${t.id}','Thread link copied')">${sv('hub', 17)} Share</button><button type="button" class="t-how" data-on-click="threadVcf('${t.id}')">${sv('user', 17)} Add to contacts</button><button type="button" class="t-how" data-on-click="dMenu('${t.id}')">&bull;&bull;&bull; More</button>${['matched', 'open', 'pending'].includes(s) ? `<button type="button" class="x-btn lg" data-on-click="fuOpen('${t.id}')">${sv('cal', 17)} Follow up</button>` : ''}</div><div class="td-warm">${thRing(p).replace(/<small>[^<]*<\/small>/, '')}<div><small>Verified warmth</small>${dWarm(t)}</div></div></div></div>
  <div class="td-grid"><div class="td-main">${tdReveal(t)}<section class="d-box td-tabsbox"><nav class="cd-tabs td-tabs" role="tablist">${[
    ['conv', 'Conversation'],
    ['det', 'Details'],
@@ -5865,13 +5865,13 @@ function vThread(id) {
  ]
    .map(
      ([k, l]) =>
-       `<button type="button" role="tab" aria-selected="${TDT === k}" class="${TDT === k ? 'on' : ''}" onclick="TDT='${k}';window._keepScroll=true;render()">${l}</button>`
+       `<button type="button" role="tab" aria-selected="${TDT === k}" class="${TDT === k ? 'on' : ''}" data-on-click="tdTab('${k}')">${l}</button>`
    )
    .join('')}</nav><div class="td-tab">${tab}</div></section></div>
- <aside class="d-box td-side"><div class="td-sec"><div class="td-sh"><b>The moment</b><button type="button" class="td-ed" onclick="tdEdit('${t.id}')">${sv('brief', 14)} Edit</button></div><ul class="td-facts"><li>${sv('pin', 16)}${esc(t.where || 'In person')}</li><li>${sv('cal', 16)}${new Date(t.createdAt).toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' })}, ${new Date(t.createdAt).toLocaleTimeString('en-GB', { hour: 'numeric', minute: '2-digit' })}</li>${t.other.email ? `<li>${sv('mail', 16)}<a href="mailto:${esc(t.other.email)}">${esc(t.other.email)}</a></li>` : ''}${t.other.company ? `<li>${sv('building', 16)}${esc(t.other.company)}</li>` : ''}${t.other.role ? `<li>${sv('brief', 16)}${esc(t.other.role)}</li>` : ''}${room ? `<li>${sv('users', 16)}<a href="/app/room/${room.id}">${esc(room.name)}</a></li>` : ''}</ul></div>
- <div class="td-sec"><div class="td-sh"><b>Private context (only you)</b><button type="button" class="td-ed" onclick="saveNote('${t.id}')">${sv('check', 14)} Save</button></div><textarea id="note" class="td-ctx" rows="3" maxlength="300" placeholder="What should you remember about ${f}?">${esc(t.note || '')}</textarea></div>
- <div class="td-sec"><div class="td-sh"><b>Tags</b><button type="button" class="td-ed" onclick="tpEdit('${t.id}')">${sv('brief', 14)} Edit</button></div><div class="td-tags">${tagChips(t) || ''}<button type="button" class="td-add" onclick="tpEdit('${t.id}')">+ Add tag</button></div></div>
- <div class="td-sec"><div class="td-sh"><b>Timeline</b><select class="d7-sel" aria-label="Filter timeline" onchange="TDF=this.value;window._keepScroll=true;render()">${[
+ <aside class="d-box td-side"><div class="td-sec"><div class="td-sh"><b>The moment</b><button type="button" class="td-ed" data-on-click="tdEdit('${t.id}')">${sv('brief', 14)} Edit</button></div><ul class="td-facts"><li>${sv('pin', 16)}${esc(t.where || 'In person')}</li><li>${sv('cal', 16)}${new Date(t.createdAt).toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' })}, ${new Date(t.createdAt).toLocaleTimeString('en-GB', { hour: 'numeric', minute: '2-digit' })}</li>${t.other.email ? `<li>${sv('mail', 16)}<a href="mailto:${esc(t.other.email)}">${esc(t.other.email)}</a></li>` : ''}${t.other.company ? `<li>${sv('building', 16)}${esc(t.other.company)}</li>` : ''}${t.other.role ? `<li>${sv('brief', 16)}${esc(t.other.role)}</li>` : ''}${room ? `<li>${sv('users', 16)}<a href="/app/room/${room.id}">${esc(room.name)}</a></li>` : ''}</ul></div>
+ <div class="td-sec"><div class="td-sh"><b>Private context (only you)</b><button type="button" class="td-ed" data-on-click="saveNote('${t.id}')">${sv('check', 14)} Save</button></div><textarea id="note" class="td-ctx" rows="3" maxlength="300" placeholder="What should you remember about ${f}?">${esc(t.note || '')}</textarea></div>
+ <div class="td-sec"><div class="td-sh"><b>Tags</b><button type="button" class="td-ed" data-on-click="tpEdit('${t.id}')">${sv('brief', 14)} Edit</button></div><div class="td-tags">${tagChips(t) || ''}<button type="button" class="td-add" data-on-click="tpEdit('${t.id}')">+ Add tag</button></div></div>
+ <div class="td-sec"><div class="td-sh"><b>Timeline</b><select class="d7-sel" aria-label="Filter timeline" data-on-change="tdFilter(this.value)">${[
    ['all', 'All activity'],
    ['answers', 'Answers'],
    ['fu', 'Follow-ups'],
@@ -5888,7 +5888,7 @@ function vThread(id) {
          .join('')}</ol>`
      : '<p class="d-muted">Nothing here yet.</p>'
  }</div>
- <button type="button" class="td-del" onclick="delThread('${t.id}')">${sv('close', 16)} Delete my side of this Thread</button></aside></div>`
+ <button type="button" class="td-del" data-on-click="delThread('${t.id}')">${sv('close', 16)} Delete my side of this Thread</button></aside></div>`
   );
 }
 
@@ -6052,4 +6052,96 @@ function setDRange(v) {
   DRANGE = +v;
   window._keepScroll = true;
   render();
+}
+
+/* v61: named handlers for the Threads list and Thread detail (no inline JavaScript). */
+function tpKey(e, el) {
+  if (e.key === 'Enter') {
+    e.preventDefault();
+    tpAddCustom(el);
+  }
+}
+function tpPress(el) {
+  el.classList.toggle('on');
+  el.setAttribute('aria-pressed', el.classList.contains('on'));
+}
+function thFiltClear() {
+  TFT = [];
+  TFV = false;
+  closeModal();
+  TLIM = 20;
+  render();
+}
+function thFiltApply() {
+  TFT = [...document.querySelectorAll('.modal .tp.on')].map(b => b.dataset.v);
+  TFV = $('#tfv').checked;
+  closeModal();
+  TLIM = 20;
+  render();
+}
+function thRowClick(e, id) {
+  if (!e.target.closest('button,a')) go('/app/thread/' + id);
+}
+function thRowKey(e, el, id) {
+  if (e.key === 'Enter' && e.target === el) go('/app/thread/' + id);
+}
+const keepRender = () => {
+  window._keepScroll = true;
+  render();
+};
+function thTab(k) {
+  TF2 = k;
+  TLIM = 20;
+  keepRender();
+}
+function thSort(v) {
+  TSORT = v;
+  keepRender();
+}
+function thCompact() {
+  TCOMPACT = !TCOMPACT;
+  keepRender();
+}
+function thClearQ() {
+  TQ2 = '';
+  Q = '';
+  const i = document.querySelector('.topbar input');
+  if (i) i.value = '';
+  render();
+}
+function thMore() {
+  TLIM += 20;
+  keepRender();
+}
+function tdTab(k) {
+  TDT = k;
+  keepRender();
+}
+function tdCat(k) {
+  TDC = k;
+  keepRender();
+}
+function tdFilter(v) {
+  TDF = v;
+  keepRender();
+}
+function copyDraft() {
+  copy($('#draft').value, 'Draft copied');
+}
+function draftMail(a) {
+  a.href = a.href.split('&body=')[0] + '&body=' + encodeURIComponent($('#draft').value);
+}
+function resolveAsk(id, l) {
+  if (confirm('Resolve this Thread as: ' + l + '?')) resolve(id, l);
+}
+function threadVcf(id) {
+  const t = findThread(id);
+  tapVcf({
+    name: t.other.name,
+    role: t.other.role,
+    company: t.other.company,
+    email: t.other.email,
+    where: t.where
+  });
+  toast('Contact file downloaded');
 }
