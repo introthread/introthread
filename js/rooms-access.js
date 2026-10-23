@@ -45,7 +45,7 @@ const _bRP36 = bRoomPass;
 bRoomPass = function () {
   if (!(cloud() && typeof IT_SV !== 'undefined' && IT_SV && IT_SV.pay)) return _bRP36.apply(this, arguments);
   modal(
-    `<div class="bl-co"><div class="row between"><h3>Buy a Room pass</h3><button class="x" aria-label="Close" onclick="closeModal()">&times;</button></div><p class="fu-sub">One extra Room for an event or community: Room link and QR code, members and invitations, up to 1,000 people.</p><div class="bl-sum"><div class="tot"><span>Room pass, one Room</span><b>${money(199)}</b></div></div><button type="button" class="x-btn lg block" onclick="raPay(this)">Continue to secure payment</button><p class="bl-fine c">${sv('lock', 12)} Card payment on Paystack's secure page. Charged once in Kenyan shillings; your bank converts it. The pass is added as soon as the payment goes through.</p></div>`
+    `<div class="bl-co"><div class="row between"><h3>Buy a Room pass</h3><button class="x" aria-label="Close" data-on-click="closeModal()">&times;</button></div><p class="fu-sub">One extra Room for an event or community: Room link and QR code, members and invitations, up to 1,000 people.</p><div class="bl-sum"><div class="tot"><span>Room pass, one Room</span><b>${money(199)}</b></div></div><button type="button" class="x-btn lg block" data-on-click="raPay(this)">Continue to secure payment</button><p class="bl-fine c">${sv('lock', 12)} Card payment on Paystack's secure page. Charged once in Kenyan shillings; your bank converts it. The pass is added as soon as the payment goes through.</p></div>`
   );
 };
 async function raPay(b) {
@@ -107,17 +107,17 @@ function rjBody(code, d) {
  <p class="rj-n">${d.members} ${d.members === 1 ? 'person has' : 'people have'} joined${d.cap < 1000 ? ' &middot; ' + d.cap + ' places' : ''}</p>`;
   let act;
   if (!me() && d.full)
-    act = `<p class="rj-no">This Room is full.</p><p class="small muted">Already a member? <a href="/login" onclick="try{localStorage.setItem('it_join','${esc(d.code)}')}catch(e){}">Sign in</a></p>`;
+    act = `<p class="rj-no">This Room is full.</p><p class="small muted">Already a member? <a href="/login" data-on-click="rjRemember('${esc(d.code)}')">Sign in</a></p>`;
   else if (!me())
-    act = `<button type="button" class="btn primary" onclick="rjSignIn('${esc(d.code)}')">Sign in to join</button><p class="small muted" style="margin-top:12px">New to Introthread? <a href="/signup" onclick="try{localStorage.setItem('it_join','${esc(d.code)}')}catch(e){}">Get your free card</a></p>`;
+    act = `<button type="button" class="btn primary" data-on-click="rjSignIn('${esc(d.code)}')">Sign in to join</button><p class="small muted" style="margin-top:12px">New to Introthread? <a href="/signup" data-on-click="rjRemember('${esc(d.code)}')">Get your free card</a></p>`;
   else if (d.is_owner || d.status === 'member')
-    act = `<p class="rj-ok">${d.is_owner ? 'This is your Room.' : 'You are in this Room.'}</p>${d.link ? `<p><a href="${esc(d.link)}" target="_blank" rel="noopener">Join online</a></p>` : ''}<button type="button" class="btn primary" onclick="rjOpen('${d.id}')">Open Room</button>`;
+    act = `<p class="rj-ok">${d.is_owner ? 'This is your Room.' : 'You are in this Room.'}</p>${d.link ? `<p><a href="${esc(d.link)}" target="_blank" rel="noopener">Join online</a></p>` : ''}<button type="button" class="btn primary" data-on-click="rjOpen('${d.id}')">Open Room</button>`;
   else if (d.status === 'pending') act = `<p class="rj-ok">Request sent. The organiser will let you in.</p>`;
   else if (d.full) act = `<p class="rj-no">This Room is full.</p>`;
   else if (priv && !d.invited)
-    act = `${d.status === 'declined' ? '<p class="rj-no">The organiser did not accept your last request.</p>' : '<p class="muted small">This Room is invite only. Ask to join and the organiser will decide.</p>'}<button type="button" class="btn primary" onclick="rjJoin('${esc(d.code)}',this)">Request to join</button>`;
+    act = `${d.status === 'declined' ? '<p class="rj-no">The organiser did not accept your last request.</p>' : '<p class="muted small">This Room is invite only. Ask to join and the organiser will decide.</p>'}<button type="button" class="btn primary" data-on-click="rjJoin('${esc(d.code)}',this)">Request to join</button>`;
   else
-    act = `<button type="button" class="btn primary" onclick="rjJoin('${esc(d.code)}',this)">Join Room</button>`;
+    act = `<button type="button" class="btn primary" data-on-click="rjJoin('${esc(d.code)}',this)">Join Room</button>`;
   return (
     info +
     `<div class="rj-a">${act}</div><p class="small muted" style="margin-top:16px">Tap or scan the card of anyone you meet here to start a Thread.</p>`
@@ -191,14 +191,14 @@ function raBox(id) {
     `<span class="ra-w"><b>${esc(x.name || 'Member')}</b><small>${esc([x.role, x.company].filter(Boolean).join(', '))}</small></span>`;
   let h = `<div class="card pad ra-box" id="rab"><div class="row between"><h3>People in this Room</h3><span class="ra-c">${M.length}${d.cap < 1000 ? ' of ' + d.cap : ''} joined</span></div>`;
   if (own && P.length)
-    h += `<h4>Waiting for you (${P.length})</h4><ul class="ra-l">${P.map(x => `<li>${who(x)}<span class="ra-b"><button type="button" class="x-btn sm" onclick="raAct('${id}','${x.id}','member')">Let in</button><button type="button" class="t-how sm" onclick="raAct('${id}','${x.id}','declined')">Decline</button></span></li>`).join('')}</ul>`;
+    h += `<h4>Waiting for you (${P.length})</h4><ul class="ra-l">${P.map(x => `<li>${who(x)}<span class="ra-b"><button type="button" class="x-btn sm" data-on-click="raAct('${id}','${x.id}','member')">Let in</button><button type="button" class="t-how sm" data-on-click="raAct('${id}','${x.id}','declined')">Decline</button></span></li>`).join('')}</ul>`;
   h += M.length
-    ? `<ul class="ra-l">${M.map(x => `<li>${x.handle ? `<a href="/${esc(x.handle)}" class="ra-wl">${who(x)}</a>` : who(x)}${own ? `<span class="ra-b"><button type="button" class="t-how sm" onclick="raAct('${id}','${x.id}','remove')" aria-label="Remove ${esc(x.name || 'member')}">Remove</button></span>` : ''}</li>`).join('')}</ul>`
+    ? `<ul class="ra-l">${M.map(x => `<li>${x.handle ? `<a href="/${esc(x.handle)}" class="ra-wl">${who(x)}</a>` : who(x)}${own ? `<span class="ra-b"><button type="button" class="t-how sm" data-on-click="raAct('${id}','${x.id}','remove')" aria-label="Remove ${esc(x.name || 'member')}">Remove</button></span>` : ''}</li>`).join('')}</ul>`
     : `<p class="muted small">No one has joined yet. Share the Room link or QR code.</p>`;
   if (own && m.priv === 'private')
-    h += `<h4>Invitations</h4><p class="muted small">Invited people get in straight away when they open the Room link and sign in with this email. Anyone else can ask, and you decide.</p><label class="x-f"><span>Email addresses</span><textarea id="rai" rows="2" maxlength="4000" placeholder="name@company.com, another@company.com"></textarea></label><button type="button" class="x-btn sm" onclick="raInvite('${id}')">Add invitations</button>${d.invites.length ? `<ul class="ra-l ra-inv">${d.invites.map(e => `<li><span>${esc(e)}</span><button type="button" class="t-how sm" onclick="raUninvite('${id}','${esc(e)}')" aria-label="Remove invitation for ${esc(e)}">Remove</button></li>`).join('')}</ul>` : ''}`;
+    h += `<h4>Invitations</h4><p class="muted small">Invited people get in straight away when they open the Room link and sign in with this email. Anyone else can ask, and you decide.</p><label class="x-f"><span>Email addresses</span><textarea id="rai" rows="2" maxlength="4000" placeholder="name@company.com, another@company.com"></textarea></label><button type="button" class="x-btn sm" data-on-click="raInvite('${id}')">Add invitations</button>${d.invites.length ? `<ul class="ra-l ra-inv">${d.invites.map(e => `<li><span>${esc(e)}</span><button type="button" class="t-how sm" data-on-click="raUninvite('${id}','${esc(e)}')" aria-label="Remove invitation for ${esc(e)}">Remove</button></li>`).join('')}</ul>` : ''}`;
   if (!own)
-    h += `<button type="button" class="t-how" style="margin-top:12px" onclick="raLeave('${id}')">Leave this Room</button>`;
+    h += `<button type="button" class="t-how" style="margin-top:12px" data-on-click="raLeave('${id}')">Leave this Room</button>`;
   return h + `</div>`;
 }
 async function raLoad(id) {
@@ -343,7 +343,7 @@ auPanel = function () {
   if (!id || !admOk(['owner', 'admin', 'finance'])) return h;
   return (
     h +
-    `<section class="au-sec"><h3>${sv('cal', 16)} Room passes</h3><p class="ix-mu">Each pass lets this person create one extra Room. Use this when they paid by bank transfer; card payments add passes automatically.</p><button type="button" class="ix-btn" onclick="auGrantPass('${id}')">Add a Room pass</button></section>`
+    `<section class="au-sec"><h3>${sv('cal', 16)} Room passes</h3><p class="ix-mu">Each pass lets this person create one extra Room. Use this when they paid by bank transfer; card payments add passes automatically.</p><button type="button" class="ix-btn" data-on-click="auGrantPass('${id}')">Add a Room pass</button></section>`
   );
 };
 function auGrantPass(id) {
@@ -359,4 +359,11 @@ function auGrantPass(id) {
       toast('Room pass added. Unused passes: ' + data);
     }
   });
+}
+
+/* v62: named handler (no inline JavaScript): remember the room code across sign-in. */
+function rjRemember(code) {
+  try {
+    localStorage.setItem('it_join', code);
+  } catch (e) {}
 }
