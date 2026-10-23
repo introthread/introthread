@@ -28,6 +28,8 @@ The current state of the build, working rules, what has been done and what comes
 
 ## Development workflow
 
+- Setup: `npm install` (Node 20.19 or later). This installs the pinned Prettier, jsdom and acorn from `package.json`.
+- `npm test` runs the admin tests (each should end in `errs []`); `npm run test:photo-crop` runs the Playwright check; `npm run format` formats `/js` and `/css`; `npm run build` rebuilds and pre-renders the pages.
 - Edit `index.html`, then run `python3 scripts/build_pages.py` to regenerate the 9 static pages, and commit them together.
 
 - Commits are made directly to `main`.

@@ -1,0 +1,24 @@
+{
+  "name": "introthread",
+  "version": "0.67.0",
+  "private": true,
+  "description": "Introthread: professional networking and relationship intelligence.",
+  "license": "UNLICENSED",
+  "engines": {
+    "node": ">=20.19"
+  },
+  "scripts": {
+    "build": "python3 scripts/build_pages.py && python3 scripts/prerender.py",
+    "format": "prettier --write \"js/*.js\" \"css/*.css\"",
+    "format:check": "prettier --check \"js/*.js\" \"css/*.css\"",
+    "test": "npm run test:admin",
+    "test:admin": "for t in tests/admin/*.js; do echo \"$t\"; timeout 13 node \"$t\" | grep -v 'Not implemented' | tail -1; done",
+    "test:photo-crop": "python3 tests/app/photo_crop.py",
+    "check:deps": "python3 scripts/check_deps.py"
+  },
+  "devDependencies": {
+    "acorn": "8.19.0",
+    "jsdom": "29.1.1",
+    "prettier": "3.9.10"
+  }
+}

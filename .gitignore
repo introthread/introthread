@@ -1,0 +1,26 @@
+# Dependencies
+node_modules/
+
+# Secrets and local environment (keep keys in Vercel environment variables)
+.env
+.env.*
+!.env.example
+
+# Vercel
+.vercel/
+
+# Build and test leftovers
+_shot.html
+*.log
+npm-debug.log*
+__pycache__/
+*.pyc
+test-results/
+playwright-report/
+
+# Editors and operating systems
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
+*.swp
