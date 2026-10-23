@@ -2556,9 +2556,6 @@ const xav = (n, s = 44) =>
 /* ---------- Today ---------- */
 /* vToday: earlier version removed in the v54 merge (the later declaration below always won) */
 /* ---------- Threads ---------- */
-let TF2 = 'all',
-  TQ2 = '',
-  TS2 = 'recent';
 /* vThreads: earlier version removed in the v54 merge (the later declaration below always won) */
 /* ---------- Rooms ---------- */
 let RF = 'all',
@@ -2846,17 +2843,6 @@ render = function () {
 /* ===== v7 Today dashboard (design: Relationship Today) ===== */
 
 /* ===== v8 Threads screen (design: Relationship Thread) ===== */
-let TSORT = 'priority',
-  TLIM = 20,
-  TCOMPACT = false,
-  TFT = [],
-  TFV = false;
-const TH_SORTS = [
-  ['priority', 'Priority'],
-  ['recent', 'Most recent'],
-  ['oldest', 'Oldest'],
-  ['next', 'Next follow-up']
-];
 
 /* ===== v9 Rooms: events and communities ===== */
 let RF9 = 'all',
@@ -3987,9 +3973,6 @@ vPublic = function (hd) {
 };
 
 /* ===== v15 Thread detail (design: Thread Detail Dashboard) ===== */
-let TDT = 'conv',
-  TDC = 'note',
-  TDF = 'all';
 
 /* ===== v16 Account menu: one professional dropdown for the top bar and the sidebar footer ===== */
 function amClose() {

@@ -1,7 +1,28 @@
 // Introthread - Threads screens (v86): the Threads list (vThreads, th*), the Thread page (vThread, td*), topics (tp*)
 // and threadVcf. Moved out of js/app-core.js unchanged (code cleanup step 4). Loads straight after today.js; shares
-// app-core globals (threadState, threadLink, TF2, TQ2, TSORT, TH_SORTS, TDT, topicsField, ...). Later files wrap some
+// app-core globals (threadState, threadLink, topicsField, ...); its own state (TF2, TQ2, TSORT, TH_SORTS, TDT, ...) is
+// declared at the top of this file since v89. Later files wrap some
 // of these (vThreads in billing.js, data-export.js, contacts-import.js, pro-gates.js and admin-audit.js).
+
+/* v89: the Threads screens' own state and sort options, moved unchanged from js/app-core.js. Nothing in the files
+   loaded before this one uses them while loading; app-core.js and app-navigation.js only use them at run time. */
+let TF2 = 'all',
+  TQ2 = '',
+  TS2 = 'recent';
+let TSORT = 'priority',
+  TLIM = 20,
+  TCOMPACT = false,
+  TFT = [],
+  TFV = false;
+const TH_SORTS = [
+  ['priority', 'Priority'],
+  ['recent', 'Most recent'],
+  ['oldest', 'Oldest'],
+  ['next', 'Next follow-up']
+];
+let TDT = 'conv',
+  TDC = 'note',
+  TDF = 'all';
 
 function tpChips(sel) {
   const all = [...new Set([...TOPICS, ...sel])];
