@@ -545,7 +545,6 @@ function showNudges() {
 
 /* vToday: earlier version removed in the v54 merge (the later declaration below always won) */
 
-let TF = 'all';
 /* vThreads: earlier version removed in the v54 merge (the later declaration below always won) */
 
 function draftFor(t) {
@@ -2134,9 +2133,6 @@ const xav = (n, s = 44) =>
 /* ---------- Threads ---------- */
 /* vThreads: earlier version removed in the v54 merge (the later declaration below always won) */
 /* ---------- Rooms ---------- */
-let RF = 'all',
-  RQ = '',
-  RS = 'recent';
 /* vRooms: earlier version removed in the v54 merge (the later declaration below always won) */
 
 /* ===== Topic tags on Threads ===== */
