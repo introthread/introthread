@@ -98,6 +98,6 @@ vCard = function () {
   if (b < 0) return h;
   const u = me(),
     v = clOf(u);
-  const blk = `<div class="cl-row"><div class="cl-prev">${v ? `<img src="${v}" alt="Your company logo">` : '<span>No logo</span>'}</div><div><b>Company logo</b><small>Shown on your card and public profile. A PNG with a transparent background works best (JPG, PNG or WebP, max 5MB).</small><div class="cd-pb"><label class="t-how sm">${sv('photo', 16)} ${v ? 'Change logo' : 'Upload logo'}<input type="file" hidden accept="image/png,image/jpeg,image/webp" onchange="clPick(this)"></label>${v ? `<button type="button" class="cd-rm" onclick="clRemove()">${sv('close', 15)} Remove</button>` : ''}</div></div></div>`;
+  const blk = `<div class="cl-row"><div class="cl-prev">${v ? `<img src="${v}" alt="Your company logo">` : '<span>No logo</span>'}</div><div><b>Company logo</b><small>Shown on your card and public profile. A PNG with a transparent background works best (JPG, PNG or WebP, max 5MB).</small><div class="cd-pb"><label class="t-how sm">${sv('photo', 16)} ${v ? 'Change logo' : 'Upload logo'}<input type="file" hidden accept="image/png,image/jpeg,image/webp" data-on-change="clPick(this)"></label>${v ? `<button type="button" class="cd-rm" data-on-click="clRemove()">${sv('close', 15)} Remove</button>` : ''}</div></div></div>`;
   return h.slice(0, b + end.length) + blk + h.slice(b + end.length);
 };
