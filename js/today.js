@@ -216,3 +216,10 @@ function vToday() {
  </div>`
   );
 }
+
+/* v96: named handlers for this screen, moved unchanged from js/app-core.js (code cleanup). */
+function setDRange(v) {
+  DRANGE = +v;
+  window._keepScroll = true;
+  render();
+}

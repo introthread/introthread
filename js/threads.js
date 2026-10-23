@@ -553,3 +553,18 @@ function threadVcf(id) {
   });
   toast('Contact file downloaded');
 }
+
+/* v96: named handlers for this screen, moved unchanged from js/app-core.js (code cleanup). */
+function copyThreadLink(id, msg, close) {
+  copy(threadLink(findThread(id)), msg);
+  if (close) closeModal();
+}
+function copyDraft() {
+  copy($('#draft').value, 'Draft copied');
+}
+function draftMail(a) {
+  a.href = a.href.split('&body=')[0] + '&body=' + encodeURIComponent($('#draft').value);
+}
+function resolveAsk(id, l) {
+  if (confirm('Resolve this Thread as: ' + l + '?')) resolve(id, l);
+}

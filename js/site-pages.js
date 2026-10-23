@@ -602,3 +602,25 @@ function legalDoc(eye, title, updated, sections) {
 function vTerms() {
   return legalDoc('Legal', 'Terms of <em>Service.</em>', '20 October 2026', TERMS);
 }
+
+/* v96: named handlers for this screen, moved unchanged from js/app-core.js (code cleanup). */
+function scrollToId(e, id) {
+  e.preventDefault();
+  const el = document.getElementById(id);
+  if (el) el.scrollIntoView({ behavior: 'smooth' });
+}
+function setBilling(v) {
+  billing = v;
+  window._keepScroll = true;
+  render();
+}
+function contactSend(e) {
+  e.preventDefault();
+  if (!$('#ce').value.includes('@')) return toast('Add a valid email');
+  location.href =
+    'mailto:hello@introthread.com?subject=' +
+    encodeURIComponent('Introthread enquiry from ' + $('#cn').value) +
+    '&body=' +
+    encodeURIComponent($('#cm').value + '\n\n' + $('#cn').value + ' <' + $('#ce').value + '>');
+  toast('Opening your email app to send this.');
+}

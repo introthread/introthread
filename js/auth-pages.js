@@ -260,3 +260,31 @@ function authSide(s) {
   <div class="x-sc-m"><small>What's next?</small><span>${sv('cal', 13)} Meet again ${sv('check', 13, 'currentColor', 2.6)}</span></div>
  </div></aside>`;
 }
+
+/* v96: named handlers for this screen, moved unchanged from js/app-core.js (code cleanup). */
+function suSample() {
+  seed(me());
+  save();
+  closeModal();
+  render();
+  toast('Sample Threads added');
+}
+function pwToggle(id) {
+  const i = $('#' + id);
+  if (i) i.type = i.type === 'password' ? 'text' : 'password';
+}
+function suStep(n, live) {
+  if (live) liveP();
+  SU.step = n;
+  render();
+}
+function suCat(k) {
+  SU.cat = k;
+  window._keepScroll = true;
+  render();
+}
+function suPhotoClear() {
+  SU.photo = null;
+  $('#xup').innerHTML = upBox();
+  liveP();
+}

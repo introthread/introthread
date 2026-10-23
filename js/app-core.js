@@ -2682,82 +2682,18 @@ shell = function (on, inner) {
 };
 
 /* v61: named handlers for the website pages, signup and login (no inline JavaScript). */
-function suSample() {
-  seed(me());
-  save();
-  closeModal();
-  render();
-  toast('Sample Threads added');
-}
-function pwToggle(id) {
-  const i = $('#' + id);
-  if (i) i.type = i.type === 'password' ? 'text' : 'password';
-}
-function suStep(n, live) {
-  if (live) liveP();
-  SU.step = n;
-  render();
-}
-function suCat(k) {
-  SU.cat = k;
-  window._keepScroll = true;
-  render();
-}
-function scrollToId(e, id) {
-  e.preventDefault();
-  const el = document.getElementById(id);
-  if (el) el.scrollIntoView({ behavior: 'smooth' });
-}
-function setBilling(v) {
-  billing = v;
-  window._keepScroll = true;
-  render();
-}
-function contactSend(e) {
-  e.preventDefault();
-  if (!$('#ce').value.includes('@')) return toast('Add a valid email');
-  location.href =
-    'mailto:hello@introthread.com?subject=' +
-    encodeURIComponent('Introthread enquiry from ' + $('#cn').value) +
-    '&body=' +
-    encodeURIComponent($('#cm').value + '\n\n' + $('#cn').value + ' <' + $('#ce').value + '>');
-  toast('Opening your email app to send this.');
-}
 
 /* v61: named handlers for the Today screen (no inline JavaScript). */
-function copyThreadLink(id, msg, close) {
-  copy(threadLink(findThread(id)), msg);
-  if (close) closeModal();
-}
-function setDRange(v) {
-  DRANGE = +v;
-  window._keepScroll = true;
-  render();
-}
 
 /* v61: named handlers for the Threads list and Thread detail (no inline JavaScript). */
 const keepRender = () => {
   window._keepScroll = true;
   render();
 };
-function copyDraft() {
-  copy($('#draft').value, 'Draft copied');
-}
-function draftMail(a) {
-  a.href = a.href.split('&body=')[0] + '&body=' + encodeURIComponent($('#draft').value);
-}
-function resolveAsk(id, l) {
-  if (confirm('Resolve this Thread as: ' + l + '?')) resolve(id, l);
-}
 
 /* v61: named handlers for the Tap screen (no inline JavaScript). */
 
 /* v61: named handlers for My card and Profile (no inline JavaScript). */
-function suPhotoClear() {
-  SU.photo = null;
-  $('#xup').innerHTML = upBox();
-  liveP();
-}
 
 /* v61: named handlers for the Rooms screens (no inline JavaScript). */
 
