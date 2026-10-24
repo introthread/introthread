@@ -1,6 +1,6 @@
 # Introthread - handover for the next AI agent
 
-Last updated: 24 Oct 2026, 10:30 pm Nairobi (after v119 and the Google verification file). Read the 24 Oct status summary below first, then ARCHITECTURE-ESSENTIALS.md, ARCHITECTURE.md and AGENTS.md. Update this file and docs/CHANGELOG.md with every change.
+Last updated: 24 Oct 2026, 10:40 pm Nairobi (after v119, the Google verification file and Agnes's launch setup). Read the 24 Oct status summary below first, then ARCHITECTURE-ESSENTIALS.md, ARCHITECTURE.md and AGENTS.md. Update this file and docs/CHANGELOG.md with every change.
 
 ## STATUS SUMMARY: 24 Oct 2026, after v119 (read this first)
 
@@ -23,13 +23,10 @@ Agnes can ask the assistant to "run the appearance check". Signed in as test acc
 - **Settings profile editor style picker (`pfTheme` in `js/settings.js`) still saves on click.** v118/v119 changed My card and `/app/profile` only. Change it the same way if Agnes wants all three to match.
 - **Logos uploaded before v117** get the white backing. A white or very light logo uploaded before then must be uploaded again to get the dark backing.
 - **Billing security fix:** the Billing screen should read invoices and card details from the server rather than the browser. Not started.
-- **Launch items waiting on Agnes** (she owns GitHub, Vercel, Supabase, Paystack and the domain; see the "Introthread to-do, due Sat 24 Oct" document):
-  1. Pay the domain host for introthread.com.
-  2. Resend: add and verify the domain, add `RESEND_API_KEY` in Vercel, and turn on custom SMTP in Supabase (`smtp.resend.com`, port 465, sender `noreply@introthread.com`). Then ask the assistant to test the sign-in emails.
-  3. Google sign-in: publish the OAuth consent screen, create the web client (origin `https://www.introthread.com`, redirect `https://zpcsmsqnesqftodnondn.supabase.co/auth/v1/callback`), turn on the Google provider in Supabase and set the Site URL. Then ask the assistant to test it.
-  4. Switch Paystack from test to live keys, and confirm the Pro plan amounts in KES.
-  5. Click Verify in Google Search Console now that the file is live.
-  6. Confirm that migrations 019 to 021 have been run in Supabase, and send the company's legal details for invoices.
+- **Launch setup done by Agnes (confirmed 24 Oct, 10:30 pm):** domain host paid, Resend set up for sign-in emails, Google sign-in set up, Google Search Console verified and approved, and all Supabase migrations run (including 019 to 021). Sign-in emails through Resend and Google sign-in have not yet been tested end to end by the assistant on the live site.
+- **Launch items still waiting on Agnes** (she owns Paystack and the company records):
+  1. Switch Paystack from test to live keys in Vercel, and confirm the Pro plan amounts in KES (`PAYSTACK_PLAN_MONTH` / `PAYSTACK_PLAN_YEAR`). Then ask the assistant to check the Pro checkout charges KES 1,560 and stop before paying.
+  2. Send the company's legal details (registered name, address, registration and tax numbers) for invoices and the site footer.
 - **Product decisions already made (23 Oct):** global USD pricing (not Kenya-first), no physical NFC card, Free plan stays at 5 new Threads a month, keep the words "Thread" and "Rooms", and one free small Rooms event a month for up to 20 people (migration `021_free_small_rooms.sql`). The rest of the JamboLink comparison (plain words in the app, WhatsApp-first sharing, fewer tabs, Teams) is suggestions, not decisions.
 
 ### How to work on this repo (unchanged rules)

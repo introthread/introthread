@@ -3,6 +3,7 @@
 Everything built so far, newest first. Full technical detail for each item is in `HANDOVER.md`. How Rooms, events, communities and the Room pass work: `docs/ROOMS.md`.
 
 ## 24 Oct 2026
+- **Handover: launch setup status.** Agnes has paid the domain host, set up Resend and Google sign-in, verified the site in Google Search Console and run all migrations. Only live Paystack keys and the company's legal details remain.
 - **Handover updated.** HANDOVER.md has a new 24 Oct status summary at the top: what was done from v83 to v119, the Google verification file, the appearance check, and everything still open for the next agent.
 - **Google Search Console verification file added** (`google0693ac56298b9d88.html` in the site root). Do not remove it.
 - **v119: Public profile style picker previews until you save.** Clicking a style on the public profile editor (`/app/profile`, Appearance) used to save it straight away through `setTheme`. It now only changes the preview and the selected style, and shows a bar under the styles saying the style is not saved yet, with Cancel and Save changes. Save changes saves the style; Cancel or leaving the screen keeps the saved one. The profile's other fields still save automatically as before. Also fixes a gap in v118: My card now follows the saved style unless you are previewing one there, so a style saved on the public profile or in Settings can no longer be overwritten by My card's Save changes.
