@@ -1,11 +1,11 @@
 // Introthread - Threads screens (v86): the Threads list (vThreads, th*), the Thread page (vThread, td*), topics (tp*)
-// and threadVcf. Moved out of js/app-core.js unchanged (code cleanup step 4). Loads straight after today.js; shares
-// app-core globals (threadState, threadLink, topicsField, ...); its own state (TF2, TQ2, TSORT, TH_SORTS, TDT, ...) is
+// and threadVcf. Moved out of js/core.js unchanged (code cleanup step 4). Loads straight after today.js; shares
+// core.js globals (threadState, threadLink, topicsField, ...); its own state (TF2, TQ2, TSORT, TH_SORTS, TDT, ...) is
 // declared at the top of this file since v89. Later files wrap some
 // of these (vThreads in billing.js, data-export.js, contacts-import.js, pro-gates.js and admin-audit.js).
 
-/* v89: the Threads screens' own state and sort options, moved unchanged from js/app-core.js. Nothing in the files
-   loaded before this one uses them while loading; app-core.js and app-navigation.js only use them at run time. */
+/* v89: the Threads screens' own state and sort options, moved unchanged from js/core.js. Nothing in the files
+   loaded before this one uses them while loading; core.js and app-navigation.js only use them at run time. */
 let TF2 = 'all',
   TQ2 = '',
   TS2 = 'recent';
@@ -554,7 +554,7 @@ function threadVcf(id) {
   toast('Contact file downloaded');
 }
 
-/* v96: named handlers for this screen, moved unchanged from js/app-core.js (code cleanup). */
+/* v96: named handlers for this screen, moved unchanged from js/core.js (code cleanup). */
 function copyThreadLink(id, msg, close) {
   copy(threadLink(findThread(id)), msg);
   if (close) closeModal();

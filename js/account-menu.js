@@ -1,9 +1,9 @@
 // Introthread - Account menu (v102): the account dropdown for the top bar and the sidebar footer (amClose, amOut,
 // amKey, amGo, acctMenu), its resize/itroute/popstate listeners, the shell wrapper that adds the menu buttons, and the
-// shell search and help handlers (setQ, searchKey, amHelp). Moved out of js/app-core.js unchanged and in their original
-// order (cleanup plan step 7). Loads straight after app-core.js: app-routing.js, billing.js and app-navigation.js wrap
+// shell search and help handlers (setQ, searchKey, amHelp). Moved out of js/core.js unchanged and in their original
+// order (cleanup plan step 7). Loads straight after core.js: app-routing.js, billing.js and app-navigation.js wrap
 // acctMenu, amGo, amClose and shell while loading, so this file must load before them, and this shell wrapper must stay
-// after the base shell in app-core.js and before the app-routing.js, app-navigation.js and event-mode.js wrappers.
+// after the base shell in core.js and before the app-routing.js, app-navigation.js and event-mode.js wrappers.
 
 /* ===== v16 Account menu: one professional dropdown for the top bar and the sidebar footer ===== */
 function amClose() {

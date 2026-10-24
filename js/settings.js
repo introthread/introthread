@@ -1,11 +1,11 @@
 // Introthread - Settings and profile screens (v91): the profile editor (pf*), the public profile page editor
-// (vProfile, pp*) and Settings (vSettings, st*, st12*). Moved out of js/app-core.js unchanged and in their original
-// order (code cleanup step 7). Nothing at the top level of app-core.js or earlier files uses them while loading.
-// Loads straight after rooms.js; shares app-core globals; its own state is declared at the top of this file since v93. Later files
+// (vProfile, pp*) and Settings (vSettings, st*, st12*). Moved out of js/core.js unchanged and in their original
+// order (code cleanup step 7). Nothing at the top level of core.js or earlier files uses them while loading.
+// Loads straight after rooms.js; shares core.js globals; its own state is declared at the top of this file since v93. Later files
 // wrap some of these.
 
 /* v93: the Settings and profile screens' own state (PF, PFT, STAB, CC, stCard, stTog, PTAB, PP, PPT, ST12, ST_TABS),
-   moved unchanged from js/app-core.js. Nothing in the files loaded before this one uses them while loading;
+   moved unchanged from js/core.js. Nothing in the files loaded before this one uses them while loading;
    tap-card.js (cdSave wrapper), app-navigation.js, billing.js and the admin files use them only at run time. */
 let PF = null,
   PFT = 'qr';

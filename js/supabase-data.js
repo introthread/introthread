@@ -1,8 +1,8 @@
 // Introthread - Supabase data layer (v104): the site config (CFG), the Supabase client (SB), the demo/cloud MODE,
-// the row mappers (mapProfile, mapThread, mapRoom), loadCloud, addEvent and upd. Moved out of js/app-core.js unchanged
-// and in their original order (cleanup plan step 8a). Loads straight after app-core.js, before every file that uses
+// the row mappers (mapProfile, mapThread, mapRoom), loadCloud, addEvent and upd. Moved out of js/core.js unchanged
+// and in their original order (cleanup plan step 8a). Loads straight after core.js, before every file that uses
 // SB, MODE or CFG while loading (google-calendar.js, app-routing.js, payments.js, the admin files and others). Inside
-// app-core.js these are used only inside functions and in boot, which waits until every deferred file has run.
+// core.js these are used only inside functions and in boot, which waits until every deferred file has run.
 // Tests swap in a fake Supabase by matching the formatted const SB = line in this file.
 
 const CFG = window.INTROTHREAD_CONFIG || {};

@@ -1,10 +1,10 @@
-// Introthread - Today screen (v85): dAction, dMenu, dIcs, fuOpen, fuSave, vToday. Moved out of js/app-core.js
+// Introthread - Today screen (v85): dAction, dMenu, dIcs, fuOpen, fuSave, vToday. Moved out of js/core.js
 // unchanged (code cleanup step 3). Since v87 its helpers (dChip, dWarm, dRing, dSecHead, dPromo, DRANGE, D_OUT) live
-// at the top of this file too. Loads straight after auth-pages.js and shares app-core globals. Later files wrap some
+// at the top of this file too. Loads straight after auth-pages.js and shares core.js globals. Later files wrap some
 // of these (vToday in contacts-import.js, dIcs in pro-gates.js). dMenu, dIcs, fuOpen, dChip and dSecHead are also
 // used from the Threads screens, and DRANGE from billing.js, all at run time only.
 
-/* v87: the Today screen helpers, moved unchanged from js/app-core.js. */
+/* v87: the Today screen helpers, moved unchanged from js/core.js. */
 const dChip = t => {
   const s = threadState(t);
   const m = {
@@ -217,7 +217,7 @@ function vToday() {
   );
 }
 
-/* v96: named handlers for this screen, moved unchanged from js/app-core.js (code cleanup). */
+/* v96: named handlers for this screen, moved unchanged from js/core.js (code cleanup). */
 function setDRange(v) {
   DRANGE = +v;
   window._keepScroll = true;

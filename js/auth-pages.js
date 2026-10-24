@@ -1,6 +1,6 @@
 // Introthread - Sign-up and login screens (v84): authSideBase, chkH, liveP, setPv, pickTheme, doSu3, vSignup,
-// prevHTML, forgotPw, vLogin, authSide. Moved out of js/app-core.js unchanged (code cleanup step 2). Loads straight
-// after site-pages.js; shares app-core globals. Later files wrap some of these (vSignup and vLogin in app-routing.js
+// prevHTML, forgotPw, vLogin, authSide. Moved out of js/core.js unchanged (code cleanup step 2). Loads straight
+// after site-pages.js; shares core.js globals. Later files wrap some of these (vSignup and vLogin in app-routing.js
 // and capture.js; liveP is called from capture.js and admin-audit.js).
 
 function authSideBase(s) {
@@ -261,7 +261,7 @@ function authSide(s) {
  </div></aside>`;
 }
 
-/* v96: named handlers for this screen, moved unchanged from js/app-core.js (code cleanup). */
+/* v96: named handlers for this screen, moved unchanged from js/core.js (code cleanup). */
 function suSample() {
   seed(me());
   save();

@@ -1,8 +1,8 @@
 // Introthread - Public card and guest pages (v99, vPublic merged in v113): the public card page (vPublic, built from
 // pcBasic, pcFind and pcCard here plus one step each in billing.js, event-mode.js, capture.js, admin-core.js,
 // late-fixes.js and company-logo.js), vcard, pcVcf, the guest Thread pages (guestThread, vGuest, guestConfirm,
-// guestAnswer, each with its later version) and their state (PUB, GUEST). Loads straight after app-core.js. render in
-// app-core.js calls vPublic and vGuest only at run time; the vPublic steps in later files are called only at run time.
+// guestAnswer, each with its later version) and their state (PUB, GUEST). Loads straight after core.js. render in
+// core.js calls vPublic and vGuest only at run time; the vPublic steps in later files are called only at run time.
 
 /* pcBasic: the original card page, now used for unknown handles. Was the first version of vPublic. */
 function pcBasic(h) {

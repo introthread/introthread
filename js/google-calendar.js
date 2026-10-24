@@ -1,8 +1,8 @@
 // Introthread - Google sign-in and Calendar (v100): GSCOPE, the calendar version of oauth (asks for the read-only
 // calendar scope when connecting the calendar), gTokSave, gTok, GCAL, GCAL_BUSY, gcalLoad, gcalPanel and the Supabase
-// listener that saves the Google token after sign-in. Moved out of js/app-core.js unchanged and in their original order
-// (cleanup plan step 5). Loads straight after app-core.js, so this oauth still replaces the earlier sign-in versions in
-// app-core.js, and its token listener is still added before the ones in app-routing.js and admin-audit.js and before
+// listener that saves the Google token after sign-in. Moved out of js/core.js unchanged and in their original order
+// (cleanup plan step 5). Loads straight after core.js, so this oauth still replaces the earlier sign-in versions in
+// core.js, and its token listener is still added before the ones in app-routing.js and admin-audit.js and before
 // boot runs. today.js, settings.js and admin-audit.js use these only at run time; admin-audit.js wraps gcalPanel later.
 
 /* ===== Google sign-in + Calendar ===== */

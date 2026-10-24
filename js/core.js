@@ -1,8 +1,9 @@
 /*
- * app-core.js - the original Introthread app (v1-v16): data store, router,
+ * core.js - the original Introthread app (v1-v16): data store, router,
  * website pages and the main app screens (Today, Threads, Tap, Card, Rooms,
  * Settings). Every later feature file in /js builds on the functions here,
- * so this file must load first. Moved out of index.html in v56.
+ * so this file must load first. Moved out of index.html in v56; named
+ * app-core.js until v115.
  */
 /* Introthread prototype — local data store, router, views */
 const $ = s => document.querySelector(s);

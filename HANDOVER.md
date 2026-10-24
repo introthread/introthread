@@ -17,7 +17,7 @@ The page footer reads (since v69): "UK prices shown in GBP: Pro £9/month, Rooms
 
 **Where each price lives (change all of them together)**
 - **`js/billing.js` `PLANS`:** names, subtitles, prices and feature lists. The billing screen and the pricing page read from here.
-- **`js/app-core.js` `vPricing()`:** the pricing page layout. Rooms always shows $199. There is no yearly Room discount; the old $166 yearly Room price was removed in v65.
+- **`js/core.js` `vPricing()`:** the pricing page layout. Rooms always shows $199. There is no yearly Room discount; the old $166 yearly Room price was removed in v65.
 - **`js/contacts-import.js` `GBP` map:** the UK display prices. 12→9, 199→149, 120→90 (yearly Pro, pending confirmation, see below).
 - **`js/admin-staff.js` `planApply()`:** overrides names, subtitles, USD/GBP prices and Thread limits from the Supabase `plans` table, which staff edit in Admin, Plans and pricing.
 - **`supabase/migrations/019_pricing.sql`:** sets Free to $0 with 5 Threads a month, and Pro to $12 / £9 a month, $120 / £90 a year, with the subtitles above. **Agnes must run it.** Until she does, the live table still has Pro at £10 a month and £96 a year.
@@ -105,7 +105,7 @@ The page footer reads (since v69): "UK prices shown in GBP: Pro £9/month, Rooms
 - `index.html` (website home, with pre-rendered text) and `app-shell.html` (an empty root, served by the `vercel.json` catch-all for /app, /admin, cards and rooms). Both are generated: never edit them by hand.
 - `js/` holds all app code, 34 files loaded with `defer` in a fixed order:
   - `actions.js` loads first.
-  - `app-core.js` (the original app, v1-v16) loads second.
+  - `core.js` (the original app, v1-v16) loads second.
   - Feature files, admin screens, `payments.js`, then `demo-mode.js` last.
 - `css/` holds the styles: `base`, `app`, `admin`, `features`, in that order.
 - `scripts/build_pages.py`:
@@ -137,7 +137,7 @@ The page footer reads (since v69): "UK prices shown in GBP: Pro £9/month, Rooms
 - **Tool:** `node scripts/convert_handlers.js js/<file>.js` lists what it can convert and what it cannot. Add `--apply` to rename the simple ones, then hand-write the rest. In the browser, `ACT.check(document)` lists any `data-on-*` that would fail.
 - **Done (one commit each):**
   - v59a-v59j: Dashboard plus `actions.js`, then Users, Moderation, Rooms, Revenue, Plans, Settings, Privacy, Staff, Audit.
-  - v61a-v61g: `app-core.js` screen by screen: website pages, Today, Threads, Tap, Card/Profile, Rooms, Settings plus app shell and account menu. `app-core.js` is now at 0.
+  - v61a-v61g: `core.js` screen by screen: website pages, Today, Threads, Tap, Card/Profile, Rooms, Settings plus app shell and account menu. `core.js` is now at 0.
   - v61h: `admin-core.js` is now at 0.
   - v61i: `billing.js` is now at 0. The card form keeps its action in `data-act` and runs it with `ACT.run`.
   - `convert_handlers.js --only=fnA,fnB` converts inside the named top-level functions only.
@@ -230,7 +230,7 @@ The page footer reads (since v69): "UK prices shown in GBP: Pro £9/month, Rooms
 
 **Code layout (v56):**
 - `index.html` is now about 6 KB: page structure and `<link>`/`<script>` tags only.
-- The original app (v1-v16, no duplicate functions left) is in `js/app-core.js` and must load first.
+- The original app (v1-v16, no duplicate functions left) is in `js/core.js` and must load first.
 - Styles are in `css/` (base, app, admin, features).
 - Features are in `js/` (32 files, in load order).
 - The sandbox browser tests and `tests/admin` serve or inline both `/js` and `/css`.

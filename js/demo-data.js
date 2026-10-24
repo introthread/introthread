@@ -1,7 +1,7 @@
 // Introthread - Demo data (v109): seed, which fills the "Explore the live demo" account with sample people, Threads
-// and Rooms. Moved out of js/app-core.js unchanged (cleanup plan step 9). Nothing uses it while the page loads: seed is
-// called only when the demo starts (demoLogin in app-core.js) and from the signup sample button (suSample in
-// auth-pages.js). Loads straight after app-core.js so seed is available as early as before. demo-mode.js (loaded last)
+// and Rooms. Moved out of js/core.js unchanged (cleanup plan step 9). Nothing uses it while the page loads: seed is
+// called only when the demo starts (demoLogin in core.js) and from the signup sample button (suSample in
+// auth-pages.js). Loads straight after core.js so seed is available as early as before. demo-mode.js (loaded last)
 // is the separate file that keeps the demo account safe. demoStage, the old unused phone-mockup stage, was removed in v111.
 
 function seed(u) {

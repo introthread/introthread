@@ -1,10 +1,10 @@
 // Introthread - Tap and Card screens (v88): the Tap screen (vTap, tap*) and the My card editor (vCard, cd*).
-// Moved out of js/app-core.js unchanged (code cleanup step 5). Loads straight after threads.js and shares app-core
+// Moved out of js/core.js unchanged (code cleanup step 5). Loads straight after threads.js and shares core.js
 // globals; its own state (TAPM, CTAB, SHT, CD, cdHref) is declared at the top of this file since v92. The v11 cdSave wrapper moved with cdSave and still runs right after it.
 // Later files wrap some of these (vTap, tapMode, tapNFC, tapInsights, cdCard, vCard).
 
-/* v92: the Tap and Card screens' own state (TAPM, CTAB, SHT, CD) and cdHref, moved unchanged from js/app-core.js.
-   Nothing in the files loaded before this one uses them while loading; app-core.js (newThread, saveCard, vPublic),
+/* v92: the Tap and Card screens' own state (TAPM, CTAB, SHT, CD) and cdHref, moved unchanged from js/core.js.
+   Nothing in the files loaded before this one uses them while loading; core.js (newThread, saveCard, vPublic),
    app-navigation.js, settings.js and billing.js use them only at run time. */
 let TAPM = 'q';
 let CTAB = 'basic',

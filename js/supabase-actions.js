@@ -1,10 +1,10 @@
 // Introthread - Supabase sign-in and Thread actions (v107): the cloud versions of sign-in (doLogin, demoLogin, oauth,
 // logout, su1, su2, su3) and of the Thread actions (answer, sendFollow, resolve, saveNote, delThread, newThread), plus the
-// two later newThread wrappers from app-core.js (Full details + save to contacts, then tags). Moved out of js/app-core.js
+// two later newThread wrappers from core.js (Full details + save to contacts, then tags). Moved out of js/core.js
 // unchanged and in their original order (cleanup plan step 8b). Loads straight after supabase-data.js, so each version
-// still replaces the base version in app-core.js and is still wrapped later by photo-upload.js (su3),
+// still replaces the base version in core.js and is still wrapped later by photo-upload.js (su3),
 // google-calendar.js (oauth), app-routing.js (logout, doLogin, demoLogin), capture.js, contacts-import.js and
-// admin-audit.js (newThread) and demo-mode.js (demoLogin). Nothing in app-core.js uses these while loading.
+// admin-audit.js (newThread) and demo-mode.js (demoLogin). Nothing in core.js uses these while loading.
 
 /* auth */
 doLogin = function (e) {
@@ -223,7 +223,7 @@ delThread = async function (id) {
   go('#/app/threads');
 };
 /* newThread: one function since v112 (cleanup plan step 10). It used to be built from 8 layered versions across
-   app-core.js, supabase-actions.js, capture.js, contacts-import.js and admin-audit.js; the steps below run in the same
+   core.js, supabase-actions.js, capture.js, contacts-import.js and admin-audit.js; the steps below run in the same
    order as those layers did, outermost first. createThread (below) checks the name and saves the new Thread. */
 function newThread(e) {
   /* quick mode: a phone number typed into the email box moves to the phone box (was admin-audit.js) */

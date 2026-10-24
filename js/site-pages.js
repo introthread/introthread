@@ -1,9 +1,9 @@
 // Introthread - Website pages (v83): home, how it works, rooms, networks, pricing, about, privacy, terms, 404.
-// Moved out of js/app-core.js unchanged (code cleanup step 1). Loads straight after app-core.js; shares its globals
+// Moved out of js/core.js unchanged (code cleanup step 1). Loads straight after core.js; shares its globals
 // (sv, esc, PLANS, ...). Later files wrap some of these (for example vPricing in contacts-import.js).
 
 /* v98: website content and helpers (feat3, secHead, PAGE_META, setMeta, POLICY, TERMS), moved unchanged from
-   js/app-core.js (cleanup plan step 3). Nothing uses them while the page loads; the render wrapper in app-core.js
+   js/core.js (cleanup plan step 3). Nothing uses them while the page loads; the render wrapper in core.js
    calls setMeta only at run time. */
 const feat3 = a =>
   `<div class="x-f3">${a.map(([ic, t, s]) => `<div class="x-f3-i"><span class="x-f3-ic">${sv(ic, 21)}</span><h3>${t}</h3><p>${s}</p></div>`).join('')}</div>`;
@@ -789,7 +789,7 @@ function vTerms() {
   return legalDoc('Legal', 'Terms of <em>Service.</em>', '20 October 2026', TERMS);
 }
 
-/* v96: named handlers for this screen, moved unchanged from js/app-core.js (code cleanup). */
+/* v96: named handlers for this screen, moved unchanged from js/core.js (code cleanup). */
 function scrollToId(e, id) {
   e.preventDefault();
   const el = document.getElementById(id);

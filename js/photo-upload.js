@@ -1,9 +1,9 @@
 // Introthread - Profile photo upload (v101): upBox, shrinkImg, pickPhoto, removePhoto, _phBusy, applyPhoto and
-// the sign-up su3 wrapper that keeps the chosen photo until the account exists. Moved out of js/app-core.js unchanged and
+// the sign-up su3 wrapper that keeps the chosen photo until the account exists. Moved out of js/core.js unchanged and
 // in their original order (cleanup plan step 6). Sits next to photo-crop.js in the js folder, but loads straight after
-// app-core.js: admin-audit.js replaces pickPhoto with the crop version while loading, so this file must load before it,
-// and the su3 wrapper must still come after the sign-up versions of su3 in app-core.js. The render wrapper in
-// app-core.js calls applyPhoto only at run time; auth-pages.js and admin-audit.js use upBox only at run time.
+// core.js: admin-audit.js replaces pickPhoto with the crop version while loading, so this file must load before it,
+// and the su3 wrapper must still come after the sign-up versions of su3 in core.js. The render wrapper in
+// core.js calls applyPhoto only at run time; auth-pages.js and admin-audit.js use upBox only at run time.
 
 /* profile photo */
 function upBox() {

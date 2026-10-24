@@ -1,12 +1,12 @@
 // Introthread - Rooms screens (v90): the Rooms list and calendar (vRooms, r*, ro*), a Room page (vRoom, rm9),
 // creating a Room (newRoom, newRoomModal, newRoom9), Room codes (vRoomCode), stats and the demo Rooms. Moved out of
-// js/app-core.js unchanged and in their original order (code cleanup step 6). Two load-time wrappers moved with
+// js/core.js unchanged and in their original order (code cleanup step 6). Two load-time wrappers moved with
 // them so they still run right after the functions they wrap: the v4 newRoom replacement and the v9 vRoom wrapper.
-// Loads straight after tap-card.js; shares app-core globals; its own values are declared at the top of this file since v94. Later files wrap
+// Loads straight after tap-card.js; shares core.js globals; its own values are declared at the top of this file since v94. Later files wrap
 // newRoomModal, newRoom9 and vRoom.
 
 /* v94: the Rooms screens' own values (fmtDate, RIMG, RF9, RQ9, RDAY, RCAL, RLIM9, RFF, RNT, RIMG9, rYmd, ymdL, rFmt),
-   moved unchanged from js/app-core.js. Nothing in the files loaded before this one uses them while loading; today.js,
+   moved unchanged from js/core.js. Nothing in the files loaded before this one uses them while loading; today.js,
    threads.js, app-navigation.js, event-mode.js and rooms-access.js use some of them only at run time. */
 const fmtDate = t =>
   new Date(t).toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' });
