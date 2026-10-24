@@ -217,7 +217,7 @@ function cdInit() {
     phone: L.phone || '',
     tags: (L.tags || []).slice(0, 3),
     open: !!L.open,
-    theme: u.theme || 'midnight',
+    theme: null,
     uid: u.id
   };
 }
@@ -410,11 +410,12 @@ async function cdVis(on) {
   }
 }
 
-/* v118: picking a style only previews it on the card. It is saved with the rest of the card by Save changes (cdSave);
+/* v118: picking a style only previews it on the card (CD.theme; null means the saved style, so a style saved
+   elsewhere is never overwritten). It is saved with the rest of the card by Save changes (cdSave);
    before v118 it was saved straight away through setTheme. */
 function cdTheme(k) {
   if (!CD || !THEMES[k]) return;
-  CD.theme = k;
+  CD.theme = k === (me().theme || 'midnight') ? null : k;
   window._keepScroll = true;
   render();
   if (k !== (me().theme || 'midnight')) toast(THEMES[k].n + ' preview. Press Save changes to keep it.');

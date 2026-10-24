@@ -378,13 +378,15 @@ function ppInit() {
     open: !!L.open,
     show: Object.assign({ loc: true, co: true, topics: true, bio: true }, L.show || {}),
     seoDesc: L.seoDesc || '',
-    noindex: !!L.noindex
+    noindex: !!L.noindex,
+    theme: null
   };
 }
 
 function ppUser() {
   const u = me();
   return Object.assign({}, u, {
+    theme: PP.theme || u.theme,
     name: PP.name,
     role: PP.role,
     company: PP.company,
@@ -609,8 +611,38 @@ function ppSnippet() {
   return `<small>introthread.com &rsaquo; ${esc(u.handle)}</small><b>${esc(t)}</b><p>${esc(d)}</p>`;
 }
 
-async function ppTheme(k) {
+/* v119: picking a style here only previews it, like My card since v118. PP.theme holds the previewed style (null means
+   the saved one); Save changes under the styles saves it (ppThemeSave) and Cancel drops the preview (ppThemeCancel).
+   Before v119 a click saved the style straight away through setTheme. */
+function ppTheme(k) {
+  if (!PP || !THEMES[k]) return;
+  PP.theme = k === (me().theme || 'midnight') ? null : k;
+  window._keepScroll = true;
+  render();
+}
+async function ppThemeSave(b) {
+  const k = PP && PP.theme;
+  if (!k || !THEMES[k]) return;
+  if (b) b.disabled = true;
+  PP.theme = null;
+  const u = me(),
+    before = u.theme;
+  window._keepScroll = true;
   await setTheme(k);
+  if ((PP.theme || u.theme) === k && u.theme !== before) {
+    CD = null;
+    toast(THEMES[k].n + ' style saved');
+  } else {
+    PP.theme = k;
+    if (b) b.disabled = false;
+    render();
+  }
+}
+function ppThemeCancel() {
+  if (!PP) return;
+  PP.theme = null;
+  window._keepScroll = true;
+  render();
 }
 
 function ppShow(k, on) {
@@ -646,9 +678,11 @@ function vProfile() {
     )
       .map(
         ([k, v]) =>
-          `<button type="button" class="cd-sty ${u.theme === k ? 'on' : ''}" aria-pressed="${u.theme === k}" data-on-click="ppTheme('${k}')"><span style="background:${v.bg}">${u.theme === k ? `<i>${sv('check', 12, '#fff', 3.2)}</i>` : ''}</span><b>${v.n}</b><small>${esc(v.d || '')}</small></button>`
+          `<button type="button" class="cd-sty ${(PP.theme || u.theme) === k ? 'on' : ''}" aria-pressed="${(PP.theme || u.theme) === k}" data-on-click="ppTheme('${k}')"><span style="background:${v.bg}">${(PP.theme || u.theme) === k ? `<i>${sv('check', 12, '#fff', 3.2)}</i>` : ''}</span><b>${v.n}</b><small>${esc(v.d || '')}</small></button>`
       )
-      .join('')}</div></section>
+      .join(
+        ''
+      )}</div>${PP.theme && THEMES[PP.theme] ? `<div class="pp-thbar" role="status"><span>Previewing <b>${esc(THEMES[PP.theme].n)}</b>. It is not saved yet.</span><span class="pp-thbtn"><button type="button" class="t-how sm" data-on-click="ppThemeCancel()">Cancel</button><button type="button" class="x-btn" data-on-click="ppThemeSave(this)">${sv('lock', 15)} Save changes</button></span></div>` : ''}</section>
   <section class="pp-sec"><div class="cd-bh"><span class="cd-bi">${sv('eye', 20)}</span><div><b>What visitors see</b><small>Choose which details appear on your public profile.</small></div></div><div class="pp-shw">${[
     ['bio', 'Bio'],
     ['loc', 'Location'],

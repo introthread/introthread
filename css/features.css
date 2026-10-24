@@ -2975,3 +2975,24 @@ html body .pc-m .pc-stage {
     gap: 28px;
   }
 }
+
+/* v119: preview bar under the public profile style picker */
+.pp-thbar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  margin-top: 14px;
+  padding: 10px 12px;
+  border: 1px solid #c7d7fe;
+  background: #eef4ff;
+  border-radius: 12px;
+  font-size: 14px;
+  color: #1d2939;
+}
+.pp-thbtn {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
