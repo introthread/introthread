@@ -2,6 +2,9 @@
 
 Everything built so far, newest first. Full technical detail for each item is in `HANDOVER.md`. How Rooms, events, communities and the Room pass work: `docs/ROOMS.md`.
 
+## 24 Oct 2026
+- **v110: Code cleanup, plan step 10: `render` merged into one function.** The base `render` and its 6 layered versions in `js/app-core.js` are now a single `render`, running the same steps in the same order; the page-building part is `renderRoute`, called from it. Later files still wrap `render` as before. Before-and-after DOM snapshots and screenshots of 26 screens at 390px and 1366px match, apart from differences that also occur between two runs of the unchanged code. The pre-rendered pages are identical before and after. No change in behaviour.
+
 ## 23 Oct 2026
 - **v109: Code cleanup, plan step 9: demo data split out.** `seed` and `demoStage` moved unchanged and in their original order from `js/app-core.js` (now about 1,290 lines) to a new `js/demo-data.js`, loaded straight after it. Nothing uses either while the page loads. `demoStage` is not called anywhere and is noted for removal. The pre-rendered pages are identical before and after. No change in behaviour.
 - **v108: Test fix: every script in `tests/app` passes.** `notifications.py` and `thread_stages.py` failed with "demoLogin is not defined" for the same reason as `integrations.py` (fixed in v106): they served only the page itself, so no `js/` file loaded. They now serve the site's files from disk. `integrations.py`, `notifications.py` and `thread_stages.py` also wait until `demoLogin` exists instead of a fixed 1 second, since a cold start can take longer (seen once with `notifications.py`). `photo_crop.py` already served the files and passed. Tests only; no app code changed.

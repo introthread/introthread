@@ -594,7 +594,69 @@ function delAccount() {
 /* ---------- public profile & recipient view ---------- */
 
 /* ---------- router ---------- */
+/* render: one function since v110 (cleanup plan step 10). It used to be built from 7 layered versions in this file;
+   the steps below run in the same order as those layers did, outermost first. renderRoute (below) builds the page for
+   the current address. Later files (app-routing.js, billing.js, app-navigation.js and others) still wrap render. */
 function render() {
+  /* v9.1 demo: realistic upcoming Rooms so the demo shows the full Rooms experience */
+  seedDemoRooms9();
+  /* v9 Rooms: bring each Room up to date */
+  try {
+    (DB.rooms || []).forEach(rm9);
+  } catch (_) {}
+  /* room-code links (/r/code) and a cloud sign-up that still needs its profile */
+  const p = RH().slice(1).split('/').filter(Boolean);
+  if (p[0] === 'r') {
+    $('#root').innerHTML = vRoomCode(p[1]);
+    return;
+  }
+  if (p[0] === 'app' && MODE === 'cloud' && PENDING && !me()) {
+    go('#/signup');
+    return;
+  }
+  /* Thread tags */
+  normTags();
+  /* keep the scroll position when the same page is drawn again */
+  const same = RH() === lastHash && window._rendered;
+  window._keepScroll = same;
+  renderRoute();
+  window._rendered = true;
+  /* after the page is drawn: QR codes, page meta, a photo chosen at sign-up, #anchor scroll, clean links, reveal */
+  [
+    ['qrHero', 84],
+    ['qrCta', 112]
+  ].forEach(([id, s]) => {
+    const el = document.getElementById(id);
+    if (el && !el.firstChild) qr(el, 'https://www.introthread.com', s);
+  });
+  setMeta();
+  applyPhoto();
+  if ($('#qrPf') && !$('#qrPf').firstChild) qr($('#qrPf'), profileUrl(me()), 104);
+  if (location.hash && /^#[a-z]+$/.test(location.hash)) {
+    const t = document.getElementById(location.hash.slice(1));
+    if (t) setTimeout(() => t.scrollIntoView(), 60);
+  }
+  document
+    .querySelectorAll('a[href^="#/"]')
+    .forEach(a => a.setAttribute('href', a.getAttribute('href').slice(1) || '/'));
+  const dl = document.querySelector('.x-dl');
+  if (dl && !dl.classList.contains('in')) {
+    if ('IntersectionObserver' in window) {
+      const io = new IntersectionObserver(
+        es => {
+          if (es.some(e => e.isIntersecting)) {
+            dl.classList.add('in');
+            io.disconnect();
+          }
+        },
+        { threshold: 0.25 }
+      );
+      io.observe(dl);
+    } else dl.classList.add('in');
+  }
+}
+
+function renderRoute() {
   const h = RH().slice(1);
   const p = h.split('/').filter(Boolean);
   let html;
@@ -676,13 +738,6 @@ window.addEventListener('hashchange', () => {
     _onRoute();
   }
 });
-const _r = render;
-render = function () {
-  const same = RH() === lastHash && window._rendered;
-  window._keepScroll = same;
-  _r();
-  window._rendered = true;
-};
 document.addEventListener('keydown', e => {
   if (e.key === 'Escape') closeModal();
 });
@@ -972,44 +1027,6 @@ const logo = dark =>
 let _hT;
 /* prevHTML: earlier version removed in the v54 merge (the later declaration below always won) */
 
-const _rx = render;
-render = function () {
-  const r = _rx.apply(this, arguments);
-  [
-    ['qrHero', 84],
-    ['qrCta', 112]
-  ].forEach(([id, s]) => {
-    const el = document.getElementById(id);
-    if (el && !el.firstChild) qr(el, 'https://www.introthread.com', s);
-  });
-  setMeta();
-  applyPhoto();
-  if ($('#qrPf') && !$('#qrPf').firstChild) qr($('#qrPf'), profileUrl(me()), 104);
-  if (location.hash && /^#[a-z]+$/.test(location.hash)) {
-    const t = document.getElementById(location.hash.slice(1));
-    if (t) setTimeout(() => t.scrollIntoView(), 60);
-  }
-  document
-    .querySelectorAll('a[href^="#/"]')
-    .forEach(a => a.setAttribute('href', a.getAttribute('href').slice(1) || '/'));
-  const dl = document.querySelector('.x-dl');
-  if (dl && !dl.classList.contains('in')) {
-    if ('IntersectionObserver' in window) {
-      const io = new IntersectionObserver(
-        es => {
-          if (es.some(e => e.isIntersecting)) {
-            dl.classList.add('in');
-            io.disconnect();
-          }
-        },
-        { threshold: 0.25 }
-      );
-      io.observe(dl);
-    } else dl.classList.add('in');
-  }
-  return r;
-};
-
 /* v4.1 login + compact previews */
 
 /* ===== v4 inner pages ===== */
@@ -1122,11 +1139,6 @@ async function saveTags(t, tags) {
   t.events = t.events.filter(e => !(e.k === 'note' && /^#tags:/.test(e.text || '')));
   save();
 }
-const _rT = render;
-render = function () {
-  normTags();
-  return _rT.apply(this, arguments);
-};
 
 /* Supabase email-link callback: introthread.com/app#access_token=... or #error=... */
 const AUTH_CB = /(^|[#&])(access_token|error_description|error)=/.test(location.hash);
@@ -1153,19 +1165,6 @@ document.addEventListener('click', e => {
   e.preventDefault();
   go(p);
 });
-const _render2 = render;
-render = function () {
-  const p = RH().slice(1).split('/').filter(Boolean);
-  if (p[0] === 'r') {
-    $('#root').innerHTML = vRoomCode(p[1]);
-    return;
-  }
-  if (p[0] === 'app' && MODE === 'cloud' && PENDING && !me()) {
-    go('#/signup');
-    return;
-  }
-  _render2();
-};
 (async function boot() {
   /* wait until every script (main + /js files) has run, so all wrappers exist before the first render */ await new Promise(
     r =>
@@ -1229,25 +1228,12 @@ render = function () {
 /* ===== v8 Threads screen (design: Relationship Thread) ===== */
 
 /* ===== v9 Rooms: events and communities ===== */
-const _render9 = render;
-render = function () {
-  try {
-    (DB.rooms || []).forEach(rm9);
-  } catch (_) {}
-  return _render9.apply(this, arguments);
-};
 function r12(t) {
   if (!t) return '';
   const [h, m] = t.split(':').map(Number);
   return `${h % 12 || 12}:${String(m).padStart(2, '0')} ${h < 12 ? 'AM' : 'PM'}`;
 }
 
-/* v9.1 demo: realistic upcoming Rooms so the demo shows the full Rooms experience */
-const _render91 = render;
-render = function () {
-  seedDemoRooms9();
-  return _render91.apply(this, arguments);
-};
 /* ===== v10 My card (design: Digital My Card) ===== */
 
 const _saveCard10 = saveCard;
