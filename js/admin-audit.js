@@ -785,36 +785,6 @@ tMeta = function (t) {
   }
   return _tMetaG.apply(this, arguments);
 };
-const _ntGeo = newThread;
-newThread = function (e) {
-  const at = new Date().toISOString();
-  const gp = geoGet();
-  const before = new Set((DB.threads || []).map(t => t.id));
-  const r = _ntGeo.apply(this, arguments);
-  let n = 0;
-  const iv = setInterval(async () => {
-    const t = (DB.threads || []).find(x => !before.has(x.id) && x.ownerId === DB.session);
-    if (!t) {
-      if (++n > 60) clearInterval(iv);
-      return;
-    }
-    clearInterval(iv);
-    t.other = t.other || {};
-    t.other.at = at;
-    const g = await gp;
-    await new Promise(z => setTimeout(z, 1500));
-    if (g) {
-      t.other.geo = g;
-      const pl = await geoPlace(g);
-      if (pl) t.other.geo.place = pl;
-    }
-    if (cloud())
-      await upd('threads', t.id, { where_met: tPack(t.where, Object.assign({}, t.other, { src: t.src })) });
-    save();
-    if (String(location.pathname).includes(t.id)) render();
-  }, 150);
-  return r;
-};
 function geoWhenTxt(iso) {
   const d = new Date(iso);
   return (
@@ -1668,20 +1638,6 @@ tapMode = function (m) {
   _tapMode35(m);
   const f = document.querySelector('.t-form');
   if (f) f.classList.toggle('q', m === 'q');
-};
-const _nt35 = newThread;
-newThread = function (e) {
-  const f = document.querySelector('.t-form');
-  if (f && f.classList.contains('q')) {
-    const te = $('#te'),
-      tp = $('#tph');
-    const v = ((te && te.value) || '').trim();
-    if (v && !v.includes('@') && /^[+\d][\d\s()-]{5,}$/.test(v) && tp) {
-      tp.value = v;
-      te.value = '';
-    }
-  }
-  return _nt35.call(this, e);
 };
 
 const _gcal11 = gcalPanel;

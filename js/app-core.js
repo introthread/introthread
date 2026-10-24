@@ -451,36 +451,6 @@ function shareNative() {
     navigator.share({ title: u.name + ' on Introthread', url: profileUrl(u) }).catch(() => {});
   else copy(profileUrl(u), 'Link copied');
 }
-function newThread(e) {
-  e.preventDefault();
-  const rid = $('#tw').value,
-    room = DB.rooms.find(r => r.id === rid);
-  const where = room ? room.name : $('#tw2').value.trim() || 'In person';
-  const t = {
-    id: uid(),
-    ownerId: DB.session,
-    other: {
-      name: $('#tn').value.trim(),
-      role: $('#tr').value.trim() || 'Professional',
-      company: $('#tc').value.trim(),
-      email: $('#te').value.trim()
-    },
-    where,
-    note: $('#tx').value.trim(),
-    createdAt: Date.now(),
-    confirmed: false,
-    mine: null,
-    theirs: null,
-    resolvedAt: null,
-    roomId: room ? room.id : null,
-    events: [{ k: 'tap', at: Date.now(), text: 'Thread started at ' + where }]
-  };
-  DB.threads.push(t);
-  save();
-  toast('Thread started. Confirm link sent.');
-  go('#/app/thread/' + t.id);
-  return false;
-}
 
 /* ---------- card ---------- */
 /* vCard: earlier version removed in the v54 merge (the later declaration below always won) */

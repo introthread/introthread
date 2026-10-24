@@ -483,15 +483,6 @@ function freeLeft() {
 function limitOn() {
   return cloud() && !isPro();
 }
-const _nt32 = newThread;
-newThread = function (e) {
-  if (limitOn() && freeLeft() <= 0) {
-    e.preventDefault();
-    limitSheet();
-    return false;
-  }
-  return _nt32.call(this, e);
-};
 function limitSheet() {
   modal(`<div class="cap-m"><div class="row between"><h3>You have used your ${freeLim()} free Threads this month</h3><button class="x" aria-label="Close" data-on-click="closeModal()">&times;</button></div>
  <p class="fu-sub">Upgrade to Pro for unlimited Threads, or save this person as a contact now and invite them next month.</p>

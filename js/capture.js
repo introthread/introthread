@@ -474,68 +474,6 @@ vTap = function () {
   );
   return h.replace('<div class="t-g2">', capStrip() + '<div class="t-g2">');
 };
-const _nt30 = newThread;
-newThread = function (e) {
-  const v = id => {
-    const x = $('#' + id);
-    return x ? x.value.trim() : '';
-  };
-  const em = v('te'),
-    ph = normPhone(v('tph')),
-    liR = v('tln');
-  if (v('tn') && !em && !ph) {
-    e.preventDefault();
-    toast('Add their email or phone so you can follow up');
-    const t = $('#te');
-    if (t) t.focus();
-    return false;
-  }
-  if (em && !/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(em)) {
-    e.preventDefault();
-    toast('Check the email address');
-    return false;
-  }
-  if (v('tph') && !ph) {
-    e.preventDefault();
-    toast('Check the phone number');
-    return false;
-  }
-  const li = liR ? (liFromUrl(liR) || {}).url || '' : '';
-  if (liR && !li) {
-    e.preventDefault();
-    toast('Paste a LinkedIn profile link like linkedin.com/in/name');
-    return false;
-  }
-  const meta = { phone: ph, linkedin: li, src: CAP_SRC };
-  ['phone2', 'email2', 'website', 'address', 'social'].forEach(k => {
-    const id = CAP_FIELDS[k];
-    let x = id ? v(id) : '';
-    if (k === 'phone2' && x) x = normPhone(x) || x;
-    if (x) meta[k] = x;
-  });
-  const before = new Set(DB.threads.map(t => t.id));
-  window._capLast = Object.assign({ name: v('tn'), email: em, role: v('tr'), company: v('tc') }, meta);
-  const r = _nt30.call(this, e);
-  CAP_SRC = '';
-  let n = 0;
-  const iv = setInterval(() => {
-    const t = DB.threads.find(x => !before.has(x.id) && x.ownerId === DB.session);
-    if (t) {
-      clearInterval(iv);
-      t._mx = 1;
-      t.other.phone = meta.phone || t.other.phone;
-      t.other.linkedin = meta.linkedin || t.other.linkedin;
-      ['phone2', 'email2', 'website', 'address', 'social'].forEach(k => {
-        if (meta[k]) t.other[k] = meta[k];
-      });
-      if (meta.src) t.src = meta.src;
-      if (cloud() && Object.keys(meta).some(k => k !== 'src' && meta[k]))
-        upd('threads', t.id, { where_met: tPack(t.where, meta) });
-      save();
-    } else if (++n > 40) clearInterval(iv);
-  }, 150);
-  return r;
-};
 tapVcf = function (o) {
   const x = Object.assign({}, o, window._capLast || {});
   const lines = [
