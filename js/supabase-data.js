@@ -71,9 +71,15 @@ const mapRoom = r => ({
 
 async function loadCloud(user) {
   let { data: p, error } = await SB.rpc('my_profile');
-  if (error || (p && !p.id)) {
-    if (error && !/function|schema cache/i.test(error.message || '')) console.warn(error);
-    ({ data: p, error } = await SB.from('profiles').select('*').eq('id', user.id).maybeSingle());
+  /* my_profile returns an all-null row when the person has no profile yet (e.g. first Google sign-in).
+     Treat that as "no profile" instead of falling back to select('*'), which 016 blocks (prefs/plan are private). */
+  if (!error && p && !p.id) p = null;
+  if (error) {
+    if (!/function|schema cache/i.test(error.message || '')) console.warn(error);
+    ({ data: p, error } = await SB.from('profiles')
+      .select('id,handle,name,role,company,city,bio,theme,links,created_at')
+      .eq('id', user.id)
+      .maybeSingle());
     if (error) return fail(error);
   }
   if (!p) {
