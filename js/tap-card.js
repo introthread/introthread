@@ -217,6 +217,7 @@ function cdInit() {
     phone: L.phone || '',
     tags: (L.tags || []).slice(0, 3),
     open: !!L.open,
+    theme: u.theme || 'midnight',
     uid: u.id
   };
 }
@@ -224,6 +225,7 @@ function cdInit() {
 function cdUser() {
   const u = me();
   return Object.assign({}, u, {
+    theme: CD.theme || u.theme,
     name: CD.name,
     role: CD.role,
     company: CD.company,
@@ -333,6 +335,7 @@ async function cdSave(e) {
     bio: CD.bio.trim(),
     links
   };
+  if (CD.theme && THEMES[CD.theme] && CD.theme !== u.theme) patch.theme = CD.theme;
   const b = $('#cdsave');
   if (b) {
     b.disabled = true;
@@ -407,8 +410,14 @@ async function cdVis(on) {
   }
 }
 
-async function cdTheme(k) {
-  await setTheme(k);
+/* v118: picking a style only previews it on the card. It is saved with the rest of the card by Save changes (cdSave);
+   before v118 it was saved straight away through setTheme. */
+function cdTheme(k) {
+  if (!CD || !THEMES[k]) return;
+  CD.theme = k;
+  window._keepScroll = true;
+  render();
+  if (k !== (me().theme || 'midnight')) toast(THEMES[k].n + ' preview. Press Save changes to keep it.');
 }
 
 function cdTagT(x) {
@@ -498,7 +507,7 @@ function vCard() {
     form = `<div class="cd-styles">${Object.entries(THEMES)
       .map(
         ([k, v]) =>
-          `<button type="button" class="cd-sty ${u.theme === k ? 'on' : ''}" aria-pressed="${u.theme === k}" data-on-click="cdTheme('${k}')"><span style="background:${v.bg}">${u.theme === k ? `<i>${sv('check', 12, '#fff', 3.2)}</i>` : ''}</span><b>${v.n}</b><small>${esc(v.d || '')}</small></button>`
+          `<button type="button" class="cd-sty ${cu.theme === k ? 'on' : ''}" aria-pressed="${cu.theme === k}" data-on-click="cdTheme('${k}')"><span style="background:${v.bg}">${cu.theme === k ? `<i>${sv('check', 12, '#fff', 3.2)}</i>` : ''}</span><b>${v.n}</b><small>${esc(v.d || '')}</small></button>`
       )
       .join('')}</div>
   <div class="x-f cd-tp"><span>Card topics <em>(up to 3, shown on your card)</em></span><div class="tp-wrap">${[...new Set([...TOPICS, ...CD.tags])].map(x => `<button type="button" class="tp ${CD.tags.includes(x) ? 'on' : ''}" aria-pressed="${CD.tags.includes(x)}" data-v="${esc(x)}" data-on-click="cdTagT(this.dataset.v)">${esc(x)}</button>`).join('')}</div></div>
@@ -528,7 +537,7 @@ function vCard() {
  )
    .map(
      ([k, v]) =>
-       `<button type="button" class="${u.theme === k ? 'on' : ''}" aria-pressed="${u.theme === k}" aria-label="${v.n} style" data-on-click="cdTheme('${k}')"><span style="background:${v.bg}">${u.theme === k ? `<i>${sv('check', 11, '#fff', 3.2)}</i>` : ''}</span><small>${v.n}</small></button>`
+       `<button type="button" class="${cu.theme === k ? 'on' : ''}" aria-pressed="${cu.theme === k}" aria-label="${v.n} style" data-on-click="cdTheme('${k}')"><span style="background:${v.bg}">${cu.theme === k ? `<i>${sv('check', 11, '#fff', 3.2)}</i>` : ''}</span><small>${v.n}</small></button>`
    )
    .join('')}</div></section>
  <section class="d-box cd-qab"><div class="cd-bh"><span class="cd-bi">${sv('spark', 20)}</span><div><b>Quick actions</b><small>Common actions for your card.</small></div></div><div class="cd-qa"><button type="button" data-on-click="shareNative()">${sv('send', 18)} Share my card</button><button type="button" data-on-click="cdPrint()">${sv('brief', 18)} Print card</button><button type="button" data-on-click="toast('Apple Wallet passes are coming soon.')">${sv('wallet', 18)} Add to Apple Wallet</button><button type="button" data-on-click="toast('Google Wallet passes are coming soon.')">${sv('wallet', 18)} Add to Google Wallet</button></div></section>
