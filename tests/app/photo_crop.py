@@ -1,8 +1,8 @@
-# --- v56: app code now lives in js/app-core.js; swap in the test Supabase there too ---
+# --- v56: swap in the test Supabase where const SB is declared (js/supabase-data.js since v104) ---
 import builtins as _bi, io as _io
 def open(p,*a,**k):
     f=_bi.open(p,*a,**k)
-    if isinstance(p,str) and p.endswith('js/app-core.js') and 'b' not in (a[0] if a else k.get('mode','r')):
+    if isinstance(p,str) and p.endswith('js/supabase-data.js') and 'b' not in (a[0] if a else k.get('mode','r')):
         t=f.read(); f.close()
         return _io.StringIO(t.replace('const SB =\n  window.supabase','const SB = window.__SB ? window.__SB :\n  window.supabase'))
     return f
