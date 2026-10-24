@@ -454,24 +454,38 @@ function shareNative() {
 
 /* ---------- card ---------- */
 /* vCard: earlier version removed in the v54 merge (the later declaration below always won) */
+/* saveCard: one function since v114 (cleanup plan step 10). It used to be 3 layered versions in this file: the
+   first local-only version (replaced by the cloud version without being called), the cloud version, and the v10 My card
+   version that hands the new card editor to cdSave. The steps run in the same order. */
 function saveCard(e) {
+  /* v10 My card: the new card editor has no #cn box and saves through cdSave (tap-card.js) */
+  if (!$('#cn')) {
+    if (e && e.preventDefault) e.preventDefault();
+    if (!CD) cdInit();
+    return cdSave();
+  }
+  /* the older card form: save to Supabase for real accounts (upd saves nothing remotely in the demo), then locally */
   e.preventDefault();
   const u = me();
-  Object.assign(u, {
+  const patch = {
     name: $('#cn').value.trim(),
     role: $('#cr').value.trim(),
     company: $('#cc').value.trim(),
     city: $('#cct').value.trim(),
-    bio: $('#cb').value.trim()
-  });
-  u.links = {
-    linkedin: $('#cl').value.trim(),
-    website: $('#cw').value.trim(),
-    calendar: $('#ck').value.trim()
+    bio: $('#cb').value.trim(),
+    links: {
+      linkedin: $('#cl').value.trim(),
+      website: $('#cw').value.trim(),
+      calendar: $('#ck').value.trim()
+    }
   };
-  save();
-  toast('Card updated');
-  render();
+  upd('profiles', u.id, patch).then(ok => {
+    if (!ok) return;
+    Object.assign(u, patch);
+    save();
+    toast('Card updated');
+    render();
+  });
   return false;
 }
 
@@ -759,30 +773,6 @@ let PENDING = null;
 /* auth */
 
 /* thread actions */
-saveCard = function (e) {
-  e.preventDefault();
-  const u = me();
-  const patch = {
-    name: $('#cn').value.trim(),
-    role: $('#cr').value.trim(),
-    company: $('#cc').value.trim(),
-    city: $('#cct').value.trim(),
-    bio: $('#cb').value.trim(),
-    links: {
-      linkedin: $('#cl').value.trim(),
-      website: $('#cw').value.trim(),
-      calendar: $('#ck').value.trim()
-    }
-  };
-  upd('profiles', u.id, patch).then(ok => {
-    if (!ok) return;
-    Object.assign(u, patch);
-    save();
-    toast('Card updated');
-    render();
-  });
-  return false;
-};
 async function setTheme(k) {
   const u = me();
   if (await upd('profiles', u.id, { theme: k })) {
@@ -1206,15 +1196,6 @@ function r12(t) {
 
 /* ===== v10 My card (design: Digital My Card) ===== */
 
-const _saveCard10 = saveCard;
-saveCard = function (e) {
-  if (!$('#cn')) {
-    if (e && e.preventDefault) e.preventDefault();
-    if (!CD) cdInit();
-    return cdSave();
-  }
-  return _saveCard10.call(this, e);
-};
 /* ===== v11 Public profile (design: Public Profile) ===== */
 /* public page: apply profile SEO settings */
 
