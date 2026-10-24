@@ -131,5 +131,44 @@ vCard = function () {
   const u = me(),
     v = clOf(u);
   const blk = `<div class="cl-row"><div class="cl-prev">${v ? `<img class="cl-on-${clTone(u) === 'light' ? 'dk' : 'lt'}" src="${v}" alt="Your company logo">` : '<span>No logo</span>'}</div><div><b>Company logo</b><small>Shown on your card and public profile. A PNG with a transparent background works best (JPG, PNG or WebP, max 5MB).</small><div class="cd-pb"><label class="t-how sm">${sv('photo', 16)} ${v ? 'Change logo' : 'Upload logo'}<input type="file" hidden accept="image/png,image/jpeg,image/webp" data-on-change="clPick(this)"></label>${v ? `<button type="button" class="cd-rm" data-on-click="clRemove()">${sv('close', 15)} Remove</button>` : ''}</div></div></div>`;
+  if (v && !(u.links && u.links.logoTone)) setTimeout(clToneFix, 30);
   return h.slice(0, b + end.length) + blk + h.slice(b + end.length);
 };
+/* v120: logos uploaded before v117 have no saved tone, so they always got the white backing. The first time the
+   owner opens My card, work out the tone from the logo itself and save it once. */
+let _clFixing = false;
+function clToneFix() {
+  const u = me();
+  const v = clOf(u);
+  if (_clFixing || !v || (u.links && u.links.logoTone)) return;
+  _clFixing = true;
+  const im = new Image();
+  im.onerror = () => {
+    _clFixing = false;
+  };
+  im.onload = async () => {
+    try {
+      const c = document.createElement('canvas');
+      c.width = Math.max(1, im.naturalWidth);
+      c.height = Math.max(1, im.naturalHeight);
+      const x = c.getContext('2d');
+      x.drawImage(im, 0, 0);
+      const tone = clBright(x, c.width, c.height) > 200 ? 'light' : 'dark';
+      const m = me();
+      if (!m || clOf(m) !== v || (m.links && m.links.logoTone)) return;
+      const links = Object.assign({}, m.links || {}, { logoTone: tone });
+      if (cloud() && !(await upd('profiles', m.id, { links }))) return;
+      m.links = links;
+      try {
+        save();
+      } catch (e) {}
+      if (tone === 'light') {
+        window._keepScroll = true;
+        render();
+      }
+    } finally {
+      _clFixing = false;
+    }
+  };
+  im.src = v;
+}

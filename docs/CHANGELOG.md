@@ -3,6 +3,7 @@
 Everything built so far, newest first. Full technical detail for each item is in `HANDOVER.md`. How Rooms, events, communities and the Room pass work: `docs/ROOMS.md`.
 
 ## 24 Oct 2026
+- **v120: older company logos get the right backing automatically.** Logos uploaded before v117 had no saved tone, so they always got the white backing, even white logos. The first time the owner opens My card, the app now works out the tone from the logo and saves it once (`links.logoTone`), so a white or very light logo moves to the dark backing without being uploaded again. Other screens are unchanged.
 - **Handover: launch setup status.** Agnes has paid the domain host, set up Resend and Google sign-in, verified the site in Google Search Console and run all migrations. Only live Paystack keys and the company's legal details remain.
 - **Handover updated.** HANDOVER.md has a new 24 Oct status summary at the top: what was done from v83 to v119, the Google verification file, the appearance check, and everything still open for the next agent.
 - **Google Search Console verification file added** (`google0693ac56298b9d88.html` in the site root). Do not remove it.
