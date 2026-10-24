@@ -1,6 +1,42 @@
 # Introthread - handover for the next AI agent
 
-Last updated: 22 Oct 2026, 3:00 pm Nairobi (after v37 security hardening and migration 016). Read this section first, then ARCHITECTURE-ESSENTIALS.md and AGENTS.md. Update this file and docs/CHANGELOG.md with every change.
+Last updated: 24 Oct 2026, 10:30 pm Nairobi (after v119 and the Google verification file). Read the 24 Oct status summary below first, then ARCHITECTURE-ESSENTIALS.md, ARCHITECTURE.md and AGENTS.md. Update this file and docs/CHANGELOG.md with every change.
+
+## STATUS SUMMARY: 24 Oct 2026, after v119 (read this first)
+
+### Done on 23-24 Oct (all on `main`, tested, deployed by Vercel)
+- **Code clean-up plan finished (v83 to v115).** The old `js/app-core.js` (about 6,300 lines) was split into screen and feature files, and its layered functions were merged:
+  - v83 to v109: website pages, sign-up/login, Today, Threads, Tap and Card, Rooms, Settings and profile, website content, public card and guest pages (`public-pages.js`), Google Calendar, photo upload, account menu, Supabase data and actions (`supabase-data.js`, `supabase-actions.js`) and demo data (`demo-data.js`) each moved to their own file, unchanged.
+  - v110 to v114: `render`, `newThread`, `vPublic` and `saveCard` each have one version now (plan step 10). `vPublic` runs named steps from other files (`pcNoNewThreads`, `pcEventAt`, `pcCaptureFields`, `pcReportLink`, `pcFlipCard`, `pcCompanyLogo`).
+  - v115: `js/app-core.js` renamed to `js/core.js` (about 1,225 lines). It still loads first. Older notes that say `app-core.js` mean this file.
+- **v116: real 404s for missing `/js/` and `/css/` files.** The `vercel.json` catch-all rewrite to `app-shell.html` now skips `/js/` and `/css/`. Confirmed live: `/js/app-core.js` returns 404 and `/js/core.js?v=f65c6e34a7` returns 200. The 404 still carries the 1-year cache header from the `/js/(.*)` header rule; Vercel header rules cannot depend on status, and it is harmless because new files always get a new `?v=` hash.
+- **v117: company logos stay visible on every card style.** The logo sits on a small rounded backing (white for dark logos, dark for light logos) on the card, the card preview, the public profile and the My card logo preview. Tone is measured on upload and saved as `profiles.links.logoTone`. Confirmed live on Forest, both on `/app/card` and on the public profile.
+- **v118 and v119: style pickers preview until Save changes.** On My card (sidebar and Card style tab) and on the public profile editor (`/app/profile`, Appearance), clicking a style only previews it. My card saves it with Save changes; the profile editor shows a bar with Cancel and Save changes. `CD.theme` / `PP.theme` are null unless a style is being previewed, so a style saved on one screen is never overwritten by the other. Confirmed live with test account one (the account is left on Forest).
+- **Google Search Console verification file** `google0693ac56298b9d88.html` is in the site root. Never delete it: Google rechecks it to keep the site verified.
+- **Live checks done (24 Oct):** on `/`, `/pricing`, `/login`, `/signup` and `/app` (signed out), `core.js` loads with 200, `app-core.js` is never requested, and there were no 404s or console errors.
+
+### Appearance check (rerun on request)
+Agnes can ask the assistant to "run the appearance check". Signed in as test account one on the live site: pick Cobalt on `/app/profile` Appearance without saving, reload and confirm Forest is still saved; save Cobalt, reload and confirm; check `/app/card` shows Cobalt; switch back to Forest and save. Last run 24 Oct, all four steps passed. It needs the hosted browser, so it cannot be a scheduled routine.
+
+### Still open
+- **Signed-in network and console audit of `/app`, `/app/tap`, `/app/threads`, `/app/rooms`, `/app/card`, `/app/profile` and `/app/settings`.** Not done. The hosted browser can sign in but cannot read network or console logs. Agnes tried to send a Chrome HAR and console log several times, but nothing arrived in the thread or in agneswamaria@gmail.com. Next step: get the HAR/log as a thread attachment, or run the audit with the test account login in a test browser that records requests.
+- **Settings profile editor style picker (`pfTheme` in `js/settings.js`) still saves on click.** v118/v119 changed My card and `/app/profile` only. Change it the same way if Agnes wants all three to match.
+- **Logos uploaded before v117** get the white backing. A white or very light logo uploaded before then must be uploaded again to get the dark backing.
+- **Billing security fix:** the Billing screen should read invoices and card details from the server rather than the browser. Not started.
+- **Launch items waiting on Agnes** (she owns GitHub, Vercel, Supabase, Paystack and the domain; see the "Introthread to-do, due Sat 24 Oct" document):
+  1. Pay the domain host for introthread.com.
+  2. Resend: add and verify the domain, add `RESEND_API_KEY` in Vercel, and turn on custom SMTP in Supabase (`smtp.resend.com`, port 465, sender `noreply@introthread.com`). Then ask the assistant to test the sign-in emails.
+  3. Google sign-in: publish the OAuth consent screen, create the web client (origin `https://www.introthread.com`, redirect `https://zpcsmsqnesqftodnondn.supabase.co/auth/v1/callback`), turn on the Google provider in Supabase and set the Site URL. Then ask the assistant to test it.
+  4. Switch Paystack from test to live keys, and confirm the Pro plan amounts in KES.
+  5. Click Verify in Google Search Console now that the file is live.
+  6. Confirm that migrations 019 to 021 have been run in Supabase, and send the company's legal details for invoices.
+- **Product decisions already made (23 Oct):** global USD pricing (not Kenya-first), no physical NFC card, Free plan stays at 5 new Threads a month, keep the words "Thread" and "Rooms", and one free small Rooms event a month for up to 20 people (migration `021_free_small_rooms.sql`). The rest of the JamboLink comparison (plain words in the app, WhatsApp-first sharing, fewer tabs, Teams) is suggestions, not decisions.
+
+### How to work on this repo (unchanged rules)
+- One step per commit, no change in behaviour unless asked. Build with `python3 scripts/build_pages.py && python3 scripts/prerender.py`, then check every `?v=` hash.
+- Before and after each change: screenshot every screen at 390px and 1366px and compare, plus a targeted check of the changed behaviour.
+- Tests for every change: all 10 admin tests in `tests/admin`, every script in `tests/app` (`integrations.py`, `notifications.py`, `thread_stages.py`, `photo_crop.py`), the sweeps at 390/1366 with the CSP enforced, and axe.
+- Update `ARCHITECTURE.md` and `docs/CHANGELOG.md` with each change, and use `data-on-*` handlers only.
 
 ## PRICING: source of truth (v65, 23 Oct 2026)
 
@@ -50,7 +86,7 @@ The page footer reads (since v69): "UK prices shown in GBP: Pro £9/month, Rooms
 5. **Calendar booking: RESOLVED in v73 (Pro only).** `has('booking')` now guards `dIcs()` (the "Add to calendar" file on a Thread, the Threads follow-up list and the Thread menu) in `js/pro-gates.js`. Free users see the "Calendar booking is a Pro feature" dialog. The "Book a meeting" link on a person's own card stays free, because it is part of their card.
 6. **Paystack plan amounts** for Pro in KES need checking against $12 (monthly) and $120 (yearly).
 
-## STATUS SUMMARY: 23 Oct 2026, after v64 (read this first)
+## STATUS SUMMARY: 23 Oct 2026, after v64 (kept for history; see 24 Oct above)
 
 ### Done (all on `main`, tested, deployed by Vercel)
 - **Code clean-up**
