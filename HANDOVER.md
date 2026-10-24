@@ -20,6 +20,7 @@ Agnes can ask the assistant to "run the appearance check". Signed in as test acc
 
 ### Still open
 - **Signed-in network and console audit of `/app`, `/app/tap`, `/app/threads`, `/app/rooms`, `/app/card`, `/app/profile` and `/app/settings`.** Not done. The hosted browser can sign in but cannot read network or console logs. Agnes tried to send a Chrome HAR and console log several times, but nothing arrived in the thread or in agneswamaria@gmail.com. A later try (24 Oct, 11:40 pm) also did not include them: the newest thread attachments were the Google verification file and a PDF of the Google Auth branding page, and none of the attached files is a .har or a text log. Next step: get the HAR/log as a thread attachment, or run the audit with the test account login in a test browser that records requests.
+- **Microsoft sign-in dropped (v122, Agnes's decision 24 Oct):** the Continue with Microsoft buttons on login and signup, the Microsoft row in Settings > Integrations and Connected accounts, and the Microsoft wording in the privacy policy are gone. Sign-in is Google, LinkedIn (when set up) and email. Skip section 5 (Microsoft Azure) of the setup guide; nothing needs to be set up in Azure or in Supabase's Azure provider.
 - **Settings profile editor style picker:** removed in v121. `pfTheme` and its `.pf-sty` styles were never shown on any screen and nothing depended on them.
 - **Logos uploaded before v117:** fixed in v120. The tone is worked out and saved the first time the owner opens My card.
 - **Billing security fix:** already in place. Receipts and Room passes come from the server's `payments` and `room_passes` tables since v80, and plan, status and card in `prefs.billing` are written only by the payment server; migration 018 (run) stops the browser changing them.
@@ -111,7 +112,7 @@ The page footer reads (since v69): "UK prices shown in GBP: Pro £9/month, Rooms
 
 ### Waiting on Agnes (she owns GitHub, Vercel, Supabase and the domain)
 0. Run `supabase/migrations/019_pricing.sql`, which sets Pro to £9/month and the published plan text. Confirm the Paystack Pro plan amounts in KES.
-1. Turn on the Google, Microsoft and LinkedIn sign-in providers in Supabase.
+1. Turn on the Google and LinkedIn sign-in providers in Supabase (Microsoft was dropped in v122).
 2. Set up Resend for sign-in emails and add its key in Vercel.
 3. Run database migration 012 in Supabase.
 4. Send the company's legal details for the invoice.
@@ -222,7 +223,7 @@ The page footer reads (since v69): "UK prices shown in GBP: Pro £9/month, Rooms
 ### Live checks still needed (only a person can do these)
 - In browser devtools, check that each page's source has `<!--pre-->` text, that /app and /admin show no homepage flash, and that the console is clear at phone and laptop width. The assistant's browser tools cannot read raw source or the console.
 - Waiting on Agnes:
-  - Google, Microsoft and LinkedIn sign-in providers
+  - Google and LinkedIn sign-in providers
   - Resend
   - migration 012
   - the company's legal details for the invoice
@@ -277,7 +278,7 @@ The page footer reads (since v69): "UK prices shown in GBP: Pro £9/month, Rooms
 **Pending (owner or Agnes):**
 1. Confirm the public card (introthread.com/mosesmunyi in a private window) still shows name, photo and links after 016. The owner's screenshot did not arrive.
 2. Check whether migrations 012 (audit screen) and 013 (fix ambiguous columns) were run. Open /admin/users and /admin/audit; if either shows "column reference ... is ambiguous", run 013.
-3. Agnes: turn on Google, Microsoft and LinkedIn sign-in providers.
+3. Agnes: turn on Google and LinkedIn sign-in providers.
 4. Agnes: set up Resend email (`RESEND_API_KEY`, `NOTIFY_FROM`) and verify the domain. Then do a real end-to-end sign-up test.
 5. Company legal details for invoices: address, company number, VAT number. Invoices currently say "Introthread Ltd, London and New York".
 6. Paystack: switch to live keys and live plan codes before launch. USD once the Kenyan USD account is approved.
@@ -519,9 +520,9 @@ Tap -> Thread -> one question, "What's next?". Answers stay sealed until both pe
 1b. All admin screens are redesigned (v34 to v43). Agnes sends one mockup at a time.
 2. Agnes: sign in with the admin owner account, open /admin, set up two-step verification.
 3. Stripe billing (next in the build order after admin): Product + monthly/yearly Prices in USD and GBP, Price IDs into Plans, secret key and webhook secret in Vercel env (never in code), checkout, customer portal, webhook writing `subscriptions` (incl. started_at, canceled_at, amount, current_period_end) and `payments` (amount_usd for totals). The Revenue badge turns green automatically once Stripe ids appear.
-4. Then Google/Microsoft connect, then LinkedIn (agreed build order: contacts and import, admin, Stripe, Google/Microsoft, LinkedIn). No LinkedIn company page yet.
+4. Then Google connect, then LinkedIn (agreed build order: contacts and import, admin, Stripe, Google, LinkedIn; Microsoft dropped 24 Oct). No LinkedIn company page yet.
 5. Supabase email templates (code based, code length 8) and Resend SMTP; then a real end-to-end sign-up test with a real inbox.
-6. Real Google and Microsoft sign-in (Google sign-in being tested with a separate test account).
+6. Real Google sign-in (Google sign-in being tested with a separate test account).
 7. Agnes's on-phone test of capture (business card, QR, paste, contacts/.vcf); fix what she reports.
 8. Contacts are stored on the device until used with the `contacts` table (exists since 002); check sync when real users arrive.
 9. Possible future: move phone/LinkedIn out of `where_met` into proper columns.

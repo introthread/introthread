@@ -938,7 +938,6 @@ function secView(u) {
                     ({
                       email: 'Email and password',
                       google: 'Google',
-                      azure: 'Microsoft',
                       linkedin_oidc: 'LinkedIn'
                     })[x] || x
                 )
@@ -1315,10 +1314,9 @@ bNotifs = function (u) {
   return i >= 0 ? h.slice(0, i) + extra + h.slice(i) : h;
 };
 
-/* ==== Settings > Integrations: link and unlink Google, Microsoft and LinkedIn sign-in to your account (Supabase identity linking) ==== */
+/* ==== Settings > Integrations: link and unlink Google and LinkedIn sign-in to your account (Supabase identity linking) ==== */
 const INT_P = [
   ['google', 'Google', 'g', 'Sign in with Google and keep your Google account linked.'],
-  ['azure', 'Microsoft', 'ms', 'Sign in with Microsoft (Outlook, Microsoft 365) and keep it linked.'],
   ['linkedin_oidc', 'LinkedIn', 'li', 'Sign in with LinkedIn and link your LinkedIn profile.']
 ];
 let INTX = { ids: null, on: null, loading: false, err: '' };
@@ -1349,15 +1347,7 @@ async function intLoad(force) {
   }
 }
 function intIcon(c) {
-  return c === 'li'
-    ? sv('li', 20)
-    : c === 'ms'
-      ? typeof stMs === 'function'
-        ? stMs()
-        : sv('grid', 20)
-      : typeof oG === 'function'
-        ? oG()
-        : sv('globe', 20);
+  return c === 'li' ? sv('li', 20) : typeof oG === 'function' ? oG() : sv('globe', 20);
 }
 function intView() {
   const live = typeof cloud === 'function' && cloud();
@@ -1403,7 +1393,6 @@ async function intConnect(k) {
   const p = INT_P.find(x => x[0] === k);
   try {
     const opts = { redirectTo: location.origin + '/app/settings?tab=integrations' };
-    if (k === 'azure') opts.scopes = 'email';
     const { error } = await SB.auth.linkIdentity({ provider: k, options: opts });
     if (error) throw error;
   } catch (e) {

@@ -39,7 +39,7 @@ People meet at events and swap cards, then nothing happens. Nobody knows which c
 - Fonts: sans-serif only.
 
 ## Next
-- Google, Microsoft and LinkedIn sign-in.
+- Google and LinkedIn sign-in. (Microsoft sign-in was dropped on 24 Oct 2026.)
 - Resend email.
 - Live Paystack.
 - Emailed Room invitations.

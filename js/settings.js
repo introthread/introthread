@@ -796,10 +796,6 @@ function stPlan(u) {
  <div class="st12-bill"><span>${pro ? 'Next billing date: ' + stNextBill(u) : 'Billed monthly. Cancel anytime.'}</span><button type="button" class="x-btn" data-on-click="stManage()">${pro ? 'Manage subscription' : 'Upgrade to Pro'} ${sv('arrow', 16)}</button></div></section>`;
 }
 
-function stMs() {
-  return `<svg width="22" height="22" viewBox="0 0 24 24" aria-hidden="true"><rect x="2" y="2" width="9.5" height="9.5" fill="#f25022"/><rect x="12.5" y="2" width="9.5" height="9.5" fill="#7fba00"/><rect x="2" y="12.5" width="9.5" height="9.5" fill="#00a4ef"/><rect x="12.5" y="12.5" width="9.5" height="9.5" fill="#ffb900"/></svg>`;
-}
-
 function stGConnect() {
   if (!cloud()) return toast('Google connects on your live account. This is the demo.');
   if (typeof oauth === 'function') oauth('Google', 1);
@@ -822,7 +818,6 @@ function stConnected() {
   return `<section class="d-box st12-box"><div class="cd-bh"><span class="cd-bi">${sv('link', 20)}</span><div><b>Connected accounts</b><small>Connect your accounts to make networking easier.</small></div></div>
  ${row(sv('li', 20), 'li', 'LinkedIn', 'Connect to import your profile and contacts.', `<button type="button" class="st12-cb" data-on-click="toast('LinkedIn connection is coming soon. It needs LinkedIn app approval first.')">Connect</button>`)}
  ${row(typeof oG === 'function' ? oG() : sv('globe', 20), 'g', 'Google', g ? 'Connected. Today&rsquo;s meetings show on your dashboard.' : 'Connect to add events and calendar.', g ? `<button type="button" class="st12-cb on" data-on-click="stGDisc()">Disconnect</button>` : `<button type="button" class="st12-cb" data-on-click="stGConnect()">Connect</button>`)}
- ${row(stMs(), 'ms', 'Microsoft', 'Connect your Outlook calendar.', `<button type="button" class="st12-cb" data-on-click="toast('Microsoft connection is coming soon. It needs a Microsoft app registration first.')">Connect</button>`)}
  <p class="st12-sec">${sv('lock', 13)} Connections use the provider&rsquo;s secure sign-in. Introthread never sees your password.</p></section>`;
 }
 
