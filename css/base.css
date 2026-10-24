@@ -5753,35 +5753,6 @@ body.x-open .x-links .x-mlogin {
   font: 600 13.5px var(--xss);
   cursor: pointer;
 }
-.x-prow {
-  display: flex;
-  gap: 16px;
-  align-items: center;
-  padding-bottom: 16px;
-  margin-bottom: 4px;
-  border-bottom: 1px solid var(--line, #e6e8ec);
-}
-.x-prow .x-av {
-  margin: 0;
-  box-shadow: none;
-}
-.x-prow b {
-  display: block;
-  font-size: 15px;
-}
-.x-prow small {
-  display: block;
-  font-size: 13px;
-  color: var(--xmu);
-}
-.x-prow-b {
-  display: flex;
-  gap: 8px;
-  margin-top: 8px;
-}
-.x-prow-b .x-btn {
-  cursor: pointer;
-}
 @media (min-width: 1081px) and (max-height: 820px) {
   .x-up-in {
     padding: 8px 12px;
