@@ -2723,6 +2723,29 @@ html body .pc-m .pc-stage {
   max-height: 100%;
   object-fit: contain;
 }
+/* v117: a backing behind the company logo so it never blends into the card colour */
+.cd-clogo,
+.pc-clogo {
+  box-sizing: content-box;
+  padding: 4px 10px;
+  border-radius: 8px;
+}
+.cd-clogo.cl-on-lt,
+.pc-clogo.cl-on-lt,
+.cl-prev img.cl-on-lt {
+  background: #fff;
+  box-shadow: 0 0 0 1px rgba(16, 24, 40, 0.08);
+}
+.cd-clogo.cl-on-dk,
+.pc-clogo.cl-on-dk,
+.cl-prev img.cl-on-dk {
+  background: #101828;
+}
+.cl-prev img {
+  box-sizing: border-box;
+  padding: 2px 4px;
+  border-radius: 6px;
+}
 .cl-prev span {
   font-size: 12px;
   color: #4b5565;
