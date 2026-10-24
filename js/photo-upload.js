@@ -1,4 +1,4 @@
-// Introthread - Profile photo upload (v101): upBox, shrinkImg, pickPhoto, removePhoto, photoRow, _phBusy, applyPhoto and
+// Introthread - Profile photo upload (v101): upBox, shrinkImg, pickPhoto, removePhoto, _phBusy, applyPhoto and
 // the sign-up su3 wrapper that keeps the chosen photo until the account exists. Moved out of js/app-core.js unchanged and
 // in their original order (cleanup plan step 6). Sits next to photo-crop.js in the js folder, but loads straight after
 // app-core.js: admin-audit.js replaces pickPhoto with the crop version while loading, so this file must load before it,
@@ -77,9 +77,6 @@ async function removePhoto() {
     window._keepScroll = true;
     render();
   }
-}
-function photoRow(u) {
-  return `<div class="x-prow">${avatarC(u, 64)}<div><b>Profile photo</b><small>Shown on your card and public profile.</small><div class="x-prow-b"><label class="x-btn sm ghost">${u.photo ? 'Change photo' : 'Upload photo'}<input type="file" hidden accept="image/jpeg,image/png,image/webp" data-on-change="pickPhoto(this,1)"></label>${u.photo ? '<button type="button" class="x-btn sm ghost" data-on-click="removePhoto()">Remove</button>' : ''}</div></div></div>`;
 }
 let _phBusy = false;
 async function applyPhoto() {
