@@ -35,6 +35,7 @@ async def main():
             return await r.continue_()
         await pg.route('**/*',rt)
         await pg.goto('https://local.test/');await pg.wait_for_timeout(900)
+        await pg.wait_for_function("typeof demoLogin==='function'",timeout=15000)  # v108: scripts can take longer than 1s on a cold start
         assert await pg.evaluate("typeof SB!=='undefined' && SB===window.__SB"), 'test Supabase swap did not take effect'
         print('sb swap: ok')
         await pg.evaluate("demoLogin()");await pg.wait_for_timeout(300)

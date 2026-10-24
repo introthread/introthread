@@ -1,13 +1,27 @@
 
-import asyncio,json
+import asyncio,json,os as _os
 from playwright.async_api import async_playwright
 async def main():
     html=open('index.html').read()
     async with async_playwright() as p:
         b=await p.chromium.launch();pg=await b.new_page(viewport={'width':390,'height':844})
         errs=[];pg.on('pageerror',lambda e:errs.append(str(e)));pg.on('dialog',lambda d:asyncio.ensure_future(d.accept()))
-        await pg.route('**/*',lambda r: r.fulfill(body=html,content_type='text/html') if r.request.url.startswith('https://local.test/') and r.request.resource_type=='document' else r.abort() if ('supabase' in r.request.url or 'nominatim' in r.request.url) else r.continue_())
+        # v108: serve the site's own files (js, css, config.js) from disk. Before this, only the page itself was served,
+        # so no app script loaded and demoLogin was never defined (same cause as integrations.py, fixed in v106).
+        async def rt(r):
+            u=r.request.url
+            if u.startswith('https://local.test/'):
+                if r.request.resource_type=='document': return await r.fulfill(body=html,content_type='text/html')
+                fp=u.split('://',1)[1].split('/',1)[1].split('?')[0].split('#')[0]
+                if fp and _os.path.isfile(fp):
+                    ct={'.js':'application/javascript','.css':'text/css','.svg':'image/svg+xml','.png':'image/png'}.get(_os.path.splitext(fp)[1],'application/octet-stream')
+                    return await r.fulfill(body=open(fp,'rb').read(),content_type=ct)
+                return await r.abort()
+            if 'supabase' in u or 'nominatim' in u: return await r.abort()
+            return await r.continue_()
+        await pg.route('**/*',rt)
         await pg.goto('https://local.test/');await pg.wait_for_timeout(1000)
+        await pg.wait_for_function("typeof demoLogin==='function'",timeout=15000)  # v108: scripts can take longer than 1s on a cold start
         await pg.evaluate("demoLogin()");await pg.wait_for_timeout(400)
         async def mk(name):
             await pg.evaluate("go('/app/tap')");await pg.wait_for_timeout(500)
