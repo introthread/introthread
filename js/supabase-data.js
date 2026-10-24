@@ -100,11 +100,14 @@ async function loadCloud(user) {
         city: m.city,
         bio: m.bio,
         theme: m.theme
-      })
-      .select('id,handle,name,role,company,city,bio,theme,links,created_at')
-      .single();
+      });
+    /* No .select() here: INSERT ... RETURNING needs SELECT on the whole row, which 016 blocks
+       (prefs/plan are private), so it failed with "permission denied for table profiles".
+       Read the new row back through my_profile instead. */
     if (ins.error) return fail(ins.error);
-    p = ins.data;
+    const again = await SB.rpc('my_profile');
+    if (again.error) return fail(again.error);
+    p = again.data;
   }
   const [th, rm] = await Promise.all([
     SB.from('threads').select('*, thread_events(*)').order('created_at', { ascending: false }),
