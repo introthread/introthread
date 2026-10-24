@@ -37,7 +37,7 @@
       "destination": "/signup/index.html"
     },
     {
-      "source": "/(.*)",
+      "source": "/((?!js/|css/).*)",
       "destination": "/app-shell.html"
     }
   ],

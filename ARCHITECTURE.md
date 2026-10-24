@@ -114,7 +114,7 @@ Each step was done one screen or file per commit, with the full test list re-run
   - Start-up (`boot()` in `core.js`) waits for `DOMContentLoaded` through a `DOM_READY` flag, because with deferred scripts `readyState` is already `interactive` before the last files have run.
 - **Step 10 (v58, 23 Oct 2026), done: pre-rendered website pages.**
   - `scripts/prerender.py` loads `/`, `/how`, `/rooms`, `/networks`, `/pricing`, `/about`, `/privacy` and `/terms` in headless Chromium (logged out, no network). It saves the drawn `#root` between `<!--pre-->` markers, so the text shows before scripts run and search engines read it directly. The app redraws the same content on load.
-  - App, admin, card and room routes now use `app-shell.html` (an empty root) through the `vercel.json` catch-all, so they never flash the home page.
+  - App, admin, card and room routes now use `app-shell.html` (an empty root) through the `vercel.json` catch-all, so they never flash the home page. Since v116 the catch-all skips `/js/` and `/css/`, so a missing script or style file returns a real 404 instead of the app page.
   - Login and signup are not pre-rendered, because they change with sign-in options.
   - Screenshots of each page with and without scripts match at 390px and 1366px. The only difference is the pulsing LIVE dot on /rooms.
 - **Step 11 (v59-v63, 23 Oct 2026), done: no inline JavaScript.**
