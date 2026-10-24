@@ -159,23 +159,6 @@ async function pfSave(b) {
   render();
 }
 
-async function pfTheme(k) {
-  PF.theme = k;
-  document.querySelectorAll('.pf-sty').forEach(b => {
-    const on = b.dataset.k === k;
-    b.classList.toggle('on', on);
-    b.setAttribute('aria-pressed', on);
-  });
-  const p = $('#pfprev');
-  if (p) p.innerHTML = pfPreview();
-  const u = me();
-  if (await upd('profiles', u.id, { theme: k })) {
-    u.theme = k;
-    save();
-    toast(THEMES[k].n + ' style applied');
-  }
-}
-
 async function pfVis(on) {
   const u = me();
   PF.hidden = !on;

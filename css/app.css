@@ -954,55 +954,6 @@
   font-size: 16px;
   margin-top: 6px;
 }
-.pf-styles {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 10px;
-}
-.pf-sty {
-  border: 1px solid var(--line);
-  background: #fff;
-  border-radius: 12px;
-  padding: 6px 6px 9px;
-  text-align: left;
-  font: 500 13.5px var(--xss);
-  color: var(--xink);
-  cursor: pointer;
-  transition:
-    border-color 0.15s,
-    box-shadow 0.15s;
-}
-.pf-sty span {
-  position: relative;
-  display: block;
-  height: 64px;
-  border-radius: 8px;
-  margin-bottom: 8px;
-  overflow: hidden;
-}
-.pf-sty i {
-  position: absolute;
-  right: 6px;
-  top: 6px;
-  width: 22px;
-  height: 22px;
-  border-radius: 50%;
-  background: var(--xb);
-  display: none;
-  place-items: center;
-  box-shadow: 0 0 0 2px #fff;
-}
-.pf-sty.on {
-  border-color: var(--xb);
-  background: #eef3ff;
-  box-shadow: 0 0 0 3px rgba(31, 94, 255, 0.15);
-}
-.pf-sty.on i {
-  display: grid;
-}
-.pf-sty:hover {
-  border-color: #c5cbd8;
-}
 .pf-tabs {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
