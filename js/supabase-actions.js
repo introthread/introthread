@@ -186,6 +186,7 @@ answer = async function (id, k) {
   save();
   render();
   if (k) toast(t.theirs ? 'Answers revealed' : 'Answer locked in privately');
+  if (k && t.theirs && typeof itApi === 'function') itApi('match-notify', { thread_id: id });
 };
 sendFollow = async function (id) {
   const t = findThread(id);

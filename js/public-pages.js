@@ -194,6 +194,7 @@ guestAnswer = function (tok, k) {
   if (findThread(tok) && !findThread(tok)._c) return _ga(tok, k);
   SB.rpc('guest_answer', { p_token: tok, p_answer: k }).then(({ error }) => {
     if (error) return fail(error);
+    if (typeof itMatchGuest === 'function') itMatchGuest(tok);
     delete GUEST[tok];
     refreshOwned(tok);
     render();

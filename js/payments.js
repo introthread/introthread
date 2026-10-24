@@ -35,6 +35,16 @@ async function itApi(path, body) {
     return null;
   }
 }
+/* v123: "You matched" email. The server checks the answers really match and sends once per Thread. */
+function itMatchGuest(tok) {
+  try {
+    fetch('/api/match-notify', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ token: tok })
+    }).catch(() => {});
+  } catch (e) {}
+}
 /* Analytics: PostHog, only after consent, only when a key is in config.js. No emails or names are sent. */
 let IT_PH = false;
 function itConsent() {
