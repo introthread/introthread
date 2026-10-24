@@ -1,9 +1,8 @@
 // Introthread - Demo data (v109): seed, which fills the "Explore the live demo" account with sample people, Threads
-// and Rooms, and demoStage, the old phone-mockup stage for the marketing pages. Moved out of js/app-core.js unchanged and
-// in their original order (cleanup plan step 9). Nothing uses either while the page loads: seed is called only when the
-// demo starts (demoLogin in app-core.js) and by the signup preview in auth-pages.js, and demoStage is not called
-// anywhere. Loads straight after app-core.js so seed is available as early as before. demo-mode.js (loaded last) is the
-// separate file that keeps the demo account safe.
+// and Rooms. Moved out of js/app-core.js unchanged (cleanup plan step 9). Nothing uses it while the page loads: seed is
+// called only when the demo starts (demoLogin in app-core.js) and from the signup sample button (suSample in
+// auth-pages.js). Loads straight after app-core.js so seed is available as early as before. demo-mode.js (loaded last)
+// is the separate file that keeps the demo account safe. demoStage, the old unused phone-mockup stage, was removed in v111.
 
 function seed(u) {
   const now = Date.now();
@@ -147,17 +146,4 @@ function seed(u) {
       events: [{ k: 'tap', at: c, text: 'Tapped in room ' + room.code }]
     });
   }
-}
-
-function demoStage() {
-  return `<div class="stage">
-<div class="phone a"><div class="notch"></div><div class="scr"><div class="top"><div class="tiny muted" style="font-weight:800;letter-spacing:.1em">YOUR CARD</div></div>
-<div class="mini-card"><div class="row">${av('Sarah Williams', 'sm')}<div><b style="font-size:13px">Sarah Williams</b><div class="tiny" style="color:#aab3c4">Marketing Director, Acme</div></div></div><div class="tiny" style="margin-top:34px;color:#aab3c4">introthread.com/sarah</div></div>
-<div style="padding:14px"><div class="tiny muted" style="font-weight:800;margin-bottom:8px">LAST THREAD</div><div class="row" style="border:1px solid var(--line);border-radius:12px;padding:10px">${av('James Carter', 'sm')}<div style="flex:1"><b style="font-size:12px">James Carter</b><div class="tiny muted">London Tech Week &middot; just now</div></div><span class="chip green" style="font-size:10px">Confirmed</span></div></div></div></div>
-<div class="tapwave"></div><div class="tapwave d2"></div><div class="tapwave d3"></div><div class="threadline"></div>
-<div class="phone b"><div class="notch"></div><div class="scr"><div class="top"><div class="tiny muted" style="font-weight:800;letter-spacing:.1em">NEW THREAD</div><b style="font-size:17px;display:block;margin-top:6px;letter-spacing:-.4px">You and Sarah met at London Tech Week</b></div>
-<div style="padding:0 18px 6px" class="tiny muted">One question. Only you see your answer until you both reply.</div>
-<div style="padding:4px 18px 0;font-weight:900;font-size:15px">What's next?</div>
-<div class="q-opt on">Meet again ${ic('check', 14, '#3157ff', 3)}</div><div class="q-opt">Introduce someone</div><div class="q-opt">Stay in touch</div><div class="q-opt">Not now</div>
-<div style="margin:12px 14px" class="tiny muted">${ic('lock', 12)} Private until you both answer</div></div></div></div>`;
 }

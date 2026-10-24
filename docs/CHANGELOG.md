@@ -3,6 +3,7 @@
 Everything built so far, newest first. Full technical detail for each item is in `HANDOVER.md`. How Rooms, events, communities and the Room pass work: `docs/ROOMS.md`.
 
 ## 24 Oct 2026
+- **v111: Code cleanup: unused `demoStage` removed.** `demoStage` in `js/demo-data.js` (an old phone-mockup stage for the marketing pages) was not called from any script, HTML page or test, so it was deleted and the file header updated. The pre-rendered pages are identical before and after. No change in behaviour.
 - **v110: Code cleanup, plan step 10: `render` merged into one function.** The base `render` and its 6 layered versions in `js/app-core.js` are now a single `render`, running the same steps in the same order; the page-building part is `renderRoute`, called from it. Later files still wrap `render` as before. Before-and-after DOM snapshots and screenshots of 26 screens at 390px and 1366px match, apart from differences that also occur between two runs of the unchanged code. The pre-rendered pages are identical before and after. No change in behaviour.
 
 ## 23 Oct 2026
