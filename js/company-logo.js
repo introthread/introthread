@@ -74,9 +74,8 @@ cdCard = function (u) {
   const i = h.indexOf('<div class="cd-id">');
   return i < 0 ? h : h.slice(0, i) + `<div class="cd-cl">${img}</div>` + h.slice(i);
 };
-const _vPub49 = vPublic;
-vPublic = function (hd) {
-  let h = _vPub49.apply(this, arguments);
+/* vPublic step (v113): company-logo.js: company logo under the name. Called in order from vPublic in public-pages.js. */
+function pcCompanyLogo(h, hd) {
   const u = DB.users.find(x => String(x.handle || '').toLowerCase() === String(hd || '').toLowerCase());
   if (!u || typeof h !== 'string') return h;
   const img = clImg(u, 'pc-clogo');
@@ -87,7 +86,7 @@ vPublic = function (hd) {
   const c = b < 0 ? -1 : h.indexOf('</p>', b);
   if (c < 0) return h;
   return h.slice(0, c + 4) + `<div class="pc-cl">${img}</div>` + h.slice(c + 4);
-};
+}
 const _vCard49 = vCard;
 vCard = function () {
   let h = _vCard49.apply(this, arguments);

@@ -617,9 +617,8 @@ bExportThreads = function () {
   }
 };
 /* public card: phone and LinkedIn for the visitor, with autofill */
-const _vPub30 = vPublic;
-vPublic = function (hd) {
-  let h = _vPub30(hd);
+/* vPublic step (v113): capture.js: phone and LinkedIn boxes for the visitor, with autofill. Called in order from vPublic in public-pages.js. */
+function pcCaptureFields(h, hd) {
   if (!h.includes('id="gc"')) return h;
   const fi = (id, ic, ph, o) =>
     `<label class="pc-in">${sv(ic, 18)}<input id="${id}" placeholder="${ph}" ${o}></label>`;
@@ -633,7 +632,7 @@ vPublic = function (hd) {
       sv('spark', 14) +
       ' Tip: paste your LinkedIn link or email signature into any box and we fill in the rest.</p><form class="pc-form"'
   );
-};
+}
 const _guest30 = guestThread;
 guestThread = function (e, oid) {
   const gw = $('#gw');

@@ -158,9 +158,8 @@ shell = function (on, inner) {
   return _shell24(on, inner).replace('<a href="/app/tap" class="mb-tap', '<a href="/app/scan" class="mb-tap');
 };
 /* public card: prefill where you met from an event QR (?at=) */
-const _vPub24 = vPublic;
-vPublic = function (hd) {
-  let h = _vPub24(hd);
+/* vPublic step (v113): event-mode.js: prefill where you met from an event QR (?at=). Called in order from vPublic in public-pages.js. */
+function pcEventAt(h, hd) {
   const at = new URLSearchParams(location.search).get('at');
   if (at && h.includes('id="gw"')) {
     const v = esc(at.slice(0, 120));
@@ -175,7 +174,7 @@ vPublic = function (hd) {
       );
   }
   return h;
-};
+}
 
 /* v26 bottom bar icons: add the missing Today and Threads icons */
 SV.home = '<path d="M3.5 10.5 12 3.5l8.5 7"/><path d="M5.5 9v11h13V9"/><path d="M10 20v-5.5h4V20"/>';

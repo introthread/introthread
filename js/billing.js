@@ -889,9 +889,8 @@ pcVcf = function (id) {
     L.phone = keep.phone;
   }
 };
-const _vPub19 = vPublic;
-vPublic = function (hd) {
-  const h = _vPub19(hd);
+/* vPublic step (v113): billing.js: a card whose owner turned off new Threads shows a notice instead of the form. Called in order from vPublic in public-pages.js. */
+function pcNoNewThreads(h, hd) {
   const u = DB.users.find(x => x.handle === String(hd).toLowerCase());
   if (!u || (u.links || {}).allowThreads !== false) return h;
   const f = esc((u.name || '').split(' ')[0]);
@@ -899,7 +898,7 @@ vPublic = function (hd) {
     /<section class="pc-box pc-start"[\s\S]*?<\/form><\/section>/,
     `<section class="pc-box pc-start off"><div class="pc-bh"><span class="pc-bi">${sv('lock', 20)}</span><div><b>${f} isn&rsquo;t taking new Threads from this card</b><small>You can still save ${f}&rsquo;s contact details or use the links above.</small></div></div></section>`
   );
-};
+}
 const _guest19 = guestThread;
 guestThread = function (e, oid) {
   const o = DB.users.find(u => u.id === oid);

@@ -129,9 +129,8 @@ function pcTap(e) {
   if (window.getSelection && String(window.getSelection()).length) return;
   pcFlip();
 }
-const _vPub23 = vPublic;
-vPublic = function (hd) {
-  let h = _vPub23.apply(this, arguments);
+/* vPublic step (v113): late-fixes.js: the card flips to show the QR code. Called in order from vPublic in public-pages.js. */
+function pcFlipCard(h, hd) {
   const a = h.indexOf('<article class="pc-card');
   if (a < 0) return h;
   const b = h.indexOf('</article>', a);
@@ -175,7 +174,7 @@ vPublic = function (hd) {
     if (bk) bk.inert = true;
   }, 0);
   return h;
-};
+}
 document.addEventListener('keydown', e => {
   if (e.key === 'Escape' && PCF && document.getElementById('pcflip')) pcFlip(false);
 });

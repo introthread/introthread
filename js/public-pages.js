@@ -1,11 +1,11 @@
-// Introthread - Public card and guest pages (v99): the public card page (vPublic, with its 4 layered versions from
-// app-core.js in their original order), vcard, pcVcf, the guest Thread pages (guestThread, vGuest, guestConfirm,
-// guestAnswer, each with its later version) and their state (PUB, GUEST). Moved out of js/app-core.js unchanged and in
-// their original order (cleanup plan step 4). Loads straight after app-core.js, so its load-time wrappers still run
-// before any later file (billing, capture, admin-core, late-fixes, event-mode, company-logo) wraps vPublic, pcVcf or
-// guestThread. render in app-core.js calls vPublic and vGuest only at run time.
+// Introthread - Public card and guest pages (v99, vPublic merged in v113): the public card page (vPublic, built from
+// pcBasic, pcFind and pcCard here plus one step each in billing.js, event-mode.js, capture.js, admin-core.js,
+// late-fixes.js and company-logo.js), vcard, pcVcf, the guest Thread pages (guestThread, vGuest, guestConfirm,
+// guestAnswer, each with its later version) and their state (PUB, GUEST). Loads straight after app-core.js. render in
+// app-core.js calls vPublic and vGuest only at run time; the vPublic steps in later files are called only at run time.
 
-function vPublic(h) {
+/* pcBasic: the original card page, now used for unknown handles. Was the first version of vPublic. */
+function pcBasic(h) {
   h = String(h || '').toLowerCase();
   const u = DB.users.find(x => String(x.handle || '').toLowerCase() === h);
   if (!u) return vNotFound(h);
@@ -105,26 +105,6 @@ function guestAnswer(id, k) {
 const PUB = {},
   GUEST = {};
 
-const _vPublic = vPublic;
-
-vPublic = function (h) {
-  h = String(h).toLowerCase();
-  if (DB.users.some(u => u.handle === h) || !SB || PUB[h] === null) return _vPublic(h);
-  if (!PUB[h]) {
-    SB.from('profiles')
-      .select('id,handle,name,role,company,city,bio,theme,links')
-      .eq('handle', h)
-      .maybeSingle()
-      .then(({ data }) => {
-        PUB[h] = data ? mapProfile(data, '') : null;
-        if (data) DB.users.push(PUB[h]);
-        render();
-      });
-    return `<div class="pub"><div class="pubcard center"><div style="margin:60px 0">${logo()}</div><p class="muted">Loading card...</p></div></div>`;
-  }
-  return _vPublic(h);
-};
-
 vcard = function (id) {
   const u = DB.users.find(x => x.id === id);
   const v = `BEGIN:VCARD\nVERSION:3.0\nFN:${u.name}\nTITLE:${u.role}\nORG:${u.company}\n${u.email ? 'EMAIL:' + u.email + '\n' : ''}URL:${profileUrl(u)}\nEND:VCARD`;
@@ -220,51 +200,6 @@ guestAnswer = function (tok, k) {
   });
 };
 
-const _vPubX = vPublic;
-
-vPublic = function (h) {
-  const u = DB.users.find(x => x.handle === String(h).toLowerCase());
-  const mine = me() && u && me().id === u.id;
-  if (u && u.links && u.links.hidden && !mine)
-    return (
-      mnav() +
-      `<section class="x-ph c x-nf"><div class="x-wrap"><div class="x-eye">Private profile</div><h1 class="x-h1 x-ph-h">This profile is <em>private.</em></h1><p class="x-lead" style="margin:0 auto">The owner has chosen not to show their card publicly right now.</p><div class="x-cta-row" style="justify-content:center"><a href="/signup" class="x-btn lg">Create your own card ${sv('arrow', 17)}</a></div></div></section>` +
-      foot()
-    );
-  return _vPubX(h);
-};
-
-const _vPub11 = vPublic;
-
-vPublic = function (hd) {
-  const out = _vPub11(hd);
-  setTimeout(() => {
-    try {
-      const u = DB.users.find(x => x.handle === String(hd).toLowerCase());
-      if (u && !(u.links && u.links.hidden)) {
-        const L = u.links || {};
-        document.title = `${u.name}${u.role ? ' - ' + u.role : ''}${u.company ? ' at ' + u.company : ''} | Introthread`;
-        const d = document.querySelector('meta[name="description"]');
-        if (d)
-          d.setAttribute(
-            'content',
-            (L.seoDesc || u.bio || 'Connect with ' + u.name + ' on Introthread.').slice(0, 160)
-          );
-        let r = document.querySelector('meta[name="robots"]');
-        if (L.noindex) {
-          if (!r) {
-            r = document.createElement('meta');
-            r.name = 'robots';
-            document.head.appendChild(r);
-          }
-          r.content = 'noindex';
-        } else if (r) r.remove();
-      }
-    } catch (_) {}
-  }, 0);
-  return out;
-};
-
 function pcVcf(id) {
   const u = DB.users.find(x => x.id === id);
   if (!u) return;
@@ -292,13 +227,65 @@ function pcVcf(id) {
   toast('Contact saved');
 }
 
-const _vPub14 = vPublic;
-
-vPublic = function (hd) {
+/* pcFind: the private-profile page, or the card owner looked up (from Supabase the first time for cloud accounts),
+   drawn with pcBasic. Was the v12 private-profile and cloud-loading versions of vPublic. */
+function pcFind(h) {
+  const u = DB.users.find(x => x.handle === String(h).toLowerCase());
+  const mine = me() && u && me().id === u.id;
+  if (u && u.links && u.links.hidden && !mine)
+    return (
+      mnav() +
+      `<section class="x-ph c x-nf"><div class="x-wrap"><div class="x-eye">Private profile</div><h1 class="x-h1 x-ph-h">This profile is <em>private.</em></h1><p class="x-lead" style="margin:0 auto">The owner has chosen not to show their card publicly right now.</p><div class="x-cta-row" style="justify-content:center"><a href="/signup" class="x-btn lg">Create your own card ${sv('arrow', 17)}</a></div></div></section>` +
+      foot()
+    );
+  /* cloud accounts: load the card from Supabase the first time it is opened */
+  h = String(h).toLowerCase();
+  if (DB.users.some(u => u.handle === h) || !SB || PUB[h] === null) return pcBasic(h);
+  if (!PUB[h]) {
+    SB.from('profiles')
+      .select('id,handle,name,role,company,city,bio,theme,links')
+      .eq('handle', h)
+      .maybeSingle()
+      .then(({ data }) => {
+        PUB[h] = data ? mapProfile(data, '') : null;
+        if (data) DB.users.push(PUB[h]);
+        render();
+      });
+    return `<div class="pub"><div class="pubcard center"><div style="margin:60px 0">${logo()}</div><p class="muted">Loading card...</p></div></div>`;
+  }
+  return pcBasic(h);
+}
+/* pcCard: the public card page. Was the v14 card design version of vPublic, with the v11 page-meta step. */
+function pcCard(hd) {
   const h = String(hd).toLowerCase();
   const u = DB.users.find(x => String(x.handle || '').toLowerCase() === h);
   const mine = me() && u && me().id === u.id;
-  const prev = _vPub14(hd);
+  const prev = pcFind(hd);
+  /* page title, description and robots tag for the card */
+  setTimeout(() => {
+    try {
+      const u = DB.users.find(x => x.handle === String(hd).toLowerCase());
+      if (u && !(u.links && u.links.hidden)) {
+        const L = u.links || {};
+        document.title = `${u.name}${u.role ? ' - ' + u.role : ''}${u.company ? ' at ' + u.company : ''} | Introthread`;
+        const d = document.querySelector('meta[name="description"]');
+        if (d)
+          d.setAttribute(
+            'content',
+            (L.seoDesc || u.bio || 'Connect with ' + u.name + ' on Introthread.').slice(0, 160)
+          );
+        let r = document.querySelector('meta[name="robots"]');
+        if (L.noindex) {
+          if (!r) {
+            r = document.createElement('meta');
+            r.name = 'robots';
+            document.head.appendChild(r);
+          }
+          r.content = 'noindex';
+        } else if (r) r.remove();
+      }
+    } catch (_) {}
+  }, 0);
   if (!u || (u.links && u.links.hidden && !mine)) return prev;
   const t = THEMES[u.theme] || THEMES.midnight,
     L = u.links || {},
@@ -361,4 +348,17 @@ vPublic = function (hd) {
   <button class="pc-go">${sv('send', 19)} Start a Thread</button><p class="pc-priv">${sv('lock', 14)} We only share your details with ${f}.</p></form></section>
  <p class="pc-own2"><span></span>Want your own card? <a href="/signup">Create one free ${sv('arrow', 15)}</a><span></span></p>
  </div></div>`;
-};
+}
+/* vPublic: one function since v113 (cleanup plan step 10). It used to be built from 11 layered versions across
+   public-pages.js, billing.js, event-mode.js, capture.js, admin-core.js, late-fixes.js and company-logo.js. The card is
+   drawn by pcCard, then each later feature's step changes it, in the same order the layers used to run. */
+function vPublic(hd) {
+  let h = pcCard(hd);
+  h = pcNoNewThreads(h, hd);
+  h = pcEventAt(h, hd);
+  h = pcCaptureFields(h, hd);
+  h = pcReportLink(h, hd);
+  h = pcFlipCard(h, hd);
+  h = pcCompanyLogo(h, hd);
+  return h;
+}

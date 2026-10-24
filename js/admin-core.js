@@ -812,16 +812,15 @@ async function reportSend(type, id) {
   closeModal();
   toast('Thanks. Our team will review this.');
 }
-const _vPub33 = vPublic;
-vPublic = function (h) {
-  const out = _vPub33(h);
+/* vPublic step (v113): admin-core.js: Report this profile link for visitors. Called in order from vPublic in public-pages.js. */
+function pcReportLink(out, h) {
   const u = DB.users.find(x => x.handle === h);
   if (!u || !out || (me() && me().id === u.id)) return out;
   return (
     out +
     `<div class="rep-l"><button type="button" data-on-click="reportOpen('profile',${esc(JSON.stringify(u.id))},${esc(JSON.stringify(u.name || ''))})">${sv('shield', 14)} Report this profile</button></div>`
   );
-};
+}
 const _vThread33 = vThread;
 vThread = function (id) {
   const h = _vThread33(id);
