@@ -1,8 +1,37 @@
 # Introthread - handover for the next AI agent
 
-Last updated: 24 Oct 2026, 10:40 pm Nairobi (after v119, the Google verification file and Agnes's launch setup). Read the 24 Oct status summary below first, then ARCHITECTURE-ESSENTIALS.md, ARCHITECTURE.md and AGENTS.md. Update this file and docs/CHANGELOG.md with every change.
+Last updated: 26 Oct 2026, 1:40 pm Nairobi (after v133.2, NFC cards). Read the 26 Oct status summary below first, then the 24 Oct summary, ARCHITECTURE-ESSENTIALS.md, ARCHITECTURE.md and AGENTS.md. Update this file and docs/CHANGELOG.md with every change.
 
-## STATUS SUMMARY: 24 Oct 2026, after v119 (read this first)
+## STATUS SUMMARY: 26 Oct 2026, after v133.2 (read this first)
+
+### Done 25-26 Oct (all on `main`, tested, deployed by Vercel unless noted)
+- **v120 to v131:** light-logo tone fix, "You matched" email (v123), AI follow-up drafts through Gemini (v127 to v131), clean-up and handover updates.
+- **Manuals** in `docs/manuals/` (docx and md): User Guide IT-DOC-UG-001, Administrator Guide IT-DOC-AG-001, Technical and Operations Manual IT-DOC-TM-001 (all now v1.2) and Quick Start Guide IT-DOC-QS-001. Built from Python sources outside the repo (doc_ug.py, doc_ag.py, doc_tm.py, doc_qs.py with docbuild.py); if those are gone, edit the .md and regenerate the .docx another way. Copies also sit in Agnes's Town library (projects/introthread).
+- **v132: Room pass $59** (was $199): UK £45, KES 7,670 (59 x 130 unless `ROOM_PASS_KES`). "Why confirm / answer / join" lists added. Confirmed live on `/pricing` and `/rooms`. `img/brand/price-card.png` still shows $199 (not yet redrawn).
+- **v133: NFC cards end to end.** Tap > "Tap with an NFC card" opens one panel (`js/nfc-card.js`): tap count, **Order a ready-programmed card, KES 199** (all plans), **Write my own card (Android, Pro)**, **On iPhone: write it with NFC Tools**. Wording: "Tap your Introthread card on their phone to open your card and start a Thread." Card links end in `?src=nfc`; the public card counts the tap (skips the owner and repeat visits in the same browser session) and opens at Start a Thread. Orders: `/api/pay-init` kind `nfc_card`; `pay-verify`, the webhook and `pay-sync` save them with `applyCardOrder` (one per Paystack reference) and email the buyer and `ORDER_EMAIL` (default hello@introthread.com). **Migration `022_nfc_cards.sql` has been run by Agnes (26 Oct).**
+- **v133.1: Vercel Hobby allows only 12 serverless functions** (files directly in `api/`). v133 added a 13th and the deploy silently did not go out. `/api/card-tap` is now handled inside `api/status.js` (POST) via `api/_lib/card-tap.js` and a rewrite at the top of `vercel.json`. There are exactly 12 now: add new endpoints inside an existing function with a rewrite.
+- **v133.2: a card order no longer switches Pro on.** `api/pay-sync.js` (runs when Billing opens) used to treat every non-Room payment as Pro. It now routes `nfc_card` to `applyCardOrder`, and `applyCharge` refuses any payment whose metadata has a `kind`.
+
+### Live checks 26 Oct (test account one, handle `testaccountone`, Paystack TEST mode)
+- NFC panel shows on the Free plan with the three options; wording correct.
+- A direct POST to `/api/card-tap` for testaccountone returned `{"ok":true}`, the row is in `card_taps`, and the Tap screen shows "Your card has been tapped 1 time (1 in the last 30 days)." Agnes's earlier visit from another phone was not counted; most likely that phone was signed in as the same account (owner visits are skipped). Not yet re-tested from a signed-out phone.
+- Two test card orders (Paystack "Success" simulation, no real card) saved correctly: `card_orders` references `ps_T126408002797062` and `ps_T286301451422157`, payments with no plan, receipts IT-2026-0001 and IT-2026-0002 in Billing. After v133.2 the account stays on Free.
+- The first order hit the old Pro bug. With Agnes's approval the account was set back to Free (receipt kept) and the wrong `subscriptions` row was deleted.
+
+### Waiting on Agnes (next agent: ask or act on her answer)
+- **The two test card orders above are still `status = 'paid'`.** Do not ship them. Options given to her (no answer yet): (A) set both to `cancelled` (direct update, not audit-logged; or she runs `select admin_card_order_set(id, 'cancelled', 'Test order, do not ship') from card_orders where reference in ('ps_T126408002797062','ps_T286301451422157');` in the SQL Editor for an audit entry); (B) delete both rows, keeping or also removing the two payment rows and Billing receipts. Two order emails for them reached hello@ and must be ignored.
+- Signed-out phone re-test of the tap link (`introthread.com/testaccountone?src=nfc`), then check the count goes to 2.
+- Source blank NFC cards (NTAG213/215/216, about KES 100 each), printing and delivery. There is no admin orders screen yet; orders arrive by email and status changes need `admin_card_order_set` (staff) or a direct database update.
+- Paystack live keys (still TEST mode), company legal details, Resend sender verification for all emails, Google sign-in live test, signed-in HAR/console audit.
+- Decision on an "In development" label for Networks features on the pricing page (Warmth dashboard, API, SSO, admin controls are not built; estimate 8 to 10 weeks).
+- Redraw `img/brand/price-card.png` with the $59 Room pass.
+- Phone-to-phone NFC tapping is not possible from a web app; always use a card or sticker.
+
+### How the last agent worked (keep doing this)
+- Snapshot commit, edit, `npx prettier --write` on changed js/css, build (version hashes on the 11 HTML pages: `index.html`, `app-shell.html`, and `about`, `how`, `login`, `networks`, `pricing`, `privacy`, `rooms`, `signup`, `terms` `/index.html`), before-and-after screenshots at 390 and 1366, admin tests in `tests/admin/` (including `tnfc.js`), every script in `tests/app`, sweeps with the CSP enforced and axe. Then CHANGELOG entry, this file, commit to `main`, and check live with test account one.
+- Agnes wants plain, short replies with no emojis, each commit linked with the checks run, and a plan before any change to live data.
+
+## STATUS SUMMARY: 24 Oct 2026, after v119 (kept for history; see 26 Oct above)
 
 ### Done on 23-24 Oct (all on `main`, tested, deployed by Vercel)
 - **Code clean-up plan finished (v83 to v115).** The old `js/app-core.js` (about 6,300 lines) was split into screen and feature files, and its layered functions were merged:
