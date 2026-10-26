@@ -91,7 +91,7 @@ const POLICY = [
   [
     'ai',
     'AI follow-up drafts',
-    '<p>If you switch on &ldquo;Draft follow-ups with AI&rdquo;, we send the context of that one Thread (names, where you met, your note and your answers) to our AI provider to write a suggested message. Drafts are never sent without you. Our AI provider processes this data only to create the draft, under a data processing agreement, and may not use it to train its models. You can switch this off at any time in Settings.</p>'
+    '<p>If you switch on &ldquo;Draft follow-ups with AI&rdquo;, we send the context of that one Thread (names, roles, where you met and your answers) to our AI provider to write a suggested message. Drafts are never sent without you. Depending on the provider&rsquo;s plan, the provider may use this text to improve its services, so your private Thread note is only sent to providers that do not. You can switch this off at any time in Settings.</p>'
   ],
   [
     'use',

@@ -1,6 +1,7 @@
 // POST /api/ai-draft  { thread_id }
 // Writes a short follow-up from one Thread's context. Never sends anything.
-// Needs Vercel env: ANTHROPIC_API_KEY or OPENAI_API_KEY (optional AI_MODEL).
+// Needs Vercel env: ANTHROPIC_API_KEY or OPENAI_API_KEY (optional AI_MODEL), or GEMINI_API_KEY (free tier from
+// Google AI Studio, no card; optional GEMINI_MODEL, default gemini-2.5-flash). If several are set: Anthropic, OpenAI, Gemini.
 const { place, send, readBody, isUuid, caller, guard } = require('./_lib/common');
 const LABEL = { meet: 'meet again', intro: 'introduce someone', keep: 'stay in touch', notnow: 'stay in touch' };
 
@@ -13,13 +14,22 @@ async function complete(system, prompt) {
     const r = await fetch('https://api.openai.com/v1/chat/completions', { method: 'POST', headers: { Authorization: 'Bearer ' + process.env.OPENAI_API_KEY, 'Content-Type': 'application/json' }, body: JSON.stringify({ model: process.env.AI_MODEL || 'gpt-4o-mini', max_tokens: 500, temperature: 0.6, messages: [{ role: 'system', content: system }, { role: 'user', content: prompt }] }) });
     if (!r.ok) return null; const j = await r.json(); return (((j.choices || [])[0] || {}).message || {}).content || null;
   }
+  if (process.env.GEMINI_API_KEY) {
+    const model = process.env.GEMINI_MODEL || 'gemini-2.5-flash';
+    const r = await fetch('https://generativelanguage.googleapis.com/v1beta/models/' + encodeURIComponent(model) + ':generateContent', { method: 'POST', headers: { 'x-goog-api-key': process.env.GEMINI_API_KEY, 'Content-Type': 'application/json' }, body: JSON.stringify({ system_instruction: { parts: [{ text: system }] }, contents: [{ role: 'user', parts: [{ text: prompt }] }], generationConfig: { maxOutputTokens: 500, temperature: 0.6, thinkingConfig: { thinkingBudget: 0 } } }) });
+    if (!r.ok) return null; const j = await r.json();
+    return ((((j.candidates || [])[0] || {}).content || {}).parts || []).map(p => p.text || '').join('').trim() || null;
+  }
   return undefined;
 }
+// Paid providers (and Gemini on a paid plan, GEMINI_PAID=1) do not use prompts for training.
+const NOTE_OK = () => !!(process.env.ANTHROPIC_API_KEY || process.env.OPENAI_API_KEY || process.env.GEMINI_PAID === '1');
+const AI_ON = () => !!(process.env.ANTHROPIC_API_KEY || process.env.OPENAI_API_KEY || process.env.GEMINI_API_KEY);
 
 module.exports = async (req, res) => {
   if (!guard(req, res, { max: 10, sameSite: true })) return;
   if (req.method !== 'POST') return send(res, 405, { error: 'method' });
-  if (!process.env.ANTHROPIC_API_KEY && !process.env.OPENAI_API_KEY) return send(res, 503, { error: 'not_configured' });
+  if (!AI_ON()) return send(res, 503, { error: 'not_configured' });
   const c = await caller(req);
   if (!c) return send(res, 401, { error: 'auth' });
   const { thread_id } = await readBody(req);
@@ -36,7 +46,8 @@ module.exports = async (req, res) => {
     `Sender: ${p.name || ''}${p.role ? ', ' + p.role : ''}${p.company ? ' at ' + p.company : ''}. Card: introthread.com/${p.handle || ''}`,
     `Recipient: ${t.other_name}${t.other_role ? ', ' + t.other_role : ''}${t.other_company ? ' at ' + t.other_company : ''}`,
     `Where they met: ${place(t.where_met)} on ${String(t.created_at || '').slice(0, 10)}`,
-    `Sender's private note (use for context, do not quote it word for word): ${String(t.note || 'none').slice(0, 500)}`,
+    // The private note is never sent to a free-tier provider that may use prompts to improve its products.
+    NOTE_OK() ? `Sender's private note (use for context, do not quote it word for word): ${String(t.note || 'none').slice(0, 500)}` : 'Sender\'s private note: not shared',
     `Goal: ${goal} Never mention that the recipient chose "not now".`,
   ].join('\n');
   const out = await complete(system, prompt);
