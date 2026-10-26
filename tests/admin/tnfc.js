@@ -23,7 +23,7 @@ const call=(h,body,hd={})=>new Promise(res=>{const r={statusCode:0,setHeader(){}
  let o=await applyCardOrder(svc(),'u1',tx);ck(o.created&&orders.length===1&&orders[0].status==='paid'&&mails.length===2,'order '+JSON.stringify(o)+mails.length);
  ck(mails.some(x=>x.to[0]==='hello@introthread.com'&&/agnes\?src=nfc/.test(x.text))&&mails.some(x=>x.to[0]==='buyer@example.com'),'emails');
  o=await applyCardOrder(svc(),'u1',tx);ck(!o.created&&orders.length===1&&mails.length===2,'once per reference');
- const tap=require('/home/user/introthread/api/card-tap.js');
+ const tap=require('/home/user/introthread/api/status.js');
  r=await call(tap,{handle:'agnes'},{authorization:''});ck(r[0]===200&&taps.length===1&&taps[0].profile_id==='p1'&&taps[0].src==='nfc','tap '+JSON.stringify(r));
  r=await call(tap,{handle:'nobody'});ck(r[0]===404,'unknown card');
  r=await call(tap,{handle:'../x'});ck(r[0]===400,'bad handle');
