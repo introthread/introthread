@@ -48,9 +48,16 @@ module.exports = async (req, res) => {
   const both = t.mine && t.theirs; const match = both && t.mine === t.theirs && t.mine !== 'notnow';
   const goal = match ? `They both chose to ${LABEL[t.mine]}.` : t.mine ? `The sender chose to ${LABEL[t.mine]}.` : 'No next step chosen yet; keep it warm and light.';
   // v130: always open with a short greeting using the recipient's first name and say where they met.
-  const fname = first(t.other_name), where = place(t.where_met), day = String(t.created_at || '').slice(0, 10);
+  const fname = first(t.other_name), where = place(t.where_met), day = (() => {
+    // v131: "26 October" (the year only when it is not this year), in Nairobi time.
+    const d = new Date(t.created_at || Date.now());
+    if (isNaN(d)) return '';
+    const o = { day: 'numeric', month: 'long', timeZone: 'Africa/Nairobi' };
+    if (d.getUTCFullYear() !== new Date().getUTCFullYear()) o.year = 'numeric';
+    return d.toLocaleDateString('en-GB', o);
+  })();
   const generic = /^in person$/i.test(where);
-  const system = 'You write short, warm, professional follow-up emails after an in-person meeting. Plain text only. 60 to 120 words. Start with a one-line greeting using the recipient\'s first name exactly as given, for example "Hi Sam,", then a blank line. In the first sentence, say where you met, using the place exactly as given (if no specific place is given, say it was good to meet in person and mention the date). No subject line, no emojis, no placeholders in brackets, no invented facts, dates or promises. Use only the context given. Sign off with the sender\'s first name.';
+  const system = 'You write short, warm, professional follow-up emails after an in-person meeting. Plain text only. 60 to 120 words. Start with a one-line greeting using the recipient\'s first name exactly as given, for example "Hi Sam,", then a blank line. In the first sentence, say where you met, using the place exactly as given (if no specific place is given, say it was good to meet in person and mention the date). Write any date exactly as given, for example "26 October", never in numeric form. No subject line, no emojis, no placeholders in brackets, no invented facts, dates or promises. Use only the context given. Sign off with the sender\'s first name.';
   const prompt = [
     `Sender: ${p.name || ''}${p.role ? ', ' + p.role : ''}${p.company ? ' at ' + p.company : ''}. Card: introthread.com/${p.handle || ''}`,
     `Recipient: ${t.other_name}${t.other_role ? ', ' + t.other_role : ''}${t.other_company ? ' at ' + t.other_company : ''}. First name for the greeting: ${fname}`,
