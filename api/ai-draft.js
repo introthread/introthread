@@ -2,7 +2,7 @@
 // Writes a short follow-up from one Thread's context. Never sends anything.
 // Needs Vercel env: ANTHROPIC_API_KEY or OPENAI_API_KEY (optional AI_MODEL), or GEMINI_API_KEY (free tier from
 // Google AI Studio, no card; optional GEMINI_MODEL; default tries gemini-3.5-flash-lite, gemini-3.1-flash-lite, gemini-2.5-flash). If several are set: Anthropic, OpenAI, Gemini.
-const { place, send, readBody, isUuid, caller, guard } = require('./_lib/common');
+const { first, place, send, readBody, isUuid, caller, guard } = require('./_lib/common');
 const LABEL = { meet: 'meet again', intro: 'introduce someone', keep: 'stay in touch', notnow: 'stay in touch' };
 
 async function complete(system, prompt) {
@@ -47,11 +47,14 @@ module.exports = async (req, res) => {
   if (!t || t.owner_id !== c.user.id) return send(res, 404, { error: 'thread' });
   const both = t.mine && t.theirs; const match = both && t.mine === t.theirs && t.mine !== 'notnow';
   const goal = match ? `They both chose to ${LABEL[t.mine]}.` : t.mine ? `The sender chose to ${LABEL[t.mine]}.` : 'No next step chosen yet; keep it warm and light.';
-  const system = 'You write short, warm, professional follow-up emails after an in-person meeting. Plain text only. 60 to 120 words. No subject line, no emojis, no placeholders in brackets, no invented facts, dates or promises. Use only the context given. Sign off with the sender\'s first name.';
+  // v130: always open with a short greeting using the recipient's first name and say where they met.
+  const fname = first(t.other_name), where = place(t.where_met), day = String(t.created_at || '').slice(0, 10);
+  const generic = /^in person$/i.test(where);
+  const system = 'You write short, warm, professional follow-up emails after an in-person meeting. Plain text only. 60 to 120 words. Start with a one-line greeting using the recipient\'s first name exactly as given, for example "Hi Sam,", then a blank line. In the first sentence, say where you met, using the place exactly as given (if no specific place is given, say it was good to meet in person and mention the date). No subject line, no emojis, no placeholders in brackets, no invented facts, dates or promises. Use only the context given. Sign off with the sender\'s first name.';
   const prompt = [
     `Sender: ${p.name || ''}${p.role ? ', ' + p.role : ''}${p.company ? ' at ' + p.company : ''}. Card: introthread.com/${p.handle || ''}`,
-    `Recipient: ${t.other_name}${t.other_role ? ', ' + t.other_role : ''}${t.other_company ? ' at ' + t.other_company : ''}`,
-    `Where they met: ${place(t.where_met)} on ${String(t.created_at || '').slice(0, 10)}`,
+    `Recipient: ${t.other_name}${t.other_role ? ', ' + t.other_role : ''}${t.other_company ? ' at ' + t.other_company : ''}. First name for the greeting: ${fname}`,
+    `Where they met: ${generic ? 'in person (no specific place given)' : where} on ${day}`,
     // The private note is never sent to a free-tier provider that may use prompts to improve its products.
     NOTE_OK() ? `Sender's private note (use for context, do not quote it word for word): ${String(t.note || 'none').slice(0, 500)}` : 'Sender\'s private note: not shared',
     `Goal: ${goal} Never mention that the recipient chose "not now".`,
@@ -60,5 +63,8 @@ module.exports = async (req, res) => {
   try { out = await complete(system, prompt); } catch (e) { console.error('ai-draft', e && e.message); out = null; }
   if (out && out.fail) return send(res, 502, { error: out.fail === 429 ? 'busy' : 'provider', status: out.fail });
   if (!out) return send(res, 502, { error: 'provider' });
-  return send(res, 200, { draft: String(out).trim().slice(0, 2000) });
+  // The greeting is guaranteed even if the model leaves it out.
+  let draft = String(out).trim();
+  if (!/^(hi|hello|dear|hey)\b/i.test(draft)) draft = `Hi ${fname},\n\n` + draft;
+  return send(res, 200, { draft: draft.slice(0, 2000) });
 };
