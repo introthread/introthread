@@ -580,6 +580,8 @@ function vNetworks() {
 }
 
 function vPricing() {
+  // v134: Networks features not built yet get an "In development" label.
+  const X_DEV_SOON = ['Warmth dashboard', 'Warmth API', 'SSO and admin controls'];
   const p = (m, y) => (billing === 'm' ? m : y);
   const plans = [
     [
@@ -645,7 +647,7 @@ function vPricing() {
   return (
     mnav('pricing') +
     `<section class="x-ph c"><div class="x-wrap"><div class="x-eye">Pricing</div><h1 class="x-h1 x-ph-h">Start free. <em>Pay when it pays off.</em></h1><p class="x-lead" style="margin:0 auto">We never charge per tap or per scan. Sharing should be free.</p></div></section>
- <section class="x-sec" style="padding-top:0"><div class="x-wrap"><div class="x-plans">${plans.map(([n, a, per, who, f, c, href, hot]) => `<div class="x-plan ${hot}">${hot ? '<span class="x-plan-tag">Most popular</span>' : ''}<b class="x-plan-n">${n}</b><small class="x-plan-w">${who}</small><div class="x-plan-a">${a}<small>${per}</small></div><a href="${href}" class="x-btn ${hot ? '' : 'ghost'} block">${c}</a><ul>${f.map(x => `<li>${sv('check', 16, 'currentColor', 2.4)}${x}</li>`).join('')}</ul></div>`).join('')}</div><p class="x-plan-note">UK prices shown in GBP: Pro &pound;9/month, Rooms &pound;149/event. Cards are charged the equivalent in Kenyan shillings. Prices exclude VAT and sales tax where applicable.</p></div></section><section class="x-sec alt" id="your-data"><div class="x-wrap"><div class="x-head2"><div><div class="x-eye">Your data is always yours</div><h2 class="x-h2">Stop paying, <em class="ink">keep everything.</em></h2></div><p class="x-sub">Your relationships belong to you, not to a subscription. Here is exactly what happens if you stop paying.</p></div><div class="x-own">${[
+ <section class="x-sec" style="padding-top:0"><div class="x-wrap"><div class="x-plans">${plans.map(([n, a, per, who, f, c, href, hot]) => `<div class="x-plan ${hot}">${hot ? '<span class="x-plan-tag">Most popular</span>' : ''}<b class="x-plan-n">${n}</b><small class="x-plan-w">${who}</small><div class="x-plan-a">${a}<small>${per}</small></div><a href="${href}" class="x-btn ${hot ? '' : 'ghost'} block">${c}</a><ul>${f.map(x => `<li>${sv('check', 16, 'currentColor', 2.4)}<span>${x}${n === 'Networks' && X_DEV_SOON.includes(x) ? ' <span class="x-dev">In development</span>' : ''}</span></li>`).join('')}</ul></div>`).join('')}</div><p class="x-plan-note">UK prices shown in GBP: Pro &pound;9/month, Rooms &pound;149/event. Cards are charged the equivalent in Kenyan shillings. Prices exclude VAT and sales tax where applicable.</p></div></section><section class="x-sec alt" id="your-data"><div class="x-wrap"><div class="x-head2"><div><div class="x-eye">Your data is always yours</div><h2 class="x-h2">Stop paying, <em class="ink">keep everything.</em></h2></div><p class="x-sub">Your relationships belong to you, not to a subscription. Here is exactly what happens if you stop paying.</p></div><div class="x-own">${[
    [
      'shield',
      'Nothing is deleted',

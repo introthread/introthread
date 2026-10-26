@@ -3115,3 +3115,17 @@ html body .pc-m .pc-stage {
 .nfc-f {
   margin: 4px 0 0;
 }
+/* v134: "In development" label on the pricing page (Networks plan) */
+.x-dev {
+  display: inline-block;
+  margin-left: 6px;
+  padding: 1px 7px;
+  border-radius: 999px;
+  border: 1px solid #f0c9a8;
+  background: #fff6ee;
+  color: #9a4510;
+  font: 600 11px/1.5 var(--xss);
+  letter-spacing: 0.02em;
+  white-space: nowrap;
+  vertical-align: 1px;
+}

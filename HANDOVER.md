@@ -1,6 +1,6 @@
 # Introthread - handover for the next AI agent
 
-Last updated: 26 Oct 2026, 1:40 pm Nairobi (after v133.2, NFC cards). Read the 26 Oct status summary below first, then the 24 Oct summary, ARCHITECTURE-ESSENTIALS.md, ARCHITECTURE.md and AGENTS.md. Update this file and docs/CHANGELOG.md with every change.
+Last updated: 26 Oct 2026, 2:00 pm Nairobi (after v134: pricing labels, price card, test card orders cancelled). Read the 26 Oct status summary below first, then the 24 Oct summary, ARCHITECTURE-ESSENTIALS.md, ARCHITECTURE.md and AGENTS.md. Update this file and docs/CHANGELOG.md with every change.
 
 ## STATUS SUMMARY: 26 Oct 2026, after v133.2 (read this first)
 
@@ -12,6 +12,11 @@ Last updated: 26 Oct 2026, 1:40 pm Nairobi (after v133.2, NFC cards). Read the 2
 - **v133.1: Vercel Hobby allows only 12 serverless functions** (files directly in `api/`). v133 added a 13th and the deploy silently did not go out. `/api/card-tap` is now handled inside `api/status.js` (POST) via `api/_lib/card-tap.js` and a rewrite at the top of `vercel.json`. There are exactly 12 now: add new endpoints inside an existing function with a rewrite.
 - **v133.2: a card order no longer switches Pro on.** `api/pay-sync.js` (runs when Billing opens) used to treat every non-Room payment as Pro. It now routes `nfc_card` to `applyCardOrder`, and `applyCharge` refuses any payment whose metadata has a `kind`.
 
+- **v134 (26 Oct, 2 pm):**
+  - `/pricing`: small "In development" label (`.x-dev`) next to Warmth dashboard, Warmth API and SSO and admin controls on the Networks plan (`X_DEV_SOON` in `vPricing`, `js/site-pages.js`). Remove a name from `X_DEV_SOON` when that feature ships.
+  - `img/brand/price-card.png` redrawn with the $59 Room pass (figure rendered from the pricing page at 2x and placed where $199 was; rest of the image unchanged).
+  - The two test card orders are now `cancelled` (Agnes chose option A). Payment rows and receipts IT-2026-0001 / IT-2026-0002 kept. Done by direct update, so there is no audit-log entry; the table has no note column.
+
 ### Live checks 26 Oct (test account one, handle `testaccountone`, Paystack TEST mode)
 - NFC panel shows on the Free plan with the three options; wording correct.
 - A direct POST to `/api/card-tap` for testaccountone returned `{"ok":true}`, the row is in `card_taps`, and the Tap screen shows "Your card has been tapped 1 time (1 in the last 30 days)." Agnes's earlier visit from another phone was not counted; most likely that phone was signed in as the same account (owner visits are skipped). Not yet re-tested from a signed-out phone.
@@ -19,12 +24,13 @@ Last updated: 26 Oct 2026, 1:40 pm Nairobi (after v133.2, NFC cards). Read the 2
 - The first order hit the old Pro bug. With Agnes's approval the account was set back to Free (receipt kept) and the wrong `subscriptions` row was deleted.
 
 ### Waiting on Agnes (next agent: ask or act on her answer)
-- **The two test card orders above are still `status = 'paid'`.** Do not ship them. Options given to her (no answer yet): (A) set both to `cancelled` (direct update, not audit-logged; or she runs `select admin_card_order_set(id, 'cancelled', 'Test order, do not ship') from card_orders where reference in ('ps_T126408002797062','ps_T286301451422157');` in the SQL Editor for an audit entry); (B) delete both rows, keeping or also removing the two payment rows and Billing receipts. Two order emails for them reached hello@ and must be ignored.
+- ~~Two test card orders~~: done in v134, both `cancelled`. Ignore the two order emails at hello@.
 - Signed-out phone re-test of the tap link (`introthread.com/testaccountone?src=nfc`), then check the count goes to 2.
 - Source blank NFC cards (NTAG213/215/216, about KES 100 each), printing and delivery. There is no admin orders screen yet; orders arrive by email and status changes need `admin_card_order_set` (staff) or a direct database update.
 - Paystack live keys (still TEST mode), company legal details, Resend sender verification for all emails, Google sign-in live test, signed-in HAR/console audit.
-- Decision on an "In development" label for Networks features on the pricing page (Warmth dashboard, API, SSO, admin controls are not built; estimate 8 to 10 weeks).
-- Redraw `img/brand/price-card.png` with the $59 Room pass.
+- ~~"In development" label for Networks features~~: done in v134. The features themselves are still not built (estimate 8 to 10 weeks).
+- ~~Redraw the price card~~: done in v134.
+- **UK Room price mismatch:** HANDOVER (v132) says the UK display is £45, but the note under the plans on `/pricing` (and the price card footer) still says "Rooms £149/event". Ask Agnes which is right, then fix `js/site-pages.js` and the image together.
 - Phone-to-phone NFC tapping is not possible from a web app; always use a card or sticker.
 
 ### How the last agent worked (keep doing this)
