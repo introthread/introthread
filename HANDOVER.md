@@ -1,6 +1,6 @@
 # Introthread - handover for the next AI agent
 
-Last updated: 26 Oct 2026, 2:00 pm Nairobi (after v136: figures cross-checked site-wide; v135: UK Room price fixed; v134: pricing labels, price card, test card orders cancelled). Read the 26 Oct status summary below first, then the 24 Oct summary, ARCHITECTURE-ESSENTIALS.md, ARCHITECTURE.md and AGENTS.md. Update this file and docs/CHANGELOG.md with every change.
+Last updated: 26 Oct 2026, 2:00 pm Nairobi (after v137: full site review fixes; v136: figures cross-checked site-wide; v135: UK Room price fixed; v134: pricing labels, price card, test card orders cancelled). Read the 26 Oct status summary below first, then the 24 Oct summary, ARCHITECTURE-ESSENTIALS.md, ARCHITECTURE.md and AGENTS.md. Update this file and docs/CHANGELOG.md with every change.
 
 ## STATUS SUMMARY: 26 Oct 2026, after v133.2 (read this first)
 
@@ -17,6 +17,7 @@ Last updated: 26 Oct 2026, 2:00 pm Nairobi (after v136: figures cross-checked si
   - `img/brand/price-card.png` redrawn with the $59 Room pass (figure rendered from the pricing page at 2x and placed where $199 was; rest of the image unchanged).
   - The two test card orders are now `cancelled` (Agnes chose option A). Payment rows and receipts IT-2026-0001 / IT-2026-0002 kept. Done by direct update, so there is no audit-log entry; the table has no note column.
 
+- **v137 (26 Oct, 3 pm):** full site review. Login and signup now have one `<h1>` each (side heading is `h2.x-side-h`). `/networks` marks the Warmth API, dashboard, SSO and admin controls as in development. The `/rooms` closing line mentions the free event (20 people, once a month) before the $59 price. Sitemap dates updated. Sweep script result: 10 pages x 2 widths, no script errors, missing files, broken links or sideways scroll. Still open: yearly Pro £90 marked pending confirmation; `img/brand/price-card.png` must be redrawn by hand whenever a price changes.
 - **v136 (26 Oct, 2:30 pm):** site-wide figure check. Fixed the in-app `/pricing` description (said unlimited Free Threads and Rooms from $166), the "stop paying" answer on `/how` and in Help (said Free has unlimited Threads) and PRD.md (UK Rooms £149). Everything else matches: Free 5 Threads a month; Pro $12 / £9 a month, $120 / £90 a year (live `plans` table agrees); Room pass $59 / £45 / KES 7,670; one free event a month up to 20 people; up to 1,000 attendees; NFC card KES 199. Still open: the yearly Pro £90 is marked "pending confirmation" in `js/contacts-import.js`.
 
 ### Live checks 26 Oct (test account one, handle `testaccountone`, Paystack TEST mode)

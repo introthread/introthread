@@ -2537,7 +2537,7 @@ img.x-av {
   margin: 64px 0 0;
   max-width: 300px;
 }
-.x-side h1 {
+.x-side .x-side-h {
   font-family: var(--xsf);
   font-weight: 400;
   font-size: clamp(44px, 4.4vw, 66px);
@@ -2546,7 +2546,7 @@ img.x-av {
   margin: 16px 0 20px;
   max-width: 560px;
 }
-.x-side h1 em {
+.x-side .x-side-h em {
   font-style: italic;
 }
 .x-side-p {
@@ -3242,7 +3242,7 @@ img.x-av {
   .x-side-top small {
     display: none;
   }
-  .x-side h1 {
+  .x-side .x-side-h {
     font-size: 40px;
   }
   .x-main {
@@ -3428,7 +3428,7 @@ img.x-av {
   .x-side .x-eye {
     margin-top: clamp(18px, 5.4vh, 64px);
   }
-  .x-side h1 {
+  .x-side .x-side-h {
     font-size: clamp(36px, min(4.3vw, 7.2vh), 66px);
     margin: clamp(8px, 1.5vh, 16px) 0 clamp(10px, 2vh, 20px);
   }

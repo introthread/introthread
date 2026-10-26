@@ -532,7 +532,7 @@ function vRoomsPage() {
     )}</div></section>` +
     ctaBand(
       'Run your next event on Threads.',
-      'Rooms start at $59 per event, up to 1,000 attendees.',
+      `One event a month for up to 20 people is free. Bigger or extra events are ${usd0((PLANS.rooms && +PLANS.rooms.price.event) || 59)} each, up to 1,000 attendees.`,
       `<a href="/signup" class="x-btn lg">Create a Room ${sv('arrow', 17)}</a>`,
       `<a href="/pricing" class="x-btn dk2 lg">See pricing</a>`
     ) +
@@ -570,13 +570,13 @@ function vNetworks() {
         [
           'link',
           'API and integrations',
-          'Feed Warmth into your intro workflows, job boards and CRM via the Warmth API.'
+          'Feed Warmth into your intro workflows, job boards and CRM via the Warmth API. <span class="x-dev">In development</span>'
         ]
       ]
     )}</div></section>` +
     ctaBand(
       'Bring Warmth to your network.',
-      'Custom annual plans with SSO, admin controls and a dedicated success manager.',
+      'Custom annual plans with a dedicated success manager. The Warmth dashboard, Warmth API, SSO and admin controls are in development.',
       `<a href="/about" class="x-btn lg">Talk to us ${sv('arrow', 17)}</a>`,
       `<a href="/pricing" class="x-btn dk2 lg">See pricing</a>`
     ) +

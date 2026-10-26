@@ -10,7 +10,7 @@ function authSideBase(s) {
   const note = (i, b, t) =>
     `<div class="x-note"><span class="x-fic" style="width:44px;height:44px">${sv(i, 19)}</span><div><b>${b}</b><span>${t}</span></div></div>`;
   if (s === 2)
-    return `<aside class="x-side">${top}<div class="x-eye">Your professional identity<br>anywhere you network</div><h1>A profile that<br>works as hard as<br><em>your network.</em></h1><p class="x-side-p" style="max-width:340px">Create a professional identity that people trust, share it instantly and turn introductions into meaningful opportunities.</p>${feats(
+    return `<aside class="x-side">${top}<div class="x-eye">Your professional identity<br>anywhere you network</div><h2 class="x-side-h">A profile that<br>works as hard as<br><em>your network.</em></h2><p class="x-side-p" style="max-width:340px">Create a professional identity that people trust, share it instantly and turn introductions into meaningful opportunities.</p>${feats(
       [
         ['user', 'Professional identity', 'Showcase who you are and what you do.'],
         ['link', 'Share anywhere', 'QR, NFC, link, email or SMS.'],
@@ -19,14 +19,14 @@ function authSideBase(s) {
     )}
  <div class="x-side-art x-s2art"><div class="x-hand">This is what people see when you share${handArrow(44, 40, 1)}</div>${phone(bizCard(SARAH, { phone: 1 }))}</div>${note('lock', 'Private by default', 'Your card shows only what you add. A Thread is created only when both people confirm.')}</aside>`;
   if (s === 3)
-    return `<aside class="x-side">${top}<div class="x-eye">Your identity. Everywhere<br>you network.</div><h1>Choose a card<br>that represents<br><em>you.</em></h1><p class="x-side-p" style="max-width:360px">Your Introthread card is a modern way to share your professional identity. You can change the style any time.</p>${feats(
+    return `<aside class="x-side">${top}<div class="x-eye">Your identity. Everywhere<br>you network.</div><h2 class="x-side-h">Choose a card<br>that represents<br><em>you.</em></h2><p class="x-side-p" style="max-width:360px">Your Introthread card is a modern way to share your professional identity. You can change the style any time.</p>${feats(
       [
         ['palette', 'Modern, professional designs', 'A style for every industry.'],
         ['phone', 'Optimised for mobile and NFC', 'Looks great on any device.'],
         ['sync', 'Instant updates', 'Change your style anytime.']
       ]
     )}${note('sync', 'One card, always current', 'Your link, QR code and NFC tap all update the moment you change your style or details.')}</aside>`;
-  return `<aside class="x-side">${top}<div class="x-eye">${s ? 'Join a more meaningful<br>professional network' : 'Welcome back to<br>your professional network'}</div><h1>Every handshake,<br><em>followed through.</em></h1><p class="x-side-p">Introthread helps you create your professional identity, capture connections and stay on top of the relationships that matter.</p>${feats(
+  return `<aside class="x-side">${top}<div class="x-eye">${s ? 'Join a more meaningful<br>professional network' : 'Welcome back to<br>your professional network'}</div><h2 class="x-side-h">Every handshake,<br><em>followed through.</em></h2><p class="x-side-p">Introthread helps you create your professional identity, capture connections and stay on top of the relationships that matter.</p>${feats(
     [
       ['users', 'Create your identity', 'A modern digital card in under 60 seconds.'],
       ['send', 'Share instantly', 'Tap, scan, send a link or save to contacts.'],
@@ -242,7 +242,7 @@ function vLogin() {
 function authSide(s) {
   if (s === 2 || s === 3) return authSideBase(s);
   return `<aside class="x-side v2"><div class="x-side-top">${logo(true)}<small>Built for professionals<br>around the world</small></div>
- <div class="x-eye">${s ? 'Join a more meaningful<br>professional network' : 'Welcome back to<br>your professional network'}</div><h1>Every handshake,<br><em>followed through.</em></h1>
+ <div class="x-eye">${s ? 'Join a more meaningful<br>professional network' : 'Welcome back to<br>your professional network'}</div><h2 class="x-side-h">Every handshake,<br><em>followed through.</em></h2>
  <p class="x-side-p">Introthread helps you create your professional identity, capture connections and stay on top of the relationships that matter.</p>
  <div class="x-chips2">${[
    ['user', 'Create your identity'],

@@ -5998,7 +5998,7 @@ button.rm-c:hover {
   }
   .x-mi h1,
   .x-ftitle,
-  .x-side h1,
+  .x-side .x-side-h,
   .x-eye {
     overflow-wrap: anywhere;
   }
