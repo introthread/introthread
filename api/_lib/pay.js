@@ -28,6 +28,8 @@ const planCode = tx => (tx.plan && typeof tx.plan === 'object') ? tx.plan.plan_c
 
 // A successful charge: turn Pro on, record the payment once, remember the Paystack customer and subscription.
 async function applyCharge(db, userId, tx) {
+  // Only a Pro subscription payment may switch Pro on: one-off purchases (Room pass, NFC card) are refused here.
+  if (meta(tx).kind) return { kind: meta(tx).kind, skipped: true };
   const code = planCode(tx);
   const interval = code === PLAN.year ? 'year' : code === PLAN.month ? 'month' : intervalOf(tx.plan_object || tx.plan) || 'month';
   const amount = Number(tx.amount || 0) / 100, cur = String(tx.currency || 'KES').toLowerCase();

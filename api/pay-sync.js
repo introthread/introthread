@@ -1,7 +1,7 @@
 // POST /api/pay-sync -> finds this person's successful Paystack payments and makes sure Pro and the receipts are recorded.
 // Safe to repeat: payments and invoices are recorded once per Paystack reference.
 const { send, caller, guard } = require('./_lib/common');
-const { ps, svc, applyCharge, applyRoomPass, meta } = require('./_lib/pay');
+const { ps, svc, applyCharge, applyRoomPass, applyCardOrder, meta } = require('./_lib/pay');
 module.exports = async (req, res) => {
   if (!guard(req, res, { max: 10, sameSite: true })) return;
   if (req.method !== 'POST') return send(res, 405, { error: 'method' });
@@ -21,7 +21,9 @@ module.exports = async (req, res) => {
   for (const t of mine) {
     if (!t.customer || !t.customer.id) t.customer = Object.assign({}, cust || {}, t.customer || {});
     // Room pass payments add a pass; they must never switch Pro on.
-    if (meta(t).kind === 'rooms') { await applyRoomPass(db, c.user.id, t); rooms++; } else { await applyCharge(db, c.user.id, t); pro++; }
+    const kind = meta(t).kind;
+    // v133.2: NFC card orders are one-off purchases, never Pro (before this, pay-sync gave Pro for any non-Room payment).
+    if (kind === 'rooms') { await applyRoomPass(db, c.user.id, t); rooms++; } else if (kind === 'nfc_card') { await applyCardOrder(db, c.user.id, t); } else if (!kind) { await applyCharge(db, c.user.id, t); pro++; }
     n++;
   }
   return send(res, 200, { synced: n, pro: pro > 0, rooms, found: txs.length });
