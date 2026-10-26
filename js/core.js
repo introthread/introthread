@@ -1145,9 +1145,9 @@ document.addEventListener('click', e => {
       if (r === 'needs-profile') {
         SU = {
           step: 2,
-          name: (s.user.user_metadata || {}).full_name || '',
+          name: (s.user.user_metadata || {}).full_name || (s.user.user_metadata || {}).name || '',
           email: s.user.email,
-          photo: (s.user.user_metadata || {}).avatar_url || null
+          photo: (s.user.user_metadata || {}).avatar_url || (s.user.user_metadata || {}).picture || null
         };
         go('#/signup');
       }
@@ -1172,9 +1172,9 @@ document.addEventListener('click', e => {
       if (r === 'needs-profile') {
         SU = {
           step: 2,
-          name: (ok.user.user_metadata || {}).full_name || '',
+          name: (ok.user.user_metadata || {}).full_name || (ok.user.user_metadata || {}).name || '',
           email: ok.user.email,
-          photo: (ok.user.user_metadata || {}).avatar_url || null
+          photo: (ok.user.user_metadata || {}).avatar_url || (ok.user.user_metadata || {}).picture || null
         };
         go('#/signup');
       }

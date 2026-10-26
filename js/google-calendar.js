@@ -14,6 +14,7 @@ oauth = async function (p, withCal) {
     return toast('Sign-in is not available right now. Please try again shortly.');
   try {
     sessionStorage.setItem('it_oauth', '1');
+    sessionStorage.setItem('it_oauth_p', prov);
   } catch (_) {}
   const { error } = await SB.auth.signInWithOAuth({
     provider: prov,
@@ -28,8 +29,17 @@ oauth = async function (p, withCal) {
   });
   if (error) toast(error.message);
 };
+/* v125: provider_token belongs to whichever provider was used last. Keep it as the Google Calendar token only when
+   that provider was Google (set by oauth/intConnect just before leaving for the provider), never for LinkedIn. */
 function gTokSave(s) {
-  if (s && s.provider_token) {
+  if (!s || !s.provider_token) return;
+  let p = null;
+  try {
+    p = sessionStorage.getItem('it_oauth_p');
+    if (p) sessionStorage.removeItem('it_oauth_p');
+  } catch (_) {}
+  if (p !== 'google') return;
+  {
     try {
       sessionStorage.setItem('it_gtok', JSON.stringify({ t: s.provider_token, exp: Date.now() + 50 * 6e4 }));
     } catch (_) {}

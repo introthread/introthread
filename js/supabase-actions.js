@@ -186,7 +186,8 @@ answer = async function (id, k) {
   save();
   render();
   if (k) toast(t.theirs ? 'Answers revealed' : 'Answer locked in privately');
-  if (k && t.theirs && typeof itApi === 'function') itApi('match-notify', { thread_id: id });
+  // v125: always ask the server; the local copy of their answer can be out of date.
+  if (k && k !== 'notnow' && typeof itApi === 'function') itApi('match-notify', { thread_id: id });
 };
 sendFollow = async function (id) {
   const t = findThread(id);

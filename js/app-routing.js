@@ -239,7 +239,12 @@ async function otpVerify(e) {
     LG = null;
     const r = await loadCloud(data.user);
     if (r === 'needs-profile') {
-      SU = { step: 2, name: (data.user.user_metadata || {}).full_name || '', email: data.user.email };
+      SU = {
+        step: 2,
+        name: (data.user.user_metadata || {}).full_name || (data.user.user_metadata || {}).name || '',
+        email: data.user.email,
+        photo: (data.user.user_metadata || {}).avatar_url || (data.user.user_metadata || {}).picture || null
+      };
       go('/signup');
       return false;
     }

@@ -1393,6 +1393,9 @@ async function intConnect(k) {
   const p = INT_P.find(x => x[0] === k);
   try {
     const opts = { redirectTo: location.origin + '/app/settings?tab=integrations' };
+    try {
+      sessionStorage.setItem('it_oauth_p', k);
+    } catch (_) {}
     const { error } = await SB.auth.linkIdentity({ provider: k, options: opts });
     if (error) throw error;
   } catch (e) {
