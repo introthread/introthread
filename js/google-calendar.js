@@ -8,19 +8,23 @@
 /* ===== Google sign-in + Calendar ===== */
 const GSCOPE = 'https://www.googleapis.com/auth/calendar.readonly';
 oauth = async function (p, withCal) {
-  if (p !== 'Google') return toast(p + ' sign-in is coming soon. Please use Google or email for now.');
+  const prov = { Google: 'google', LinkedIn: 'linkedin_oidc' }[p];
+  if (!prov) return toast(p + ' sign-in is not available. Please use Google, LinkedIn or email.');
   if (typeof SB === 'undefined' || !SB)
     return toast('Sign-in is not available right now. Please try again shortly.');
   try {
     sessionStorage.setItem('it_oauth', '1');
   } catch (_) {}
   const { error } = await SB.auth.signInWithOAuth({
-    provider: 'google',
-    options: {
-      redirectTo: 'https://www.introthread.com/',
-      ...(withCal ? { scopes: GSCOPE } : {}),
-      queryParams: { access_type: 'offline', prompt: 'select_account' }
-    }
+    provider: prov,
+    options:
+      prov === 'google'
+        ? {
+            redirectTo: 'https://www.introthread.com/',
+            ...(withCal ? { scopes: GSCOPE } : {}),
+            queryParams: { access_type: 'offline', prompt: 'select_account' }
+          }
+        : { redirectTo: 'https://www.introthread.com/' }
   });
   if (error) toast(error.message);
 };

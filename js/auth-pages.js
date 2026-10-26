@@ -136,7 +136,7 @@ function vSignup() {
   if (s === 1) {
     mw = 520;
     body = `<h1 class="x-ftitle">Create your account</h1><p class="x-fsub">Free forever for individuals. No card required.</p>
- <div class="x-oauth"><button type="button" class="x-obtn" data-on-click="oauth('Google')">${oG()} Continue with Google</button></div><div class="x-or">or use your email</div>
+ <div class="x-oauth"><button type="button" class="x-obtn" data-on-click="oauth('Google')">${oG()} Continue with Google</button><button type="button" class="x-obtn" data-on-click="oauth('LinkedIn')">${oL()} Continue with LinkedIn</button></div><div class="x-or">or use your email</div>
  <form data-on-submit="return su1(event)" class="x-form" novalidate2><label class="x-f"><span>Full name</span><input id="sn" required autocomplete="name" value="${esc(SU.name || '')}" placeholder="Alex Morgan"></label>
  <label class="x-f"><span>Work email</span><input id="se" type="email" required autocomplete="email" value="${esc(SU.email || '')}" placeholder="alex@company.com"></label>
  <div class="x-f"><span>Password</span><div class="x-pw"><input id="sp" type="password" required minlength="8" autocomplete="new-password" placeholder="At least 8 characters" aria-label="Password"><button type="button" aria-label="Show password" data-on-click="pwToggle('sp')">${sv('eye', 19)}</button></div></div>
@@ -231,7 +231,7 @@ function vLogin() {
   document.body.classList.remove('x-open');
   return `<div class="x-auth" style="--sw:47%">${authSide(0)}<main class="x-main"><div class="x-mi" style="--mw:460px">
 <div class="x-eye" style="margin-bottom:10px">Welcome back</div><h1 class="x-ftitle">Log in to Introthread</h1><p class="x-fsub">Pick up every Thread where you left it.</p>
-<div class="x-oauth"><button type="button" class="x-obtn" data-on-click="oauth('Google')">${oG()} Continue with Google</button></div><div class="x-or">or use your email</div>
+<div class="x-oauth"><button type="button" class="x-obtn" data-on-click="oauth('Google')">${oG()} Continue with Google</button><button type="button" class="x-obtn" data-on-click="oauth('LinkedIn')">${oL()} Continue with LinkedIn</button></div><div class="x-or">or use your email</div>
 <form data-on-submit="return doLogin(event)" class="x-form"><label class="x-f"><span>Work email</span><input id="le" type="email" required autocomplete="email" placeholder="you@company.com"></label>
 <div class="x-f"><span>Password <button type="button" class="x-forgot" data-on-click="forgotPw()">Forgot password?</button></span><div class="x-pw"><input id="lp" type="password" required autocomplete="current-password" placeholder="Your password" aria-label="Password"><button type="button" aria-label="Show password" data-on-click="pwToggle('lp')">${sv('eye', 19)}</button></div></div>
 <div id="lerr" class="x-err" role="alert"></div><button class="x-btn lg block" style="margin-top:4px">Log in ${sv('arrow', 17)}</button></form>
