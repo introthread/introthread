@@ -531,7 +531,7 @@ function isUK() {
     return false;
   }
 }
-/* v65 pricing: Pro $12 = £9 a month, Rooms $59 = £45 an event (v132; was $199 = £149). Yearly Pro $120 = £90 (pending confirmation, see HANDOVER). */
+/* v65 pricing: Pro $12 = £9 a month, Rooms $59 = £45 an event (v132; was $199 = £149). Yearly Pro $120 = £90 (confirmed by the owner, 26 Oct 2026). */
 const GBP = { 0: 0, 12: 9, 59: 45, 199: 149, 120: 90, 10: 8, 2: 2, 1: 1 };
 function toGBP(h) {
   return h.replace(/\$(\d[\d,]*)(?![\d])/g, (m, n) => {

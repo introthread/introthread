@@ -1,6 +1,6 @@
 # Introthread - handover for the next AI agent
 
-Last updated: 26 Oct 2026, 2:00 pm Nairobi (after v137: full site review fixes; v136: figures cross-checked site-wide; v135: UK Room price fixed; v134: pricing labels, price card, test card orders cancelled). Read the 26 Oct status summary below first, then the 24 Oct summary, ARCHITECTURE-ESSENTIALS.md, ARCHITECTURE.md and AGENTS.md. Update this file and docs/CHANGELOG.md with every change.
+Last updated: 26 Oct 2026, 2:00 pm Nairobi (after v138: yearly Pro £90 confirmed; v137: full site review fixes; v136: figures cross-checked site-wide; v135: UK Room price fixed; v134: pricing labels, price card, test card orders cancelled). Read the 26 Oct status summary below first, then the 24 Oct summary, ARCHITECTURE-ESSENTIALS.md, ARCHITECTURE.md and AGENTS.md. Update this file and docs/CHANGELOG.md with every change.
 
 ## STATUS SUMMARY: 26 Oct 2026, after v133.2 (read this first)
 
@@ -17,7 +17,7 @@ Last updated: 26 Oct 2026, 2:00 pm Nairobi (after v137: full site review fixes; 
   - `img/brand/price-card.png` redrawn with the $59 Room pass (figure rendered from the pricing page at 2x and placed where $199 was; rest of the image unchanged).
   - The two test card orders are now `cancelled` (Agnes chose option A). Payment rows and receipts IT-2026-0001 / IT-2026-0002 kept. Done by direct update, so there is no audit-log entry; the table has no note column.
 
-- **v137 (26 Oct, 3 pm):** full site review. Login and signup now have one `<h1>` each (side heading is `h2.x-side-h`). `/networks` marks the Warmth API, dashboard, SSO and admin controls as in development. The `/rooms` closing line mentions the free event (20 people, once a month) before the $59 price. Sitemap dates updated. Sweep script result: 10 pages x 2 widths, no script errors, missing files, broken links or sideways scroll. Still open: yearly Pro £90 marked pending confirmation; `img/brand/price-card.png` must be redrawn by hand whenever a price changes.
+- **v137 (26 Oct, 3 pm):** full site review. Login and signup now have one `<h1>` each (side heading is `h2.x-side-h`). `/networks` marks the Warmth API, dashboard, SSO and admin controls as in development. The `/rooms` closing line mentions the free event (20 people, once a month) before the $59 price. Sitemap dates updated. Sweep script result: 10 pages x 2 widths, no script errors, missing files, broken links or sideways scroll. Yearly Pro £90 confirmed in v138, and v137 confirmed live. Still open: `img/brand/price-card.png` must be redrawn by hand whenever a price changes.
 - **v136 (26 Oct, 2:30 pm):** site-wide figure check. Fixed the in-app `/pricing` description (said unlimited Free Threads and Rooms from $166), the "stop paying" answer on `/how` and in Help (said Free has unlimited Threads) and PRD.md (UK Rooms £149). Everything else matches: Free 5 Threads a month; Pro $12 / £9 a month, $120 / £90 a year (live `plans` table agrees); Room pass $59 / £45 / KES 7,670; one free event a month up to 20 people; up to 1,000 attendees; NFC card KES 199. Still open: the yearly Pro £90 is marked "pending confirmation" in `js/contacts-import.js`.
 
 ### Live checks 26 Oct (test account one, handle `testaccountone`, Paystack TEST mode)
@@ -108,9 +108,9 @@ The page footer reads (since v69): "UK prices shown in GBP: Pro £9/month, Rooms
 **Where each price lives (change all of them together)**
 - **`js/billing.js` `PLANS`:** names, subtitles, prices and feature lists. The billing screen and the pricing page read from here.
 - **`js/core.js` `vPricing()`:** the pricing page layout. Rooms always shows $59. There is no yearly Room discount; the old $166 yearly Room price was removed in v65.
-- **`js/contacts-import.js` `GBP` map:** the UK display prices. 12→9, 199→149, 120→90 (yearly Pro, pending confirmation, see below).
+- **`js/contacts-import.js` `GBP` map:** the UK display prices. 12→9, 199→149, 120→90 (yearly Pro, confirmed by Agnes on 26 Oct).
 - **`js/admin-staff.js` `planApply()`:** overrides names, subtitles, USD/GBP prices and Thread limits from the Supabase `plans` table, which staff edit in Admin, Plans and pricing.
-- **`supabase/migrations/019_pricing.sql`:** sets Free to $0 with 5 Threads a month, and Pro to $12 / £9 a month, $120 / £90 a year, with the subtitles above. **Agnes must run it.** Until she does, the live table still has Pro at £10 a month and £96 a year.
+- **`supabase/migrations/019_pricing.sql`:** sets Free to $0 with 5 Threads a month, and Pro to $12 / £9 a month, $120 / £90 a year, with the subtitles above. Run on the live database: on 26 Oct the `plans` table showed Pro $12 / £9 a month and $120 / £90 a year, and Free 5 Threads a month.
 - **`api/_lib/pay.js`:** the Room pass is charged in KES, at `ROOM_PASS_KES` = 59 × `KES_PER_USD` (default 130), which is KES 7,670. Pro is charged through the Paystack plan codes `PAYSTACK_PLAN_MONTH` / `PAYSTACK_PLAN_YEAR`. Their amounts are set in the Paystack dashboard: about KES 1,560 a month at 130 KES/USD. Agnes needs to confirm these.
 - **`scripts/build_pages.py` META `/pricing`:** the search/social description, which now matches the page.
 
