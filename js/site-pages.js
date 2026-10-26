@@ -30,7 +30,7 @@ const PAGE_META = {
   ],
   '/pricing': [
     'Pricing | Introthread',
-    'Start free with your card, link, QR and 5 new Threads a month. Pro is $12 a month for unlimited Threads, Rooms are $59 per event, and Networks get custom annual plans.'
+    'Start free with your card, link, QR and unlimited Threads. Pro for people who follow through, Rooms from $166 per event, custom plans for networks.'
   ],
   '/about': [
     'About | Introthread',
@@ -347,11 +347,6 @@ function ctaBand(h, p, b1, b2) {
   return `<section class="x-sec" style="padding-top:8px"><div class="x-wrap"><div class="x-ctab one"><div><div class="x-eye">Get started today</div><h2>${h || 'Make every introduction count.'}</h2><p>${p || 'Create your free Introthread card in 60 seconds. Your next handshake deserves a Thread.'}</p><div class="x-cta-row" style="margin-top:0">${b1 || `<a href="/signup" class="x-btn lg">Get your free card ${sv('arrow', 17)}</a>`}${b2 || `<a href="/login" class="x-btn dk2 lg">Try the live demo</a>`}</div></div></div></div></section>`;
 }
 
-/* v136: the Free plan's Thread allowance in words ("5 new Threads a month"), from the live plan settings. */
-function xFreeThr() {
-  const n = typeof freeLim === 'function' ? freeLim() : 5;
-  return n == null ? 'unlimited Threads' : `${n} new Thread${+n === 1 ? '' : 's'} a month`;
-}
 function vHow() {
   return (
     mnav('how') +
@@ -408,7 +403,7 @@ function vHow() {
       ],
       [
         'What happens to my contacts if I stop paying?',
-        `Nothing is lost. Pro stays active until the end of the period you paid for, then your account moves to the Free plan. Every Thread, note, tag, Room and your card stay exactly as they are, and Free includes ${xFreeThr()}, so you can keep meeting people. Only Pro tools such as AI follow-up drafts and NFC writing are paused.`
+        'Nothing is lost. Pro stays active until the end of the period you paid for, then your account moves to the Free plan. Every Thread, note, tag, Room and your card stay exactly as they are, and Free includes unlimited Threads, so you can keep adding people. Only Pro tools such as AI follow-up drafts and NFC writing are paused.'
       ],
       [
         'Can I export my contacts?',
@@ -532,7 +527,7 @@ function vRoomsPage() {
     )}</div></section>` +
     ctaBand(
       'Run your next event on Threads.',
-      `One event a month for up to 20 people is free. Bigger or extra events are ${usd0((PLANS.rooms && +PLANS.rooms.price.event) || 59)} each, up to 1,000 attendees.`,
+      'Rooms start at $59 per event, up to 1,000 attendees.',
       `<a href="/signup" class="x-btn lg">Create a Room ${sv('arrow', 17)}</a>`,
       `<a href="/pricing" class="x-btn dk2 lg">See pricing</a>`
     ) +
@@ -570,13 +565,13 @@ function vNetworks() {
         [
           'link',
           'API and integrations',
-          'Feed Warmth into your intro workflows, job boards and CRM via the Warmth API. <span class="x-dev">In development</span>'
+          'Feed Warmth into your intro workflows, job boards and CRM via the Warmth API.'
         ]
       ]
     )}</div></section>` +
     ctaBand(
       'Bring Warmth to your network.',
-      'Custom annual plans with a dedicated success manager. The Warmth dashboard, Warmth API, SSO and admin controls are in development.',
+      'Custom annual plans with SSO, admin controls and a dedicated success manager.',
       `<a href="/about" class="x-btn lg">Talk to us ${sv('arrow', 17)}</a>`,
       `<a href="/pricing" class="x-btn dk2 lg">See pricing</a>`
     ) +
@@ -585,12 +580,6 @@ function vNetworks() {
 }
 
 function vPricing() {
-  // v134: Networks features not built yet get an "In development" label.
-  const X_DEV_SOON = ['Warmth dashboard', 'Warmth API', 'SSO and admin controls'];
-  // v135: the Rooms price and the UK note come from PLANS and the GBP table (js/contacts-import.js),
-  // so the note can no longer drift from the real prices (it said Rooms £149 after the v132 cut to $59 = £45).
-  const X_ROOMS_USD = (PLANS.rooms && +PLANS.rooms.price.event) || 59;
-  const xGbp = n => (typeof GBP === 'object' && GBP[n] != null ? GBP[n] : Math.round(n * 0.8));
   const p = (m, y) => (billing === 'm' ? m : y);
   const plans = [
     [
@@ -628,7 +617,7 @@ function vPricing() {
     ],
     [
       'Rooms',
-      usd0(X_ROOMS_USD),
+      '$59',
       'per event',
       'For events and communities',
       [
@@ -647,7 +636,7 @@ function vPricing() {
       'Custom',
       'annual',
       'For VC platforms and networks',
-      ['Warmth dashboard', 'Warmth API', 'SSO and admin controls', 'Dedicated success manager'],
+      ['~Warmth dashboard', '~Warmth API', '~SSO and admin controls', 'Dedicated success manager'],
       'Talk to us',
       '/about',
       ''
@@ -656,7 +645,7 @@ function vPricing() {
   return (
     mnav('pricing') +
     `<section class="x-ph c"><div class="x-wrap"><div class="x-eye">Pricing</div><h1 class="x-h1 x-ph-h">Start free. <em>Pay when it pays off.</em></h1><p class="x-lead" style="margin:0 auto">We never charge per tap or per scan. Sharing should be free.</p></div></section>
- <section class="x-sec" style="padding-top:0"><div class="x-wrap"><div class="x-plans">${plans.map(([n, a, per, who, f, c, href, hot]) => `<div class="x-plan ${hot}">${hot ? '<span class="x-plan-tag">Most popular</span>' : ''}<b class="x-plan-n">${n}</b><small class="x-plan-w">${who}</small><div class="x-plan-a">${a}<small>${per}</small></div><a href="${href}" class="x-btn ${hot ? '' : 'ghost'} block">${c}</a><ul>${f.map(x => `<li>${sv('check', 16, 'currentColor', 2.4)}<span>${x}${n === 'Networks' && X_DEV_SOON.includes(x) ? ' <span class="x-dev">In development</span>' : ''}</span></li>`).join('')}</ul></div>`).join('')}</div><p class="x-plan-note">UK prices shown in GBP: Pro &pound;${xGbp(proM())}/month, Rooms &pound;${xGbp(X_ROOMS_USD)}/event. Cards are charged the equivalent in Kenyan shillings. Prices exclude VAT and sales tax where applicable.</p></div></section><section class="x-sec alt" id="your-data"><div class="x-wrap"><div class="x-head2"><div><div class="x-eye">Your data is always yours</div><h2 class="x-h2">Stop paying, <em class="ink">keep everything.</em></h2></div><p class="x-sub">Your relationships belong to you, not to a subscription. Here is exactly what happens if you stop paying.</p></div><div class="x-own">${[
+ <section class="x-sec" style="padding-top:0"><div class="x-wrap"><div class="x-plans">${plans.map(([n, a, per, who, f, c, href, hot]) => `<div class="x-plan ${hot}">${hot ? '<span class="x-plan-tag">Most popular</span>' : ''}<b class="x-plan-n">${n}</b><small class="x-plan-w">${who}</small><div class="x-plan-a">${a}<small>${per}</small></div><a href="${href}" class="x-btn ${hot ? '' : 'ghost'} block">${c}</a><ul>${f.map(x => (x[0] === '~' ? `<li class="x-dev-i">${sv('check', 16, 'currentColor', 2.4)}<span>${x.slice(1)} <span class="x-dev">In development</span></span></li>` : `<li>${sv('check', 16, 'currentColor', 2.4)}${x}</li>`)).join('')}</ul></div>`).join('')}</div><p class="x-plan-note">UK prices shown in GBP: Pro &pound;9/month, Rooms &pound;45/event. Cards are charged the equivalent in Kenyan shillings. Prices exclude VAT and sales tax where applicable.</p></div></section><section class="x-sec alt" id="your-data"><div class="x-wrap"><div class="x-head2"><div><div class="x-eye">Your data is always yours</div><h2 class="x-h2">Stop paying, <em class="ink">keep everything.</em></h2></div><p class="x-sub">Your relationships belong to you, not to a subscription. Here is exactly what happens if you stop paying.</p></div><div class="x-own">${[
    [
      'shield',
      'Nothing is deleted',
@@ -665,7 +654,7 @@ function vPricing() {
    [
      'users',
      'Free keeps working',
-     `The Free plan includes ${xFreeThr()}, your card and the quiet reveal, so you can keep meeting people.`
+     'The Free plan includes unlimited Threads, your card and the quiet reveal, so you can keep meeting people.'
    ],
    [
      'arrow',
@@ -687,7 +676,7 @@ function vPricing() {
    )}</div></div></section><section class="x-sec"><div class="x-wrap x-faqw"><div><div class="x-eye">Pricing and data</div><h2 class="x-h2">Questions,<br><em>answered.</em></h2><p class="x-sub" style="margin-top:16px">Anything else? Write to <a href="mailto:hello@introthread.com" style="color:var(--xb);font-weight:700">hello@introthread.com</a></p></div><div class="x-faq">${[
    [
      'What happens to my contacts if I stop paying?',
-     `Nothing is lost. Pro stays active until the end of the period you paid for, then your account moves to the Free plan. Every Thread, note, tag, Room and your card stay exactly as they are, and Free includes ${xFreeThr()}, so you can keep meeting people. Only Pro tools such as AI follow-up drafts and NFC writing are paused.`
+     'Nothing is lost. Pro stays active until the end of the period you paid for, then your account moves to the Free plan. Every Thread, note, tag, Room and your card stay exactly as they are, and Free includes unlimited Threads, so you can keep adding people. Only Pro tools such as AI follow-up drafts and NFC writing are paused.'
    ],
    [
      'Can I export my contacts?',
