@@ -27,7 +27,7 @@ People meet at events and swap cards, then nothing happens. Nobody knows which c
 - **Plans** (as published on `/pricing`; source of truth in HANDOVER.md, "PRICING"):
   - **Free:** $0 forever. Card, link and QR; 5 new Threads a month; What's next? and the quiet reveal; save to contacts; export anytime.
   - **Pro:** $12 a month (£9 in the UK). Unlimited Threads, AI follow-ups, calendar booking from a match, NFC card support, Thread search.
-  - **Rooms:** $59 per event (£149 in the UK). Room code, QR and badges; live Resolution Report; up to 1,000 attendees; sponsor-ready export. In the code and database a purchased Room is called a "Room pass" (`room_passes`).
+  - **Rooms:** $59 per event (£45 in the UK). Room code, QR and badges; live Resolution Report; up to 1,000 attendees; sponsor-ready export. In the code and database a purchased Room is called a "Room pass" (`room_passes`).
   - **Networks:** custom annual pricing for VC platforms and networks, sales-led. The Warmth dashboard, Warmth API and SSO are roadmap items, not built yet.
 - **Admin:** dashboard, users, moderation, rooms, revenue, plans, settings, privacy requests, staff and audit log, with roles and two-step verification.
 

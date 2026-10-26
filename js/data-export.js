@@ -73,7 +73,7 @@ HELP.splice(
   [
     'Your data',
     'What happens to my contacts if I stop paying?',
-    'Nothing is lost. Pro stays active until the end of the period you paid for, then your account moves to the Free plan. Every Thread, note, tag, Room and your card stay exactly as they are, and Free includes unlimited Threads, so you can keep adding people. Only Pro tools such as AI follow-up drafts and NFC writing are paused.'
+    'Nothing is lost. Pro stays active until the end of the period you paid for, then your account moves to the Free plan. Every Thread, note, tag, Room and your card stay exactly as they are, and Free includes 5 new Threads a month, so you can keep meeting people. Only Pro tools such as AI follow-up drafts and NFC writing are paused.'
   ],
   [
     'Your data',

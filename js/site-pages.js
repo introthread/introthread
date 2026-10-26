@@ -30,7 +30,7 @@ const PAGE_META = {
   ],
   '/pricing': [
     'Pricing | Introthread',
-    'Start free with your card, link, QR and unlimited Threads. Pro for people who follow through, Rooms from $166 per event, custom plans for networks.'
+    'Start free with your card, link, QR and 5 new Threads a month. Pro is $12 a month for unlimited Threads, Rooms are $59 per event, and Networks get custom annual plans.'
   ],
   '/about': [
     'About | Introthread',
@@ -347,6 +347,11 @@ function ctaBand(h, p, b1, b2) {
   return `<section class="x-sec" style="padding-top:8px"><div class="x-wrap"><div class="x-ctab one"><div><div class="x-eye">Get started today</div><h2>${h || 'Make every introduction count.'}</h2><p>${p || 'Create your free Introthread card in 60 seconds. Your next handshake deserves a Thread.'}</p><div class="x-cta-row" style="margin-top:0">${b1 || `<a href="/signup" class="x-btn lg">Get your free card ${sv('arrow', 17)}</a>`}${b2 || `<a href="/login" class="x-btn dk2 lg">Try the live demo</a>`}</div></div></div></div></section>`;
 }
 
+/* v136: the Free plan's Thread allowance in words ("5 new Threads a month"), from the live plan settings. */
+function xFreeThr() {
+  const n = typeof freeLim === 'function' ? freeLim() : 5;
+  return n == null ? 'unlimited Threads' : `${n} new Thread${+n === 1 ? '' : 's'} a month`;
+}
 function vHow() {
   return (
     mnav('how') +
@@ -403,7 +408,7 @@ function vHow() {
       ],
       [
         'What happens to my contacts if I stop paying?',
-        'Nothing is lost. Pro stays active until the end of the period you paid for, then your account moves to the Free plan. Every Thread, note, tag, Room and your card stay exactly as they are, and Free includes unlimited Threads, so you can keep adding people. Only Pro tools such as AI follow-up drafts and NFC writing are paused.'
+        `Nothing is lost. Pro stays active until the end of the period you paid for, then your account moves to the Free plan. Every Thread, note, tag, Room and your card stay exactly as they are, and Free includes ${xFreeThr()}, so you can keep meeting people. Only Pro tools such as AI follow-up drafts and NFC writing are paused.`
       ],
       [
         'Can I export my contacts?',
@@ -660,7 +665,7 @@ function vPricing() {
    [
      'users',
      'Free keeps working',
-     'The Free plan includes unlimited Threads, your card and the quiet reveal, so you can keep meeting people.'
+     `The Free plan includes ${xFreeThr()}, your card and the quiet reveal, so you can keep meeting people.`
    ],
    [
      'arrow',
@@ -682,7 +687,7 @@ function vPricing() {
    )}</div></div></section><section class="x-sec"><div class="x-wrap x-faqw"><div><div class="x-eye">Pricing and data</div><h2 class="x-h2">Questions,<br><em>answered.</em></h2><p class="x-sub" style="margin-top:16px">Anything else? Write to <a href="mailto:hello@introthread.com" style="color:var(--xb);font-weight:700">hello@introthread.com</a></p></div><div class="x-faq">${[
    [
      'What happens to my contacts if I stop paying?',
-     'Nothing is lost. Pro stays active until the end of the period you paid for, then your account moves to the Free plan. Every Thread, note, tag, Room and your card stay exactly as they are, and Free includes unlimited Threads, so you can keep adding people. Only Pro tools such as AI follow-up drafts and NFC writing are paused.'
+     `Nothing is lost. Pro stays active until the end of the period you paid for, then your account moves to the Free plan. Every Thread, note, tag, Room and your card stay exactly as they are, and Free includes ${xFreeThr()}, so you can keep meeting people. Only Pro tools such as AI follow-up drafts and NFC writing are paused.`
    ],
    [
      'Can I export my contacts?',
