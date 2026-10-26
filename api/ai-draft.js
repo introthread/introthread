@@ -1,7 +1,7 @@
 // POST /api/ai-draft  { thread_id }
 // Writes a short follow-up from one Thread's context. Never sends anything.
 // Needs Vercel env: ANTHROPIC_API_KEY or OPENAI_API_KEY (optional AI_MODEL), or GEMINI_API_KEY (free tier from
-// Google AI Studio, no card; optional GEMINI_MODEL, default gemini-2.5-flash). If several are set: Anthropic, OpenAI, Gemini.
+// Google AI Studio, no card; optional GEMINI_MODEL; default tries gemini-3.5-flash-lite, gemini-3.1-flash-lite, gemini-2.5-flash). If several are set: Anthropic, OpenAI, Gemini.
 const { place, send, readBody, isUuid, caller, guard } = require('./_lib/common');
 const LABEL = { meet: 'meet again', intro: 'introduce someone', keep: 'stay in touch', notnow: 'stay in touch' };
 
@@ -15,10 +15,16 @@ async function complete(system, prompt) {
     if (!r.ok) { console.error('ai-draft openai', r.status, (await r.text().catch(() => '')).slice(0, 300)); return { fail: r.status }; } const j = await r.json(); return (((j.choices || [])[0] || {}).message || {}).content || null;
   }
   if (process.env.GEMINI_API_KEY) {
-    const model = process.env.GEMINI_MODEL || 'gemini-2.5-flash';
-    const r = await fetch('https://generativelanguage.googleapis.com/v1beta/models/' + encodeURIComponent(model) + ':generateContent', { method: 'POST', headers: { 'x-goog-api-key': process.env.GEMINI_API_KEY, 'Content-Type': 'application/json' }, body: JSON.stringify({ system_instruction: { parts: [{ text: system }] }, contents: [{ role: 'user', parts: [{ text: prompt }] }], generationConfig: { maxOutputTokens: 500, temperature: 0.6, thinkingConfig: { thinkingBudget: 0 } } }) });
-    if (!r.ok) { const e = await r.text().catch(() => ''); console.error('ai-draft gemini', r.status, e.slice(0, 300)); return { fail: r.status }; } const j = await r.json();
-    return ((((j.candidates || [])[0] || {}).content || {}).parts || []).map(p => p.text || '').join('').trim() || null;
+    // v129: try current free-tier models in order; a 404 means that model is not offered to this key, so try the next.
+    const models = process.env.GEMINI_MODEL ? [process.env.GEMINI_MODEL] : ['gemini-3.5-flash-lite', 'gemini-3.1-flash-lite', 'gemini-2.5-flash'];
+    let last = 0;
+    for (const model of models) {
+      const r = await fetch('https://generativelanguage.googleapis.com/v1beta/models/' + encodeURIComponent(model) + ':generateContent', { method: 'POST', headers: { 'x-goog-api-key': process.env.GEMINI_API_KEY, 'Content-Type': 'application/json' }, body: JSON.stringify({ system_instruction: { parts: [{ text: system }] }, contents: [{ role: 'user', parts: [{ text: prompt }] }], generationConfig: { maxOutputTokens: 1024, temperature: 0.6 } }) });
+      if (!r.ok) { last = r.status; console.error('ai-draft gemini', model, r.status, (await r.text().catch(() => '')).slice(0, 300)); if (r.status === 404) continue; return { fail: r.status }; }
+      const j = await r.json();
+      return ((((j.candidates || [])[0] || {}).content || {}).parts || []).map(p => p.text || '').join('').trim() || null;
+    }
+    return { fail: last || 502 };
   }
   return undefined;
 }
