@@ -90,17 +90,16 @@ async function loadCloud(user) {
       PENDING = user;
       return 'needs-profile';
     }
-    const ins = await SB.from('profiles')
-      .insert({
-        id: user.id,
-        handle: m.handle,
-        name: m.name,
-        role: m.role,
-        company: m.company,
-        city: m.city,
-        bio: m.bio,
-        theme: m.theme
-      });
+    const ins = await SB.from('profiles').insert({
+      id: user.id,
+      handle: m.handle,
+      name: m.name,
+      role: m.role,
+      company: m.company,
+      city: m.city,
+      bio: m.bio,
+      theme: m.theme
+    });
     /* No .select() here: INSERT ... RETURNING needs SELECT on the whole row, which 016 blocks
        (prefs/plan are private), so it failed with "permission denied for table profiles".
        Read the new row back through my_profile instead. */

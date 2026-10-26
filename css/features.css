@@ -3085,6 +3085,28 @@ html body .pc-m .pc-stage {
 .why li {
   margin: 2px 0;
 }
+/* v140: the box always sets its own text colour. Inside the dark "What's next" card (.td-rv, white text)
+   the light box showed white text on a near-white background, so "Why answer?" was unreadable. */
+.why {
+  color: #1d2939;
+}
+.why b {
+  color: #101828;
+}
+.td-rv .why,
+.dk .why {
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  color: rgba(255, 255, 255, 0.9);
+}
+.td-rv .why b,
+.dk .why b {
+  color: #fff;
+}
+.td-rv .why li::marker,
+.dk .why li::marker {
+  color: #8fb0ff;
+}
 
 /* v133: NFC card panel */
 .nfc-p h3 {
