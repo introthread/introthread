@@ -35,6 +35,11 @@ module.exports = async (req, res) => {
 
   const t = (await get(`threads?${filter}&select=id,owner_id,guest_token,other_name,other_email,where_met,confirmed,mine,theirs`))[0];
   if (!t || (ownerId && t.owner_id !== ownerId)) return send(res, 404, { error: 'thread' });
+  // The guest link used by the Thread's own owner (signed in) is not the other person answering: send nothing.
+  if (!ownerId && String(req.headers.authorization || '').startsWith('Bearer ')) {
+    const c = await caller(req);
+    if (c && c.user.id === t.owner_id) return send(res, 403, { sent: false, reason: 'own_link' });
+  }
   if (!t.confirmed || !t.mine || t.mine !== t.theirs || !LABEL[t.mine]) return send(res, 200, { sent: false, reason: 'no_match' });
 
   const marks = `thread_events?thread_id=eq.${t.id}&kind=eq.note&text=like.${encodeURIComponent(MARK + '*')}&select=id&order=id.asc`;

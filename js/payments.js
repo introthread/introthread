@@ -36,13 +36,22 @@ async function itApi(path, body) {
   }
 }
 /* v123: "You matched" email. The server checks the answers really match and sends once per Thread. */
-function itMatchGuest(tok) {
+async function itMatchGuest(tok) {
   try {
-    fetch('/api/match-notify', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ token: tok })
-    }).catch(() => {});
+    const headers = { 'Content-Type': 'application/json' };
+    /* v126: send the sign-in when there is one, so the server can refuse a Thread owner answering for the guest. */
+    if (cloud() && SB) {
+      const { data } = await SB.auth.getSession();
+      const s = data && data.session;
+      if (s)
+        Object.assign(headers, {
+          Authorization: 'Bearer ' + s.access_token,
+          apikey: CFG.supabaseAnonKey || ''
+        });
+    }
+    fetch('/api/match-notify', { method: 'POST', headers, body: JSON.stringify({ token: tok }) }).catch(
+      () => {}
+    );
   } catch (e) {}
 }
 /* Analytics: PostHog, only after consent, only when a key is in config.js. No emails or names are sent. */

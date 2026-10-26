@@ -25,4 +25,5 @@ const call=(body,hd={})=>new Promise(res=>{const r={statusCode:0,setHeader(){},e
  T.mine=T.theirs='keep';prefs={emailMatch:false};r=await call({token:T.guest_token});ck(r[1].sent===1&&sent[0].to[0]==='guest@example.com','owner opted out');
  ev=[];sent=[];r=await call({thread_id:T.id});ck(r[0]===401,'needs auth');
  r=await call({});ck(r[0]===400,'bad input');
+ T.mine=T.theirs='meet';prefs={};ev=[];sent=[];r=await call({token:T.guest_token},{authorization:'Bearer a.b.c',apikey:'a.b.c'});ck(r[0]===403&&r[1].reason==='own_link'&&!sent.length,'own link refused '+JSON.stringify(r));
  console.log('errs',JSON.stringify(errs));})();

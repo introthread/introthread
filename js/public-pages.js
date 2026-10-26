@@ -143,6 +143,9 @@ const _vGuest = vGuest;
 
 vGuest = function (tok) {
   if (findThread(tok) && !findThread(tok)._c) return _vGuest(tok);
+  /* v126: the owner opening their own guest link cannot confirm or answer for the other person. */
+  if (findThread(tok) && findThread(tok)._c && cloud())
+    return `<div class="pub"><div class="pubcard card pad-lg center">${logo()}<h2>This is your own Thread link</h2><p class="muted">Send it to the person you met so they can confirm and answer. Your own answer goes on the Thread in the app.</p><button type="button" class="x-btn" data-on-click="go('/app/thread/${findThread(tok).id}')">Open the Thread</button></div></div>`;
   if (!SB) return _vGuest(tok);
   const g = GUEST[tok];
   if (g === undefined) {
@@ -180,6 +183,8 @@ const _gc = guestConfirm;
 
 guestConfirm = function (tok) {
   if (findThread(tok) && !findThread(tok)._c) return _gc(tok);
+  if (findThread(tok) && cloud())
+    return toast('This is your own Thread. The other person confirms it from their link.');
   SB.rpc('guest_confirm', { p_token: tok }).then(({ error }) => {
     if (error) return fail(error);
     delete GUEST[tok];
@@ -192,6 +197,8 @@ const _ga = guestAnswer;
 
 guestAnswer = function (tok, k) {
   if (findThread(tok) && !findThread(tok)._c) return _ga(tok, k);
+  if (findThread(tok) && cloud())
+    return toast('This is your own Thread. Answer it from the Thread in the app.');
   SB.rpc('guest_answer', { p_token: tok, p_answer: k }).then(({ error }) => {
     if (error) return fail(error);
     if (typeof itMatchGuest === 'function') itMatchGuest(tok);
