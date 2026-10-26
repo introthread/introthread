@@ -53,6 +53,7 @@ The current state of the build, working rules, what has been done and what comes
 - `docs/ROOMS.md`: Rooms, events, communities and the Room pass
 - `docs/CHANGELOG.md`: every change, newest first
 - `docs/manuals/`: the full product documentation (Word and Markdown), release v131, 26 Oct 2026:
+  - `Introthread-Quick-Start-Guide` (IT-DOC-QS-001): a short guide for new users
   - `Introthread-User-Guide` (IT-DOC-UG-001): every member feature, step by step
   - `Introthread-Administrator-Guide` (IT-DOC-AG-001): admin roles, every admin screen and procedures
   - `Introthread-Technical-and-Operations-Manual` (IT-DOC-TM-001): architecture, configuration, DNS, email, payments, AI, security, tests, runbooks and release history
