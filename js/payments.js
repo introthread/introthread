@@ -274,7 +274,9 @@ stManage = async function () {
     clean();
     if (r && r.ok && r.kind === 'nfc_card') {
       await itProfReload();
-      toast('Card ordered. We will call you to arrange delivery. Your receipt is in Billing.');
+      toast(
+        'Paid. Your print-ready card is on its way to your email, and you can download it from Tap, then NFC. Receipt in Billing.'
+      );
       return;
     }
     if (r && r.ok && r.kind === 'rooms') {

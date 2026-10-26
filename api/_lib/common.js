@@ -35,10 +35,10 @@ async function caller(req) {
   const u = await db.user();
   return u && u.id ? { db, user: u } : null;
 }
-async function sendEmail({ to, subject, html, text, replyTo }) {
+async function sendEmail({ to, subject, html, text, replyTo, attachments }) {
   const key = process.env.RESEND_API_KEY;
   if (!key) return { ok: false, reason: 'not_configured' };
-  const r = await fetch('https://api.resend.com/emails', { method: 'POST', headers: { Authorization: 'Bearer ' + key, 'Content-Type': 'application/json' }, body: JSON.stringify({ from: FROM, to: [to], subject, html, text, ...(replyTo ? { reply_to: replyTo } : {}) }) });
+  const r = await fetch('https://api.resend.com/emails', { method: 'POST', headers: { Authorization: 'Bearer ' + key, 'Content-Type': 'application/json' }, body: JSON.stringify({ from: FROM, to: [to], subject, html, text, ...(replyTo ? { reply_to: replyTo } : {}), ...(attachments ? { attachments } : {}) }) });
   return { ok: r.ok, status: r.status };
 }
 // Simple, brand-consistent email shell (sans-serif only, no images, works in every client).

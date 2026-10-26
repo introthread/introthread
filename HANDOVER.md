@@ -1,6 +1,6 @@
 # Introthread - handover for the next AI agent
 
-Last updated: 26 Oct 2026, 8:30 pm Nairobi (after v139: event mode fits every phone, admin tests wait for the page, one source of pricing, price card drawn by the build, stray 6f7f154 reverted; v138: yearly Pro £90 confirmed; v137: full site review fixes; v136: figures cross-checked site-wide; v135: UK Room price fixed; v134: pricing labels, price card, test card orders cancelled). Read the 26 Oct status summary below first, then the 24 Oct summary, ARCHITECTURE-ESSENTIALS.md, ARCHITECTURE.md and AGENTS.md. Update this file and docs/CHANGELOG.md with every change.
+Last updated: 26 Oct 2026, 9:00 pm Nairobi (after v141: print-ready card emailed as a PDF, no posting; v140: readable Why answer box; v139: event mode fits every phone, admin tests wait for the page, one source of pricing, price card drawn by the build, stray 6f7f154 reverted; v138: yearly Pro £90 confirmed; v137: full site review fixes; v136: figures cross-checked site-wide; v135: UK Room price fixed; v134: pricing labels, price card, test card orders cancelled). Read the 26 Oct status summary below first, then the 24 Oct summary, ARCHITECTURE-ESSENTIALS.md, ARCHITECTURE.md and AGENTS.md. Update this file and docs/CHANGELOG.md with every change.
 
 
 <!-- prices:start -->
@@ -10,6 +10,8 @@ Last updated: 26 Oct 2026, 8:30 pm Nairobi (after v139: event mode fits every ph
 - Room pass: $59 / £45 per event (KES = $59 x `KES_PER_USD`)
 - `img/brand/price-card.png` is drawn by the build from these figures (`scripts/price_card.py`).
 <!-- prices:end -->
+- **v141 (26 Oct, 9 pm): the card is print-ready only.** The KES 199 order no longer posts anything. The buyer gets a PDF (`js/card-pdf.js`, shared by the browser and the server) by email, and can download it again from Tap > NFC. `card_orders` rows from v141 on have `phone` null, `delivery` 'Emailed (print-ready PDF)', `title_on_card` "title · company", and status `delivered` once the email is accepted. There is nothing to program or ship. The order inbox email only confirms the sale. The server QR encoder is `api/_lib/qrcode.js`. Keep it at the same version as the CDN script in index.html.
+
 
 - **v139 (26 Oct, evening):** (a) commit 6f7f154 (labelled v134, pushed 5:26 pm from the `introthread` account) re-applied old files and undid v135 to v138; reverted. If an old local copy is pushed again it will do the same: pull `main` first. (b) Event mode fits without scrolling: `ev2Fit` in `js/admin-audit.js`, CSS at the end of the ev2 block in `css/features.css`, test `tests/app/event_mode_fit.py`. (c) Admin tests use `tests/admin/_ready.js` (`sl()` now waits for the page). (d) Pricing: change `PLANS`/`GBP` only, then run `scripts/build_pages.py`; it fails listing every file that disagrees (`scripts/pricing.py`) and redraws `img/brand/price-card.png` (`scripts/price_card.py`, needs Playwright Chromium).
 

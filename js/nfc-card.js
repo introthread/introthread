@@ -1,6 +1,6 @@
 // Introthread - NFC cards (v133). One panel for the Tap screen's NFC option: what a tap does, how many times the
 // member's card has been tapped, writing a card on Android (Pro), writing it with the free NFC Tools app on iPhone,
-// and ordering a ready-programmed card (KES 199, Paystack). The card link ends in ?src=nfc: the public card then
+// and buying a print-ready card (KES 199, Paystack; emailed PDF since v141, nothing posted). The card link ends in ?src=nfc: the public card then
 // counts the tap (/api/card-tap) and opens at "Start a Thread". Needs migration 022 for tap counts and orders.
 const NFC_CARD_KES = 199;
 function nfcLink(u) {
@@ -13,9 +13,10 @@ function nfcOpen() {
   const opt = (fn, icon, b, s) =>
     `<button type="button" class="nfc-o" data-on-click="${fn}"><span class="nfc-oi">${sv(icon, 20)}</span><span><b>${b}</b><small>${s}</small></span>${sv('chev', 16)}</button>`;
   modal(
-    `<div class="nfc-p"><div class="row between"><h3>Your Introthread NFC card</h3><button class="x" aria-label="Close" data-on-click="closeModal()">&times;</button></div><p class="fu-sub">Tap your Introthread card on their phone. Their phone opens your card, where they can save your contact or start a Thread with you. They need no app.</p><p class="nfc-taps" id="nfcTaps" hidden></p><div class="nfc-os">${opt('nfcOrder()', 'send', 'Order a ready-programmed card, KES ' + NFC_CARD_KES, 'We program it with your link and deliver it to you.')}${opt('closeModal();tapNFC()', 'nfc', 'Write my own card' + (android ? '' : ' (Android)'), android ? 'Pro. Hold a blank NFC card to the back of your phone.' : 'Pro. Works in Chrome on Android phones.')}${opt('nfcIphone()', 'phone', 'On iPhone: write it with NFC Tools', 'Free app, takes about a minute.')}</div><p class="small muted nfc-f">Any phone that reads NFC (most Android phones, iPhone XS and newer) opens your card when tapped. Phone-to-phone tapping is not possible from a web app.</p></div>`
+    `<div class="nfc-p"><div class="row between"><h3>Your Introthread NFC card</h3><button class="x" aria-label="Close" data-on-click="closeModal()">&times;</button></div><p class="fu-sub">Tap your Introthread card on their phone. Their phone opens your card, where they can save your contact or start a Thread with you. They need no app.</p><p class="nfc-taps" id="nfcTaps" hidden></p><div id="nfcDl" hidden></div><div class="nfc-os">${opt('nfcOrder()', 'send', 'Get a print-ready card, KES ' + NFC_CARD_KES, 'We email you a PDF of your card with your QR code. Print it anywhere.')}${opt('closeModal();tapNFC()', 'nfc', 'Write my own card' + (android ? '' : ' (Android)'), android ? 'Pro. Hold a blank NFC card to the back of your phone.' : 'Pro. Works in Chrome on Android phones.')}${opt('nfcIphone()', 'phone', 'On iPhone: write it with NFC Tools', 'Free app, takes about a minute.')}</div><p class="small muted nfc-f">Any phone that reads NFC (most Android phones, iPhone XS and newer) opens your card when tapped. Phone-to-phone tapping is not possible from a web app.</p></div>`
   );
   nfcLoadTaps();
+  nfcLoadOrders();
 }
 async function nfcLoadTaps() {
   if (!(typeof cloud === 'function' && cloud()) || typeof SB === 'undefined' || !SB) return;
@@ -43,7 +44,7 @@ function nfcOrder() {
   const f = (id, label, attr, val) =>
     `<label class="nfc-fl"><span>${label}</span><input id="${id}" ${attr} value="${esc(val || '')}"></label>`;
   modal(
-    `<div class="nfc-p"><div class="row between"><h3>Order your Introthread NFC card</h3><button class="x" aria-label="Close" data-on-click="closeModal()">&times;</button></div><p class="fu-sub">A card programmed with your link (introthread.com/${esc(u.handle)}), printed with your name, and delivered to you. <b>KES ${NFC_CARD_KES}</b>, paid securely through Paystack.</p><form data-on-submit="return nfcPay(event)" class="nfc-form">${f('nfn', 'Name on the card', 'required maxlength="80" autocomplete="name"', u.name)}${f('nft', 'Title on the card (optional)', 'maxlength="80"', u.role)}${f('nfp', 'Phone for delivery', 'required type="tel" maxlength="30" autocomplete="tel" placeholder="+254 7XX XXX XXX"', '')}<label class="nfc-fl"><span>Delivery address or area</span><textarea id="nfd" required maxlength="300" rows="3" placeholder="For example: Westlands, Nairobi, Mirage Tower, 5th floor"></textarea></label><p class="err" id="nferr" role="alert"></p><button class="x-btn block">Pay KES ${NFC_CARD_KES}</button></form></div>`
+    `<div class="nfc-p"><div class="row between"><h3>Get your print-ready card</h3><button class="x" aria-label="Close" data-on-click="closeModal()">&times;</button></div><p class="fu-sub">A business card with your name and a QR code to your link (introthread.com/${esc(u.handle)}), emailed to you as a PDF to print at home or at any print shop. Nothing is posted, so it works wherever you are. <b>KES ${NFC_CARD_KES}</b>, paid securely through Paystack.</p><form data-on-submit="return nfcPay(event)" class="nfc-form">${f('nfn', 'Name on the card', 'required maxlength="80" autocomplete="name"', u.name)}${f('nft', 'Title (optional)', 'maxlength="80"', u.role)}${f('nfc2', 'Company (optional)', 'maxlength="80" autocomplete="organization"', u.company)}<p class="err" id="nferr" role="alert"></p><button class="x-btn block">Pay KES ${NFC_CARD_KES}</button></form></div>`
   );
 }
 async function nfcPay(e) {
@@ -54,22 +55,18 @@ async function nfcPay(e) {
     kind: 'nfc_card',
     name: v('nfn').trim(),
     title: v('nft').trim(),
-    phone: v('nfp').trim(),
-    delivery: v('nfd').trim(),
+    company: v('nfc2').trim(),
     handle: u && u.handle
   };
   const err = document.getElementById('nferr');
-  if (!/^[+0-9 ()-]{7,30}$/.test(body.phone)) {
-    if (err) err.textContent = 'Enter a phone number we can call to arrange delivery.';
-    return false;
-  }
-  if (body.delivery.length < 5) {
-    if (err) err.textContent = 'Enter where we should deliver the card.';
+  if (!body.name) {
+    if (err) err.textContent = 'Enter the name to print on the card.';
     return false;
   }
   if (!(typeof cloud === 'function' && cloud())) {
     closeModal();
-    toast('Demo account: card ordered (no payment taken).');
+    nfcDownload({ name: body.name, title: body.title, company: body.company });
+    toast('Demo account: card downloaded (no payment taken).');
     return false;
   }
   const b = e.target.querySelector('button');
@@ -91,9 +88,58 @@ async function nfcPay(e) {
       r && r.status === 503
         ? 'Card orders are not open yet. Email hello@introthread.com and we will arrange it.'
         : r && r.error === 'details'
-          ? 'Please check your name, phone and delivery details.'
+          ? 'Please check the name on the card.'
           : 'Could not start the payment. Try again.';
   return false;
+}
+/* v141: printable card. Paid orders (card_orders, readable by their owner) unlock "Download your card" in the
+   NFC panel. The PDF is built in the browser by js/card-pdf.js, the same file the server emails after payment. */
+let NFC_ORDER = null;
+async function nfcLoadOrders() {
+  const el = document.getElementById('nfcDl');
+  if (!el) return;
+  if (typeof cloud === 'function' && cloud() && typeof SB !== 'undefined' && SB) {
+    try {
+      const { data } = await SB.from('card_orders')
+        .select('name_on_card,title_on_card,status,created_at')
+        .neq('status', 'cancelled')
+        .order('created_at', { ascending: false })
+        .limit(1);
+      NFC_ORDER = data && data[0] ? data[0] : null;
+    } catch (e) {}
+  }
+  if (!NFC_ORDER) return;
+  el.hidden = false;
+  el.innerHTML = `<button type="button" class="x-btn block nfc-dl" data-on-click="nfcDownloadOrder()">${sv('send', 16)} Download your print-ready card (PDF)</button>`;
+}
+function nfcDownloadOrder() {
+  const o = NFC_ORDER || {},
+    u = me() || {};
+  const [title, company] = String(o.title_on_card || '').split(' \u00b7 ');
+  nfcDownload({ name: o.name_on_card || u.name, title: title || '', company: company || '' });
+}
+function nfcDownload(d) {
+  const u = me();
+  if (!u || typeof cardPdf !== 'function' || !window.qrcode)
+    return toast('Could not build the PDF. Try again.');
+  const s = cardPdf(
+    {
+      name: d.name || u.name,
+      title: d.title,
+      company: d.company,
+      handle: u.handle,
+      url: profileUrl(u) + '?src=card'
+    },
+    window.qrcode
+  );
+  const b = new Uint8Array(s.length);
+  for (let i = 0; i < s.length; i++) b[i] = s.charCodeAt(i) & 255;
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(new Blob([b], { type: 'application/pdf' }));
+  a.download = 'introthread-card-' + u.handle + '.pdf';
+  document.body.appendChild(a);
+  a.click();
+  setTimeout(() => (URL.revokeObjectURL(a.href), a.remove()), 1000);
 }
 /* Public card opened from an NFC tap (?src=nfc): count the tap once per visit and open at "Start a Thread". */
 let NFC_LANDED = '';

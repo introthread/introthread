@@ -88,7 +88,9 @@ async function applyRoomPass(db, userId, tx) {
   const left = await db.get(`room_passes?user_id=eq.${userId}&used_at=is.null&select=id`);
   return { kind: 'rooms', amount, currency: cur, passes: Array.isArray(left) ? left.length : null };
 }
-// v133: a paid NFC card order. One order per Paystack reference; emails the buyer and the order inbox only the first time.
+// v133: a paid card order. One order per Paystack reference; emails the buyer and the order inbox only the first time.
+// v141: printable only. The buyer is emailed a print-ready PDF of their card (js/card-pdf.js, QR to their link);
+// nothing is programmed or posted. The order is marked 'delivered' once the email is accepted.
 async function applyCardOrder(db, userId, tx) {
   const { SITE, esc, sendEmail, layout } = require('./common');
   const m = meta(tx), ref = 'ps_' + tx.reference;
@@ -97,7 +99,7 @@ async function applyCardOrder(db, userId, tx) {
   const k = process.env.SUPABASE_SERVICE_ROLE_KEY;
   const h = { apikey: k, Authorization: 'Bearer ' + k, 'Content-Type': 'application/json' };
   const cut = (v, n) => String(v || '').slice(0, n);
-  const row = { user_id: userId, reference: ref, amount, currency: cur, status: 'paid', name_on_card: cut(m.name, 80), title_on_card: cut(m.title, 80), phone: cut(m.phone, 30), delivery: cut(m.delivery, 300), handle: cut(m.handle, 20) };
+  const row = { user_id: userId, reference: ref, amount, currency: cur, status: 'paid', name_on_card: cut(m.name, 80), title_on_card: cut([m.title, m.company].filter(Boolean).join(' \u00b7 '), 80), phone: null, delivery: 'Emailed (print-ready PDF)', handle: cut(m.handle, 20) };
   const r = await fetch(SB_URL + '/rest/v1/card_orders?on_conflict=reference', { method: 'POST', headers: { ...h, Prefer: 'resolution=ignore-duplicates,return=representation' }, body: JSON.stringify(row) });
   const created = r.ok ? ((await r.json()) || []).length > 0 : false;
   await db.insertIgnore('payments', { user_id: userId, plan_id: null, amount, currency: cur, amount_usd: cur === 'usd' ? amount : Math.round(amount / KES_PER_USD * 100) / 100, status: 'succeeded', stripe_invoice_id: ref, stripe_payment_intent: String(tx.id || '') }, 'stripe_invoice_id');
@@ -105,21 +107,30 @@ async function applyCardOrder(db, userId, tx) {
     b.invoices = Array.isArray(b.invoices) ? b.invoices : [];
     if (!b.invoices.some(i => i && (i.id === ref || i.ref === tx.reference))) {
       b.seq = (b.seq || 0) + 1;
-      const t = paid.getTime(), desc = 'Introthread NFC card, programmed';
+      const t = paid.getTime(), desc = 'Introthread print-ready card (PDF)';
       b.invoices.unshift({ id: ref, ref: tx.reference, number: 'IT-' + paid.getFullYear() + '-' + String(b.seq).padStart(4, '0'), date: t, due: t, desc, lines: [{ d: desc, amount }], subtotal: amount, taxLabel: 'Tax', tax: 0, total: amount, currency: cur.toUpperCase(), status: 'paid' });
     }
     return b;
   });
+  let emailed = false;
   if (created && process.env.RESEND_API_KEY) {
     const buyer = (tx.customer && tx.customer.email) || '';
-    const link = SITE + '/' + row.handle + '?src=nfc';
-    const lines = [['Name on card', row.name_on_card], ['Title on card', row.title_on_card], ['Phone', row.phone], ['Delivery', row.delivery], ['Card link', link], ['Paid', 'KES ' + amount + ' (' + tx.reference + ')']];
+    const link = SITE + '/' + row.handle + '?src=card';
+    const { cardPdf } = require('../../js/card-pdf.js');
+    const pdf = Buffer.from(cardPdf({ name: row.name_on_card, title: cut(m.title, 80), company: cut(m.company, 80), handle: row.handle, url: link }, require('./qrcode.js')), 'latin1').toString('base64');
+    const file = 'introthread-card-' + row.handle + '.pdf';
+    const lines = [['Name on card', row.name_on_card], ['Title on card', row.title_on_card], ['Card link', link], ['Paid', 'KES ' + amount + ' (' + tx.reference + ')']];
     const table = '<table style="font-size:14px;line-height:1.5;border-collapse:collapse">' + lines.map(([a, b]) => `<tr><td style="padding:2px 12px 2px 0;color:#6b7385">${esc(a)}</td><td><b>${esc(b || '-')}</b></td></tr>`).join('') + '</table>';
     const text = lines.map(([a, b]) => a + ': ' + (b || '-')).join('\n');
-    if (buyer) await sendEmail({ to: buyer, subject: 'Your Introthread NFC card order', html: layout('Your NFC card is on its way', `<p style="font-size:15px;line-height:1.6;margin:0 0 10px">Thank you. We will program your card with your Introthread link and deliver it to you. We will call you on the number below to arrange delivery.</p>${table}`, 'Open my card', SITE + '/app/card', 'Questions? Reply to hello@introthread.com.'), text: 'Thank you for your order.\n\n' + text });
-    await sendEmail({ to: process.env.ORDER_EMAIL || 'hello@introthread.com', subject: 'New NFC card order: ' + (row.name_on_card || row.handle), html: layout('New NFC card order', `<p style="font-size:15px;line-height:1.6;margin:0 0 10px">Program the card with the link below (NFC Tools: Write, Add a record, URL), print and deliver.</p>${table}`, 'Open the card link', link, 'Buyer: ' + esc(buyer)), text });
+    const how = '<p style="font-size:15px;line-height:1.6;margin:0 0 10px">Your print-ready card is attached (PDF). Print it at 100% (Actual size) on card stock, or send it to any print shop, and cut along the marks. Page 1 is one card; pages 2 and 3 give 10 cards (print double-sided, flip on the long edge).</p><p style="font-size:15px;line-height:1.6;margin:0 0 10px">The QR code opens your Introthread card. To let people tap as well, stick a blank NFC sticker or card (NTAG213, 215 or 216) on the back and write your link to it: in the app, open Tap, then NFC, then Write my own card. You can download the PDF again any time from the same NFC panel.</p>';
+    if (buyer) {
+      const r1 = await sendEmail({ to: buyer, subject: 'Your Introthread card, ready to print', html: layout('Your card is ready to print', how + table, 'Open my card', SITE + '/app/card', 'Questions? Reply to hello@introthread.com.'), text: 'Your print-ready card is attached (PDF). Print at 100% and cut along the marks.\n\n' + text, attachments: [{ filename: file, content: pdf }] });
+      emailed = !!(r1 && r1.ok);
+      if (emailed) await db.patch(`card_orders?reference=eq.${encodeURIComponent(ref)}`, { status: 'delivered', updated_at: new Date().toISOString() });
+    }
+    await sendEmail({ to: process.env.ORDER_EMAIL || 'hello@introthread.com', subject: 'Printable card sold: ' + (row.name_on_card || row.handle), html: layout('Printable card sold', `<p style="font-size:15px;line-height:1.6;margin:0 0 10px">${emailed ? 'The print-ready PDF was emailed to the buyer. Nothing to post.' : 'The PDF could not be emailed to the buyer. They can download it from the NFC panel; check with them.'}</p>${table}`, 'Open the card link', link, 'Buyer: ' + esc(buyer)), text });
   }
-  return { kind: 'nfc_card', amount, currency: cur, created };
+  return { kind: 'nfc_card', amount, currency: cur, created, emailed };
 }
 const meta = tx => { let m = tx && tx.metadata; if (typeof m === 'string') { try { m = JSON.parse(m); } catch (e) { m = {}; } } return m || {}; };
 module.exports = { PS, PLAN, ROOM_PASS_KES, NFC_CARD_KES, ps, svc, applyCharge, applyRoomPass, applyCardOrder, planCode, setBilling, meta };
