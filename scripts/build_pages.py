@@ -1,12 +1,18 @@
 # Generates per-page HTML copies with page-specific meta for crawlers (LinkedIn, WhatsApp, X).
-import re, json, os
+import re, json, os, sys
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+# v139: PLANS (js/billing.js) and GBP (js/contacts-import.js) are the single source of pricing.
+# pricing.check_and_generate() fails the build if PRD.md, HANDOVER.md, the Help text, the in-app page
+# description or migration 019 disagree, and writes the HANDOVER prices block.
+import pricing
+PRICES=pricing.check_and_generate()
 SITE='https://www.introthread.com'
 META={
  '/':('Introthread | Every handshake, followed through','Create your professional card, share it by tap, QR or link, and turn every introduction into a shared Thread with one clear next step. Built for professionals everywhere.'),
  '/how':('How it works | Introthread','Tap or scan, confirm a shared Thread, answer one private question: What\'s next? See how Introthread turns introductions into follow-through.'),
  '/rooms':('Thread Rooms for events and communities | Introthread','Measure what your event created: verified connections, meetings booked and introductions made, live and for 30 days after.'),
  '/networks':('Warmth for teams and networks | Introthread','Consented, verified relationship strength for VC platform teams, accelerators and professional communities. Warm intros that are actually warm.'),
- '/pricing':('Pricing | Introthread','Start free with your card, link, QR and 5 new Threads a month. Pro is $12 a month for unlimited Threads, Rooms are $59 per event, and Networks get custom annual plans.'),
+ '/pricing':('Pricing | Introthread',pricing.meta_pricing(PRICES)),
  '/about':('About | Introthread','Introthread records the moment two people meet and agree on what happens next. Our story, and how to get in touch.'),
  '/privacy':('Trust and privacy | Introthread','Two-sided consent, private answers and opt-in network visibility. Designed for UK GDPR, the DPA 2018 and US state privacy laws.'),
  '/terms':('Terms of Service | Introthread','The terms for using Introthread: your account, your content, acceptable use, plans and payments, and your rights.'),
@@ -65,3 +71,6 @@ for p in META:
     os.makedirs(p[1:],exist_ok=True)
     open(p[1:]+'/index.html','w').write(re.sub(r'<!--meta-->.*?<!--/meta-->',lambda m:block(p),h,flags=re.S))
 print('built',len(META))
+# v139: the price card image is drawn from PLANS (redrawn only when the prices change).
+import price_card
+if price_card.redraw_if_needed(PRICES, force='--force-card' in sys.argv): print('price card redrawn from PLANS')

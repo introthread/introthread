@@ -1,16 +1,36 @@
 # Introthread - handover for the next AI agent
 
-Last updated: 26 Oct 2026, 5:30 pm Nairobi (after v134, price card image and In development labels). Read the 26 Oct status summary below first, then the 24 Oct summary, ARCHITECTURE-ESSENTIALS.md, ARCHITECTURE.md and AGENTS.md. Update this file and docs/CHANGELOG.md with every change.
+Last updated: 26 Oct 2026, 8:30 pm Nairobi (after v139: event mode fits every phone, admin tests wait for the page, one source of pricing, price card drawn by the build, stray 6f7f154 reverted; v138: yearly Pro £90 confirmed; v137: full site review fixes; v136: figures cross-checked site-wide; v135: UK Room price fixed; v134: pricing labels, price card, test card orders cancelled). Read the 26 Oct status summary below first, then the 24 Oct summary, ARCHITECTURE-ESSENTIALS.md, ARCHITECTURE.md and AGENTS.md. Update this file and docs/CHANGELOG.md with every change.
+
+
+<!-- prices:start -->
+**Current prices** (generated from `PLANS` in `js/billing.js` and `GBP` in `js/contacts-import.js` by `scripts/build_pages.py`; do not edit by hand, change `PLANS`/`GBP` and rebuild):
+- Free: $0, 5 new Threads a month
+- Pro: $12 / £9 a month; $120 / £90 a year
+- Room pass: $59 / £45 per event (KES = $59 x `KES_PER_USD`)
+- `img/brand/price-card.png` is drawn by the build from these figures (`scripts/price_card.py`).
+<!-- prices:end -->
+
+- **v139 (26 Oct, evening):** (a) commit 6f7f154 (labelled v134, pushed 5:26 pm from the `introthread` account) re-applied old files and undid v135 to v138; reverted. If an old local copy is pushed again it will do the same: pull `main` first. (b) Event mode fits without scrolling: `ev2Fit` in `js/admin-audit.js`, CSS at the end of the ev2 block in `css/features.css`, test `tests/app/event_mode_fit.py`. (c) Admin tests use `tests/admin/_ready.js` (`sl()` now waits for the page). (d) Pricing: change `PLANS`/`GBP` only, then run `scripts/build_pages.py`; it fails listing every file that disagrees (`scripts/pricing.py`) and redraws `img/brand/price-card.png` (`scripts/price_card.py`, needs Playwright Chromium).
+
 
 ## STATUS SUMMARY: 26 Oct 2026, after v133.2 (read this first)
 
 ### Done 25-26 Oct (all on `main`, tested, deployed by Vercel unless noted)
 - **v120 to v131:** light-logo tone fix, "You matched" email (v123), AI follow-up drafts through Gemini (v127 to v131), clean-up and handover updates.
 - **Manuals** in `docs/manuals/` (docx and md): User Guide IT-DOC-UG-001, Administrator Guide IT-DOC-AG-001, Technical and Operations Manual IT-DOC-TM-001 (all now v1.2) and Quick Start Guide IT-DOC-QS-001. Built from Python sources outside the repo (doc_ug.py, doc_ag.py, doc_tm.py, doc_qs.py with docbuild.py); if those are gone, edit the .md and regenerate the .docx another way. Copies also sit in Agnes's Town library (projects/introthread).
-- **v132: Room pass $59** (was $199): UK £45, KES 7,670 (59 x 130 unless `ROOM_PASS_KES`). "Why confirm / answer / join" lists added. Confirmed live on `/pricing` and `/rooms`. `img/brand/price-card.png` redrawn with $59 and £45 in v134. The pricing footnote said £149 until v134 (fixed).
+- **v132: Room pass $59** (was $199): UK £45, KES 7,670 (59 x 130 unless `ROOM_PASS_KES`). "Why confirm / answer / join" lists added. Confirmed live on `/pricing` and `/rooms`. `img/brand/price-card.png` still shows $199 (not yet redrawn).
 - **v133: NFC cards end to end.** Tap > "Tap with an NFC card" opens one panel (`js/nfc-card.js`): tap count, **Order a ready-programmed card, KES 199** (all plans), **Write my own card (Android, Pro)**, **On iPhone: write it with NFC Tools**. Wording: "Tap your Introthread card on their phone to open your card and start a Thread." Card links end in `?src=nfc`; the public card counts the tap (skips the owner and repeat visits in the same browser session) and opens at Start a Thread. Orders: `/api/pay-init` kind `nfc_card`; `pay-verify`, the webhook and `pay-sync` save them with `applyCardOrder` (one per Paystack reference) and email the buyer and `ORDER_EMAIL` (default hello@introthread.com). **Migration `022_nfc_cards.sql` has been run by Agnes (26 Oct).**
 - **v133.1: Vercel Hobby allows only 12 serverless functions** (files directly in `api/`). v133 added a 13th and the deploy silently did not go out. `/api/card-tap` is now handled inside `api/status.js` (POST) via `api/_lib/card-tap.js` and a rewrite at the top of `vercel.json`. There are exactly 12 now: add new endpoints inside an existing function with a rewrite.
 - **v133.2: a card order no longer switches Pro on.** `api/pay-sync.js` (runs when Billing opens) used to treat every non-Room payment as Pro. It now routes `nfc_card` to `applyCardOrder`, and `applyCharge` refuses any payment whose metadata has a `kind`.
+
+- **v134 (26 Oct, 2 pm):**
+  - `/pricing`: small "In development" label (`.x-dev`) next to Warmth dashboard, Warmth API and SSO and admin controls on the Networks plan (`X_DEV_SOON` in `vPricing`, `js/site-pages.js`). Remove a name from `X_DEV_SOON` when that feature ships.
+  - `img/brand/price-card.png` redrawn with the $59 Room pass (figure rendered from the pricing page at 2x and placed where $199 was; rest of the image unchanged).
+  - The two test card orders are now `cancelled` (Agnes chose option A). Payment rows and receipts IT-2026-0001 / IT-2026-0002 kept. Done by direct update, so there is no audit-log entry; the table has no note column.
+
+- **v137 (26 Oct, 3 pm):** full site review. Login and signup now have one `<h1>` each (side heading is `h2.x-side-h`). `/networks` marks the Warmth API, dashboard, SSO and admin controls as in development. The `/rooms` closing line mentions the free event (20 people, once a month) before the $59 price. Sitemap dates updated. Sweep script result: 10 pages x 2 widths, no script errors, missing files, broken links or sideways scroll. Yearly Pro £90 confirmed in v138, and v137 confirmed live. Still open: `img/brand/price-card.png` must be redrawn by hand whenever a price changes.
+- **v136 (26 Oct, 2:30 pm):** site-wide figure check. Fixed the in-app `/pricing` description (said unlimited Free Threads and Rooms from $166), the "stop paying" answer on `/how` and in Help (said Free has unlimited Threads) and PRD.md (UK Rooms £149). Everything else matches: Free 5 Threads a month; Pro $12 / £9 a month, $120 / £90 a year (live `plans` table agrees); Room pass $59 / £45 / KES 7,670; one free event a month up to 20 people; up to 1,000 attendees; NFC card KES 199. Still open: the yearly Pro £90 is marked "pending confirmation" in `js/contacts-import.js`.
 
 ### Live checks 26 Oct (test account one, handle `testaccountone`, Paystack TEST mode)
 - NFC panel shows on the Free plan with the three options; wording correct.
@@ -19,11 +39,13 @@ Last updated: 26 Oct 2026, 5:30 pm Nairobi (after v134, price card image and In 
 - The first order hit the old Pro bug. With Agnes's approval the account was set back to Free (receipt kept) and the wrong `subscriptions` row was deleted.
 
 ### Waiting on Agnes (next agent: ask or act on her answer)
-- **The two test card orders above are still `status = 'paid'`.** Do not ship them. Options given to her (no answer yet): (A) set both to `cancelled` (direct update, not audit-logged; or she runs `select admin_card_order_set(id, 'cancelled', 'Test order, do not ship') from card_orders where reference in ('ps_T126408002797062','ps_T286301451422157');` in the SQL Editor for an audit entry); (B) delete both rows, keeping or also removing the two payment rows and Billing receipts. Two order emails for them reached hello@ and must be ignored.
+- ~~Two test card orders~~: done in v134, both `cancelled`. Ignore the two order emails at hello@.
 - Signed-out phone re-test of the tap link (`introthread.com/testaccountone?src=nfc`), then check the count goes to 2.
 - Source blank NFC cards (NTAG213/215/216, about KES 100 each), printing and delivery. There is no admin orders screen yet; orders arrive by email and status changes need `admin_card_order_set` (staff) or a direct database update.
 - Paystack live keys (still TEST mode), company legal details, Resend sender verification for all emails, Google sign-in live test, signed-in HAR/console audit.
-- Networks features (Warmth dashboard, Warmth API, SSO and admin controls) are not built (estimate 8 to 10 weeks). Since v134 the pricing page labels them "In development"; remove the `~` prefix in the Networks list in `js/site-pages.js` when each one ships.
+- ~~"In development" label for Networks features~~: done in v134. The features themselves are still not built (estimate 8 to 10 weeks).
+- ~~Redraw the price card~~: done in v134.
+- ~~UK Room price mismatch~~: fixed in v135. The pricing note is now built from `PLANS` and `GBP` (Rooms £45/event), and the price card footer is redrawn. To change a price later, update `PLANS` (js/billing.js or the plans table) and the `GBP` table in js/contacts-import.js; the page follows. The price card image must still be redrawn by hand.
 - Phone-to-phone NFC tapping is not possible from a web app; always use a card or sticker.
 
 ### How the last agent worked (keep doing this)
@@ -98,9 +120,9 @@ The page footer reads (since v69): "UK prices shown in GBP: Pro £9/month, Rooms
 **Where each price lives (change all of them together)**
 - **`js/billing.js` `PLANS`:** names, subtitles, prices and feature lists. The billing screen and the pricing page read from here.
 - **`js/core.js` `vPricing()`:** the pricing page layout. Rooms always shows $59. There is no yearly Room discount; the old $166 yearly Room price was removed in v65.
-- **`js/contacts-import.js` `GBP` map:** the UK display prices. 12→9, 199→149, 120→90 (yearly Pro, pending confirmation, see below).
+- **`js/contacts-import.js` `GBP` map:** the UK display prices. 12→9, 199→149, 120→90 (yearly Pro, confirmed by Agnes on 26 Oct).
 - **`js/admin-staff.js` `planApply()`:** overrides names, subtitles, USD/GBP prices and Thread limits from the Supabase `plans` table, which staff edit in Admin, Plans and pricing.
-- **`supabase/migrations/019_pricing.sql`:** sets Free to $0 with 5 Threads a month, and Pro to $12 / £9 a month, $120 / £90 a year, with the subtitles above. **Agnes must run it.** Until she does, the live table still has Pro at £10 a month and £96 a year.
+- **`supabase/migrations/019_pricing.sql`:** sets Free to $0 with 5 Threads a month, and Pro to $12 / £9 a month, $120 / £90 a year, with the subtitles above. Run on the live database: on 26 Oct the `plans` table showed Pro $12 / £9 a month and $120 / £90 a year, and Free 5 Threads a month.
 - **`api/_lib/pay.js`:** the Room pass is charged in KES, at `ROOM_PASS_KES` = 59 × `KES_PER_USD` (default 130), which is KES 7,670. Pro is charged through the Paystack plan codes `PAYSTACK_PLAN_MONTH` / `PAYSTACK_PLAN_YEAR`. Their amounts are set in the Paystack dashboard: about KES 1,560 a month at 130 KES/USD. Agnes needs to confirm these.
 - **`scripts/build_pages.py` META `/pricing`:** the search/social description, which now matches the page.
 

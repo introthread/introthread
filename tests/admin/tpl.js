@@ -1,5 +1,5 @@
 const fs=require('fs');const {JSDOM}=require('jsdom');const errs=[];const calls=[];
-const sl=ms=>new Promise(r=>setTimeout(r,ms));
+const sl=require('./_ready.js')(()=>w); // v139: waits for the page instead of fixed sleeps
 const days=[...Array(30)].map((_,i)=>({d:new Date(Date.now()-(29-i)*864e5).toISOString().slice(0,10),n:i%4}));
 let aal='aal1';
 let RANGEOK=true,ZERO=false;

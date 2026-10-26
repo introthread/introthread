@@ -1519,6 +1519,41 @@ Object.assign(SV, {
     '<circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/>',
   evmoon: '<path d="M20 14.5A8 8 0 1 1 9.5 4 6.5 6.5 0 0 0 20 14.5z"/>'
 });
+/* v139: event mode fits any phone without scrolling. After the QR is drawn, if the screen still
+   overflows (browser bars, long names, the event chips), the QR shrinks by the overflow so the
+   Share, NFC, Wallpaper and Add manually buttons and the tip stay on screen. Refits on resize. */
+function ev2Fit(q, url, sz) {
+  const ev = document.querySelector('.ev2');
+  if (!ev || !q || !q.isConnected) return;
+  // Up to 3 passes: the QR is drawn in whole modules, so one shrink can land a few pixels short.
+  for (let i = 0; i < 3; i++) {
+    const over = ev.scrollHeight - ev.clientHeight;
+    if (over <= 0) break;
+    const n = Math.max(96, Math.floor(sz - over - 4 - i * 12));
+    if (n >= sz) break;
+    qr(q, url, n);
+    q.dataset.fit = n;
+    sz = n;
+  }
+  if (!window._ev2Rs) {
+    window._ev2Rs = 1;
+    let t;
+    addEventListener('resize', () => {
+      clearTimeout(t);
+      t = setTimeout(() => {
+        const e = document.querySelector('.ev2 #scanqr'),
+          m = typeof me === 'function' && me();
+        if (!e || !m) return;
+        const s0 = Math.max(
+          190,
+          Math.min(innerWidth - 96, innerHeight - (innerHeight < 760 ? 430 : 400), 420)
+        );
+        qr(e, scanUrl(m), s0);
+        ev2Fit(e, scanUrl(m), s0);
+      }, 150);
+    });
+  }
+}
 const _vScanEv2 = vScan;
 vScan = function () {
   const u = me();
@@ -1532,6 +1567,7 @@ vScan = function () {
     if (q) {
       const sz = Math.max(190, Math.min(innerWidth - 96, innerHeight - (innerHeight < 760 ? 430 : 400), 420));
       qr(q, scanUrl(u), sz);
+      ev2Fit(q, scanUrl(u), sz);
     }
     scanWake(true);
   }, 20);
