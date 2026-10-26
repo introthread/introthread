@@ -4,7 +4,7 @@ _Architecture, configuration, security, testing, deployment and runbooks for the
 
 | Document No. | Version | Date of issue | Status |
 |---|---|---|---|
-| IT-DOC-TM-001 | 1.1 | 26 October 2026 | Approved for release |
+| IT-DOC-TM-001 | 1.2 | 26 October 2026 | Approved for release |
 
 **Audience:** The product owner, developers and anyone operating Introthread
 
@@ -60,6 +60,8 @@ Introthread is a web application (installable on phones) for professional networ
 | paystack-webhook | Records successful charges (signature checked). | Paystack only |
 | cron-nudge | Daily reminders for Threads 48 to 72 hours old that need a step. | Vercel Cron with CRON_SECRET |
 | weekly-digest | Weekly summary for members who switched it on. | Vercel Cron with CRON_SECRET |
+| card-tap | Counts one tap on a member's NFC card link (?src=nfc). | Public, rate-limited |
+| pay-init kind nfc_card | Checkout for a ready-programmed NFC card (KES 199); pay-verify and the webhook save the order and email the buyer and hello@. | Signed-in member |
 
 Every function uses a shared guard: same-site origin check, no cross-site preflight, and a per-IP rate limit.
 
@@ -88,6 +90,7 @@ Every function uses a shared guard: same-site origin check, no cross-site prefli
 | PAYSTACK_SECRET_KEY | Paystack API | Set (test key) |
 | PAYSTACK_PLAN_MONTH, PAYSTACK_PLAN_YEAR | Pro plan codes | Test codes; recreate in live mode |
 | ROOM_PASS_KES, KES_PER_USD | Room pass price in shillings (default 59 x 130 = KES 7,670) | Defaults |
+| NFC_CARD_KES, ORDER_EMAIL | NFC card price (default KES 199) and where order emails go (default hello@introthread.com) | Defaults |
 | SITE_URL, SUPABASE_URL, SUPABASE_ANON_KEY, ALLOWED_ORIGINS | Overrides for site and Supabase addresses | Defaults |
 
 ### Supabase settings
@@ -100,7 +103,7 @@ Every function uses a shared guard: same-site origin check, no cross-site prefli
 
 ### Database migrations
 
-Schema is in `supabase/schema.sql`; changes are in `supabase/migrations/NNN_*.sql`, run by the owner in the Supabase SQL Editor. Migrations 002 to 021 have all been run.
+Schema is in `supabase/schema.sql`; changes are in `supabase/migrations/NNN_*.sql`, run by the owner in the Supabase SQL Editor. Migrations 002 to 021 have been run; 022 (NFC cards) must be run for tap counts and card orders.
 
 | Migration | Adds |
 |---|---|
@@ -113,6 +116,7 @@ Schema is in `supabase/schema.sql`; changes are in `supabase/migrations/NNN_*.sq
 | 018 | Billing guard: browser cannot change server billing fields |
 | 019 | Pricing: Free 5 Threads a month, Pro $12 / £9 |
 | 020, 021 | Paid Rooms, then one free small event a month for up to 20 people |
+| 022 | NFC cards: card_taps (tap counts) and card_orders (ready-programmed card orders), my_card_taps, admin_card_order_set |
 
 ### Domain and DNS
 
@@ -227,6 +231,7 @@ Every release in this period passed the admin tests, every script in tests/app, 
 | v130 | AI drafts open with a first-name greeting and name the place met. |
 | v131 | Natural dates in AI drafts ("26 October"). |
 | v132 | Room pass price cut from $199 to $59 per event (£45 UK, KES 7,670). |
+| v133 | NFC cards: clear wording, tap opens Start a Thread, tap counts, iPhone NFC Tools steps, ready-programmed card orders at KES 199. |
 
 Operational changes in the same period: Search Console verified; Resend sign-in emails; Google and LinkedIn sign-in; manual linking on; hello@introthread.com receiving via ImprovMX; CRON_SECRET and GEMINI_API_KEY added.
 

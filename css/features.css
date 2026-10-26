@@ -3018,3 +3018,100 @@ html body .pc-m .pc-stage {
 .why li {
   margin: 2px 0;
 }
+
+/* v133: NFC card panel */
+.nfc-p h3 {
+  margin: 0;
+  font-size: 19px;
+}
+.nfc-taps {
+  margin: 8px 0 0;
+  padding: 10px 12px;
+  border-radius: 10px;
+  background: #eefaf3;
+  font-size: 14px;
+}
+.nfc-os {
+  display: grid;
+  gap: 10px;
+  margin: 14px 0 10px;
+}
+.nfc-o {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+  padding: 12px;
+  border: 1px solid var(--line, #dfe3ec);
+  border-radius: 12px;
+  background: #fff;
+  text-align: left;
+  font: inherit;
+  color: inherit;
+  cursor: pointer;
+}
+.nfc-o:hover {
+  border-color: #c5cbd8;
+}
+.nfc-o > span:nth-child(2) {
+  flex: 1;
+}
+.nfc-o b {
+  display: block;
+  font-size: 15px;
+}
+.nfc-o small {
+  color: #5b6375;
+}
+.nfc-oi {
+  display: grid;
+  place-items: center;
+  width: 38px;
+  height: 38px;
+  border-radius: 10px;
+  background: #eef3ff;
+  color: #1f5eff;
+  flex: none;
+}
+.nfc-st {
+  padding-left: 20px;
+  line-height: 1.55;
+  font-size: 15px;
+}
+.nfc-st li {
+  margin: 6px 0;
+}
+.nfc-l {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  margin-top: 6px;
+  flex-wrap: wrap;
+}
+.nfc-l code {
+  word-break: break-all;
+  background: #f3f5fa;
+  padding: 4px 6px;
+  border-radius: 6px;
+  font-size: 13px;
+}
+.nfc-form {
+  display: grid;
+  gap: 10px;
+}
+.nfc-fl {
+  display: grid;
+  gap: 4px;
+  font-size: 14px;
+  font-weight: 600;
+}
+.nfc-fl input,
+.nfc-fl textarea {
+  font: 400 15px sans-serif;
+  padding: 10px 12px;
+  border: 1px solid var(--line, #dfe3ec);
+  border-radius: 10px;
+}
+.nfc-f {
+  margin: 4px 0 0;
+}

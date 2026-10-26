@@ -4,7 +4,7 @@ _How to use Introthread: your card, Threads, follow-ups, Rooms, settings and pla
 
 | Document No. | Version | Date of issue | Status |
 |---|---|---|---|
-| IT-DOC-UG-001 | 1.1 | 26 October 2026 | Approved for release |
+| IT-DOC-UG-001 | 1.2 | 26 October 2026 | Approved for release |
 
 **Audience:** Everyone who uses Introthread: Free and Pro members, Room organisers and members, and people who receive a Thread link
 
@@ -152,7 +152,7 @@ Your card has a public page at introthread.com/your-handle. Anyone you share it 
 | QR code | Show the QR on your card or in Event mode; the other person scans it with their camera. | All plans |
 | Link | Copy introthread.com/your-handle and paste it anywhere. | All plans |
 | WhatsApp, email, SMS | Use the Share buttons on your card. | All plans |
-| NFC | Write your card link to an NFC card or tag and tap it on a phone. | Pro |
+| NFC card | Tap your Introthread card on their phone. Their phone opens your card at "Start a Thread". Order a ready-programmed card (KES 199), or write your own (Android, Pro; iPhone with the free NFC Tools app). | All plans (writing on Android: Pro) |
 | Event mode | Open /app/scan for a full-screen QR that keeps the screen awake, with light or dark mode and a downloadable wallpaper. | All plans |
 
 ### Use Event mode at an event
@@ -161,6 +161,16 @@ Your card has a public page at introthread.com/your-handle. Anyone you share it 
 2. If you are at a Room, choose it so every Thread is tagged to the event.
 3. Hold up your phone. People scan your QR and see your card.
 4. After the conversation, capture them on **Tap** so you remember the context.
+
+### Use an Introthread NFC card
+
+An NFC card holds your card link. When you tap it on someone's phone (most Android phones and iPhone XS or newer, no app needed), their phone opens your card straight at **Start a Thread**, where they can save your contact or start a Thread with you. Phone-to-phone tapping is not possible from a web app, so a card or sticker is used.
+
+1. Open **Tap > Tap with an NFC card**.
+2. **Order a ready-programmed card (KES 199):** enter the name and title for the card, a phone number and the delivery address, then pay securely through Paystack. We program, print and deliver the card and call you to arrange delivery. The receipt appears in Billing.
+3. **Or write your own card on Android (Pro):** choose **Write my own card** and hold a blank NFC card (NTAG213, 215 or 216) to the back of your phone.
+4. **Or write it on iPhone:** choose **On iPhone: write it with NFC Tools**, copy your card link, and follow the steps in the free NFC Tools app.
+5. The panel shows how many times your card has been tapped, in total and in the last 30 days.
 
 ## 07 Capturing a connection (Tap)
 

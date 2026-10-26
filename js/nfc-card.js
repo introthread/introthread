@@ -1,0 +1,140 @@
+// Introthread - NFC cards (v133). One panel for the Tap screen's NFC option: what a tap does, how many times the
+// member's card has been tapped, writing a card on Android (Pro), writing it with the free NFC Tools app on iPhone,
+// and ordering a ready-programmed card (KES 199, Paystack). The card link ends in ?src=nfc: the public card then
+// counts the tap (/api/card-tap) and opens at "Start a Thread". Needs migration 022 for tap counts and orders.
+const NFC_CARD_KES = 199;
+function nfcLink(u) {
+  return profileUrl(u) + '?src=nfc';
+}
+function nfcOpen() {
+  const u = me();
+  if (!u) return;
+  const android = 'NDEFReader' in window;
+  const opt = (fn, icon, b, s) =>
+    `<button type="button" class="nfc-o" data-on-click="${fn}"><span class="nfc-oi">${sv(icon, 20)}</span><span><b>${b}</b><small>${s}</small></span>${sv('chev', 16)}</button>`;
+  modal(
+    `<div class="nfc-p"><div class="row between"><h3>Your Introthread NFC card</h3><button class="x" aria-label="Close" data-on-click="closeModal()">&times;</button></div><p class="fu-sub">Tap your Introthread card on their phone. Their phone opens your card, where they can save your contact or start a Thread with you. They need no app.</p><p class="nfc-taps" id="nfcTaps" hidden></p><div class="nfc-os">${opt('nfcOrder()', 'send', 'Order a ready-programmed card, KES ' + NFC_CARD_KES, 'We program it with your link and deliver it to you.')}${opt('closeModal();tapNFC()', 'nfc', 'Write my own card' + (android ? '' : ' (Android)'), android ? 'Pro. Hold a blank NFC card to the back of your phone.' : 'Pro. Works in Chrome on Android phones.')}${opt('nfcIphone()', 'phone', 'On iPhone: write it with NFC Tools', 'Free app, takes about a minute.')}</div><p class="small muted nfc-f">Any phone that reads NFC (most Android phones, iPhone XS and newer) opens your card when tapped. Phone-to-phone tapping is not possible from a web app.</p></div>`
+  );
+  nfcLoadTaps();
+}
+async function nfcLoadTaps() {
+  if (!(typeof cloud === 'function' && cloud()) || typeof SB === 'undefined' || !SB) return;
+  try {
+    const { data, error } = await SB.rpc('my_card_taps');
+    const el = document.getElementById('nfcTaps');
+    if (error || !data || !el) return;
+    el.hidden = false;
+    el.textContent = data.total
+      ? `Your card has been tapped ${data.total} ${data.total === 1 ? 'time' : 'times'} (${data.last30} in the last 30 days).`
+      : 'No taps yet. Taps on your card show here.';
+  } catch (e) {}
+}
+function nfcIphone() {
+  const u = me();
+  if (!u) return;
+  const link = nfcLink(u);
+  modal(
+    `<div class="nfc-p"><div class="row between"><h3>Write your card on iPhone</h3><button class="x" aria-label="Close" data-on-click="closeModal()">&times;</button></div><ol class="nfc-st"><li>Install <b>NFC Tools</b> (free) from the App Store.</li><li>Open it and choose <b>Write</b>, then <b>Add a record</b>, then <b>URL / URI</b>.</li><li>Paste your card link:<div class="nfc-l"><code>${esc(link)}</code><button type="button" class="t-how sm" data-on-click="copy('${esc(link)}','Card link copied')">Copy</button></div></li><li>Choose <b>Write</b> and hold a blank NFC card (NTAG213, 215 or 216) to the top of your iPhone.</li><li>Test it: tap the card on another phone. Your card should open.</li></ol><p class="small muted">iPhone XS or newer. Prefer not to? <button type="button" class="au-inl" data-on-click="nfcOrder()">Order a ready-programmed card</button>.</p></div>`
+  );
+}
+function nfcOrder() {
+  const u = me();
+  if (!u) return;
+  const f = (id, label, attr, val) =>
+    `<label class="nfc-fl"><span>${label}</span><input id="${id}" ${attr} value="${esc(val || '')}"></label>`;
+  modal(
+    `<div class="nfc-p"><div class="row between"><h3>Order your Introthread NFC card</h3><button class="x" aria-label="Close" data-on-click="closeModal()">&times;</button></div><p class="fu-sub">A card programmed with your link (introthread.com/${esc(u.handle)}), printed with your name, and delivered to you. <b>KES ${NFC_CARD_KES}</b>, paid securely through Paystack.</p><form data-on-submit="return nfcPay(event)" class="nfc-form">${f('nfn', 'Name on the card', 'required maxlength="80" autocomplete="name"', u.name)}${f('nft', 'Title on the card (optional)', 'maxlength="80"', u.role)}${f('nfp', 'Phone for delivery', 'required type="tel" maxlength="30" autocomplete="tel" placeholder="+254 7XX XXX XXX"', '')}<label class="nfc-fl"><span>Delivery address or area</span><textarea id="nfd" required maxlength="300" rows="3" placeholder="For example: Westlands, Nairobi, Mirage Tower, 5th floor"></textarea></label><p class="err" id="nferr" role="alert"></p><button class="x-btn block">Pay KES ${NFC_CARD_KES}</button></form></div>`
+  );
+}
+async function nfcPay(e) {
+  e.preventDefault();
+  const u = me(),
+    v = id => (document.getElementById(id) || {}).value || '';
+  const body = {
+    kind: 'nfc_card',
+    name: v('nfn').trim(),
+    title: v('nft').trim(),
+    phone: v('nfp').trim(),
+    delivery: v('nfd').trim(),
+    handle: u && u.handle
+  };
+  const err = document.getElementById('nferr');
+  if (!/^[+0-9 ()-]{7,30}$/.test(body.phone)) {
+    if (err) err.textContent = 'Enter a phone number we can call to arrange delivery.';
+    return false;
+  }
+  if (body.delivery.length < 5) {
+    if (err) err.textContent = 'Enter where we should deliver the card.';
+    return false;
+  }
+  if (!(typeof cloud === 'function' && cloud())) {
+    closeModal();
+    toast('Demo account: card ordered (no payment taken).');
+    return false;
+  }
+  const b = e.target.querySelector('button');
+  if (b) {
+    b.disabled = true;
+    b.textContent = 'Opening secure payment...';
+  }
+  const r = await itApi('pay-init', body);
+  if (r && r.url) {
+    location.href = r.url;
+    return false;
+  }
+  if (b) {
+    b.disabled = false;
+    b.textContent = 'Pay KES ' + NFC_CARD_KES;
+  }
+  if (err)
+    err.textContent =
+      r && r.status === 503
+        ? 'Card orders are not open yet. Email hello@introthread.com and we will arrange it.'
+        : r && r.error === 'details'
+          ? 'Please check your name, phone and delivery details.'
+          : 'Could not start the payment. Try again.';
+  return false;
+}
+/* Public card opened from an NFC tap (?src=nfc): count the tap once per visit and open at "Start a Thread". */
+let NFC_LANDED = '';
+function nfcLanding(hd) {
+  const q = new URLSearchParams(location.search);
+  if (q.get('src') !== 'nfc' || !hd || NFC_LANDED === hd) return;
+  NFC_LANDED = hd;
+  const u = typeof me === 'function' ? me() : null;
+  const own = u && u.handle && String(u.handle).toLowerCase() === String(hd).toLowerCase();
+  let seen = false;
+  try {
+    seen = sessionStorage.getItem('it_tap_' + hd) === '1';
+    sessionStorage.setItem('it_tap_' + hd, '1');
+  } catch (e) {}
+  if (!own && !seen)
+    fetch('/api/card-tap', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ handle: hd })
+    }).catch(() => {});
+  let n = 0;
+  const jump = () => {
+    const s = document.getElementById('start');
+    if (!s) {
+      if (n++ < 20) setTimeout(jump, 200);
+      return;
+    }
+    s.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    const i = document.getElementById('gn');
+    if (i)
+      try {
+        i.focus({ preventScroll: true });
+      } catch (e) {}
+  };
+  setTimeout(jump, 300);
+}
+const _vPublic133 = vPublic;
+vPublic = function (hd) {
+  const html = _vPublic133.apply(this, arguments);
+  try {
+    nfcLanding(hd);
+  } catch (e) {}
+  return html;
+};

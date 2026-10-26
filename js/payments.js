@@ -272,6 +272,11 @@ stManage = async function () {
     }
     const r = await itApi('pay-verify', { reference: ref });
     clean();
+    if (r && r.ok && r.kind === 'nfc_card') {
+      await itProfReload();
+      toast('Card ordered. We will call you to arrange delivery. Your receipt is in Billing.');
+      return;
+    }
     if (r && r.ok && r.kind === 'rooms') {
       await raPasses();
       await itProfReload();

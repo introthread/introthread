@@ -4,7 +4,7 @@ _How Introthread staff run the platform: access, roles, every admin screen and t
 
 | Document No. | Version | Date of issue | Status |
 |---|---|---|---|
-| IT-DOC-AG-001 | 1.1 | 26 October 2026 | Approved for release |
+| IT-DOC-AG-001 | 1.2 | 26 October 2026 | Approved for release |
 
 **Audience:** Introthread staff with admin access: owner, admin, moderator, support and finance roles
 
@@ -72,14 +72,23 @@ The Dashboard gives a live overview of the platform for a chosen date range: sig
 
 > **Privacy.** Never share a member's details with anyone else. Members' private Thread notes are not shown in admin.
 
-## 06 Moderation
+## 06 NFC card orders
+
+Members can order a ready-programmed Introthread NFC card for KES 199. Each paid order is saved (table `card_orders`) and emailed to hello@introthread.com with the name and title for the card, phone, delivery address and the card link to program.
+
+1. Open the order email. Program a blank NFC card with the card link shown (it ends in ?src=nfc), for example with the free NFC Tools app: Write, Add a record, URL.
+2. Print the name and title on the card.
+3. Call the member on the phone number given to arrange delivery.
+4. Update the order status (paid, programmed, shipped, delivered or cancelled) with a reason. Until an admin screen is added, staff with database access use the function admin_card_order_set, which checks the role and writes the audit log.
+
+## 07 Moderation
 
 1. Open **Moderation** to see reports about profiles, cards or behaviour.
 2. Filter by status or type; select **Refresh** for the latest.
 3. Open a report, review the content, and use **Open in Users** to see the account.
 4. Record the outcome with a reason. The report and your decision are kept in the audit log.
 
-## 07 Rooms
+## 08 Rooms
 
 Admin > Rooms shows every Room on the platform with totals (Rooms, attendees, active Rooms, join links used) and filters for search, status (upcoming, live, past), type (events, communities, team meetings) and date.
 
@@ -90,13 +99,13 @@ Admin > Rooms shows every Room on the platform with totals (Rooms, attendees, ac
 - Rooms created by staff do not need a Room pass.
 - The Rooms feature can be switched off for everyone in **Settings > Features**.
 
-## 08 Revenue
+## 09 Revenue
 
 Revenue shows subscriptions, payments and Room passes from Paystack, recorded by the server. Use **Export subscriptions CSV** for accounting and **Review** to inspect items that need attention. Charges are made in Kenyan shillings; the pricing page shows US dollars and, for UK visitors, pounds.
 
 > **Current status.** Paystack is in test mode until the business registration is approved and the live keys are added. Test payments are not real revenue.
 
-## 09 Plans and pricing
+## 10 Plans and pricing
 
 Plans and pricing lets the owner adjust plan names, subtitles, prices (USD and GBP) and the Free plan Thread limit. Changes are read by the app and the pricing page.
 
@@ -109,32 +118,32 @@ Plans and pricing lets the owner adjust plan names, subtitles, prices (USD and G
 
 > **Important.** A price change must also be made in Paystack (plan amounts) and on any published price card. See the Technical and Operations Manual, section "Payments".
 
-## 10 Settings
+## 11 Settings
 
 - **Maintenance mode**: pause the app for everyone except staff, with a message. Public cards stay visible.
 - **Features**: turn features on or off for everyone, for example Rooms or contact import.
 - **Manage staff**: shortcut to the Staff screen.
 - Every settings change asks for a reason and is audited.
 
-## 11 Privacy requests
+## 12 Privacy requests
 
 1. Open **Privacy requests**. Filter by type and status and page with **Previous** and **Next**.
 2. Select a request and choose **Start working on it** so others know it is in progress.
 3. Verify the requester controls the account email before acting.
 4. Complete the request (export, correction or deletion) within the legal time limit, normally 30 days, then close it. Use **Dismiss** only for invalid or duplicate requests, with a reason.
 
-## 12 Staff
+## 13 Staff
 
 - Invite a staff member by email and choose a role. They receive an invitation; use **Resend** if needed.
 - **Change role** when responsibilities change.
 - **Revoke** access immediately when someone leaves.
 - Every staff member must use two-step verification.
 
-## 13 Audit log
+## 14 Audit log
 
 The audit log records every admin action: who, when, what changed and the reason given. Filter by staff member, screen and date. Use it for investigations and regular reviews.
 
-## 14 Standard operating procedures
+## 15 Standard operating procedures
 
 ### Support a member who cannot sign in
 
@@ -163,6 +172,6 @@ The audit log records every admin action: who, when, what changed and the reason
 - Check open privacy requests and reports.
 - Check the system status (see the Technical and Operations Manual).
 
-## 15 Contacts
+## 16 Contacts
 
 Product owner: Agnes. Support mailbox: hello@introthread.com (forwards to the owner). Security issues: email hello@introthread.com with "SECURITY" in the subject.

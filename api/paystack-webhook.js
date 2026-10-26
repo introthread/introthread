@@ -2,7 +2,7 @@
 // Verifies Paystack's signature, then keeps subscriptions, payments and the Pro plan in step.
 const crypto = require('crypto');
 const { send, guard } = require('./_lib/common');
-const { svc, applyCharge, applyRoomPass, setBilling, meta } = require('./_lib/pay');
+const { svc, applyCharge, applyRoomPass, applyCardOrder, setBilling, meta } = require('./_lib/pay');
 const raw = req => new Promise(r => { let d = ''; req.on('data', c => d += c); req.on('end', () => r(d)); req.on('error', () => r('')); });
 
 module.exports = async (req, res) => {
@@ -27,7 +27,7 @@ module.exports = async (req, res) => {
   };
   const now = new Date().toISOString();
   if (ev.event === 'charge.success') {
-    const uid = await userFor(); if (uid) { if (meta(d).kind === 'rooms') await applyRoomPass(db, uid, d); else await applyCharge(db, uid, d); }
+    const uid = await userFor(); if (uid) { if (meta(d).kind === 'rooms') await applyRoomPass(db, uid, d); else if (meta(d).kind === 'nfc_card') await applyCardOrder(db, uid, d); else await applyCharge(db, uid, d); }
   } else if (ev.event === 'subscription.create') {
     if (cust) await db.patch(`subscriptions?stripe_customer_id=eq.${encodeURIComponent(cust)}`, { stripe_subscription_id: d.subscription_code, ...(d.next_payment_date ? { current_period_end: d.next_payment_date } : {}), updated_at: now });
   } else if (ev.event === 'subscription.not_renew') {

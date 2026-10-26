@@ -50,15 +50,13 @@ async function tapNFC() {
     try {
       toast('Hold an NFC card or sticker to the back of your phone...');
       const w = new NDEFReader();
-      await w.write({ records: [{ recordType: 'url', data: profileUrl(u) }] });
+      await w.write({ records: [{ recordType: 'url', data: profileUrl(u) + '?src=nfc' }] });
       toast('NFC card linked to introthread.com/' + u.handle);
     } catch (e) {
       toast('NFC write was cancelled or failed. Try again.');
     }
-  } else
-    toast(
-      'Writing NFC cards works in Chrome on Android. On iPhone and desktop, use the QR code or your link.'
-    );
+  } else if (typeof nfcIphone === 'function') nfcIphone();
+  else toast('Writing NFC cards works in Chrome on Android. On iPhone, use the free NFC Tools app.');
 }
 
 function tapMore() {
@@ -144,7 +142,7 @@ ${topicsField(TSEL)}
  <button class="t-start">${sv('link', 20)} Start Thread ${sv('arrow', 18)}</button>
 </form></div>
 <div class="t-ways">
- <button type="button" class="t-way o" data-on-click="tapNFC()"><span class="t-way-ic">${sv('nfc', 24)}</span><span><b>Tap with an NFC card</b><small>Hold your NFC card or phone close to theirs to start a Thread.</small></span>${sv('chev', 18)}</button>
+ <button type="button" class="t-way o" data-on-click="nfcOpen()"><span class="t-way-ic">${sv('nfc', 24)}</span><span><b>Tap with an NFC card</b><small>Tap your Introthread card on their phone to open your card and start a Thread.</small></span>${sv('chev', 18)}</button>
  <button type="button" class="t-way b" data-on-click="tapQR()"><span class="t-way-ic">${sv('qr', 24)}</span><span><b>Scan QR code</b><small>Let them scan your code to open your Introthread card.</small></span>${sv('chev', 18)}</button>
  <button type="button" class="t-way g" data-on-click="shareNative()"><span class="t-way-ic">${sv('send', 22)}</span><span><b>Share your link</b><small>Send your link via any channel: email, SMS, WhatsApp or social media.</small></span>${sv('chev', 18)}</button><button type="button" class="t-way g" data-on-click="capCard()"><span class="t-way-ic">${sv('photo', 22)}</span><span><b>Scan a paper card</b><small>Take a photo of their business card. Introthread reads it on your phone and fills in the details.</small></span>${sv('chev', 18)}</button><button type="button" class="t-way g" data-on-click="waCard()"><span class="t-way-ic">${sv('send', 22)}</span><span><b>Send on WhatsApp</b><small>Open WhatsApp with your card link ready to send.</small></span>${sv('chev', 18)}</button>
 </div>

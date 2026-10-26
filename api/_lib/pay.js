@@ -5,6 +5,8 @@ const PLAN = { month: process.env.PAYSTACK_PLAN_MONTH || 'PLN_igm7c0i78tlx9jz', 
 const KES_PER_USD = Number(process.env.KES_PER_USD || 130);
 // Room pass: one extra Room, $59 shown, charged in KES. Override with ROOM_PASS_KES (whole shillings).
 const ROOM_PASS_KES = Number(process.env.ROOM_PASS_KES || Math.round(59 * KES_PER_USD));
+// v133: ready-programmed Introthread NFC card, KES 199 including programming. Override with NFC_CARD_KES.
+const NFC_CARD_KES = Number(process.env.NFC_CARD_KES || 199);
 
 async function ps(path, opt = {}) {
   const r = await fetch(PS + path, { ...opt, headers: { Authorization: 'Bearer ' + process.env.PAYSTACK_SECRET_KEY, 'Content-Type': 'application/json' } });
@@ -84,5 +86,38 @@ async function applyRoomPass(db, userId, tx) {
   const left = await db.get(`room_passes?user_id=eq.${userId}&used_at=is.null&select=id`);
   return { kind: 'rooms', amount, currency: cur, passes: Array.isArray(left) ? left.length : null };
 }
+// v133: a paid NFC card order. One order per Paystack reference; emails the buyer and the order inbox only the first time.
+async function applyCardOrder(db, userId, tx) {
+  const { SITE, esc, sendEmail, layout } = require('./common');
+  const m = meta(tx), ref = 'ps_' + tx.reference;
+  const amount = Number(tx.amount || 0) / 100, cur = String(tx.currency || 'KES').toLowerCase();
+  const paid = new Date(tx.paid_at || tx.paidAt || Date.now());
+  const k = process.env.SUPABASE_SERVICE_ROLE_KEY;
+  const h = { apikey: k, Authorization: 'Bearer ' + k, 'Content-Type': 'application/json' };
+  const cut = (v, n) => String(v || '').slice(0, n);
+  const row = { user_id: userId, reference: ref, amount, currency: cur, status: 'paid', name_on_card: cut(m.name, 80), title_on_card: cut(m.title, 80), phone: cut(m.phone, 30), delivery: cut(m.delivery, 300), handle: cut(m.handle, 20) };
+  const r = await fetch(SB_URL + '/rest/v1/card_orders?on_conflict=reference', { method: 'POST', headers: { ...h, Prefer: 'resolution=ignore-duplicates,return=representation' }, body: JSON.stringify(row) });
+  const created = r.ok ? ((await r.json()) || []).length > 0 : false;
+  await db.insertIgnore('payments', { user_id: userId, plan_id: null, amount, currency: cur, amount_usd: cur === 'usd' ? amount : Math.round(amount / KES_PER_USD * 100) / 100, status: 'succeeded', stripe_invoice_id: ref, stripe_payment_intent: String(tx.id || '') }, 'stripe_invoice_id');
+  await setBilling(db, userId, b => {
+    b.invoices = Array.isArray(b.invoices) ? b.invoices : [];
+    if (!b.invoices.some(i => i && (i.id === ref || i.ref === tx.reference))) {
+      b.seq = (b.seq || 0) + 1;
+      const t = paid.getTime(), desc = 'Introthread NFC card, programmed';
+      b.invoices.unshift({ id: ref, ref: tx.reference, number: 'IT-' + paid.getFullYear() + '-' + String(b.seq).padStart(4, '0'), date: t, due: t, desc, lines: [{ d: desc, amount }], subtotal: amount, taxLabel: 'Tax', tax: 0, total: amount, currency: cur.toUpperCase(), status: 'paid' });
+    }
+    return b;
+  });
+  if (created && process.env.RESEND_API_KEY) {
+    const buyer = (tx.customer && tx.customer.email) || '';
+    const link = SITE + '/' + row.handle + '?src=nfc';
+    const lines = [['Name on card', row.name_on_card], ['Title on card', row.title_on_card], ['Phone', row.phone], ['Delivery', row.delivery], ['Card link', link], ['Paid', 'KES ' + amount + ' (' + tx.reference + ')']];
+    const table = '<table style="font-size:14px;line-height:1.5;border-collapse:collapse">' + lines.map(([a, b]) => `<tr><td style="padding:2px 12px 2px 0;color:#6b7385">${esc(a)}</td><td><b>${esc(b || '-')}</b></td></tr>`).join('') + '</table>';
+    const text = lines.map(([a, b]) => a + ': ' + (b || '-')).join('\n');
+    if (buyer) await sendEmail({ to: buyer, subject: 'Your Introthread NFC card order', html: layout('Your NFC card is on its way', `<p style="font-size:15px;line-height:1.6;margin:0 0 10px">Thank you. We will program your card with your Introthread link and deliver it to you. We will call you on the number below to arrange delivery.</p>${table}`, 'Open my card', SITE + '/app/card', 'Questions? Reply to hello@introthread.com.'), text: 'Thank you for your order.\n\n' + text });
+    await sendEmail({ to: process.env.ORDER_EMAIL || 'hello@introthread.com', subject: 'New NFC card order: ' + (row.name_on_card || row.handle), html: layout('New NFC card order', `<p style="font-size:15px;line-height:1.6;margin:0 0 10px">Program the card with the link below (NFC Tools: Write, Add a record, URL), print and deliver.</p>${table}`, 'Open the card link', link, 'Buyer: ' + esc(buyer)), text });
+  }
+  return { kind: 'nfc_card', amount, currency: cur, created };
+}
 const meta = tx => { let m = tx && tx.metadata; if (typeof m === 'string') { try { m = JSON.parse(m); } catch (e) { m = {}; } } return m || {}; };
-module.exports = { PS, PLAN, ROOM_PASS_KES, ps, svc, applyCharge, applyRoomPass, planCode, setBilling, meta };
+module.exports = { PS, PLAN, ROOM_PASS_KES, NFC_CARD_KES, ps, svc, applyCharge, applyRoomPass, applyCardOrder, planCode, setBilling, meta };
