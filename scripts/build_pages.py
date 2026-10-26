@@ -6,7 +6,7 @@ META={
  '/how':('How it works | Introthread','Tap or scan, confirm a shared Thread, answer one private question: What\'s next? See how Introthread turns introductions into follow-through.'),
  '/rooms':('Thread Rooms for events and communities | Introthread','Measure what your event created: verified connections, meetings booked and introductions made, live and for 30 days after.'),
  '/networks':('Warmth for teams and networks | Introthread','Consented, verified relationship strength for VC platform teams, accelerators and professional communities. Warm intros that are actually warm.'),
- '/pricing':('Pricing | Introthread','Start free with your card, link, QR and 5 new Threads a month. Pro is $12 a month for unlimited Threads, Rooms are $199 per event, and Networks get custom annual plans.'),
+ '/pricing':('Pricing | Introthread','Start free with your card, link, QR and 5 new Threads a month. Pro is $12 a month for unlimited Threads, Rooms are $59 per event, and Networks get custom annual plans.'),
  '/about':('About | Introthread','Introthread records the moment two people meet and agree on what happens next. Our story, and how to get in touch.'),
  '/privacy':('Trust and privacy | Introthread','Two-sided consent, private answers and opt-in network visibility. Designed for UK GDPR, the DPA 2018 and US state privacy laws.'),
  '/terms':('Terms of Service | Introthread','The terms for using Introthread: your account, your content, acceptable use, plans and payments, and your rights.'),

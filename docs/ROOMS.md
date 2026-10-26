@@ -67,13 +67,13 @@ Storage: table `rooms` (`owner_id, name, event_date, location, code`). Extra det
 
 ## 6. Room pass (paying for extra Rooms)
 - **Since v76 one event a month for up to 20 people is free** (attendance limit 1 to 20, migration 021). Bigger or extra Rooms need a Room pass. Before that, v71: every Room needed a Room pass (`FREE_ROOMS = 0`, migration 020). Rooms created before v71 are kept. Before v71 every account included 1 free Room.
-- Each extra Room needs a **Room pass: $199 per event** (one extra Room, Room code, QR and badges, live Resolution Report, up to 1,000 attendees). Defined in `PLANS.rooms`.
-- When someone without an unused pass presses Create a Room, they see "Create a Room with a Room pass" with **Buy a Room pass, $199** (`bRoomAllowed`, `bRoomPass`).
+- Each extra Room needs a **Room pass: $59 per event** (one extra Room, Room code, QR and badges, live Resolution Report, up to 1,000 attendees). Defined in `PLANS.rooms`.
+- When someone without an unused pass presses Create a Room, they see "Create a Room with a Room pass" with **Buy a Room pass, $59** (`bRoomAllowed`, `bRoomPass`).
 - Passes are counted as `roomCredits` inside the person's billing record (`profiles.prefs.billing`). Creating an extra Room uses one credit ("Room pass used").
 - Where to buy: Settings > Billing (**Buy a Room pass**) or the prompt above.
 
 How payment works now (v36):
-- **Card payment (automatic):** when card payments are switched on (`/api/status` says `pay:true`), **Buy a Room pass** opens Paystack's secure page. The price is shown as $199 and charged once in Kenyan shillings (`ROOM_PASS_KES`, default 199 x `KES_PER_USD` = KES 25,870). When the payment succeeds, `/api/pay-verify` (on return) and the webhook (`charge.success` with `metadata.kind = 'rooms'`) add **one unused pass** in `room_passes`, record the payment and add a paid receipt to Billing. Each payment reference adds only one pass, even if both run.
+- **Card payment (automatic):** when card payments are switched on (`/api/status` says `pay:true`), **Buy a Room pass** opens Paystack's secure page. The price is shown as $59 and charged once in Kenyan shillings (`ROOM_PASS_KES`, default 59 x `KES_PER_USD` = KES 7,670). When the payment succeeds, `/api/pay-verify` (on return) and the webhook (`charge.success` with `metadata.kind = 'rooms'`) add **one unused pass** in `room_passes`, record the payment and add a paid receipt to Billing. Each payment reference adds only one pass, even if both run.
 - **Enforced in the database:** creating a second or later Room needs an unused pass. A database trigger (`rooms_need_pass`) uses one pass and links it to the new Room. Without a pass it refuses with `room_pass_required`, and the app opens Buy a Room pass. Staff creating Rooms from Admin are exempt.
 - **Bank transfer:** if card payments are off, the button is still **Request invoice**. When the money arrives, staff open Admin > Users > the person > **Room passes** > **Add a Room pass** and give a reason, such as the invoice number. This uses `admin_room_pass_grant` (owner, admin, finance) and is audited.
 - The app reads unused passes with `my_room_passes()`.

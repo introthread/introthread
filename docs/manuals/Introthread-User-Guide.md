@@ -4,7 +4,7 @@ _How to use Introthread: your card, Threads, follow-ups, Rooms, settings and pla
 
 | Document No. | Version | Date of issue | Status |
 |---|---|---|---|
-| IT-DOC-UG-001 | 1.0 | 26 October 2026 | Approved for release |
+| IT-DOC-UG-001 | 1.1 | 26 October 2026 | Approved for release |
 
 **Audience:** Everyone who uses Introthread: Free and Pro members, Room organisers and members, and people who receive a Thread link
 
@@ -32,7 +32,58 @@ Introthread is a professional networking app that starts with a digital business
 
 > **Tip.** You can explore every feature without signing up: on the home page or the login page choose **Explore the live demo account**. Nothing you do in the demo affects real data.
 
-## 02 Getting started
+## 02 Why Introthread
+
+**In one sentence:** Introthread turns the people you meet into relationships that actually go somewhere, and shows organisers exactly which connections their event created.
+
+### The problem it solves
+
+People swap business cards, scan QR codes or connect on LinkedIn, and then nothing happens. Nobody remembers where they met, nobody wants to send an awkward first message, and event organisers cannot show what their event achieved.
+
+### Why it matters for individuals
+
+| Benefit | What it means for you |
+|---|---|
+| Remember every meeting | Each Thread keeps who, where, when and why you met, plus your private note. |
+| A shared, confirmed record | When the other person confirms, you both hold proof that the meeting happened. No more one-sided contacts. |
+| No awkward follow-up | You each say privately what you want next. Only a match is revealed, so nobody is ever turned down out loud. |
+| Know who wants the same thing | If you both choose Meet again or Introduce someone, you are both told at once, with a ready follow-up message. |
+| Follow up on time | Reminders at 48 hours and AI-written drafts (Pro) mean good connections are not lost. |
+| Easy for the other person | They need no app and no account: one link, one tap to confirm. |
+| Your data stays yours | Export your contacts any time, free on every plan. |
+
+### Why confirm a Thread (accepting each other)
+
+- It turns a contact into a **verified relationship**: both people agree the meeting happened.
+- It unlocks **What's next?**, so you can both decide the next step.
+- It protects you from spam: a Thread only goes further when the other person chooses to confirm.
+
+### Why answer "What's next?"
+
+- It removes guesswork: you learn whether the other person wants to meet again, be introduced or simply stay in touch.
+- It is private: answers stay sealed until both reply, and "Not now" is shown only as "Stay in touch".
+- It leads to action: a match triggers a "You matched" email to both people and a ready follow-up.
+
+### Why use Rooms (for event organisers and communities)
+
+| Benefit | What it means for organisers |
+|---|---|
+| Proof of results | A live Resolution Report shows Threads made, confirmed by both, meetings agreed and introductions, not just attendance. |
+| Sponsor-ready reporting | Export results as CSV to show sponsors and partners the value of the event. |
+| Better networking for attendees | Every connection is tagged to the event, attendees see who else is in the Room, and they get reminders to follow up. |
+| Control who joins | Public or private Rooms, invitations, join requests and attendance limits up to 1,000. |
+| Ongoing communities | Repeating sessions with check-in and attendance for communities and team meetings. |
+| Affordable | One event a month for up to 20 people is free; larger events need a Room pass at $59 per event. |
+
+### Why it matters for attendees in a Room
+
+- You remember everyone you met at the event and where.
+- You can see the other members and save their cards.
+- You get a reminder to follow up while the conversation is fresh.
+
+> **Short answer when someone asks "Why Introthread?"** For individuals: "It makes sure the people you meet turn into real relationships, without awkward follow-ups." For organisers: "It shows exactly which connections your event created, so you can prove its value to attendees and sponsors."
+
+## 03 Getting started
 
 ### Create your account
 
@@ -62,7 +113,7 @@ You can sign up with Google, LinkedIn or your email address. Go to **introthread
 
 Introthread is an installable web app. On Android (Chrome) choose **Install app** when prompted or use the browser menu, **Add to Home screen**. On iPhone (Safari) tap **Share**, then **Add to Home Screen**. It then opens full screen like any other app.
 
-## 03 The app at a glance
+## 04 The app at a glance
 
 | Area | Where | What it is for |
 |---|---|---|
@@ -76,7 +127,7 @@ Introthread is an installable web app. On Android (Chrome) choose **Install app*
 | Event mode | /app/scan | A full-screen QR code of your card for busy events. |
 | Settings | /app/settings | Account, appearance, notifications, privacy, security, integrations, billing and help. |
 
-## 04 Your digital card
+## 05 Your digital card
 
 ### Design your card
 
@@ -94,7 +145,7 @@ Your card has a public page at introthread.com/your-handle. Anyone you share it 
 2. Under **Appearance**, pick a style. It previews until you select **Save**; choose **Cancel** to go back.
 3. To hide your public profile, open **Settings > Privacy & visibility** and switch visibility off. Your card link then shows "This profile is private".
 
-## 05 Sharing your card
+## 06 Sharing your card
 
 | Method | How | Plan |
 |---|---|---|
@@ -111,7 +162,7 @@ Your card has a public page at introthread.com/your-handle. Anyone you share it 
 3. Hold up your phone. People scan your QR and see your card.
 4. After the conversation, capture them on **Tap** so you remember the context.
 
-## 06 Capturing a connection (Tap)
+## 07 Capturing a connection (Tap)
 
 A Thread starts when you capture someone you met. Open **Tap** (/app/tap).
 
@@ -123,7 +174,7 @@ A Thread starts when you capture someone you met. Open **Tap** (/app/tap).
 
 > **Plan limit.** On the Free plan you can create 5 new Threads a month. Pro has unlimited Threads.
 
-## 07 Threads
+## 08 Threads
 
 ### Thread stages
 
@@ -160,7 +211,7 @@ If both answers are the same (and not Not now), both of you receive an email "Yo
 - To correct a name or the place you met, open the Thread and edit its details, then save. The app confirms "Details updated".
 - On Pro, search all Threads by name, company or place from the Threads page.
 
-## 08 If someone sends you a Thread (guests)
+## 09 If someone sends you a Thread (guests)
 
 You do not need an account to confirm a Thread.
 
@@ -171,11 +222,11 @@ You do not need an account to confirm a Thread.
 
 > **Note.** If the person who created the Thread opens their own link while signed in, they see "This is your own Thread link" and cannot answer on your behalf.
 
-## 09 Today and Google Calendar
+## 10 Today and Google Calendar
 
 The **Today** page shows what needs your attention: Threads waiting for an answer, matches to act on and recent activity. If you connect Google Calendar (**Settings > Integrations > Google Calendar > Connect**), today's and the next 7 days' meetings appear on your dashboard so you can start Threads from them.
 
-## 10 Contacts: import and export
+## 11 Contacts: import and export
 
 ### Import contacts
 
@@ -188,7 +239,7 @@ The **Today** page shows what needs your attention: Threads waiting for an answe
 
 On every plan you can download all your contacts as a vCard file (for Gmail, Outlook or your phone) or a CSV spreadsheet, and your data as JSON, from **Settings > Account** or **Contacts**.
 
-## 11 Rooms: events, communities and team meetings
+## 12 Rooms: events, communities and team meetings
 
 A Room is a shared space for one gathering. Every Thread made inside a Room is tagged to it, so the organiser can see results for the whole gathering.
 
@@ -209,7 +260,7 @@ A Room is a shared space for one gathering. Every Thread made inside a Room is t
 5. Optionally set an attendance limit (up to 1,000), up to 3 topics and a short description, then select **Create Room**.
 6. The Room gets a code such as KEN42, a join link introthread.com/r/CODE and a QR code for screens, badges and tables.
 
-> **Pricing.** One event a month for up to 20 people is free. Larger or additional Rooms need a **Room pass** ($199 per event), bought in **Settings > Billing** or when prompted.
+> **Pricing.** One event a month for up to 20 people is free. Larger or additional Rooms need a **Room pass** ($59 per event), bought in **Settings > Billing** or when prompted.
 
 ### Join a Room
 
@@ -225,7 +276,7 @@ A Room is a shared space for one gathering. Every Thread made inside a Room is t
 - **Results**: Threads made, confirmed by both, answered, meetings agreed and introductions, with **Export CSV**.
 - Members can see each other's name, role, company and card, and can **Leave this Room**.
 
-## 12 Settings
+## 13 Settings
 
 | Tab | What you can do |
 |---|---|
@@ -251,16 +302,16 @@ A Room is a shared space for one gathering. Every Thread made inside a Room is t
 2. Choose two-step verification and scan the QR code with an authenticator app (Google Authenticator, Microsoft Authenticator or 1Password).
 3. Enter the 6-digit code to finish.
 
-## 13 Plans and billing
+## 14 Plans and billing
 
 | Plan | Price | Includes |
 |---|---|---|
 | Free | $0, forever | Your card, link and QR; 5 new Threads a month; What's next? and the quiet reveal; save to contacts; export your contacts anytime. |
 | Pro | $12 per month | Everything in Free; unlimited Threads; AI follow-ups; calendar booking from a match; NFC card support; Thread search. |
-| Rooms | $199 per event | Room code, QR and badges; live Resolution Report; up to 1,000 attendees; sponsor-ready export. One event a month for up to 20 people is free. |
+| Rooms | $59 per event | Room code, QR and badges; live Resolution Report; up to 1,000 attendees; sponsor-ready export. One event a month for up to 20 people is free. |
 | Networks | Custom, annual | For VC platforms and networks. Sales-led; contact us. Warmth dashboard, Warmth API and SSO are on the roadmap. |
 
-UK prices are shown in GBP (Pro £9 a month, Rooms £149 per event). Cards are charged the equivalent in Kenyan shillings through Paystack, our payment provider. Prices exclude VAT and sales tax where applicable.
+UK prices are shown in GBP (Pro £9 a month, Rooms £45 per event). Cards are charged the equivalent in Kenyan shillings through Paystack, our payment provider. Prices exclude VAT and sales tax where applicable.
 
 ### Upgrade to Pro
 
@@ -268,7 +319,7 @@ UK prices are shown in GBP (Pro £9 a month, Rooms £149 per event). Cards are c
 2. Complete payment on Paystack's secure page.
 3. You return to Introthread and Pro features unlock straight away. Receipts appear in Billing.
 
-## 14 Emails you receive from Introthread
+## 15 Emails you receive from Introthread
 
 | Email | When | From |
 |---|---|---|
@@ -282,7 +333,7 @@ UK prices are shown in GBP (Pro £9 a month, Rooms £149 per event). Cards are c
 
 If an Introthread email lands in Spam, mark it **Not spam** once so future emails arrive normally.
 
-## 15 Privacy and your data
+## 16 Privacy and your data
 
 - Your private notes are visible only to you.
 - Answers to "What's next?" are sealed until both people reply.
@@ -290,7 +341,7 @@ If an Introthread email lands in Spam, mark it **Not spam** once so future email
 - You can export your data or delete your account at any time in Settings. You can also make a privacy request by emailing hello@introthread.com.
 - Full details: introthread.com/privacy.
 
-## 16 Troubleshooting and frequently asked questions
+## 17 Troubleshooting and frequently asked questions
 
 | Question | Answer |
 |---|---|
@@ -302,6 +353,6 @@ If an Introthread email lands in Spam, mark it **Not spam** once so future email
 | This Room is full. | The Room reached its attendance limit. Contact the organiser. |
 | My company logo is hard to see. | Upload a PNG with a transparent background; Introthread adds a light or dark backing automatically. |
 
-## 17 Getting help
+## 18 Getting help
 
 Open **Settings > Help** for answers, or email **hello@introthread.com**. Please include the email address on your account and, if relevant, a screenshot. We aim to reply within two working days.

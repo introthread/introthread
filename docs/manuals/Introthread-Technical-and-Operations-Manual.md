@@ -4,7 +4,7 @@ _Architecture, configuration, security, testing, deployment and runbooks for the
 
 | Document No. | Version | Date of issue | Status |
 |---|---|---|---|
-| IT-DOC-TM-001 | 1.0 | 26 October 2026 | Approved for release |
+| IT-DOC-TM-001 | 1.1 | 26 October 2026 | Approved for release |
 
 **Audience:** The product owner, developers and anyone operating Introthread
 
@@ -87,7 +87,7 @@ Every function uses a shared guard: same-site origin check, no cross-site prefli
 | ANTHROPIC_API_KEY / OPENAI_API_KEY, AI_MODEL | Optional paid AI providers (used before Gemini when set) | Not set |
 | PAYSTACK_SECRET_KEY | Paystack API | Set (test key) |
 | PAYSTACK_PLAN_MONTH, PAYSTACK_PLAN_YEAR | Pro plan codes | Test codes; recreate in live mode |
-| ROOM_PASS_KES, KES_PER_USD | Room pass price in shillings (default 199 x 130 = KES 25,870) | Defaults |
+| ROOM_PASS_KES, KES_PER_USD | Room pass price in shillings (default 59 x 130 = KES 7,670) | Defaults |
 | SITE_URL, SUPABASE_URL, SUPABASE_ANON_KEY, ALLOWED_ORIGINS | Overrides for site and Supabase addresses | Defaults |
 
 ### Supabase settings
@@ -145,7 +145,7 @@ Live checks on 25 and 26 October 2026: confirm-link, You matched and password re
 
 ## 05 Payments
 
-- Paystack charges in Kenyan shillings: Pro about KES 1,560 a month; Room pass KES 25,870.
+- Paystack charges in Kenyan shillings: Pro about KES 1,560 a month; Room pass KES 7,670.
 - Checkout: /api/pay-init; on return /api/pay-verify; the webhook records charge.success. Each payment reference adds only one Room pass.
 - Billing fields (plan, status, card, room credits) are written only by the server (migration 018).
 - Bank transfers: staff grant Room passes in Admin (audited).
@@ -226,6 +226,7 @@ Every release in this period passed the admin tests, every script in tests/app, 
 | v129 | Current free Gemini models with fallback. |
 | v130 | AI drafts open with a first-name greeting and name the place met. |
 | v131 | Natural dates in AI drafts ("26 October"). |
+| v132 | Room pass price cut from $199 to $59 per event (£45 UK, KES 7,670). |
 
 Operational changes in the same period: Search Console verified; Resend sign-in emails; Google and LinkedIn sign-in; manual linking on; hello@introthread.com receiving via ImprovMX; CRON_SECRET and GEMINI_API_KEY added.
 

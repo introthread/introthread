@@ -37,7 +37,7 @@ const PLANS = {
   rooms: {
     id: 'rooms',
     name: 'Rooms',
-    price: { event: 199 },
+    price: { event: 59 },
     tag: 'For events and communities',
     features: [
       'Free for up to 20 people, one event a month',
@@ -64,7 +64,7 @@ const FEATURES = {
 };
 const TRIAL_DAYS = 14,
   GRACE_DAYS = 7,
-  FREE_ROOMS = 0; /* v71: every Room is paid ($199 per event), matching the published price card */
+  FREE_ROOMS = 0; /* v71: every Room is paid ($59 per event), matching the published price card */
 const TAX = {
   GB: ['VAT', 20],
   IE: ['VAT', 23],
@@ -316,7 +316,7 @@ function bCompare(b) {
   return `<section class="d-box"><div class="cd-bh"><span class="cd-bi">${sv('grid', 20)}</span><div><b>Plans</b><small>What each plan includes. Prices in USD and exclude tax.</small></div></div>
  <div class="bl-plans">${col(P.free, '$0', '/forever', pro ? `<button type="button" class="t-how block" data-on-click="bCancel()">${b.cancelAt ? 'Moving to Free' : 'Downgrade'}</button>` : '<button type="button" class="t-how block" disabled>Current plan</button>')}
  ${col(P.pro, money(BINT === 'month' ? proM() : Math.round((proY() / 12) * 100) / 100), BINT === 'month' ? '/month' : '/month, billed ' + money(proY()) + ' yearly', pro ? `<button type="button" class="t-how block" disabled>Current plan</button>` : `<button type="button" class="x-btn block" data-on-click="bUpgrade('${BINT}')">${b.trialUsed ? 'Upgrade to Pro' : 'Start ' + TRIAL_DAYS + '-day free trial'}</button>`)}
- ${col(P.rooms, '$199', '/event', `<button type="button" class="t-how block" data-on-click="bRoomPass()">Buy a Room pass</button>`)}
+ ${col(P.rooms, '$59', '/event', `<button type="button" class="t-how block" data-on-click="bRoomPass()">Buy a Room pass</button>`)}
  ${col(P.networks, 'Custom', '/annual', `<a class="t-how block" href="mailto:hello@introthread.com?subject=Introthread%20Networks">Talk to sales</a>`)}</div></section>`;
 }
 function bUsageBox(u, b) {
@@ -326,7 +326,7 @@ function bUsageBox(u, b) {
   const bar = (l, v, max, txt) =>
     `<div class="bl-us"><div><span>${l}</span><b>${txt}</b></div><i><s style="width:${max ? Math.min(100, (v / max) * 100) : 100}%"></s></i></div>`;
   return `<section class="d-box"><div class="cd-bh"><span class="cd-bi">${sv('chart', 20)}</span><div><b>Usage and access</b><small>What you can use on your current plan.</small></div></div>
- ${bar('Threads', myThreads().length, 0, myThreads().length + ' &middot; unlimited')}${bar('Rooms', R, allow, R + ' of ' + allow + ' available')}<p class="bl-fine">One event a month for up to 20 people is free. Bigger or extra events need a Room pass ($199 per event). Unused passes: <b>${b.roomCredits || 0}</b>.</p>
+ ${bar('Threads', myThreads().length, 0, myThreads().length + ' &middot; unlimited')}${bar('Rooms', R, allow, R + ' of ' + allow + ' available')}<p class="bl-fine">One event a month for up to 20 people is free. Bigger or extra events need a Room pass ($59 per event). Unused passes: <b>${b.roomCredits || 0}</b>.</p>
  <ul class="bl-feat">${Object.entries(FEATURES)
    .map(
      ([k, l]) =>
@@ -395,7 +395,7 @@ function bBilling(u) {
 /* checkout */
 function bCheckoutBody(kind, interval) {
   const b = bGet();
-  const amount = kind === 'rooms' ? 199 : PLANS.pro.price[interval];
+  const amount = kind === 'rooms' ? 59 : PLANS.pro.price[interval];
   const tx = bTax(b, amount);
   const trial = kind === 'pro' && !b.trialUsed;
   return `<div class="bl-sum"><div><span>${kind === 'rooms' ? 'Room pass, one event' : 'Introthread Pro, ' + (interval === 'year' ? 'yearly' : 'monthly')}</span><b>${money(amount)}</b></div>${tx.amount ? `<div><span>${tx.label}</span><b>${money(tx.amount)}</b></div>` : ''}<div class="tot"><span>${trial ? 'Due today' : 'Total'}</span><b>${trial ? money(0) : money(amount + tx.amount)}</b></div>${trial ? `<p>Then ${money(amount + tx.amount)} on ${bDate(Date.now() + TRIAL_DAYS * DAY)}. Cancel any time before and you won&rsquo;t be charged.</p>` : ''}</div>`;
@@ -525,7 +525,7 @@ function bRoomPass() {
 async function bBuyRoom(mode) {
   const b = bGet();
   if (mode === 'invoice') {
-    bInvoice(b, 'Room pass, one event', 199, {
+    bInvoice(b, 'Room pass, one event', 59, {
       date: Date.now(),
       due: Date.now() + GRACE_DAYS * DAY,
       kind: 'rooms'
@@ -536,7 +536,7 @@ async function bBuyRoom(mode) {
   }
   b.card = window._card || b.card;
   b.roomCredits = (b.roomCredits || 0) + 1;
-  bInvoice(b, 'Room pass, one event', 199, {
+  bInvoice(b, 'Room pass, one event', 59, {
     date: Date.now(),
     status: 'paid',
     method: b.card.brand + ' ' + b.card.last4,
@@ -775,7 +775,7 @@ const _newRoomModal19 = newRoomModal;
 newRoomModal = function () {
   if (!bRoomAllowed()) {
     return modal(
-      `<div class="bl-co"><span class="otp-ic">${sv('cal', 24)}</span><h3>Create a Room with a Room pass</h3><p class="fu-sub">You&rsquo;ve used this month&rsquo;s free event (up to 20 people). Each further Room is $199 per event: Room code, QR and badges, a live Resolution Report and up to 1,000 attendees.</p><div class="fu-b"><button type="button" class="t-how" data-on-click="closeModal()">Not now</button><button type="button" class="x-btn" data-on-click="closeModal();bRoomPass()">Buy a Room pass, $199</button></div></div>`
+      `<div class="bl-co"><span class="otp-ic">${sv('cal', 24)}</span><h3>Create a Room with a Room pass</h3><p class="fu-sub">You&rsquo;ve used this month&rsquo;s free event (up to 20 people). Each further Room is $59 per event: Room code, QR and badges, a live Resolution Report and up to 1,000 attendees.</p><div class="fu-b"><button type="button" class="t-how" data-on-click="closeModal()">Not now</button><button type="button" class="x-btn" data-on-click="closeModal();bRoomPass()">Buy a Room pass, $59</button></div></div>`
     );
   }
   return _newRoomModal19.apply(this, arguments);
@@ -960,7 +960,7 @@ const HELP = [
   [
     'Rooms',
     'How many Rooms can I create?',
-    'One event a month for up to 20 people is free. Bigger or extra events need a Room pass ($199 per event). Rooms you already created stay yours.'
+    'One event a month for up to 20 people is free. Bigger or extra events need a Room pass ($59 per event). Rooms you already created stay yours.'
   ],
   [
     'Account',

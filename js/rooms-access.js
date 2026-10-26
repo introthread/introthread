@@ -45,7 +45,7 @@ const _bRP36 = bRoomPass;
 bRoomPass = function () {
   if (!(cloud() && typeof IT_SV !== 'undefined' && IT_SV && IT_SV.pay)) return _bRP36.apply(this, arguments);
   modal(
-    `<div class="bl-co"><div class="row between"><h3>Buy a Room pass</h3><button class="x" aria-label="Close" data-on-click="closeModal()">&times;</button></div><p class="fu-sub">One Room for an event or community: Room link and QR code, members and invitations, up to 1,000 people.</p><div class="bl-sum"><div class="tot"><span>Room pass, one Room</span><b>${money(199)}</b></div></div><button type="button" class="x-btn lg block" data-on-click="raPay(this)">Continue to secure payment</button><p class="bl-fine c">${sv('lock', 12)} Card payment on Paystack's secure page. Charged once in Kenyan shillings; your bank converts it. The pass is added as soon as the payment goes through.</p></div>`
+    `<div class="bl-co"><div class="row between"><h3>Buy a Room pass</h3><button class="x" aria-label="Close" data-on-click="closeModal()">&times;</button></div><p class="fu-sub">One Room for an event or community: Room link and QR code, members and invitations, up to 1,000 people.</p><div class="bl-sum"><div class="tot"><span>Room pass, one Room</span><b>${money(59)}</b></div></div><button type="button" class="x-btn lg block" data-on-click="raPay(this)">Continue to secure payment</button><p class="bl-fine c">${sv('lock', 12)} Card payment on Paystack's secure page. Charged once in Kenyan shillings; your bank converts it. The pass is added as soon as the payment goes through.</p></div>`
   );
 };
 async function raPay(b) {
@@ -117,7 +117,7 @@ function rjBody(code, d) {
   else if (priv && !d.invited)
     act = `${d.status === 'declined' ? '<p class="rj-no">The organiser did not accept your last request.</p>' : '<p class="muted small">This Room is invite only. Ask to join and the organiser will decide.</p>'}<button type="button" class="btn primary" data-on-click="rjJoin('${esc(d.code)}',this)">Request to join</button>`;
   else
-    act = `<button type="button" class="btn primary" data-on-click="rjJoin('${esc(d.code)}',this)">Join Room</button>`;
+    act = `${typeof whyList === 'function' ? whyList('Why join?', ['Every connection you make here is tagged to this event, so you remember where you met.', 'See who else is in the Room and save their cards.', 'Get a reminder to follow up while it is fresh.']) : ''}<button type="button" class="btn primary" data-on-click="rjJoin('${esc(d.code)}',this)">Join Room</button>`;
   return (
     info +
     `<div class="rj-a">${act}</div><p class="small muted" style="margin-top:16px">Tap or scan the card of anyone you meet here to start a Thread.</p>`

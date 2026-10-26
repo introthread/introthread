@@ -67,9 +67,9 @@ function vGuest(id) {
   const f = o.name.split(' ')[0];
   let body;
   if (!t.confirmed)
-    body = `<h2 style="letter-spacing:-.8px;margin:0 0 6px">Did you meet ${esc(o.name)}?</h2><p class="muted">${esc(f)} started a Thread after meeting you at <b>${esc(t.where)}</b>. Confirm it to keep a shared record and decide what happens next.</p><div class="row" style="margin-top:18px"><button class="btn primary" style="flex:1" data-on-click="guestConfirm('${t.id}')">${ic('check', 16)} Yes, confirm</button><button class="btn secondary" data-on-click="toast('Thanks. ${esc(f)} will not be notified.')">Not me</button></div>`;
+    body = `<h2 style="letter-spacing:-.8px;margin:0 0 6px">Did you meet ${esc(o.name)}?</h2><p class="muted">${esc(f)} started a Thread after meeting you at <b>${esc(t.where)}</b>. Confirm it to keep a shared record and decide what happens next.</p>${whyList('Why confirm?', ['A shared record: you both keep proof of where and when you met.', 'No awkward follow-up: you each say privately what you want next, and only a match is revealed.', 'No app or account needed, and it takes one tap.'])}<div class="row" style="margin-top:18px"><button class="btn primary" style="flex:1" data-on-click="guestConfirm('${t.id}')">${ic('check', 16)} Yes, confirm</button><button class="btn secondary" data-on-click="toast('Thanks. ${esc(f)} will not be notified.')">Not me</button></div>`;
   else if (!t.theirs)
-    body = `<div class="eyebrow">Verified Thread &middot; ${esc(t.where)}</div><h2 style="letter-spacing:-.8px;margin:8px 0 6px">What's next with ${esc(f)}?</h2><p class="small muted">${ic('lock', 12)} Private until you both answer. A "Not now" is never shown.</p><div class="answer" style="margin-top:14px">${Object.entries(
+    body = `<div class="eyebrow">Verified Thread &middot; ${esc(t.where)}</div><h2 style="letter-spacing:-.8px;margin:8px 0 6px">What's next with ${esc(f)}?</h2><p class="small muted">${ic('lock', 12)} Private until you both answer. A "Not now" is never shown.</p>${whyList('Why answer?', ['If you both want the same thing, you are both told and get a ready follow-up.', 'If not, nothing is revealed, so there is never an awkward no.', 'Your contact stays saved either way.'])}<div class="answer" style="margin-top:14px">${Object.entries(
       NEXT
     )
       .map(
@@ -140,6 +140,10 @@ guestThread = function (e, oid) {
 };
 
 const _vGuest = vGuest;
+/* v132: short "why it matters" lists on the guest and answer screens */
+function whyList(title, items) {
+  return `<div class="why"><b>${title}</b><ul>${items.map(x => `<li>${x}</li>`).join('')}</ul></div>`;
+}
 /* v128: threads are found by guest token (findThread only matches ids). Also compares the Thread owner's handle
    from the guest data with the signed-in profile, so it works before the owner's Threads have loaded. */
 function gOwn(tok) {
@@ -176,9 +180,9 @@ vGuest = function (tok) {
     f = o.name.split(' ')[0];
   let body;
   if (!g.confirmed)
-    body = `<h2 style="letter-spacing:-.8px;margin:0 0 6px">Did you meet ${esc(o.name)}?</h2><p class="muted">${esc(f)} started a Thread after meeting you at <b>${esc(gPlace(g.where_met))}</b>. Confirm it to keep a shared record and decide what happens next.</p><div class="row" style="margin-top:18px"><button class="btn primary" style="flex:1" data-on-click="guestConfirm('${esc(tok)}')">${ic('check', 16)} Yes, confirm</button><button class="btn secondary" data-on-click="toast('Thanks. ${esc(f)} will not be notified.')">Not me</button></div>`;
+    body = `<h2 style="letter-spacing:-.8px;margin:0 0 6px">Did you meet ${esc(o.name)}?</h2><p class="muted">${esc(f)} started a Thread after meeting you at <b>${esc(gPlace(g.where_met))}</b>. Confirm it to keep a shared record and decide what happens next.</p>${whyList('Why confirm?', ['A shared record: you both keep proof of where and when you met.', 'No awkward follow-up: you each say privately what you want next, and only a match is revealed.', 'No app or account needed, and it takes one tap.'])}<div class="row" style="margin-top:18px"><button class="btn primary" style="flex:1" data-on-click="guestConfirm('${esc(tok)}')">${ic('check', 16)} Yes, confirm</button><button class="btn secondary" data-on-click="toast('Thanks. ${esc(f)} will not be notified.')">Not me</button></div>`;
   else if (!g.theirs)
-    body = `<div class="eyebrow">Verified Thread &middot; ${esc(gPlace(g.where_met))}</div><h2 style="letter-spacing:-.8px;margin:8px 0 6px">What's next with ${esc(f)}?</h2><p class="small muted">${ic('lock', 12)} Private until you both answer. A "Not now" is never shown.</p><div class="answer" style="margin-top:14px">${Object.entries(
+    body = `<div class="eyebrow">Verified Thread &middot; ${esc(gPlace(g.where_met))}</div><h2 style="letter-spacing:-.8px;margin:8px 0 6px">What's next with ${esc(f)}?</h2><p class="small muted">${ic('lock', 12)} Private until you both answer. A "Not now" is never shown.</p>${whyList('Why answer?', ['If you both want the same thing, you are both told and get a ready follow-up.', 'If not, nothing is revealed, so there is never an awkward no.', 'Your contact stays saved either way.'])}<div class="answer" style="margin-top:14px">${Object.entries(
       NEXT
     )
       .map(

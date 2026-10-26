@@ -527,7 +527,7 @@ function vRoomsPage() {
     )}</div></section>` +
     ctaBand(
       'Run your next event on Threads.',
-      'Rooms start at $199 per event, up to 1,000 attendees.',
+      'Rooms start at $59 per event, up to 1,000 attendees.',
       `<a href="/signup" class="x-btn lg">Create a Room ${sv('arrow', 17)}</a>`,
       `<a href="/pricing" class="x-btn dk2 lg">See pricing</a>`
     ) +
@@ -617,7 +617,7 @@ function vPricing() {
     ],
     [
       'Rooms',
-      '$199',
+      '$59',
       'per event',
       'For events and communities',
       [

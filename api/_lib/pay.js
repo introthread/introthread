@@ -3,8 +3,8 @@ const { SB_URL } = require('./common');
 const PS = 'https://api.paystack.co';
 const PLAN = { month: process.env.PAYSTACK_PLAN_MONTH || 'PLN_igm7c0i78tlx9jz', year: process.env.PAYSTACK_PLAN_YEAR || 'PLN_scrctkdhtg6us1f' };
 const KES_PER_USD = Number(process.env.KES_PER_USD || 130);
-// Room pass: one extra Room, $199 shown, charged in KES. Override with ROOM_PASS_KES (whole shillings).
-const ROOM_PASS_KES = Number(process.env.ROOM_PASS_KES || Math.round(199 * KES_PER_USD));
+// Room pass: one extra Room, $59 shown, charged in KES. Override with ROOM_PASS_KES (whole shillings).
+const ROOM_PASS_KES = Number(process.env.ROOM_PASS_KES || Math.round(59 * KES_PER_USD));
 
 async function ps(path, opt = {}) {
   const r = await fetch(PS + path, { ...opt, headers: { Authorization: 'Bearer ' + process.env.PAYSTACK_SECRET_KEY, 'Content-Type': 'application/json' } });

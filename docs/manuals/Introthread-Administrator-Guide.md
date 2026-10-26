@@ -4,7 +4,7 @@ _How Introthread staff run the platform: access, roles, every admin screen and t
 
 | Document No. | Version | Date of issue | Status |
 |---|---|---|---|
-| IT-DOC-AG-001 | 1.0 | 26 October 2026 | Approved for release |
+| IT-DOC-AG-001 | 1.1 | 26 October 2026 | Approved for release |
 
 **Audience:** Introthread staff with admin access: owner, admin, moderator, support and finance roles
 
@@ -104,7 +104,7 @@ Plans and pricing lets the owner adjust plan names, subtitles, prices (USD and G
 |---|---|---|
 | Free | $0 | 5 new Threads a month |
 | Pro | $12 a month (£9 UK) | Unlimited Threads, AI follow-ups, calendar booking, NFC, search |
-| Rooms | $199 per event (£149 UK) | Up to 1,000 attendees; one free event a month for up to 20 people |
+| Rooms | $59 per event (£45 UK) | Up to 1,000 attendees; one free event a month for up to 20 people |
 | Networks | Custom, annual | Sales-led |
 
 > **Important.** A price change must also be made in Paystack (plan amounts) and on any published price card. See the Technical and Operations Manual, section "Payments".

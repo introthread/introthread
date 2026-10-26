@@ -316,7 +316,7 @@ function tdReveal(t) {
   if (!t.confirmed)
     return `<section class="td-rv"><div class="td-eye">Waiting for confirmation</div><div class="td-rvt">${f} has not confirmed this Thread yet.</div><p class="td-rvp">They received a link. When they confirm, the relationship becomes verified and you can both answer &ldquo;What&rsquo;s next?&rdquo;</p><div class="td-rvb"><button type="button" data-on-click="copy('${link}','Confirm link copied')">${sv('link', 16)} Copy confirm link</button><button type="button" data-on-click="go('/t/${t.token || t.id}')">${sv('eye', 16)} ${demo ? 'Simulate their view' : 'Open their view'}</button></div></section>`;
   if (!t.mine)
-    return `<section class="td-rv"><div class="td-eye">One question</div><div class="td-rvt">What&rsquo;s next with ${f}?</div><p class="td-rvp">${sv('lock', 13)} Private until you both answer. A &ldquo;Not now&rdquo; is shown to them as &ldquo;Stay in touch&rdquo;.</p><div class="td-ans">${Object.entries(
+    return `<section class="td-rv"><div class="td-eye">One question</div><div class="td-rvt">What&rsquo;s next with ${f}?</div><p class="td-rvp">${sv('lock', 13)} Private until you both answer. A &ldquo;Not now&rdquo; is shown to them as &ldquo;Stay in touch&rdquo;.</p>${typeof whyList === 'function' ? whyList('Why answer?', ['If you both want the same thing, you are both told and get a ready follow-up.', 'If not, nothing is revealed, so there is never an awkward no.', 'Your contact stays saved either way.']) : ''}<div class="td-ans">${Object.entries(
       NEXT
     )
       .map(

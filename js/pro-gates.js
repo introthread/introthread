@@ -39,7 +39,7 @@ dIcs = function () {
 };
 
 /* v76: one free event a month for up to 20 people (owner's decision, 23 Oct 2026).
-   Bigger or extra events still need a Room pass ($199). The database enforces the same rule
+   Bigger or extra events still need a Room pass ($59). The database enforces the same rule
    (migration 021); until it runs, the database asks for a pass and the app opens Buy a Room pass. */
 const FREE_ROOM_CAP = 20;
 function pgRoomCap(r) {

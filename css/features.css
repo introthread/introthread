@@ -2996,3 +2996,25 @@ html body .pc-m .pc-stage {
   gap: 8px;
   align-items: center;
 }
+
+/* v132: "why it matters" lists (guest confirm, What's next, Room join) */
+.why {
+  margin: 14px 0 4px;
+  padding: 12px 14px;
+  border-radius: 10px;
+  background: #f3f6ff;
+  text-align: left;
+  font-size: 14px;
+  line-height: 1.45;
+}
+.why b {
+  display: block;
+  margin-bottom: 4px;
+}
+.why ul {
+  margin: 0;
+  padding-left: 18px;
+}
+.why li {
+  margin: 2px 0;
+}
