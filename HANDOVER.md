@@ -1,6 +1,6 @@
 # Introthread - handover for the next AI agent
 
-Last updated: 26 Oct 2026, 2:00 pm Nairobi (after v134: pricing labels, price card, test card orders cancelled). Read the 26 Oct status summary below first, then the 24 Oct summary, ARCHITECTURE-ESSENTIALS.md, ARCHITECTURE.md and AGENTS.md. Update this file and docs/CHANGELOG.md with every change.
+Last updated: 26 Oct 2026, 2:00 pm Nairobi (after v135: UK Room price fixed; v134: pricing labels, price card, test card orders cancelled). Read the 26 Oct status summary below first, then the 24 Oct summary, ARCHITECTURE-ESSENTIALS.md, ARCHITECTURE.md and AGENTS.md. Update this file and docs/CHANGELOG.md with every change.
 
 ## STATUS SUMMARY: 26 Oct 2026, after v133.2 (read this first)
 
@@ -30,7 +30,7 @@ Last updated: 26 Oct 2026, 2:00 pm Nairobi (after v134: pricing labels, price ca
 - Paystack live keys (still TEST mode), company legal details, Resend sender verification for all emails, Google sign-in live test, signed-in HAR/console audit.
 - ~~"In development" label for Networks features~~: done in v134. The features themselves are still not built (estimate 8 to 10 weeks).
 - ~~Redraw the price card~~: done in v134.
-- **UK Room price mismatch:** HANDOVER (v132) says the UK display is £45, but the note under the plans on `/pricing` (and the price card footer) still says "Rooms £149/event". Ask Agnes which is right, then fix `js/site-pages.js` and the image together.
+- ~~UK Room price mismatch~~: fixed in v135. The pricing note is now built from `PLANS` and `GBP` (Rooms £45/event), and the price card footer is redrawn. To change a price later, update `PLANS` (js/billing.js or the plans table) and the `GBP` table in js/contacts-import.js; the page follows. The price card image must still be redrawn by hand.
 - Phone-to-phone NFC tapping is not possible from a web app; always use a card or sticker.
 
 ### How the last agent worked (keep doing this)
