@@ -8,16 +8,16 @@ const LABEL = { meet: 'meet again', intro: 'introduce someone', keep: 'stay in t
 async function complete(system, prompt) {
   if (process.env.ANTHROPIC_API_KEY) {
     const r = await fetch('https://api.anthropic.com/v1/messages', { method: 'POST', headers: { 'x-api-key': process.env.ANTHROPIC_API_KEY, 'anthropic-version': '2023-06-01', 'content-type': 'application/json' }, body: JSON.stringify({ model: process.env.AI_MODEL || 'claude-3-5-haiku-latest', max_tokens: 500, system, messages: [{ role: 'user', content: prompt }] }) });
-    if (!r.ok) return null; const j = await r.json(); return ((j.content || [])[0] || {}).text || null;
+    if (!r.ok) { console.error('ai-draft anthropic', r.status, (await r.text().catch(() => '')).slice(0, 300)); return { fail: r.status }; } const j = await r.json(); return ((j.content || [])[0] || {}).text || null;
   }
   if (process.env.OPENAI_API_KEY) {
     const r = await fetch('https://api.openai.com/v1/chat/completions', { method: 'POST', headers: { Authorization: 'Bearer ' + process.env.OPENAI_API_KEY, 'Content-Type': 'application/json' }, body: JSON.stringify({ model: process.env.AI_MODEL || 'gpt-4o-mini', max_tokens: 500, temperature: 0.6, messages: [{ role: 'system', content: system }, { role: 'user', content: prompt }] }) });
-    if (!r.ok) return null; const j = await r.json(); return (((j.choices || [])[0] || {}).message || {}).content || null;
+    if (!r.ok) { console.error('ai-draft openai', r.status, (await r.text().catch(() => '')).slice(0, 300)); return { fail: r.status }; } const j = await r.json(); return (((j.choices || [])[0] || {}).message || {}).content || null;
   }
   if (process.env.GEMINI_API_KEY) {
     const model = process.env.GEMINI_MODEL || 'gemini-2.5-flash';
     const r = await fetch('https://generativelanguage.googleapis.com/v1beta/models/' + encodeURIComponent(model) + ':generateContent', { method: 'POST', headers: { 'x-goog-api-key': process.env.GEMINI_API_KEY, 'Content-Type': 'application/json' }, body: JSON.stringify({ system_instruction: { parts: [{ text: system }] }, contents: [{ role: 'user', parts: [{ text: prompt }] }], generationConfig: { maxOutputTokens: 500, temperature: 0.6, thinkingConfig: { thinkingBudget: 0 } } }) });
-    if (!r.ok) return null; const j = await r.json();
+    if (!r.ok) { const e = await r.text().catch(() => ''); console.error('ai-draft gemini', r.status, e.slice(0, 300)); return { fail: r.status }; } const j = await r.json();
     return ((((j.candidates || [])[0] || {}).content || {}).parts || []).map(p => p.text || '').join('').trim() || null;
   }
   return undefined;
@@ -50,7 +50,9 @@ module.exports = async (req, res) => {
     NOTE_OK() ? `Sender's private note (use for context, do not quote it word for word): ${String(t.note || 'none').slice(0, 500)}` : 'Sender\'s private note: not shared',
     `Goal: ${goal} Never mention that the recipient chose "not now".`,
   ].join('\n');
-  const out = await complete(system, prompt);
+  let out;
+  try { out = await complete(system, prompt); } catch (e) { console.error('ai-draft', e && e.message); out = null; }
+  if (out && out.fail) return send(res, 502, { error: out.fail === 429 ? 'busy' : 'provider', status: out.fail });
   if (!out) return send(res, 502, { error: 'provider' });
   return send(res, 200, { draft: String(out).trim().slice(0, 2000) });
 };

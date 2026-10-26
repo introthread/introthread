@@ -162,7 +162,11 @@ async function itAiRewrite(b) {
     toast(
       r && r.error === 'ai_off'
         ? 'AI drafts are off in Settings.'
-        : 'Could not write a draft right now. Your original draft is unchanged.'
+        : r && r.error === 'busy'
+          ? 'AI is busy right now. Try again in a minute. Your original draft is unchanged.'
+          : 'Could not write a draft right now' +
+            (r && r.status ? ' (' + (r.error === 'provider' && r.status ? 'AI ' : '') + r.status + ')' : '') +
+            '. Your original draft is unchanged.'
     );
 }
 function itAiBtn() {

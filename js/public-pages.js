@@ -140,12 +140,27 @@ guestThread = function (e, oid) {
 };
 
 const _vGuest = vGuest;
+/* v128: threads are found by guest token (findThread only matches ids). Also compares the Thread owner's handle
+   from the guest data with the signed-in profile, so it works before the owner's Threads have loaded. */
+function gOwn(tok) {
+  if (!(typeof cloud === 'function' && cloud())) return null;
+  const t = DB.threads.find(x => x._c && x.token === tok);
+  if (t) return t;
+  const g = typeof GUEST !== 'undefined' ? GUEST[tok] : null,
+    u = typeof me === 'function' ? me() : null;
+  return g && g.owner && u && u.handle && g.owner.handle === u.handle ? { id: g.id || '' } : null;
+}
+const gPlace = w =>
+  String(w || 'In person')
+    .split(' @@')[0]
+    .trim() || 'In person';
 
 vGuest = function (tok) {
   if (findThread(tok) && !findThread(tok)._c) return _vGuest(tok);
-  /* v126: the owner opening their own guest link cannot confirm or answer for the other person. */
-  if (findThread(tok) && findThread(tok)._c && cloud())
-    return `<div class="pub"><div class="pubcard card pad-lg center">${logo()}<h2>This is your own Thread link</h2><p class="muted">Send it to the person you met so they can confirm and answer. Your own answer goes on the Thread in the app.</p><button type="button" class="x-btn" data-on-click="go('/app/thread/${findThread(tok).id}')">Open the Thread</button></div></div>`;
+  /* v126/v128: the owner opening their own guest link cannot confirm or answer for the other person. */
+  const ownT = gOwn(tok);
+  if (ownT)
+    return `<div class="pub"><div class="pubcard card pad-lg center">${logo()}<h2>This is your own Thread link</h2><p class="muted">Send it to the person you met so they can confirm and answer. Your own answer goes on the Thread in the app.</p><button type="button" class="x-btn" data-on-click="go(${ownT.id ? `'/app/thread/${ownT.id}'` : `'/app/threads'`})">Open the Thread</button></div></div>`;
   if (!SB) return _vGuest(tok);
   const g = GUEST[tok];
   if (g === undefined) {
@@ -161,9 +176,9 @@ vGuest = function (tok) {
     f = o.name.split(' ')[0];
   let body;
   if (!g.confirmed)
-    body = `<h2 style="letter-spacing:-.8px;margin:0 0 6px">Did you meet ${esc(o.name)}?</h2><p class="muted">${esc(f)} started a Thread after meeting you at <b>${esc(g.where_met)}</b>. Confirm it to keep a shared record and decide what happens next.</p><div class="row" style="margin-top:18px"><button class="btn primary" style="flex:1" data-on-click="guestConfirm('${esc(tok)}')">${ic('check', 16)} Yes, confirm</button><button class="btn secondary" data-on-click="toast('Thanks. ${esc(f)} will not be notified.')">Not me</button></div>`;
+    body = `<h2 style="letter-spacing:-.8px;margin:0 0 6px">Did you meet ${esc(o.name)}?</h2><p class="muted">${esc(f)} started a Thread after meeting you at <b>${esc(gPlace(g.where_met))}</b>. Confirm it to keep a shared record and decide what happens next.</p><div class="row" style="margin-top:18px"><button class="btn primary" style="flex:1" data-on-click="guestConfirm('${esc(tok)}')">${ic('check', 16)} Yes, confirm</button><button class="btn secondary" data-on-click="toast('Thanks. ${esc(f)} will not be notified.')">Not me</button></div>`;
   else if (!g.theirs)
-    body = `<div class="eyebrow">Verified Thread &middot; ${esc(g.where_met)}</div><h2 style="letter-spacing:-.8px;margin:8px 0 6px">What's next with ${esc(f)}?</h2><p class="small muted">${ic('lock', 12)} Private until you both answer. A "Not now" is never shown.</p><div class="answer" style="margin-top:14px">${Object.entries(
+    body = `<div class="eyebrow">Verified Thread &middot; ${esc(gPlace(g.where_met))}</div><h2 style="letter-spacing:-.8px;margin:8px 0 6px">What's next with ${esc(f)}?</h2><p class="small muted">${ic('lock', 12)} Private until you both answer. A "Not now" is never shown.</p><div class="answer" style="margin-top:14px">${Object.entries(
       NEXT
     )
       .map(
