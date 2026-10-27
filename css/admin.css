@@ -6066,3 +6066,22 @@ button.rm-c:hover {
 .geo-set {
   margin-bottom: 12px;
 }
+
+/* v143: on phones the trend line ("No change vs previous 30 days") wraps instead of pushing the KPI cards off the screen */
+@media (max-width: 640px) {
+  .ix-tr {
+    white-space: normal;
+    width: auto;
+  }
+  .ix-k {
+    overflow: hidden;
+  }
+  .ix-kb {
+    align-self: stretch;
+    width: 100%;
+  }
+  .ix-kb > * {
+    max-width: 100%;
+    overflow-wrap: anywhere;
+  }
+}

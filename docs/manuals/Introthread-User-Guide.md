@@ -4,7 +4,7 @@ _How to use Introthread: your card, Threads, follow-ups, Rooms, settings and pla
 
 | Document No. | Version | Date of issue | Status |
 |---|---|---|---|
-| IT-DOC-UG-001 | 1.2 | 26 October 2026 | Approved for release |
+| IT-DOC-UG-001 | 1.3 | 27 October 2026 | Approved for release |
 
 **Audience:** Everyone who uses Introthread: Free and Pro members, Room organisers and members, and people who receive a Thread link
 
@@ -152,7 +152,7 @@ Your card has a public page at introthread.com/your-handle. Anyone you share it 
 | QR code | Show the QR on your card or in Event mode; the other person scans it with their camera. | All plans |
 | Link | Copy introthread.com/your-handle and paste it anywhere. | All plans |
 | WhatsApp, email, SMS | Use the Share buttons on your card. | All plans |
-| NFC card | Tap your Introthread card on their phone. Their phone opens your card at "Start a Thread". Order a ready-programmed card (KES 199), or write your own (Android, Pro; iPhone with the free NFC Tools app). | All plans (writing on Android: Pro) |
+| Print-ready card | Get a print-ready card (KES 199): a PDF of your card with your QR code, emailed to you to print anywhere. People scan the QR to open your card. To make it tap-able, add a blank NFC sticker and write your link to it (Android, Pro; iPhone with the free NFC Tools app). | All plans (writing on Android: Pro) |
 | Event mode | Open /app/scan for a full-screen QR that keeps the screen awake, with light or dark mode and a downloadable wallpaper. | All plans |
 
 ### Use Event mode at an event
@@ -162,15 +162,33 @@ Your card has a public page at introthread.com/your-handle. Anyone you share it 
 3. Hold up your phone. People scan your QR and see your card.
 4. After the conversation, capture them on **Tap** so you remember the context.
 
-### Use an Introthread NFC card
+### Get your print-ready card
 
-An NFC card holds your card link. When you tap it on someone's phone (most Android phones and iPhone XS or newer, no app needed), their phone opens your card straight at **Start a Thread**, where they can save your contact or start a Thread with you. Phone-to-phone tapping is not possible from a web app, so a card or sticker is used.
+Introthread no longer posts physical cards. Instead you get a print-ready card you can print anywhere in the world.
 
-1. Open **Tap > Tap with an NFC card**.
-2. **Order a ready-programmed card (KES 199):** enter the name and title for the card, a phone number and the delivery address, then pay securely through Paystack. We program, print and deliver the card and call you to arrange delivery. The receipt appears in Billing.
-3. **Or write your own card on Android (Pro):** choose **Write my own card** and hold a blank NFC card (NTAG213, 215 or 216) to the back of your phone.
-4. **Or write it on iPhone:** choose **On iPhone: write it with NFC Tools**, copy your card link, and follow the steps in the free NFC Tools app.
-5. The panel shows how many times your card has been tapped, in total and in the last 30 days.
+**The design (chip-card style):**
+- **Front:** navy, with a printed gold chip, the contactless (tap) symbol, the Introthread name, and your name, title and company.
+- **Back:** white, with a large QR code to your card, "Scan or tap to connect" and your link (introthread.com/your-handle).
+- The chip is printed artwork, not a real chip. People connect by scanning the QR code, which works on every phone.
+
+**To order:**
+1. Open **Tap > Tap with an NFC card** and choose **Get a print-ready card, KES 199**.
+2. Enter the name to print on the card, and optionally your title and company. A live preview of the card front updates as you type.
+3. Pay KES 199 securely through Paystack. No phone number or delivery address is needed.
+4. We email you the PDF straight away. You can download it again any time from the same panel (**Download your print-ready card (PDF)**). The receipt appears in Billing.
+
+**To print:**
+- Print at 100% (Actual size), not "Fit to page". The card is 85 x 55 mm, a standard business card.
+- Page 1 has one card, front and back, with cut marks. Page 2 has 10 fronts on A4, and page 3 has 10 backs: print them double-sided and flip on the long edge.
+- Thick card stock (300 gsm or more) looks best; any print shop can do this.
+
+**To make your card tap-able (optional):**
+1. Buy a blank NFC sticker (NTAG213, 215 or 216) and stick it on the back of the printed card.
+2. **On Android (Pro):** choose **Write my own card** and hold the sticker to the back of your phone.
+3. **On iPhone:** choose **On iPhone: write it with NFC Tools**, copy your card link, and follow the steps in the free NFC Tools app (iPhone XS or newer).
+4. When tapped, most Android phones and iPhone XS or newer open your card straight at **Start a Thread**, with no app needed. Phone-to-phone tapping is not possible from a web app.
+
+The panel shows how many times your card has been tapped, in total and in the last 30 days.
 
 ## 07 Capturing a connection (Tap)
 

@@ -4,7 +4,7 @@ _Architecture, configuration, security, testing, deployment and runbooks for the
 
 | Document No. | Version | Date of issue | Status |
 |---|---|---|---|
-| IT-DOC-TM-001 | 1.2 | 26 October 2026 | Approved for release |
+| IT-DOC-TM-001 | 1.3 | 27 October 2026 | Approved for release |
 
 **Audience:** The product owner, developers and anyone operating Introthread
 
@@ -61,7 +61,7 @@ Introthread is a web application (installable on phones) for professional networ
 | cron-nudge | Daily reminders for Threads 48 to 72 hours old that need a step. | Vercel Cron with CRON_SECRET |
 | weekly-digest | Weekly summary for members who switched it on. | Vercel Cron with CRON_SECRET |
 | card-tap | Counts one tap on a member's NFC card link (?src=nfc). | Public, rate-limited |
-| pay-init kind nfc_card | Checkout for a ready-programmed NFC card (KES 199); pay-verify and the webhook save the order and email the buyer and hello@. | Signed-in member |
+| pay-init kind nfc_card | Checkout for the print-ready card (KES 199): name, title and company only. pay-verify and the webhook save the order (`applyCardOrder` in `api/_lib/pay.js`), email the buyer the card PDF built by `js/card-pdf.js` with `api/_lib/qrcode.js`, set the status to delivered, and send hello@ a "Printable card sold" note. | Signed-in member |
 
 Every function uses a shared guard: same-site origin check, no cross-site preflight, and a per-IP rate limit.
 
@@ -116,7 +116,7 @@ Schema is in `supabase/schema.sql`; changes are in `supabase/migrations/NNN_*.sq
 | 018 | Billing guard: browser cannot change server billing fields |
 | 019 | Pricing: Free 5 Threads a month, Pro $12 / £9 |
 | 020, 021 | Paid Rooms, then one free small event a month for up to 20 people |
-| 022 | NFC cards: card_taps (tap counts) and card_orders (ready-programmed card orders), my_card_taps, admin_card_order_set |
+| 022 | NFC cards: card_taps (tap counts) and card_orders (card orders; since v141 print-ready, status delivered when the PDF is emailed), my_card_taps, admin_card_order_set. No migration was needed for v141 to v143. |
 
 ### Domain and DNS
 
@@ -212,7 +212,7 @@ Every release in this period passed the admin tests, every script in tests/app, 
 | Sign-in with Google or LinkedIn fails | Check the provider is on in Supabase, redirect URLs, and the Google or LinkedIn app settings. |
 | Site needs pausing | Admin > Settings > Maintenance mode. |
 
-## 10 Release history (23 to 26 October 2026)
+## 10 Release history (23 to 27 October 2026)
 
 | Release | Summary |
 |---|---|
@@ -231,7 +231,11 @@ Every release in this period passed the admin tests, every script in tests/app, 
 | v130 | AI drafts open with a first-name greeting and name the place met. |
 | v131 | Natural dates in AI drafts ("26 October"). |
 | v132 | Room pass price cut from $199 to $59 per event (£45 UK, KES 7,670). |
-| v133 | NFC cards: clear wording, tap opens Start a Thread, tap counts, iPhone NFC Tools steps, ready-programmed card orders at KES 199. |
+| v133 | NFC cards: clear wording, tap opens Start a Thread, tap counts, iPhone NFC Tools steps, ready-programmed card orders at KES 199 (posting replaced in v141). |
+| v134 to v140 | In development labels on Networks features; single source of pricing (`scripts/pricing.py`) and price card drawn by the build; event mode fits every phone; admin tests wait for the page; readable "Why answer?" box. |
+| v141 | Print-ready card replaces the posted NFC card: KES 199, PDF emailed and downloadable (`js/card-pdf.js`, vector QR, 1 card actual size plus 10-up fronts and backs on A4); no phone or address; nothing posted. |
+| v142 | Chip-card design (navy front with printed gold chip and contactless mark; white back with QR); live preview in the order form; new pages open at the top. |
+| v143 | Clearer sign-in code error ("wrong or has expired"); manuals updated to 1.3. |
 
 Operational changes in the same period: Search Console verified; Resend sign-in emails; Google and LinkedIn sign-in; manual linking on; hello@introthread.com receiving via ImprovMX; CRON_SECRET and GEMINI_API_KEY added.
 

@@ -1,6 +1,6 @@
 # Introthread - handover for the next AI agent
 
-Last updated: 27 Oct 2026, 12:00 pm Nairobi (after v142: chip-card design, live card preview, new pages open at the top; v141: print-ready card emailed as a PDF, no posting; v140: readable Why answer box; v139: event mode fits every phone, admin tests wait for the page, one source of pricing).
+Last updated: 27 Oct 2026, 12:30 pm Nairobi (after v143: app and admin screens checked at 4 sizes, admin dashboard cards fit phones, admin screens open at the top, clearer sign-in code message, manuals 1.3; v142: chip-card design, live card preview, new pages open at the top; v141: print-ready card emailed as a PDF, no posting).
 
 
 <!-- prices:start -->
@@ -20,7 +20,10 @@ Last updated: 27 Oct 2026, 12:00 pm Nairobi (after v142: chip-card design, live 
 - Navigation: in-app links change page without a reload (2 to 11 ms measured on every public page). v142 fixed new pages opening part-way down: they now open at the top.
 - Quality: 13 admin tests and the app tests (photo crop, event mode fit) pass; daily release check routine compares live asset hashes with the build and sweeps 10 pages at desktop and phone sizes.
 
+- v143 (27 Oct): app screens (Tap, Threads, Rooms, Card, Profile, Settings with Billing and Notifications tabs) and all 10 admin screens checked in Chromium at 1366, 768, 390 and 360 px with the demo account and a mocked admin (owner) session: no sideways scroll, no page errors, every screen opens at the top. Fixed: admin Dashboard cards ran 45 px off the right edge at 390 px (the trend pill "No change vs previous 30 days" did not wrap); switching admin tabs kept the old scroll position; sign-in code error now says "wrong or has expired" (Supabase returns the same message for both). Manuals (User, Administrator, Technical and Operations, md and docx) are now 1.3 and describe the print-ready chip card.
+
 ### Remaining
+- Live signed-in check on introthread.com is still not done: the assistant's sign-in as mosemqute@gmail.com on 27 Oct reached the email code step, but both codes were rejected (each resend replaces the previous code, so only the newest email's code works). Retry with the newest code, or check `/app` and `/admin` by hand.
 - `.github/workflows/ci.yml` is not on main yet (the assistant's GitHub tool cannot write workflow files). Add it by hand, then check the first run.
 - No real KES 199 card order yet. On the first one, check: buyer gets the PDF email, order shows `delivered`, hello@ gets the "Printable card sold" note (hello@ forwards to Agnes's Gmail; the assistant cannot see that inbox).
 - The chip on the card is printed artwork. Real tapping still needs a blank NFC sticker (NTAG213/215/216) written with the card link.
@@ -30,7 +33,6 @@ Last updated: 27 Oct 2026, 12:00 pm Nairobi (after v142: chip-card design, live 
 - Signed-out phone re-test of the tap counter.
 - Networks features shown as "In development" (Warmth dashboard, Warmth API, SSO and admin controls) are not built.
 - Stricter security setting (removing 'unsafe-inline') is still in progress.
-- Update `docs/manuals/` for v141 and v142 (print-ready card replaces the posted card).
 - Older sections below that describe posting or programming physical cards (v133) are history: since v141 nothing is posted.
 - **v141 (26 Oct, 9 pm): the card is print-ready only.** The KES 199 order no longer posts anything. The buyer gets a PDF (`js/card-pdf.js`, shared by the browser and the server) by email, and can download it again from Tap > NFC. `card_orders` rows from v141 on have `phone` null, `delivery` 'Emailed (print-ready PDF)', `title_on_card` "title · company", and status `delivered` once the email is accepted. There is nothing to program or ship. The order inbox email only confirms the sale. The server QR encoder is `api/_lib/qrcode.js`. Keep it at the same version as the CDN script in index.html.
 

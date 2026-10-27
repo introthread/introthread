@@ -109,6 +109,8 @@ function admGo(t) {
   history.pushState(null, '', '/admin/' + t);
   admPaint();
   admLoadTab();
+  // v143: a new admin screen opens at the top, like the rest of the app.
+  window.scrollTo({ top: 0, left: 0, behavior: 'instant' });
 }
 function vAdmin() {
   const s = ADM.stage;

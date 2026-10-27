@@ -4,7 +4,7 @@ _How Introthread staff run the platform: access, roles, every admin screen and t
 
 | Document No. | Version | Date of issue | Status |
 |---|---|---|---|
-| IT-DOC-AG-001 | 1.2 | 26 October 2026 | Approved for release |
+| IT-DOC-AG-001 | 1.3 | 27 October 2026 | Approved for release |
 
 **Audience:** Introthread staff with admin access: owner, admin, moderator, support and finance roles
 
@@ -72,14 +72,20 @@ The Dashboard gives a live overview of the platform for a chosen date range: sig
 
 > **Privacy.** Never share a member's details with anyone else. Members' private Thread notes are not shown in admin.
 
-## 06 NFC card orders
+## 06 Print-ready card orders
 
-Members can order a ready-programmed Introthread NFC card for KES 199. Each paid order is saved (table `card_orders`) and emailed to hello@introthread.com with the name and title for the card, phone, delivery address and the card link to program.
+Since v141 (26 October 2026) the KES 199 card is print-ready only. Nothing is programmed, printed or posted by staff.
 
-1. Open the order email. Program a blank NFC card with the card link shown (it ends in ?src=nfc), for example with the free NFC Tools app: Write, Add a record, URL.
-2. Print the name and title on the card.
-3. Call the member on the phone number given to arrange delivery.
-4. Update the order status (paid, programmed, shipped, delivered or cancelled) with a reason. Until an admin screen is added, staff with database access use the function admin_card_order_set, which checks the role and writes the audit log.
+1. A member enters the name, title and company for the card (with a live preview of the chip-card design, v142) and pays KES 199 through Paystack.
+2. The server saves the order (table `card_orders`), builds the card PDF and emails it to the buyer as an attachment. When the email is accepted the order status is set to `delivered`.
+3. hello@introthread.com receives a short note: "Printable card sold, nothing to post". No action is needed.
+4. The member can download the PDF again in **Tap > Tap with an NFC card**.
+
+**If a member says they did not get the PDF:** ask them to check spam, then to download it from the NFC panel. If the order is still `paid` (not `delivered`), the email failed: check that `RESEND_API_KEY` is set in Vercel and look at the Resend dashboard.
+
+**Refunds and cancellations:** staff with database access set the status with the function `admin_card_order_set` (it checks the role and writes the audit log). Statuses: paid, delivered, cancelled (programmed and shipped are kept only for old v133 orders).
+
+**About the chip:** the gold chip on the card is printed artwork. Members who want tapping add their own NFC sticker and write their link to it in the app.
 
 ## 07 Moderation
 

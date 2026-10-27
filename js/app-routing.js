@@ -228,7 +228,8 @@ async function otpVerify(e) {
     if (error || !data || !data.session) {
       otpErr(
         /expired/i.test((error || {}).message || '')
-          ? 'That code has expired. Tap Resend code for a new one.'
+          ? // v143: Supabase says "Token has expired or is invalid" for a wrong code too, and each resend replaces the old code.
+            'That code is wrong or has expired. Use the code in the newest email, or tap Resend code.'
           : 'That code is not valid. Check the latest email and try again.'
       );
       return false;
