@@ -3218,3 +3218,122 @@ html body .pc-m .pc-stage {
   white-space: nowrap;
   vertical-align: 1px;
 }
+
+/* v142: chip-card preview in the print-ready card order form */
+.nfc-cp {
+  margin: 4px 0 14px;
+}
+.nfc-cv {
+  position: relative;
+  aspect-ratio: 85 / 55;
+  max-width: 340px;
+  margin: 0 auto 8px;
+  border-radius: 14px;
+  overflow: hidden;
+  color: #fff;
+  background:
+    linear-gradient(112deg, transparent 48%, rgba(31, 94, 255, 0.22) 48.2%, rgba(31, 94, 255, 0.1) 100%),
+    #0b1430;
+  box-shadow:
+    0 10px 24px rgba(11, 20, 48, 0.28),
+    inset 0 -4px 0 #1f5eff;
+  font-family: inherit;
+}
+.nfc-cb {
+  position: absolute;
+  left: 7%;
+  top: 11%;
+  font-weight: 700;
+  font-size: clamp(13px, 4.2vw, 17px);
+}
+.nfc-cb b {
+  color: #8fb0ff;
+}
+.nfc-cw {
+  position: absolute;
+  right: 7%;
+  top: 10%;
+  width: 26px;
+  height: 26px;
+}
+.nfc-cw i {
+  position: absolute;
+  top: 50%;
+  border: 2.5px solid #fff;
+  border-color: transparent #fff transparent transparent;
+  border-radius: 50%;
+  transform: translateY(-50%);
+}
+.nfc-cw i:nth-child(1) {
+  left: -2px;
+  width: 10px;
+  height: 10px;
+}
+.nfc-cw i:nth-child(2) {
+  left: -4px;
+  width: 20px;
+  height: 20px;
+}
+.nfc-cw i:nth-child(3) {
+  left: -6px;
+  width: 30px;
+  height: 30px;
+}
+.nfc-chip {
+  position: absolute;
+  left: 7%;
+  top: 38%;
+  width: 14%;
+  aspect-ratio: 11.5 / 9;
+  border-radius: 5px;
+  background: linear-gradient(180deg, #f0cf73 0 50%, #c99a2e 50% 100%);
+  border: 1px solid #8a6416;
+}
+.nfc-chip::before,
+.nfc-chip::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  border-top: 1px solid #8a6416;
+}
+.nfc-chip::before {
+  top: 33%;
+}
+.nfc-chip::after {
+  top: 66%;
+}
+.nfc-chip i {
+  position: absolute;
+  left: 33%;
+  top: 27%;
+  width: 34%;
+  height: 46%;
+  border-radius: 3px;
+  background: #e3b955;
+  border: 1px solid #8a6416;
+  z-index: 1;
+}
+.nfc-cn,
+.nfc-cs {
+  position: absolute;
+  left: 7%;
+  right: 7%;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.nfc-cn {
+  bottom: 22%;
+  font-weight: 700;
+  font-size: clamp(14px, 4.6vw, 19px);
+}
+.nfc-cs {
+  bottom: 11%;
+  color: #b9c6ea;
+  font-size: clamp(10px, 3vw, 12px);
+}
+.nfc-cp p {
+  text-align: center;
+  margin: 0;
+}

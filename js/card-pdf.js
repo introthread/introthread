@@ -1,4 +1,4 @@
-// Introthread - printable card PDF (v141). Shared by the browser (download in the NFC panel) and the server
+// Introthread - printable card PDF (v141, chip-card design v142). Shared by the browser (download in the NFC panel) and the server
 // (api/_lib/pay.js emails it after a paid order). No dependencies: pass the qrcode-generator function in
 // (window.qrcode in the browser, api/_lib/qrcode.js on the server). Returns the PDF as a binary (latin1) string.
 // Page 1: one card, front and back, actual size (85 x 55 mm) with cut marks. Page 2: 10 fronts on A4.
@@ -78,38 +78,90 @@
       text(x + tw(a, size, true), y, 'thread', size, true, onDark ? '#8fb0ff' : '#1f5eff')
     );
   }
-  function front(info, qrFn, x, y) {
-    const pad = 11,
-      qs = 34 * MM,
-      qx = x + CW - pad - qs,
-      qy = y + (CH - qs) / 2 + 4;
-    const tW = qx - x - pad - 8;
+  // Shapes (v142): rounded rectangles and arcs drawn with Bezier curves.
+  function rrect(x, y, w, h, r) {
+    const k = 0.5523 * r;
+    return (
+      `${n(x + r)} ${n(y)} m ${n(x + w - r)} ${n(y)} l ` +
+      `${n(x + w - r + k)} ${n(y)} ${n(x + w)} ${n(y + r - k)} ${n(x + w)} ${n(y + r)} c ` +
+      `${n(x + w)} ${n(y + h - r)} l ${n(x + w)} ${n(y + h - r + k)} ${n(x + w - r + k)} ${n(y + h)} ${n(x + w - r)} ${n(y + h)} c ` +
+      `${n(x + r)} ${n(y + h)} l ${n(x + r - k)} ${n(y + h)} ${n(x)} ${n(y + h - r + k)} ${n(x)} ${n(y + h - r)} c ` +
+      `${n(x)} ${n(y + r)} l ${n(x)} ${n(y + r - k)} ${n(x + r - k)} ${n(y)} ${n(x + r)} ${n(y)} c h\n`
+    );
+  }
+  function arc(cx, cy, r, a0, a1) {
+    const steps = 12;
     let o = '';
-    const [nm, ns] = fit(info.name, 13, 8.5, tW, true);
-    o += text(x + pad, y + CH - pad - 12, nm, ns, true, '#101828');
-    let ty = y + CH - pad - 12 - 13;
-    for (const line of [info.title, info.company].filter(Boolean)) {
-      const [t, s] = fit(line, 8, 6, tW, false);
-      o += text(x + pad, ty, t, s, false, line === info.company ? '#667085' : '#344054');
-      ty -= 10.5;
+    for (let i = 0; i <= steps; i++) {
+      const t = ((a0 + ((a1 - a0) * i) / steps) * Math.PI) / 180;
+      o += `${n(cx + r * Math.cos(t))} ${n(cy + r * Math.sin(t))} ${i ? 'l' : 'm'} `;
     }
-    o += brand(x + pad, y + pad + 11, 9.5, false);
-    const [lk, ls] = fit(info.link, 7, 5.5, tW, false);
-    o += text(x + pad, y + pad, lk, ls, false, '#475467');
-    o += qrPath(qrFn, info.url, qx, qy, qs);
-    const cap = 'Scan to connect';
-    o += text(qx + (qs - tw(cap, 6, false)) / 2, qy - 9, cap, 6, false, '#667085');
+    return o + 'S\n';
+  }
+  // Gold contact chip, like a bank card. Drawn, not a real chip.
+  function chip(x, y) {
+    const w = 11.5 * MM,
+      h = 9 * MM,
+      cw = w * 0.34,
+      ch = h * 0.46,
+      cx = x + (w - cw) / 2,
+      cy = y + (h - ch) / 2;
+    let o = `${rgb('#c99a2e')} rg ` + rrect(x, y, w, h, 1.6 * MM) + 'f\n';
+    o += `${rgb('#f0cf73')} rg ` + rrect(x + 0.5, y + h / 2, w - 1, h / 2 - 0.5, 1.4 * MM) + 'f\n';
+    o += `${rgb('#e3b955')} rg ` + rrect(cx, cy, cw, ch, 0.8 * MM) + 'f\n';
+    o += `${rgb('#8a6416')} RG 0.45 w ` + rrect(x, y, w, h, 1.6 * MM) + 'S\n';
+    o += rrect(cx, cy, cw, ch, 0.8 * MM) + 'S\n';
+    for (const f of [1 / 3, 2 / 3]) {
+      const ly = y + h * f;
+      o += `${n(x)} ${n(ly)} m ${n(cx)} ${n(ly)} l S ${n(cx + cw)} ${n(ly)} m ${n(x + w)} ${n(ly)} l S\n`;
+    }
+    o += `${n(x + w / 2)} ${n(y)} m ${n(x + w / 2)} ${n(cy)} l S ${n(x + w / 2)} ${n(cy + ch)} m ${n(x + w / 2)} ${n(y + h)} l S\n`;
     return o;
   }
-  function back(info, x, y) {
+  // Contactless symbol: three widening arcs.
+  function waves(x, y, size, color) {
+    let o = `${rgb(color)} RG ${n(size * 0.11)} w 1 J\n`;
+    for (let i = 0; i < 4; i++) o += arc(x, y, size * (0.22 + i * 0.26), -38, 38);
+    return o + '0 J\n';
+  }
+  // Front: the "chip card" side. Navy, gold chip, contactless mark, name.
+  function front(info, qrFn, x, y) {
+    const pad = 11;
     let o = `${rgb('#0b1430')} rg ${n(x)} ${n(y)} ${n(CW)} ${n(CH)} re f\n`;
-    const bs = 17,
-      bw = tw('introthread', bs, true);
-    o += brand(x + (CW - bw) / 2, y + CH / 2 + 8, bs, true);
-    const a = 'Tap or scan to connect';
-    o += text(x + (CW - tw(a, 8.5, false)) / 2, y + CH / 2 - 10, a, 8.5, false, '#ffffff');
-    const [lk, ls] = fit(info.link, 7.5, 5.5, CW - 24, false);
-    o += text(x + (CW - tw(lk, ls, false)) / 2, y + CH / 2 - 24, lk, ls, false, '#b9c6ea');
+    // soft diagonal light band
+    o += `${rgb('#13235a')} rg ${n(x + CW * 0.48)} ${n(y + CH)} m ${n(x + CW)} ${n(y + CH)} l ${n(x + CW)} ${n(y + CH * 0.12)} l ${n(x + CW * 0.86)} ${n(y)} l ${n(x + CW * 0.66)} ${n(y)} l h f\n`;
+    o += `${rgb('#1f5eff')} rg ${n(x)} ${n(y)} ${n(CW)} ${n(2.2)} re f\n`;
+    o += brand(x + pad, y + CH - pad - 9, 10.5, true);
+    o += waves(x + CW - pad - 13, y + CH - pad - 5.5, 14, '#ffffff');
+    o += chip(x + pad, y + CH / 2 - 7);
+    const tW = CW - 2 * pad;
+    const [nm, ns] = fit(info.name, 12, 8, tW, true);
+    let ty = y + pad + 12;
+    const sub = [info.title, info.company].filter(Boolean).join(' \u00b7 ');
+    if (!sub) ty -= 6;
+    o += text(x + pad, ty, nm, ns, true, '#ffffff');
+    if (sub) {
+      const [t, s] = fit(sub, 7, 5.5, tW, false);
+      o += text(x + pad, y + pad + 2, t, s, false, '#b9c6ea');
+    }
+    return o;
+  }
+  // Back: white, big QR to scan, link and a tap reminder.
+  function back(info, qrFn, x, y) {
+    const pad = 11,
+      qs = 36 * MM,
+      qx = x + CW - pad - qs + 2,
+      qy = y + (CH - qs) / 2;
+    const tW = qx - x - pad - 6;
+    let o = `1 1 1 rg ${n(x)} ${n(y)} ${n(CW)} ${n(CH)} re f\n`;
+    o += outline(x, y);
+    o += brand(x + pad, y + CH - pad - 10, 10, false);
+    o += text(x + pad, y + CH / 2 + 4, 'Scan or tap', 11, true, '#101828');
+    o += text(x + pad, y + CH / 2 - 8, 'to connect with me', 8, false, '#344054');
+    o += waves(x + pad + 4, y + pad + 13, 9, '#1f5eff');
+    const [lk, ls] = fit(info.link, 7, 5, tW, false);
+    o += text(x + pad, y + pad, lk, ls, false, '#475467');
+    o += qrPath(qrFn, info.url, qx, qy, qs);
     return o;
   }
   function marks(x, y) {
@@ -162,8 +214,8 @@
       '#475467'
     );
     const x1 = (PW - CW) / 2;
-    p += outline(x1, PH - 140 - CH) + front(info, qrFn, x1, PH - 140 - CH) + marks(x1, PH - 140 - CH);
-    p += back(info, x1, PH - 180 - 2 * CH) + marks(x1, PH - 180 - 2 * CH);
+    p += front(info, qrFn, x1, PH - 140 - CH) + marks(x1, PH - 140 - CH);
+    p += back(info, qrFn, x1, PH - 180 - 2 * CH) + marks(x1, PH - 180 - 2 * CH);
     p += text(
       56,
       120,
@@ -189,8 +241,8 @@
     for (let r = 0; r < 5; r++)
       for (let c = 0; c < 2; c++) {
         const y = my + r * CH;
-        f += outline(mx + c * CW, y) + front(info, qrFn, mx + c * CW, y);
-        b += back(info, mx + (1 - c) * CW, y);
+        f += front(info, qrFn, mx + c * CW, y);
+        b += back(info, qrFn, mx + (1 - c) * CW, y);
       }
     let cm = '';
     for (let r = 0; r < 5; r++) for (let c = 0; c < 2; c++) cm += marks(mx + c * CW, my + r * CH);

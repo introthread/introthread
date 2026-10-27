@@ -602,7 +602,10 @@ function render() {
   /* Thread tags */
   normTags();
   /* keep the scroll position when the same page is drawn again */
-  const same = RH() === lastHash && window._rendered;
+  // v142: a route change is never "the same page", so a new page always opens at the top.
+  const same = !window._routeChanged && RH() === lastHash && window._rendered;
+  window._routeChanged = false;
+  lastHash = RH();
   window._keepScroll = same;
   renderRoute();
   window._rendered = true;
@@ -706,13 +709,13 @@ function renderRoute() {
       signup: 'Create your card | Introthread',
       pricing: 'Pricing | Introthread'
     }[p[0]] || 'Introthread | Every handshake, followed through';
-  if (!window._keepScroll) window.scrollTo(0, 0);
+  if (!window._keepScroll) window.scrollTo({ top: 0, left: 0, behavior: 'instant' });
 }
 let lastHash = RH();
 const _onRoute = () => {
   window._keepScroll = false;
   document.body.classList.remove('x-open');
-  lastHash = RH();
+  window._routeChanged = RH() !== lastHash;
   render();
 };
 window.addEventListener('popstate', _onRoute);

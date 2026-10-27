@@ -181,6 +181,8 @@ SV.home = '<path d="M3.5 10.5 12 3.5l8.5 7"/><path d="M5.5 9v11h13V9"/><path d="
 SV.thread = '<circle cx="6.5" cy="12" r="3.5"/><circle cx="17.5" cy="12" r="3.5"/><path d="M10 12h4"/>';
 
 /* v29 page changes start at the top (scroll position no longer carries over between pages) */
-window.addEventListener('itroute', () => setTimeout(() => window.scrollTo(0, 0), 0));
+window.addEventListener('itroute', () =>
+  setTimeout(() => window.scrollTo({ top: 0, left: 0, behavior: 'instant' }), 0)
+);
 
 /* v62: scanDark and scanRoom (defined in admin-audit.js) handle the event-mode buttons. */

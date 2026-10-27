@@ -16,7 +16,7 @@ amGo = function (path, tab) {
   }
   window._keepScroll = false;
   render();
-  window.scrollTo(0, 0);
+  window.scrollTo({ top: 0, left: 0, behavior: 'instant' });
 };
 stTab = function (t) {
   if (!stTabKeys().includes(t)) t = 'account';
@@ -43,7 +43,7 @@ go = function (h) {
       amClose();
     } catch (_) {}
     render();
-    window.scrollTo(0, 0);
+    window.scrollTo({ top: 0, left: 0, behavior: 'instant' });
     return;
   }
   return _go21(h);

@@ -42,10 +42,20 @@ function nfcOrder() {
   const u = me();
   if (!u) return;
   const f = (id, label, attr, val) =>
-    `<label class="nfc-fl"><span>${label}</span><input id="${id}" ${attr} value="${esc(val || '')}"></label>`;
+    `<label class="nfc-fl"><span>${label}</span><input id="${id}" ${attr} data-on-input="nfcPrev()" value="${esc(val || '')}"></label>`;
+  const sub = [u.role, u.company].filter(Boolean).join(' \u00b7 ');
+  // v142: live preview of the chip side of the printed card.
+  const prev = `<div class="nfc-cp" aria-hidden="true"><div class="nfc-cv"><span class="nfc-cb">intro<b>thread</b></span><span class="nfc-cw"><i></i><i></i><i></i></span><span class="nfc-chip"><i></i></span><span class="nfc-cn" id="nfcPn">${esc(u.name || u.handle || 'Your name')}</span><span class="nfc-cs" id="nfcPs">${esc(sub)}</span></div><p class="small muted">Chip-card design: front with your name, back with your QR code. The chip is printed artwork; add an NFC sticker for real tapping.</p></div>`;
   modal(
-    `<div class="nfc-p"><div class="row between"><h3>Get your print-ready card</h3><button class="x" aria-label="Close" data-on-click="closeModal()">&times;</button></div><p class="fu-sub">A business card with your name and a QR code to your link (introthread.com/${esc(u.handle)}), emailed to you as a PDF to print at home or at any print shop. Nothing is posted, so it works wherever you are. <b>KES ${NFC_CARD_KES}</b>, paid securely through Paystack.</p><form data-on-submit="return nfcPay(event)" class="nfc-form">${f('nfn', 'Name on the card', 'required maxlength="80" autocomplete="name"', u.name)}${f('nft', 'Title (optional)', 'maxlength="80"', u.role)}${f('nfc2', 'Company (optional)', 'maxlength="80" autocomplete="organization"', u.company)}<p class="err" id="nferr" role="alert"></p><button class="x-btn block">Pay KES ${NFC_CARD_KES}</button></form></div>`
+    `<div class="nfc-p"><div class="row between"><h3>Get your print-ready card</h3><button class="x" aria-label="Close" data-on-click="closeModal()">&times;</button></div><p class="fu-sub">A business card with your name and a QR code to your link (introthread.com/${esc(u.handle)}), emailed to you as a PDF to print at home or at any print shop. Nothing is posted, so it works wherever you are. <b>KES ${NFC_CARD_KES}</b>, paid securely through Paystack.</p>${prev}<form data-on-submit="return nfcPay(event)" class="nfc-form">${f('nfn', 'Name on the card', 'required maxlength="80" autocomplete="name"', u.name)}${f('nft', 'Title (optional)', 'maxlength="80"', u.role)}${f('nfc2', 'Company (optional)', 'maxlength="80" autocomplete="organization"', u.company)}<p class="err" id="nferr" role="alert"></p><button class="x-btn block">Pay KES ${NFC_CARD_KES}</button></form></div>`
   );
+}
+function nfcPrev() {
+  const v = id => ((document.getElementById(id) || {}).value || '').trim();
+  const n = document.getElementById('nfcPn'),
+    s = document.getElementById('nfcPs');
+  if (n) n.textContent = v('nfn') || 'Your name';
+  if (s) s.textContent = [v('nft'), v('nfc2')].filter(Boolean).join(' \u00b7 ');
 }
 async function nfcPay(e) {
   e.preventDefault();

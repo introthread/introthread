@@ -1,6 +1,6 @@
 # Introthread - handover for the next AI agent
 
-Last updated: 26 Oct 2026, 9:00 pm Nairobi (after v141: print-ready card emailed as a PDF, no posting; v140: readable Why answer box; v139: event mode fits every phone, admin tests wait for the page, one source of pricing, price card drawn by the build, stray 6f7f154 reverted; v138: yearly Pro £90 confirmed; v137: full site review fixes; v136: figures cross-checked site-wide; v135: UK Room price fixed; v134: pricing labels, price card, test card orders cancelled). Read the 26 Oct status summary below first, then the 24 Oct summary, ARCHITECTURE-ESSENTIALS.md, ARCHITECTURE.md and AGENTS.md. Update this file and docs/CHANGELOG.md with every change.
+Last updated: 27 Oct 2026, 12:00 pm Nairobi (after v142: chip-card design, live card preview, new pages open at the top; v141: print-ready card emailed as a PDF, no posting; v140: readable Why answer box; v139: event mode fits every phone, admin tests wait for the page, one source of pricing).
 
 
 <!-- prices:start -->
@@ -10,6 +10,28 @@ Last updated: 26 Oct 2026, 9:00 pm Nairobi (after v141: print-ready card emailed
 - Room pass: $59 / £45 per event (KES = $59 x `KES_PER_USD`)
 - `img/brand/price-card.png` is drawn by the build from these figures (`scripts/price_card.py`).
 <!-- prices:end -->
+
+## PROGRESS: achieved and remaining (27 Oct 2026, after v142; read this first)
+
+### Achieved (live on main)
+- Public site: home, How it works, Rooms, Networks, Pricing, About, Privacy, Terms, Login and Signup, all prerendered for search, with one source of pricing (`scripts/pricing.py` fails the build on any mismatch) and a price card drawn by the build.
+- App: cards and handles, Threads with confirm and answer links, "What's next?" with matching and "You matched" emails, AI follow-up drafts (Gemini), Rooms with $59 passes and one free small event a month, event mode that fits every phone, Google and LinkedIn sign-in, Pro billing through Paystack (TEST mode), receipts, demo account, admin screens.
+- Card: KES 199 print-ready card (v141), emailed as a PDF and downloadable in the app; nothing is posted. v142 gives it a chip-card look: navy front with a printed gold chip, contactless mark, name, title and company; white back with a large QR code and "Scan or tap". The order form shows a live preview.
+- Navigation: in-app links change page without a reload (2 to 11 ms measured on every public page). v142 fixed new pages opening part-way down: they now open at the top.
+- Quality: 13 admin tests and the app tests (photo crop, event mode fit) pass; daily release check routine compares live asset hashes with the build and sweeps 10 pages at desktop and phone sizes.
+
+### Remaining
+- `.github/workflows/ci.yml` is not on main yet (the assistant's GitHub tool cannot write workflow files). Add it by hand, then check the first run.
+- No real KES 199 card order yet. On the first one, check: buyer gets the PDF email, order shows `delivered`, hello@ gets the "Printable card sold" note (hello@ forwards to Agnes's Gmail; the assistant cannot see that inbox).
+- The chip on the card is printed artwork. Real tapping still needs a blank NFC sticker (NTAG213/215/216) written with the card link.
+- Paystack live keys (still TEST mode) and confirmation of the KES Pro plan amounts.
+- Company legal details for invoices and the footer.
+- Signed-in network and console audit of the `/app` screens.
+- Signed-out phone re-test of the tap counter.
+- Networks features shown as "In development" (Warmth dashboard, Warmth API, SSO and admin controls) are not built.
+- Stricter security setting (removing 'unsafe-inline') is still in progress.
+- Update `docs/manuals/` for v141 and v142 (print-ready card replaces the posted card).
+- Older sections below that describe posting or programming physical cards (v133) are history: since v141 nothing is posted.
 - **v141 (26 Oct, 9 pm): the card is print-ready only.** The KES 199 order no longer posts anything. The buyer gets a PDF (`js/card-pdf.js`, shared by the browser and the server) by email, and can download it again from Tap > NFC. `card_orders` rows from v141 on have `phone` null, `delivery` 'Emailed (print-ready PDF)', `title_on_card` "title · company", and status `delivered` once the email is accepted. There is nothing to program or ship. The order inbox email only confirms the sale. The server QR encoder is `api/_lib/qrcode.js`. Keep it at the same version as the CDN script in index.html.
 
 
