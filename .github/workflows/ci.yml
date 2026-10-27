@@ -1,0 +1,50 @@
+# Introthread CI: build, prerender, admin tests and app tests on every push to main (and on pull requests).
+# Vercel still deploys on its own; a red X here means the pushed change failed a check and should be fixed or reverted.
+name: CI
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install dependencies
+        run: |
+          npm ci
+          python -m pip install playwright==1.48.0
+          python -m playwright install --with-deps chromium
+      - name: Formatting
+        run: npm run format:check
+      - name: Build pages (also checks every price against PLANS/GBP)
+        run: python3 scripts/build_pages.py
+      - name: Prerender
+        run: python3 scripts/prerender.py
+      - name: Admin tests
+        run: |
+          fail=0
+          for t in tests/admin/t*.js; do
+            out=$(timeout 60 node "$t" 2>&1 | grep '^errs' | tail -1)
+            echo "$t: ${out:-no result}"
+            [ "$out" = "errs []" ] || fail=1
+          done
+          exit $fail
+      - name: App tests
+        run: |
+          python3 tests/app/photo_crop.py
+          python3 tests/app/event_mode_fit.py
